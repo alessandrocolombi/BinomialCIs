@@ -114,5 +114,7 @@ MixBin_cov  = rowSums(exp(lub_MixBin_mat) > oracle_mat)/Nrep_tot
 Freq_cov    = rowSums(ub_Freq_mat > oracle_mat)/Nrep_tot
 
 coverages = rbind(PP3_cov,MixPois_cov,MixBin_cov,Freq_cov)
+coverages = as.data.frame(coverages)
+names(coverages) = paste0("M=",as.character(Mgrid))
 coverages
 
