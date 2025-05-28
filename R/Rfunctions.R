@@ -4,7 +4,7 @@ sim_zipfs = function(M,s){
   w = sapply(1:M,function(j) j^(-s))
   w / sum(w)
 }
-sim_geom = function(M,a){
+sim_geom = function(M,a ){
   w = sapply(0:(M-1),function(j) (1-a)^(j-1)  )
   w / sum(w)
 }
