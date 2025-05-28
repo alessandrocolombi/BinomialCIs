@@ -28,11 +28,11 @@ M_max = 500
 s = 1.01
 var_gamma = 10
 var_nb    = 10
-
 Nrep = 5
+
 lub_PP3_mat <- lub_MixPois_mat <- ub_Freq_mat <- lub_MixBin_mat <- oracle_mat <- c()
 for(ii in 1:Nrep){
-  file_name = paste0("save/SimStudyFeatures_zipfs_",ii,".Rdat")  
+  file_name = paste0("../save/SimStudyFeatures_zipfs_",ii,".Rdat")  
   load(file_name)
   lub_PP3_mat = cbind(lub_PP3_mat, save_res$lub_PP3_mat)
   lub_MixPois_mat = cbind(lub_MixPois_mat, save_res$lub_MixPois_mat)
@@ -85,6 +85,22 @@ points( x = Mgrid, y = ub_MixPois[2,],
 points( x = Mgrid, y = ub_Freq[2,], 
         type = "b", lwd = 1, pch = 16, lty = 2,
         col = "darkorange" ) 
+## Add conf. intervals
+# segments(x0 = Mgrid, x1 = Mgrid,
+#          y0 = ub_oracle[1,], y1 = ub_oracle[3,],
+#          col = "black", lwd = 1)
+# segments(x0 = Mgrid, x1 = Mgrid,
+#          y0 = ub_PP3[1,], y1 = ub_PP3[3,],
+#          col = "darkred", lwd = 1)
+# segments(x0 = Mgrid, x1 = Mgrid,
+#          y0 = ub_MixBin[1,], y1 = ub_MixBin[3,],
+#          col = "darkblue", lwd = 1)
+# segments(x0 = Mgrid, x1 = Mgrid,
+#          y0 = ub_MixPois[1,], y1 = ub_MixPois[3,],
+#          col = "darkgreen", lwd = 1)
+# segments(x0 = Mgrid, x1 = Mgrid,
+#          y0 = ub_Freq[1,], y1 = ub_Freq[3,],
+#          col = "darkorange", lwd = 1)
 legend("bottomright",c("Oracle","PP","MixedPoisson","MixedBinomial","Freq."), 
        lwd = 3, col = c("black","darkred","darkgreen","darkblue","darkorange"))
 if(save_img)
