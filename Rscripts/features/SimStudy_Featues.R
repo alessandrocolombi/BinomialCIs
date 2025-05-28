@@ -1,4 +1,4 @@
-setwd("G:/.shortcut-targets-by-id/1Ck2MctcmCBWOueSMeW4Zr8IOvOaOzdqz/BicoccaDrive/g-masses/R/Scripts")
+setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
 
 # Librerie ----------------------------------------------------------------
 
@@ -8,7 +8,7 @@ suppressWarnings(suppressPackageStartupMessages(library(doSNOW)))
 suppressWarnings(suppressPackageStartupMessages(library(progress)))
 suppressWarnings(suppressPackageStartupMessages(library(VGAM)))
 Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
-source("../Rfunctions.R")
+source("../../R/Rfunctions.R")
 
 # Funzioni ----------------------------------------------------------------
 

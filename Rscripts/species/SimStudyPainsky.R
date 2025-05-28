@@ -1,4 +1,4 @@
-setwd("G:/.shortcut-targets-by-id/1Ck2MctcmCBWOueSMeW4Zr8IOvOaOzdqz/BicoccaDrive/g-masses/R/Scripts")
+setwd("C:/Users/colom/bnp_upperbounds/Rscripts/species")
 
 # Librerie ----------------------------------------------------------------
 
@@ -8,7 +8,7 @@ suppressWarnings(suppressPackageStartupMessages(library(doSNOW)))
 suppressWarnings(suppressPackageStartupMessages(library(progress)))
 suppressWarnings(suppressPackageStartupMessages(library(VGAM)))
 Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
-source("../Rfunctions.R")
+source("../../R/Rfunctions.R")
 
 # Funzioni ----------------------------------------------------------------
 
@@ -147,7 +147,8 @@ save_res = list("lub_Mrk_mat" = lub_Mrk_mat,
                 "lub_Cnt_mat" = lub_Cnt_mat,
                 "lub_FD_mat"  = lub_FD_mat,
                 "oracle" = oracle)
-save(save_res, file = "save/SimStudyPain_zipfs.Rdat")
+
+save(save_res, file = "../save/SimStudyPain_zipfs.Rdat") 
 
 ub_Mrk = exp(apply(lub_Mrk_mat, 1, quantile, probs = c(0.025,0.5,0.975)))
 ub_Cnt = exp(apply(lub_Cnt_mat, 1, quantile, probs = c(0.025,0.5,0.975)))

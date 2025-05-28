@@ -1,4 +1,4 @@
-setwd("G:/.shortcut-targets-by-id/1Ck2MctcmCBWOueSMeW4Zr8IOvOaOzdqz/BicoccaDrive/g-masses/R/Scripts")
+setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
 
 # Librerie ----------------------------------------------------------------
 
@@ -8,7 +8,7 @@ suppressWarnings(suppressPackageStartupMessages(library(doSNOW)))
 suppressWarnings(suppressPackageStartupMessages(library(progress)))
 suppressWarnings(suppressPackageStartupMessages(library(VGAM)))
 Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
-source("../Rfunctions.R")
+source("../../R/Rfunctions.R")
 
 # Funzioni ----------------------------------------------------------------
 
@@ -169,5 +169,7 @@ save_res = list("lub_PP3_mat" = lub_PP3_mat,
                 "oracle_mat"  = oracle_mat,
                 "oracle" = oracle)
 
-file_name = paste0("save/SimStudyFeatures_zipfs_",idx,".Rdat")
+file_name = paste0("../save/SimStudyFeatures_zipfs_",idx,".Rdat")
 save(save_res, file = file_name)
+
+

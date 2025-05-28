@@ -6,7 +6,7 @@
 # setwd(path)
 
 # The path to the script to execute in parallel
-setwd("G:/.shortcut-targets-by-id/1Ck2MctcmCBWOueSMeW4Zr8IOvOaOzdqz/BicoccaDrive/g-masses/R/Scripts")
+setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
 
 scriptpath = "SimStudy_Featues_exec.R"
 SimNo <- 6:10

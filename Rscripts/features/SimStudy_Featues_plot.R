@@ -1,4 +1,4 @@
-setwd("G:/.shortcut-targets-by-id/1Ck2MctcmCBWOueSMeW4Zr8IOvOaOzdqz/BicoccaDrive/g-masses/R/Scripts")
+setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
 
 # Librerie ----------------------------------------------------------------
 
@@ -8,7 +8,7 @@ suppressWarnings(suppressPackageStartupMessages(library(doSNOW)))
 suppressWarnings(suppressPackageStartupMessages(library(progress)))
 suppressWarnings(suppressPackageStartupMessages(library(VGAM)))
 Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
-source("../Rfunctions.R")
+source("../../R/Rfunctions.R")
 
 # Funzioni ----------------------------------------------------------------
 
@@ -23,7 +23,7 @@ Nexp = length(Mgrid)
 M_max = 500
 
 
-# Zipfs -------------------------------------------------------------------
+# Zipfs: load data -------------------------------------------------------------------
 
 s = 1.01
 var_gamma = 10
@@ -49,11 +49,17 @@ ub_Freq = apply(ub_Freq_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 ub_MixBin  = exp(apply(lub_MixBin_mat, 1, quantile, probs = c(0.025,0.5,0.975)))
 ub_oracle = apply(oracle_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 
-# Plot
+# Zipfs: Plot curves -------------------------------------------------------------------
 ymax = (11/10) * (max(ub_oracle[2,],ub_PP3[2,],ub_MixPois[2,],ub_MixBin[2,],ub_Freq[2,]))
 ymin = 0
 ylabs = round(seq(0,ymax,length.out = 5),3)
 
+
+save_img = FALSE
+img_name = paste0("../img/SSFeatures.pdf")
+
+if(save_img)
+  pdf(img_name)
 par( mfrow = c(1,1), mar = c(3,3,1,0.5), mgp=c(1.5,0.5,0), bty = "l" )
 plot(0,0,  yaxt = "n",
      xlab = "M", ylab = " ",
@@ -81,9 +87,10 @@ points( x = Mgrid, y = ub_Freq[2,],
         col = "darkorange" ) 
 legend("bottomright",c("Oracle","PP","MixedPoisson","MixedBinomial","Freq."), 
        lwd = 3, col = c("black","darkred","darkgreen","darkblue","darkorange"))
+if(save_img)
+  dev.off()
 
-
-## Coverage
+# Zipfs: Coverage -------------------------------------------------------------------
 Nrep_tot = ncol(oracle_mat)
 PP3_cov     = rowSums( exp(lub_PP3_mat) > oracle_mat)/Nrep_tot
 MixPois_cov = rowSums(exp(lub_MixPois_mat) > oracle_mat)/Nrep_tot
