@@ -1,6 +1,7 @@
 #ifndef __SAMPLE__H
 #define __SAMPLE__H
 
+// [[Rcpp::plugins(cpp17)]]
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(RcppGSL)]]
 #include <Rcpp.h>

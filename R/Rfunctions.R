@@ -57,51 +57,51 @@ compute_r_unbounded = function(n,Rmax,alfa){
 
 
 # Objective functions (species) -----------------------------------------------------
-llik_pyp <- function(x) {
+llik_pyp <- function(x, n, Kn, data_obs) {
   alpha <- x[1]
   theta <- x[2]
   -log_eppfPYP( n, Kn, data_obs, alpha, theta )
 }
-llik_FD <- function(x) {
+llik_FD <- function(x, n, Kn, data_obs, M_max) {
   gamma <- x[1]
   Lambda <- x[2]
   -log_eppfFD(n,Kn,data_obs,gamma,Lambda,M_max)
 }
 
 # Objective functions (features) -----------------------------------------------------
-llik_PP <- function(x) {
+llik_PP <- function(x,n, Kn, data_obs, gamma) {
   alpha <- x[1]
   u <- x[2]
   c <- u - alpha
   -log_efpfBeBePois(n, Kn, data_obs, alpha, c, gamma )
 }
-llik_PP2 <- function(x) {
-  alpha <- 0
+llik_PP2 <- function(x, n, Kn, data_obs) {
+  alpha <- 0 
   gamma <- x[1]
   c <- x[2]
   -log_efpfBeBePois(n, Kn, data_obs, alpha, c, gamma )
 }
-llik_PP3Parm <- function(x) {
+llik_PP3Parm <- function(x, n, Kn, data_obs) {
   alpha <- x[1]
   gamma <- x[2]
   u     <- x[3]
   c     <- u - alpha
   -log_efpfBeBePois(n, Kn, data_obs, alpha, c, gamma )
 }
-llik_MixPois <- function(x) {
+llik_MixPois <- function(x, n, Kn, data_obs, var_gamma) {
   alpha <- x[1]
   u <- x[2]
   c <- u - alpha
   mu_gamma <- x[3]
   -log_efpfBeBeMixPois( n, Kn, data_obs, alpha, c, mu_gamma, var_gamma )
 }
-llik_MixBin <- function(x) {
+llik_MixBin <- function(x, n, Kn, data_obs, var_nb) {
   a <- x[1]
   b <- x[2]
   mu_nb <- x[3]
   -log_efpfBeBeMixNBin( n, Kn, data_obs, a, b, mu_nb, var_nb )
 }
-f_beta <- function(x){
+f_beta <- function(x, n, alfa, Shat){
   if(n <= 0)
     stop("Error in lf_beta: n<=0")
   if(alfa-x <= 0)
@@ -110,7 +110,7 @@ f_beta <- function(x){
     stop("Error in lf_beta: 1/x<=0")
   n/(alfa-x) * (  sqrt( (log(1/x))/(2*n) ) + sqrt( (log(1/x))/(2*n) + Shat) )
 }
-lf_beta <- function(x){
+lf_beta <- function(x, n, alfa, Shat){
   if(n <= 0)
     stop("Error in lf_beta: n<=0")
   if(alfa-x <= 0)

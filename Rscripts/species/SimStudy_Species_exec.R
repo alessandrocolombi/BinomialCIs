@@ -67,7 +67,8 @@ if(run_zipfs){
       start_params <- c(alpha = 0.1, theta = 1)
       fit <- optim(par = start_params, fn = llik_pyp, 
                    method = "L-BFGS-B",
-                   lower = c(0, -1), upper = c(1-1e-10, Inf)) 
+                   lower = c(0, -1), upper = c(1-1e-10, Inf),
+                   n = n, Kn = Kn, data_obs = data_obs) 
       alpha_mle = fit$par[1]
       theta_mle = fit$par[2]
       
@@ -77,7 +78,8 @@ if(run_zipfs){
       
       # Param. estimation (FD)
       start_params <- c(gamma = 0.1, Lambda = Kn)
-      fit <- optim(par = start_params, fn = llik_FD, 
+      fit <- optim(par = start_params, fn = llik_FD,
+                   n = n, Kn = Kn, data_obs = data_obs, M_max = M_max,
                    method = "L-BFGS-B",
                    lower = c(1e-5, 1e-5), upper = c(Inf, Inf)) 
       gamma_mle = fit$par[1]

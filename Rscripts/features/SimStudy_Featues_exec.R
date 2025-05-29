@@ -100,6 +100,7 @@ for(ii in 1:Nexp){
     start_params <- c(alpha = 0.1, gamma= 1, u = 1)
     fit <- optim(par = start_params, fn = llik_PP3Parm, 
                  method = "L-BFGS-B",
+                 n = n, Kn = Kn, data_obs = data_obs,
                  lower = c(1e-16, 1e-16, 1e-16), 
                  upper = c(1-1e-10, Inf, Inf)) 
     alpha_mle = fit$par[1]
@@ -112,6 +113,7 @@ for(ii in 1:Nexp){
     start_params <- c(alpha = 0.1, u = 1, mu_gamma = 1)
     fit <- optim(par = start_params, fn = llik_MixPois,
                  method = "L-BFGS-B",
+                 n = n, Kn = Kn, data_obs = data_obs, var_gamma = var_gamma,
                  lower = c(1e-16, 1e-16, 1e-16), upper = c(1-1e-10, Inf, Inf))
     alpha_mle = fit$par[1]
     c_mle = fit$par[2] - alpha_mle
@@ -127,6 +129,7 @@ for(ii in 1:Nexp){
     start_params <- c(a = 1, b = 1, mu_nb = 1)
     fit <- optim(par = start_params, fn = llik_MixBin,
                  method = "L-BFGS-B",
+                 n = n, Kn = Kn, data_obs = data_obs, var_nb = var_nb,
                  lower = c(1e-10, 1e-10, 1e-10), upper = c(Inf, Inf, var_nb-1e-10))
     a_mle = fit$par[1]
     b_mle = fit$par[2] 
@@ -153,6 +156,7 @@ for(ii in 1:Nexp){
     start_params <- c(beta = alfa/2)
     fit <- optim(par = start_params, fn = lf_beta, 
                  method = "L-BFGS-B",
+                 n = n, alfa = alfa, Shat = Shat,
                  lower = 1e-16, upper = alfa - 1e-10 ) 
     beta_opt = fit$par[1]
     # Upper bound (freq)
