@@ -6,10 +6,11 @@
 # setwd(path)
 
 # The path to the script to execute in parallel
-setwd("C:/Users/colom/bnp_upperbounds/Rscripts/species")
+# setwd("C:/Users/colom/bnp_upperbounds/Rscripts/species")
+setwd("/home/lucia.paci/Lucia/Ale/bnp_upperbounds/Rscripts/species")
 
 scriptpath = "SimStudy_Species_exec.R"
-SimNo <- 6:10
+SimNo <- 11:15
 
 # Parallel execution (5 cores)
 idx <- SimNo[1]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)

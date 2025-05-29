@@ -1,4 +1,5 @@
-setwd("C:/Users/colom/bnp_upperbounds/Rscripts/species")
+# setwd("C:/Users/colom/bnp_upperbounds/Rscripts/species")
+setwd("/home/lucia.paci/Lucia/Ale/bnp_upperbounds/Rscripts/species")
 
 # Librerie ----------------------------------------------------------------
 
@@ -14,7 +15,7 @@ source("../../R/Rfunctions.R")
 
 # Common parameters -------------------------------------------------------
 alfa = 0.05
-Bor  = 50 # nel suo codice, painsky ripete 10k volte, noi 5k?
+Bor  = 3 # nel suo codice, painsky ripete 10k volte, noi 5k?
 Bnoi = Bor 
 n = 1000
 Rmax = 100; RmaxFD = 50

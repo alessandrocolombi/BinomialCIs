@@ -1,4 +1,5 @@
-setwd("C:/Users/colom/bnp_upperbounds/Rscripts/species")
+# setwd("C:/Users/colom/bnp_upperbounds/Rscripts/species")
+setwd("/home/lucia.paci/Lucia/Ale/bnp_upperbounds/Rscripts/species")
 
 # Librerie ----------------------------------------------------------------
 
