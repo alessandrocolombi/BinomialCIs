@@ -102,12 +102,11 @@ double log_stable_sum(const Rcpp::NumericVector& a, const bool is_log){
 //	Factorials and Pochammer
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//' log Raising Factorial
+//' log Raising Factorial (old)
 //'
 //' This function computes the logarithm of the rising factorial \code{(a)_n} implementing it from scratch.
 //' Notation is log( Gamma(a+n)/Gamma(a) )
-// [[Rcpp::export]]
-double log_raising_factorial(const unsigned int& n, const double& a)
+double log_raising_factorial_old(const unsigned int& n, const double& a)
 {
 	if(n==0)
 		return 0.0;
@@ -130,6 +129,25 @@ double log_raising_factorial(const unsigned int& n, const double& a)
 	}
 }
 
+//' log Raising Factorial
+//'
+//' This function computes the logarithm of the rising factorial \code{(a)_n} implemented
+//' as the difference of lgamma functions
+//' Notation is log( Gamma(a+n)/Gamma(a) )
+// [[Rcpp::export]]
+double log_raising_factorial(const unsigned int& n, const double& a)
+{
+	if(n==0)
+		return 0.0;
+	if(a<0)
+		throw std::runtime_error("Error in my_log_raising_factorial, can not compute the raising factorial of a negative number in log scale");
+	else if(a==0.0){
+		return -std::numeric_limits<double>::infinity();
+	}
+	else{
+		return std::lgamma((double)n + a) - std::lgamma(a);
+	}
+}
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 //	Stick-Breaking
 //------------------------------------------------------------------------------------------------------------------------------------------------------
