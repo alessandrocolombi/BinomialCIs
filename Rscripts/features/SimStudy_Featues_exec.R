@@ -1,4 +1,5 @@
-setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
+# setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
+setwd("/home/lucia.paci/Lucia/Ale/bnp_upperbounds/Rscripts/features")
 
 # Librerie ----------------------------------------------------------------
 
@@ -14,8 +15,8 @@ source("../../R/Rfunctions.R")
 
 # Common parameters -------------------------------------------------------
 alfa = 0.05
-Bor  = 50 # nel suo codice, painsky ripete 10k volte, noi 5k?
-Bnoi <- Bfr <- 50
+Bor  = 500 # nel suo codice, painsky ripete 10k volte, noi 5k?
+Bnoi <- Bfr <- Bor
 n = 1000
 Rmax = 100; 
 Mgrid = seq(10,1010,by = 50)

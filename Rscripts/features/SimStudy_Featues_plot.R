@@ -1,5 +1,5 @@
-setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
-
+# setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
+setwd("/home/lucia.paci/Lucia/Ale/bnp_upperbounds/Rscripts/features")
 # Librerie ----------------------------------------------------------------
 
 suppressWarnings(suppressPackageStartupMessages(library(tibble)))
@@ -24,14 +24,16 @@ M_max = 500
 
 
 # Zipfs: load data (from different repetitions) -------------------------------------------------------------------
-stop("Data have all been collected in SimStudyFeatures_zipfs_all.Rdat ")
+# stop("Data have all been collected in SimStudyFeatures_zipfs_all.Rdat ")
 s = 1.01
 var_gamma = 10
 var_nb    = 10
-Nrep = 10
+# Nsim = 10
+sim_idx = 11:30
+# sim_idx = sim_idx[-11]
 
 lub_PP3_mat <- lub_MixPois_mat <- ub_Freq_mat <- lub_MixBin_mat <- oracle_mat <- c()
-for(ii in 1:Nrep){
+for(ii in sim_idx){
   file_name = paste0("../save/SimStudyFeatures_zipfs_",ii,".Rdat")  
   load(file_name)
   lub_PP3_mat = cbind(lub_PP3_mat, save_res$lub_PP3_mat)
@@ -47,7 +49,7 @@ for(ii in 1:Nrep){
 #                 "lub_MixBin_mat"  = lub_MixBin_mat,
 #                 "ub_Freq_mat"  = ub_Freq_mat,
 #                 "oracle_mat"  = oracle_mat)
-# file_name = paste0("../save/SimStudyFeatures_zipfs_all.Rdat")
+# file_name = paste0("../save/SimStudyFeatures_zipfs_all.dat")
 # save(save_res, file = file_name)
 
 # Zipfs: load data (all at once) -------------------------------------------------------------------
@@ -55,9 +57,9 @@ for(ii in 1:Nrep){
 s = 1.01
 var_gamma = 10
 var_nb    = 10
-Nrep = 5
+# Nrep = 5
 
-load("../save/SimStudyFeatures_zipfs_all.Rdat")
+load("../save/SimStudyFeatures_zipfs_all.dat")
 lub_PP3_mat = save_res$lub_PP3_mat
 lub_MixPois_mat = save_res$lub_MixPois_mat
 ub_Freq_mat = save_res$ub_Freq_mat
@@ -70,16 +72,16 @@ ub_PP3 = exp(apply(lub_PP3_mat, 1, quantile, probs = c(0.025,0.5,0.975)))
 ub_MixPois = exp(apply(lub_MixPois_mat, 1, quantile, probs = c(0.025,0.5,0.975)))
 ub_Freq = apply(ub_Freq_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 ub_MixBin  = exp(apply(lub_MixBin_mat, 1, quantile, probs = c(0.025,0.5,0.975)))
-ub_oracle = apply(oracle_mat, 1, quantile, probs = c(0.025,0.5,0.975))
+ub_oracle = apply(oracle_mat, 1, quantile, probs = 1-alfa)
 
 # Zipfs: Plot curves -------------------------------------------------------------------
-ymax = (11/10) * (max(ub_oracle[2,],ub_PP3[2,],ub_MixPois[2,],ub_MixBin[2,],ub_Freq[2,]))
+ymax = (11/10) * (max(ub_oracle,ub_PP3[2,],ub_MixPois[2,],ub_MixBin[2,],ub_Freq[2,]))
 ymin = 0
 ylabs = round(seq(0,ymax,length.out = 5),3)
 
 
 save_img = TRUE
-img_name = paste0("../img/SSFeatures.pdf")
+img_name = paste0("../img/SSFeatures_zipfs.pdf")
 
 if(save_img)
   pdf(img_name)
@@ -93,7 +95,7 @@ grid(lty = 1,lwd = 1, col = "gray90" )
 axis(side = 2, at = ylabs, 
      labels = ylabs, las = 1, 
      cex.axis = 1 )
-points( x = Mgrid, y = ub_oracle[2,], 
+points( x = Mgrid, y = ub_oracle, 
         type = "b", lwd = 1, pch = 16, lty = 2,
         col = "black" ) 
 points( x = Mgrid, y = ub_PP3[2,], 
@@ -141,3 +143,4 @@ coverages = as.data.frame(coverages)
 names(coverages) = paste0("M=",as.character(Mgrid))
 coverages
 
+# save(coverages, file = "SimStudyFeatures_coverages_zipfs_all.dat")
