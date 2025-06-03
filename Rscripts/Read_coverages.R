@@ -27,4 +27,7 @@ round( t(coverages), 3)
 # Features - Zipfs ---------------------------------------------------------
 load("save/SimStudyFeatures_coverages_zipfs_all.dat")
 round( t(coverages), 3)
+# Features - Zipfs ---------------------------------------------------------
+load("save/SimStudyFeatures_coverages_geom_all.dat")
+round( t(coverages), 3)
 
