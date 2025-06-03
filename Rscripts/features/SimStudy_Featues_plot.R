@@ -80,7 +80,7 @@ ymin = 0
 ylabs = round(seq(0,ymax,length.out = 5),3)
 
 
-save_img = TRUE
+save_img = FALSE
 img_name = paste0("../img/SSFeatures_zipfs.pdf")
 
 if(save_img)
@@ -143,4 +143,4 @@ coverages = as.data.frame(coverages)
 names(coverages) = paste0("M=",as.character(Mgrid))
 coverages
 
-# save(coverages, file = "SimStudyFeatures_coverages_zipfs_all.dat")
+# save(coverages, file = "../save/SimStudyFeatures_coverages_zipfs_all.dat")
