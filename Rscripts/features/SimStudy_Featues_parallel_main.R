@@ -10,7 +10,7 @@
 setwd("/home/lucia.paci/Lucia/Ale/bnp_upperbounds/Rscripts/features")
 
 scriptpath = "SimStudy_Featues_exec.R"
-SimNo <- 21:30
+SimNo <- 1:15
 
 # Parallel execution (5 cores)
 idx <- SimNo[1]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
@@ -23,3 +23,8 @@ idx <- SimNo[7]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
 idx <- SimNo[8]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
 idx <- SimNo[9]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
 idx <- SimNo[10]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- SimNo[11]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- SimNo[12]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- SimNo[13]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- SimNo[14]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- SimNo[15]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
