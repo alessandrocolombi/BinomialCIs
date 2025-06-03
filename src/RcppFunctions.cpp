@@ -106,6 +106,7 @@ double log_stable_sum(const Rcpp::NumericVector& a, const bool is_log){
 //'
 //' This function computes the logarithm of the rising factorial \code{(a)_n} implementing it from scratch.
 //' Notation is log( Gamma(a+n)/Gamma(a) )
+// [[Rcpp::export]]
 double log_raising_factorial_old(const unsigned int& n, const double& a)
 {
 	if(n==0)
@@ -137,10 +138,12 @@ double log_raising_factorial_old(const unsigned int& n, const double& a)
 // [[Rcpp::export]]
 double log_raising_factorial(const unsigned int& n, const double& a)
 {
+	if(n < 0)
+		throw std::runtime_error("Error in log_raising_factorial: n can not be negative ");
 	if(n==0)
 		return 0.0;
 	if(a<0)
-		throw std::runtime_error("Error in my_log_raising_factorial, can not compute the raising factorial of a negative number in log scale");
+		throw std::runtime_error("Error in log_raising_factorial, can not compute the raising factorial of a negative number in log scale");
 	else if(a==0.0){
 		return -std::numeric_limits<double>::infinity();
 	}
