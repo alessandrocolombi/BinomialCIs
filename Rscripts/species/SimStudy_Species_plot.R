@@ -122,7 +122,7 @@ coverages = as.data.frame(coverages)
 names(coverages) = paste0("M=",as.character(Mgrid))
 coverages
 
-file_name = paste0("../save/SimStudySpecies_coverages_zipfs_all.Rdat")
+file_name = paste0("../save/SimStudySpecies_coverages_zipfs_all.dat")
 save(coverages, file = file_name)
 
 
