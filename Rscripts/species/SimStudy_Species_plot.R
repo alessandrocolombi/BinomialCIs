@@ -93,9 +93,9 @@ axis(side = 2, at = ylabs,
 points( x = Mgrid, y = ub_oracle, 
         type = "b", lwd = 1, pch = 16, lty = 2,
         col = "black" ) 
-points( x = Mgrid, y = ub_PYP[2,], 
-        type = "b", lwd = 1, pch = 16, lty = 2, 
-        col = "darkred" ) 
+points( x = Mgrid, y = ub_PYP[2,],
+        type = "b", lwd = 1, pch = 16, lty = 2,
+        col = "darkred" )
 points( x = Mgrid, y = ub_FD[2,],
         type = "b", lwd = 1, pch = 16, lty = 2,
         col = "darkblue" )
@@ -106,7 +106,9 @@ points( x = Mgrid, y = ub_pain[2,],
 # segments(x0 = Mgrid, x1 = Mgrid,
 #          y0 = ub_oracle[1,], y1 = ub_oracle[3,],
 #          col = "black", lwd = 1)
-legend("bottomright",c("Oracle","PD","FDP","Freq."), 
+# legend("bottomright",c("Oracle","Freq."), 
+#        lwd = 3, col = c("black","darkorange"))
+legend("bottomright",c("Oracle","PD","FDP","Freq."),
        lwd = 3, col = c("black","darkred","darkblue","darkorange"))
 if(save_img)
   dev.off()
@@ -195,9 +197,9 @@ axis(side = 2, at = ylabs,
 points( x = Mgrid, y = ub_oracle, 
         type = "b", lwd = 1, pch = 16, lty = 2,
         col = "black" ) 
-points( x = Mgrid, y = ub_PYP[2,], 
-        type = "b", lwd = 1, pch = 16, lty = 2, 
-        col = "darkred" ) 
+points( x = Mgrid, y = ub_PYP[2,],
+        type = "b", lwd = 1, pch = 16, lty = 2,
+        col = "darkred" )
 points( x = Mgrid, y = ub_FD[2,],
         type = "b", lwd = 1, pch = 16, lty = 2,
         col = "darkblue" )
@@ -208,8 +210,10 @@ points( x = Mgrid, y = ub_pain[2,],
 # segments(x0 = Mgrid, x1 = Mgrid,
 #          y0 = ub_oracle[1,], y1 = ub_oracle[3,],
 #          col = "black", lwd = 1)
-legend("bottomright",c("Oracle","PD","FDP","Freq."), 
+legend("bottomright",c("Oracle","PD","FDP","Freq."),
        lwd = 3, col = c("black","darkred","darkblue","darkorange"))
+# legend("bottomright",c("Oracle","Freq."),
+#        lwd = 3, col = c("black","darkorange"))
 if(save_img)
   dev.off()
 
