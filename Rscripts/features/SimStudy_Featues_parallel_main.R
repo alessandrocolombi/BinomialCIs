@@ -6,8 +6,8 @@
 # setwd(path)
 
 # The path to the script to execute in parallel
-# setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
-setwd("/home/lucia.paci/Lucia/Ale/bnp_upperbounds/Rscripts/features")
+setwd("C:/Users/colom/bnp_upperbounds/Rscripts/features")
+# setwd("/home/lucia.paci/Lucia/Ale/bnp_upperbounds/Rscripts/features")
 
 scriptpath = "SimStudy_Featues_exec.R"
 SimNo <- 1:15

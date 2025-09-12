@@ -183,7 +183,7 @@ if(run_zipfs){
 
 
 # Geom -------------------------------------------------------------------
-run_geom = TRUE
+run_geom = FALSE
 if(run_geom){
   a = 0.4
   var_gamma = 10
