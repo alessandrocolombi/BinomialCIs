@@ -982,8 +982,10 @@ double compute_UBFreq_BeBe(const int& n, const double& alpha_lev, const double& 
 		throw std::runtime_error("Error in compute_log_UBFreq_BeBe: Shat must be positive ");
 
 	double res{1.0/(double)n};
+	// Mod 17/09/25. Ci eravamo persi un quadrato?
 	double Warg = (double)n/(alpha_lev - beta) * 
-					(  std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) ) + std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) + Shat ) );
+					(  std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) ) + std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) + Shat ) ) *
+					(  std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) ) + std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) + Shat ) ) ;
 	double temp{gsl_sf_lambert_W0(Warg)};
 	
 	if(temp < 0)
@@ -1300,7 +1302,8 @@ double log_ExpMr_BeBeMixNBin( const int& r, const double& a, const double& b,
 	double r_nb_prime = r_nb + Kn;
 	double p_nb_prime = 1.0 - kappa_n*(1.0 - p_nb);
 	double l_postmean_M{ std::log(r_nb_prime) + std::log(1.0 - p_nb_prime) - std::log(p_nb_prime)  };
-	double res = l_postmean_M + log_raising_factorial(r,a) + log_raising_factorial(n,b) - log_raising_factorial(r+n, a+b) ;
+	//double res = l_postmean_M + log_raising_factorial(r,a) + log_raising_factorial(n,b) - log_raising_factorial(r+n, a+b) ;
+	double res = l_postmean_M + log_raising_factorial(r,a) - log_raising_factorial(r, a+b+n) ;
 	return res;
 }
 

@@ -68,7 +68,7 @@ if(run_Ami_sim1){
       Kn = length(idx_obs)
       data_obs = n_i[idx_obs]
       Shat = sum( data_obs/n )
-      
+      cat("\n Shat = ",Shat,"\n")
       # Minimization wrt beta
       start_params <- c(beta = alfa/2)
       fit <- optim(par = start_params, fn = lf_beta, 
@@ -105,7 +105,7 @@ ub_Bench  = apply(ub_Bench_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 ub_oracle = apply(oracle_mat, 1, quantile, probs = 1-alfa)
 
 # Plot curves -------------------------------------------------------------------
-ymax = 13*1e-3
+ymax = 18*1e-3
 ymin = 5*1e-3
 ylabs = round(seq(5,16,by = 1),3)
 
@@ -230,7 +230,7 @@ ymin = 5*1e-3
 ylabs = round(seq(5,13,by = 1),3)
 
 
-save_img = TRUE
+save_img = FALSE
 img_name = paste0("../img/SSFeatures_SimAmi1_zipfs_M10k.pdf")
 
 if(save_img)
