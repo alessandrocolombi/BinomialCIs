@@ -1,4 +1,4 @@
-# BNP Upper Bounds
+# Confidence Intervals in Binomial models
 
 
 ## Test
