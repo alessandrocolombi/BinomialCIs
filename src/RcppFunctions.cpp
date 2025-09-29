@@ -53,7 +53,8 @@ double log_stable_sum(const std::vector<double>& a, const bool is_log, const dou
 	}
 }
 
-double log_stable_sum(const Rcpp::NumericVector& a, const bool is_log, const double& val_max){
+double log_stable_sum(const Rcpp::NumericVector& a, const bool is_log, const double& val_max)
+{
 
 	double inf = std::numeric_limits<double>::infinity();
 
@@ -85,7 +86,8 @@ double log_stable_sum(const Rcpp::NumericVector& a, const bool is_log, const dou
 
 // In this version of the formula, the maximum value is computed
 // [[Rcpp::export]]
-double log_stable_sum(const Rcpp::NumericVector& a, const bool is_log){
+double log_stable_sum(const Rcpp::NumericVector& a, const bool is_log)
+{
 	if(a.size() == 0)
 		return 0.0;
 
@@ -180,31 +182,54 @@ double HurwitzZeta(const double& a, const unsigned int& m)
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // [[Rcpp::export]]
-double compute_UBFreq_BeBe(const int& n, const double& alpha_lev, const double& beta, const double& Shat)
+double compute_UB_intersection(const int& n, const double& alpha_lev, const double& beta_lev, const double& Shat)
 {
 	if(n <= 0)
-		throw std::runtime_error("Error in compute_log_UBFreq_BeBe: n must be strictly positive ");
+		throw std::runtime_error("Error in compute_UB_intersection: n must be strictly positive ");
 	if(alpha_lev <= 0 || alpha_lev >= 1)
-		throw std::runtime_error("Error in compute_log_UBFreq_BeBe: alpha_lev must be in (0,1) ");
-	if(alpha_lev-beta <= 0 )
-		throw std::runtime_error("Error in compute_log_UBFreq_BeBe: alpha_lev-beta must be strictly positive");
-	if(1.0/beta <= 0 )
-		throw std::runtime_error("Error in compute_log_UBFreq_BeBe: 1/beta must be strictly positive");
+		throw std::runtime_error("Error in compute_UB_intersection: alpha_lev must be in (0,1) ");
+	if( beta_lev <= 0 )
+		throw std::runtime_error("Error in compute_UB_intersection: beta_lev must be strictly positive");
+	if( (1.0 - alpha_lev + beta_lev) <= 0 )
+		throw std::runtime_error("Error in compute_UB_intersection: 1.0 - alpha_lev + beta_lev must be strictly positive");
 	if(Shat < 0)
-		throw std::runtime_error("Error in compute_log_UBFreq_BeBe: Shat must be positive ");
+		throw std::runtime_error("Error in compute_UB_intersection: Shat must be positive ");
 
-	double res{1.0/(double)n};
-	// Mod 17/09/25. Ci eravamo persi un quadrato?
-	double Warg = (double)n/(alpha_lev - beta) * 
-					(  std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) ) + std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) + Shat ) ) *
-					(  std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) ) + std::sqrt( (std::log(1.0/beta))/(2.0*(double)n) + Shat ) ) ;
+	double Warg = (double)n/(-std::log(1.0 - alpha_lev + beta_lev)); 
+	Warg *= (  std::sqrt( (std::log(1.0/beta_lev))/(2.0*(double)n) ) + std::sqrt( (std::log(1.0/beta_lev))/(2.0*(double)n) + Shat ) ) *
+			(  std::sqrt( (std::log(1.0/beta_lev))/(2.0*(double)n) ) + std::sqrt( (std::log(1.0/beta_lev))/(2.0*(double)n) + Shat ) ) ;
+
+	if(Warg < 0)
+		throw std::runtime_error("Error in compute_UB_intersection: the argument of the Lambert W function can not be negative");
+
 	double temp{gsl_sf_lambert_W0(Warg)};
-	
-	if(temp < 0)
-		throw std::runtime_error("Error in compute_log_UBFreq_BeBe: the argument of the Lambert W function can not be negative");
-
-	res *= temp;
-	return res;				
+	// UB = 1/n * W(..)
+	return temp/(double)n;				
 }
 
+// [[Rcpp::export]]
+double compute_UB_rnorm(const int& n, const double& alpha_lev, const double& beta_lev, const int& r, const double& Shat)
+{
+	if(n <= 0)
+		throw std::runtime_error("Error in compute_UB_rnorm: n must be strictly positive ");
+	if(alpha_lev <= 0 || alpha_lev >= 1)
+		throw std::runtime_error("Error in compute_UB_rnorm: alpha_lev must be in (0,1) ");
+	if( beta_lev <= 0 )
+		throw std::runtime_error("Error in compute_UB_rnorm: beta_lev must be strictly positive");
+	if( (alpha_lev - beta_lev) <= 0 )
+		throw std::runtime_error("Error in compute_UB_rnorm:  alpha_lev + beta_lev must be strictly positive");
+	if(Shat < 0)
+		throw std::runtime_error("Error in compute_UB_rnorm: Shat must be positive ");
+	if(r <= 0)
+		throw std::runtime_error("Error in compute_UB_rnorm: r must be strictly positive ");
+	
+	double Sstar = (  std::sqrt( (std::log(1.0/beta_lev))/(2.0*(double)n) ) + std::sqrt( (std::log(1.0/beta_lev))/(2.0*(double)n) + Shat ) ) *
+				   (  std::sqrt( (std::log(1.0/beta_lev))/(2.0*(double)n) ) + std::sqrt( (std::log(1.0/beta_lev))/(2.0*(double)n) + Shat ) ) ;
+	
+	double res{ 0 };
+	res += 1.0/(double)r * ( std::log(Sstar) - std::log(alpha_lev - beta_lev) ) ;
+	res += (double)(r-1)/(double)r * ( std::log( (double)(r-1) ) - std::log( (double)(n+r-1) ) );
+	res += (double)(n)/(double)r * ( std::log( (double)(n) ) - std::log( (double)(n+r-1) ) );
 
+	return std::exp(res);			
+}
