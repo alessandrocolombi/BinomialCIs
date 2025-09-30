@@ -40,8 +40,6 @@ rarefaction.array <- function(object, n_reorderings = 1, seed = 1234) {
 
 
 # Load and read all --------------------------------------------------------------------
-
-
 load("cancer_types.Rdat")
 wd = "C:/Users/colom/BinomialCIs/Rscripts/CancerData/"
 load("cancer_names_easy.Rdat")
