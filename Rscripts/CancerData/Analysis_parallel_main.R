@@ -1,5 +1,5 @@
 wd = "C:/Users/colom/BinomialCIs/Rscripts/CancerData/"
-wd = "~/Lucia/Ale/BinomialCIs/Rscripts/CancerData"
+wd = "~/Lucia/Ale/BinomialCIs/Rscripts/CancerData/"
 setwd(wd)
 
 # The path to the script to execute in parallel

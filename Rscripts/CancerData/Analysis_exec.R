@@ -19,9 +19,11 @@ set.seed(seed)
 
 exp_name = paste0("Cancer_",cancer_types[idx])
 save_exp = TRUE
+save_img_1 = TRUE
+save_img_2 = TRUE
 file_name = paste0("save/",exp_name,".Rdat")
-img_name_1 = paste0("save/",exp_name,"_len.pdf")
-img_name_2 = paste0("save/",exp_name,"_nlen.pdf")
+img_name_1 = paste0("img/",exp_name,"_len.pdf")
+img_name_2 = paste0("img/",exp_name,"_nlen.pdf")
 
 # Read & Statistics -------------------------------------------------------
 
@@ -105,13 +107,13 @@ ylabs = round(seq(ymin,ymax,length.out = 5),1)
 
 n_train_vec = ceiling( n*train_prop )
 
-save_img_1 = FALSE
+
 
 if(save_img_1)
   pdf(img_name_1)
 par( mfrow = c(1,1), mar = c(3.5,3.5,1,0.5), mgp=c(2.5,0.5,0), bty = "l" )
 plot(0,0,  yaxt = "n",
-     xlab = "n", ylab = "n x Length",
+     xlab = "n", ylab = "Length",
      xlim = c(0,max(n_train_vec) ) , ylim = c(ymin,ymax), 
      main = paste0(" "),
      type = "n")
@@ -137,7 +139,7 @@ polygon( c(n_train_vec, rev(n_train_vec)),
          border = NA) # plot in-sample bands
 legend("topright",c("Intersection","r-norm"), 
        lwd = 3, col = c("darkred","darkgreen"))
-if(save_img)
+if(save_img_1)
   dev.off()
 
 
@@ -181,7 +183,7 @@ polygon( c(n_train_vec, rev(n_train_vec)),
          border = NA) # plot in-sample bands
 legend("bottomright",c("Intersection","r-norm"), 
        lwd = 3, col = c("darkred","darkgreen"))
-if(save_img)
+if(save_img_2)
   dev.off()
 
 
