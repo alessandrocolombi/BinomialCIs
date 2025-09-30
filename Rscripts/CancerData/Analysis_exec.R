@@ -151,7 +151,6 @@ ylabs = round(seq(ymin,ymax,length.out = 5),1)
 
 n_train_vec = ceiling( n*train_prop )
 
-save_img_2 = FALSE
 
 if(save_img_2)
   pdf(img_name_2)
