@@ -3,7 +3,7 @@ setwd(wd)
 
 # The path to the script to execute in parallel
 scriptpath = "./Analysis_exec.R"
-SimNo <- 1:10
+SimNo <- 1:11
 
 # Parallel execution 
 idx <- SimNo[1]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
