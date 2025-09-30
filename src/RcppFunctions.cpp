@@ -202,9 +202,10 @@ double compute_UB_intersection(const int& n, const double& alpha_lev, const doub
 	if(Warg < 0)
 		throw std::runtime_error("Error in compute_UB_intersection: the argument of the Lambert W function can not be negative");
 
-	double temp{gsl_sf_lambert_W0(Warg)};
 	// UB = 1/n * W(..)
-	return temp/(double)n;				
+	double res = gsl_sf_lambert_W0(Warg)/(double)n;
+	
+	return std::min(res,1.0);				
 }
 
 // [[Rcpp::export]]
@@ -230,6 +231,7 @@ double compute_UB_rnorm(const int& n, const double& alpha_lev, const double& bet
 	res += 1.0/(double)r * ( std::log(Sstar) - std::log(alpha_lev - beta_lev) ) ;
 	res += (double)(r-1)/(double)r * ( std::log( (double)(r-1) ) - std::log( (double)(n+r-1) ) );
 	res += (double)(n)/(double)r * ( std::log( (double)(n) ) - std::log( (double)(n+r-1) ) );
+	res = std::exp(res);
 
-	return std::exp(res);			
+	return std::min(res,1.0);			
 }
