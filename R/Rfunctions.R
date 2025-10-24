@@ -1,12 +1,13 @@
 # Generate Distributions (features) ----------------------------------------------------
 sim_Uniform_features = function(M){
   w = runif(M)
+  w
 }
 
 sim_Constant_features = function(M, c){
   w = rep(c,M)
+  w
 }
-
 
 sim_TruncatedZipfs_features = function(M,s){
   w = sapply(2:(M+1),function(j) j^(-s))
@@ -18,6 +19,21 @@ sim_TruncatedGeom_features = function(M,a){
   w 
 }
 
+
+sim_generic = function(name,M,param){
+  if(name == "Zipfs"){
+    sim_TruncatedZipfs_features(M,param)
+  }else if(name == "Constant"){
+    sim_Constant_features(M,param)
+  }else if( name == "Geom" ){
+    sim_TruncatedGeom_features(M,param)
+  }else if( name == "Uniform"){
+    sim_Uniform_features(M)
+  }
+  else
+    stop("Invalid name")
+    
+}
 
 # This function generates a zipfs distribution with parameter s.
 # Since the distribution is unbounded, it is truncated at level Mstar
@@ -40,7 +56,15 @@ sim_zipfs_features = function(s,n,eps){
 
 
 
-
+get_first3digits <- function(x,d=3) {
+  # convert to string without scientific notation
+  s <- format(x, scientific = FALSE, trim = TRUE)
+  # remove decimal point
+  s <- gsub("\\.", "", s)
+  # take first 3 digits
+  s <- substr(s, 1, d)
+  return(s)
+}
 
 
 

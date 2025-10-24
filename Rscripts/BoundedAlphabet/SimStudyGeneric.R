@@ -10,17 +10,21 @@ suppressWarnings(suppressPackageStartupMessages(library(VGAM)))
 Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
 source("../../R/Rfunctions.R")
 
-# Custom functions ----------------------------------------------------------------
+# Sim specific param ----------------------------------------------------------------
+RunParallel = TRUE
+if(!RunParallel){
+  idx = 1 
+  param = 1e-5
+}
+
+names = c("Zipfs","Geom","Constant","Uniform")
+name = names[2] # choose the name here
 
 # Common parameters -------------------------------------------------------
 alfa = 0.05
 Brep = 100; Bor = 100
 seed = 42
 set.seed(seed)
-RunParallel = FALSE
-if(!RunParallel)
-  idx = 1 
-
 
 # n fix, M varies ---------------------------------------------------------
 
@@ -35,12 +39,11 @@ Mgrid_step = 250
 Mgrid = seq(Mgrid_min,Mgrid_max,by = Mgrid_step)
 Nexp = length(Mgrid)
 
-c = 1e-7
-
-exp_name = paste0("SSBounded_nfix_Homog_",idx)
+trimmed_param = get_first3digits(param,4)
+exp_name = paste0("SSBounded_nfix_",name,"_",trimmed_param)
 save_exp = FALSE
 file_name = paste0("save/",exp_name,".Rdat")
-img_name = paste0("save/",exp_name,".pdf")
+img_name = paste0("img/",exp_name,".pdf")
 
 ## Run  --------------------------------------------------------------------
 
@@ -134,10 +137,12 @@ lb_An     = apply(lb_An_mat, 1, quantile,    probs = c(0.025,0.5,0.975))
 
 ymax = max(ub_Bench[3,],ub_An[3,],ub_RegAn[3,],lb_An[3,]) * 1.05 #18*1e-3
 ymin = min(ub_Bench[1,],ub_An[1,],lb_An[1,]) #5*1e-3
+if(ymin < 0)
+  ymin = 0
 ylabs = round(seq(ymin*1e3,ymax*1e3,by = 1),1)
 
 
-save_img = FALSE
+save_img = TRUE
 
 if(save_img)
   pdf(img_name)
@@ -193,10 +198,10 @@ Ngrid = seq(Ngrid_min,Ngrid_max,by = Ngrid_step)
 Nexp = length(Ngrid)
 
 
-exp_name = paste0("SSBounded_Mfix_Homog_",idx)
+exp_name = paste0("SSBounded_Mfix_",name,"_",trimmed_param)
 save_exp = FALSE
 file_name = paste0("save/",exp_name,".Rdat")
-img_name = paste0("save/",exp_name,".pdf")
+img_name = paste0("img/",exp_name,".pdf")
 
 ## Run  --------------------------------------------------------------------
 
@@ -292,9 +297,11 @@ lb_An     = apply(lb_An_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 
 ymax = max(ub_Bench[3,],ub_An[3,],ub_RegAn[3,],lb_An[3,],oracle) * 1.05 #18*1e-3
 ymin = min(ub_Bench[1,],ub_An[1,],ub_RegAn[1,],lb_An[1,],oracle) #5*1e-3
+if(ymin < 0)
+  ymin = 0
 ylabs = round(seq(ymin*1e3,ymax*1e3,by = 3),1)
 
-save_img = FALSE
+save_img = TRUE
 
 if(save_img)
   pdf(img_name)
@@ -324,10 +331,10 @@ points( x = Ngrid, y = lb_An[2,],
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "grey45" ) 
-points( x = Ngrid, y = oracle, 
-        type = "l", 
-        lwd = 3, pch = 16, lty = 1,
-        col = "black" )
+# points( x = Ngrid, y = oracle, 
+#         type = "l", 
+#         lwd = 3, pch = 16, lty = 1,
+#         col = "black" )
 # legend("topright",c("Benchmark","Analytic","Reg.Analytic","Lower bound","Proposed"), 
 #        lwd = 3, col = c("darkred","darkgreen","darkblue","grey45","black"))
 legend("topright",c("Benchmark","Analytic","Lower bound"), 
