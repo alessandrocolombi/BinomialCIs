@@ -177,8 +177,80 @@ double HurwitzZeta(const double& a, const unsigned int& m)
 	else 
 		return gsl_sf_hzeta(a, m);
 }
+
 //------------------------------------------------------------------------------------------------------------------------------------------------------
-//	Features - Frequentist
+//	Features - Frequentist - Bounded alphabet
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// [[Rcpp::export]]
+double compute_UB_analytical( const int& n, const Rcpp::IntegerVector& Nj, const int& M, 
+							  const double& b, const double& alpha_lev, bool IsRegular)
+{
+	double inf = std::numeric_limits<double>::infinity();
+
+	if(n <= 0)
+		throw std::runtime_error("Error in compute_UB_analytical: n must be strictly positive ");
+	if(M <= 0)
+		throw std::runtime_error("Error in compute_UB_analytical: M must be strictly positive ");
+	if(Nj.size()!= M)
+		throw std::runtime_error("Error in compute_UB_analytical: the length of Nj must be equal to M ");
+	if(alpha_lev <= 0 || alpha_lev >= 1)
+		throw std::runtime_error("Error in compute_UB_analytical: alpha_lev must be in (0,1) ");
+	if( b <= 0 )
+		throw std::runtime_error("Error in compute_UB_analytical: b must be strictly positive");
+
+	double a1 = 0.99*alpha_lev; // \alpha in the paper
+	double a2 = 0.01*alpha_lev; // \delta in the paper
+
+	std::vector<double> log_mp_vec(M+1,-inf); // vector of log values
+	double max{-inf};
+	int idx_max{-1};
+	for(int j=0; j < M; j++){
+		if(Nj[j] < n){
+			log_mp_vec[j] = b * gsl_log1p( -(double)Nj[j]/(double)n ); // compute log of jth element	
+		}
+		if(log_mp_vec[j] > max){
+			max = log_mp_vec[j]; // save max
+			idx_max = j; // save position max
+		}
+		//if(std::isnan(log_mp_vec[j])){
+			//throw std::runtime_error("Error in compute_UB_analytical. Get a NaN");
+		//}
+	}
+	//mp = std::exp( log_stable_sum(log_mp_vec, TRUE, max, idx_max) );
+	if(!IsRegular){
+		log_mp_vec[M] = std::log(b) + 0.5*( std::log( (double)M ) - std::log( (double)n ) + std::log(-std::log(a2)) );
+		if(log_mp_vec[M] > max){
+			max = log_mp_vec[M]; // save max
+			idx_max = M; // save position max
+		}
+	}
+	double log_mp = log_stable_sum(log_mp_vec, TRUE, max, idx_max);
+	return 1.0/( (double)n - b )*( log_mp - std::log(a1) );
+}
+
+// [[Rcpp::export]]
+double compute_LB_analytical( const int& n, const Rcpp::IntegerVector& Nj, const double& alpha_lev)
+{
+	double inf = std::numeric_limits<double>::infinity();
+
+	if(n <= 0)
+		throw std::runtime_error("Error in compute_UB_analytical: n must be strictly positive ");
+	if(alpha_lev <= 0 || alpha_lev >= 1)
+		throw std::runtime_error("Error in compute_UB_analytical: alpha_lev must be in (0,1) ");
+
+	int n_zeros = sum(Nj == 0);
+	if(n_zeros == 0)
+		return 0.0;
+
+	// else
+	double lb = 1.0/(double)n * std::log((double)n_zeros/alpha_lev);
+	return lb;
+}
+
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+//	Features - Frequentist - Unbounded alphabet
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
 // [[Rcpp::export]]

@@ -1,10 +1,18 @@
 # Generate Distributions (features) ----------------------------------------------------
+sim_Uniform_features = function(M){
+  w = runif(M)
+}
+
 
 sim_TruncatedZipfs_features = function(M,s){
-  w = sapply(1:(M),function(j) j^(-s))
+  w = sapply(2:(M+1),function(j) j^(-s))
   w 
 }
 
+sim_TruncatedGeom_features = function(M,a){
+  w = sapply(2:(M+1),function(j) (1-a)^(j-1) )
+  w 
+}
 
 # This function generates a zipfs distribution with parameter s.
 # Since the distribution is unbounded, it is truncated at level Mstar
@@ -20,3 +28,18 @@ sim_zipfs_features = function(s,n,eps){
   w = sim_TruncatedZipfs_features(mstar,s)
   w
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

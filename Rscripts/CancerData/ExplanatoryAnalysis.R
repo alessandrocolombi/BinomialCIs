@@ -40,17 +40,20 @@ rarefaction.array <- function(object, n_reorderings = 1, seed = 1234) {
 
 
 # Load and read all --------------------------------------------------------------------
-load("cancer_types.Rdat")
 wd = "C:/Users/colom/BinomialCIs/Rscripts/CancerData/"
+setwd(wd)
+load("cancer_types.Rdat")
 load("cancer_names_easy.Rdat")
 
 TabNj_list = vector("list", length = length(cancer_names))
 ExtrCurve_list = vector("list", length = length(cancer_names))
+N = 0
 
 idx = 1
-save_plot = FALSE
+save_plot_all = FALSE
+save_plot_individual = TRUE
 
-if(save_plot)
+if(save_plot_all)
   pdf("img/ExtrapolationCurvs_all.pdf")
 
 par(mfrow = c(2,2),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
@@ -61,6 +64,7 @@ for(idx in 1:length(cancer_names)){
   load(filename)
   Nj = c(apply(Z, 2, sum))
   n = nrow(Z)
+  N = N + n
   Kobs = length( which(Nj > 0) )
   TabNj = c(length(which(Nj == 0)), tabulate(Nj, nbins = n) )
   TabNj_list[[idx]] = TabNj
@@ -68,8 +72,11 @@ for(idx in 1:length(cancer_names)){
   # Run
   ExtrCurve = rarefaction.array(object = Z, n_reorderings = 20, seed = 1234)
   ExtrCurve_list[[idx]] = ExtrCurve
-  
+
   # Plot
+  if(save_plot_individual)
+    pdf(paste0("img/ExtrapolationCurvs_",cancer_types[idx],".pdf"))
+  par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
   plot(x = 0, y = 0, type = "n",
        main = cancer_name, xlab = "#obs.", ylab = "#variants",
        ylim = c(0,Kobs+1),
@@ -80,16 +87,18 @@ for(idx in 1:length(cancer_names)){
            col = "grey75",
            border = NA) # plot in-sample bands
   points(x = 1:n, y = ExtrCurve[2,], type = "l", lwd = 3) # plot mean obs
+  if(save_plot_individual)
+    dev.off()
 }
-if(save_plot)
+if(save_plot_all)
   dev.off()
 
 
 
 
 # Exploratory plots (#obs & #variants) -------------------------------------------------------
-Ncancers = length(nj)
 nj = sapply(ExtrCurve_list, function(x){ncol(x)})
+Ncancers = length(nj)
 Kobsj = sapply(TabNj_list, function(x) sum( x[-1] ) )
 
 ordered_nj = sort(nj,decreasing = TRUE, index.retur = TRUE )

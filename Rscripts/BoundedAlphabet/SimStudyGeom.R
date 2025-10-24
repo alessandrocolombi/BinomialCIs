@@ -35,9 +35,9 @@ Mgrid_step = 100
 Mgrid = seq(Mgrid_min,Mgrid_max,by = Mgrid_step)
 Nexp = length(Mgrid)
 
-s = 1.02
+a = 0.01
 
-exp_name = paste0("SSBounded_nfix_Zipfs_",idx)
+exp_name = paste0("SSBounded_nfix_Geom_",idx)
 save_exp = FALSE
 file_name = paste0("save/",exp_name,".Rdat")
 img_name = paste0("save/",exp_name,".pdf")
@@ -58,7 +58,7 @@ if(run_n_fix){
     M = Mgrid[ii]
     BB = max(Bor,Brep)
     prob_true_mat = matrix(0,nrow = BB, ncol = M) # (BB x M) matrix
-    prob_true_mat = t(apply(prob_true_mat, 1, function(x) { sim_TruncatedZipfs_features(M = M, s = s) } ))
+    prob_true_mat = t(apply(prob_true_mat, 1, function(x) { sim_TruncatedGeom_features(M = M, a = a) } ))
     data = apply(prob_true_mat, 2, function(pj) {rbinom(n = BB, size = n, prob = pj)} ) # (BB x M) matrix
     # data[b,j]: number of obs. of j-th features in b-th repetition
     
@@ -128,9 +128,9 @@ if(run_n_fix){
 ## Final summary and plot ---------------------------------------------------
 
 ub_Bench  = apply(ub_Bench_mat, 1, quantile, probs = c(0.025,0.5,0.975))
-ub_An     = apply(ub_An_mat, 1, quantile, probs = c(0.025,0.5,0.975))
+ub_An     = apply(ub_An_mat, 1, quantile,    probs = c(0.025,0.5,0.975))
 ub_RegAn  = apply(ub_RegAn_mat, 1, quantile, probs = c(0.025,0.5,0.975))
-lb_An     = apply(lb_An_mat, 1, quantile, probs = c(0.025,0.5,0.975))
+lb_An     = apply(lb_An_mat, 1, quantile,    probs = c(0.025,0.5,0.975))
 
 ymax = max(ub_Bench[3,],ub_An[3,],ub_RegAn[3,],lb_An[3,],oracle) * 1.05 #18*1e-3
 ymin = min(ub_Bench[1,],ub_An[1,],ub_RegAn[1,],lb_An[1,],oracle) #5*1e-3
@@ -159,10 +159,10 @@ points( x = Mgrid, y = ub_An[2,],
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "darkgreen" ) 
-points( x = Mgrid, y = ub_RegAn[2,], 
-        type = "l", 
-        lwd = 3, pch = 16, lty = 1,
-        col = "darkblue" ) 
+# points( x = Mgrid, y = ub_RegAn[2,], 
+#         type = "l", 
+#         lwd = 3, pch = 16, lty = 1,
+#         col = "darkblue" ) 
 points( x = Mgrid, y = lb_An[2,], 
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
@@ -171,8 +171,10 @@ points( x = Mgrid, y = oracle,
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "black" )
-legend("topleft",c("Benchmark","Analytic","Reg.Analytic","Lower bound","Proposed"), 
-       lwd = 3, col = c("darkred","darkgreen","darkblue","grey45","black"))
+# legend("topleft",c("Benchmark","Analytic","Reg.Analytic","Lower bound","Proposed"), 
+       # lwd = 3, col = c("darkred","darkgreen","darkblue","grey45","black"))
+legend("topleft",c("Benchmark","Analytic","Lower bound","Proposed"), 
+       lwd = 3, col = c("darkred","darkgreen","grey45","black"))
 if(save_img)
   dev.off()
 
@@ -182,17 +184,17 @@ if(save_img)
 
 ## Options -----------------------------------------------------------------
 
-M = 10000
-Ngrid_max = 10000
-Ngrid_min =  500
+M = 500
+Ngrid_max = 50000
+Ngrid_min = 10000
 Ngrid_step = 200
 
 Ngrid = seq(Ngrid_min,Ngrid_max,by = Ngrid_step)
 Nexp = length(Ngrid)
 
-s = 1.02
+a = 0.01
 
-exp_name = paste0("SSBounded_Mfix_Zipfs_",idx)
+exp_name = paste0("SSBounded_Mfix_Geom_",idx)
 save_exp = FALSE
 file_name = paste0("save/",exp_name,".Rdat")
 img_name = paste0("save/",exp_name,".pdf")
@@ -210,7 +212,7 @@ if(run_M_fix){
   # Generate true distribution
   BB = max(Bor,Brep)
   prob_true_mat = matrix(0,nrow = BB, ncol = M) # (BB x M) matrix
-  prob_true_mat = t(apply(prob_true_mat, 1, function(x) { sim_TruncatedZipfs_features(M = M, s = s) } ))
+  prob_true_mat = t(apply(prob_true_mat, 1, function(x) { sim_TruncatedGeom_features(M = M, a = a) } ))
   
   pb <- progress_bar$new(total = Nexp)
   for(ii in 1:Nexp){
@@ -299,7 +301,7 @@ if(save_img)
   pdf(img_name)
 par( mfrow = c(1,1), mar = c(4,4,1,0.5), mgp=c(3,0.5,0), bty = "l" )
 plot(0,0,  yaxt = "n",
-     xlab = "M", ylab = "1000*bound",
+     xlab = "n", ylab = "1000*bound",
      xlim = c(min(Ngrid),max(Ngrid) ) , ylim = c(ymin,ymax), 
      main = paste0(" "),
      type = "n")
@@ -315,10 +317,10 @@ points( x = Ngrid, y = ub_An[2,],
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "darkgreen" ) 
-points( x = Ngrid, y = ub_RegAn[2,], 
-        type = "l", 
-        lwd = 3, pch = 16, lty = 1,
-        col = "darkblue" ) 
+# points( x = Ngrid, y = ub_RegAn[2,], 
+#         type = "l", 
+#         lwd = 3, pch = 16, lty = 1,
+#         col = "darkblue" ) 
 points( x = Ngrid, y = lb_An[2,], 
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
@@ -327,7 +329,9 @@ points( x = Ngrid, y = oracle,
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "black" )
-legend("topright",c("Benchmark","Analytic","Reg.Analytic","Lower bound","Proposed"), 
-       lwd = 3, col = c("darkred","darkgreen","darkblue","grey45","black"))
+# legend("topright",c("Benchmark","Analytic","Reg.Analytic","Lower bound","Proposed"), 
+#        lwd = 3, col = c("darkred","darkgreen","darkblue","grey45","black"))
+legend("topright",c("Benchmark","Analytic","Lower bound","Proposed"), 
+       lwd = 3, col = c("darkred","darkgreen","grey45","black"))
 if(save_img)
   dev.off()
