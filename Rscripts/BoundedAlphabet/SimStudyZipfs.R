@@ -182,7 +182,7 @@ if(save_img)
 
 ## Options -----------------------------------------------------------------
 
-M = 10000
+M = 100
 Ngrid_max = 10000
 Ngrid_min =  500
 Ngrid_step = 200
@@ -259,7 +259,7 @@ if(run_M_fix){
       ## UB Analytical
       bn = log(n)
       ub_An_mat[ii,b] = compute_UB_analytical(n,n_i,M,bn,alfa,FALSE)
-      bn_reg = sqrt(n) - log(n)
+      bn_reg = log(n)
       ub_RegAn_mat[ii,b] = compute_UB_analytical(n,n_i,M,bn_reg,alfa,TRUE)
       
     }
@@ -299,7 +299,7 @@ if(save_img)
   pdf(img_name)
 par( mfrow = c(1,1), mar = c(4,4,1,0.5), mgp=c(3,0.5,0), bty = "l" )
 plot(0,0,  yaxt = "n",
-     xlab = "M", ylab = "1000*bound",
+     xlab = "n", ylab = "1000*bound",
      xlim = c(min(Ngrid),max(Ngrid) ) , ylim = c(ymin,ymax), 
      main = paste0(" "),
      type = "n")

@@ -28,9 +28,9 @@ if(!RunParallel)
 ## Options -----------------------------------------------------------------
 
 n = 2000
-Mgrid_min =  1000
-Mgrid_max = 10000
-Mgrid_step = 100
+Mgrid_min =  100#1000
+Mgrid_max =  2000#10000
+Mgrid_step = 50
 
 Mgrid = seq(Mgrid_min,Mgrid_max,by = Mgrid_step)
 Nexp = length(Mgrid)
@@ -132,8 +132,8 @@ ub_An     = apply(ub_An_mat, 1, quantile,    probs = c(0.025,0.5,0.975))
 ub_RegAn  = apply(ub_RegAn_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 lb_An     = apply(lb_An_mat, 1, quantile,    probs = c(0.025,0.5,0.975))
 
-ymax = max(ub_Bench[3,],ub_An[3,],ub_RegAn[3,],lb_An[3,],oracle) * 1.05 #18*1e-3
-ymin = min(ub_Bench[1,],ub_An[1,],ub_RegAn[1,],lb_An[1,],oracle) #5*1e-3
+ymax = max(ub_Bench[3,],ub_An[3,],ub_RegAn[3,],lb_An[3,]) * 1.05 #18*1e-3
+ymin = min(ub_Bench[1,],ub_An[1,],lb_An[1,]) #5*1e-3
 ylabs = round(seq(ymin*1e3,ymax*1e3,by = 1),1)
 
 
@@ -167,14 +167,14 @@ points( x = Mgrid, y = lb_An[2,],
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "grey45" ) 
-points( x = Mgrid, y = oracle, 
-        type = "l", 
-        lwd = 3, pch = 16, lty = 1,
-        col = "black" )
-# legend("topleft",c("Benchmark","Analytic","Reg.Analytic","Lower bound","Proposed"), 
+# points( x = Mgrid, y = oracle, 
+#         type = "l", 
+#         lwd = 3, pch = 16, lty = 1,
+#         col = "black" )
+# legend("topleft",c("Benchmark","Analytic","Reg.Analytic","Lower bound","Oracle"), 
        # lwd = 3, col = c("darkred","darkgreen","darkblue","grey45","black"))
-legend("topleft",c("Benchmark","Analytic","Lower bound","Proposed"), 
-       lwd = 3, col = c("darkred","darkgreen","grey45","black"))
+legend("topleft",c("Benchmark","Analytic","Lower bound"), 
+       lwd = 3, col = c("darkred","darkgreen","grey45"))
 if(save_img)
   dev.off()
 
