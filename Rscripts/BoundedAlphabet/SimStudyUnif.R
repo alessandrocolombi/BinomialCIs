@@ -14,6 +14,7 @@ source("../../R/Rfunctions.R")
 
 # Common parameters -------------------------------------------------------
 alfa = 0.05
+beta = 1e-5
 Brep = 100; Bor = 100
 seed = 42
 set.seed(seed)
@@ -39,7 +40,7 @@ Nexp = length(Mgrid)
 exp_name = paste0("SSBounded_nfix_Unif_",idx)
 save_exp = FALSE
 file_name = paste0("save/",exp_name,".Rdat")
-img_name = paste0("img/",exp_name,".pdf")
+img_name = paste0("img/Unif/",exp_name,".pdf")
 
 ## Run  --------------------------------------------------------------------
 
@@ -48,7 +49,7 @@ run_n_fix = TRUE
 if(run_n_fix){
   
   oracle_mat <- matrix(-Inf,Nexp,Bor) 
-  ub_Bench_mat <- ub_An_mat <- ub_RegAn_mat <- lb_An_mat <- matrix(-Inf,Nexp,Brep) 
+  ub_Bench_mat <- ub_An_mat <- ub_RegAn_mat <- lb_An_mat <- ub_Ubb_inter_mat <- ub_Ubb_rnorm_mat <- matrix(-Inf,Nexp,Brep) 
   oracle <- rep(NA,Nexp)
   
   pb <- progress_bar$new(total = Nexp); ii = 1
@@ -104,6 +105,17 @@ if(run_n_fix){
       ub_An_mat[ii,b] = compute_UB_analytical(n,n_i,M,bn,alfa,FALSE)
       bn_reg = sqrt(n) - log(n)
       ub_RegAn_mat[ii,b] = compute_UB_analytical(n,n_i,M,bn_reg,alfa,TRUE)
+      
+      # Unbounded alphabet:
+      Shat = sum( n_i )/n
+      
+      ## Intersection
+      ub_Ubb_inter_mat[ii,b] = compute_UB_intersection(n, alfa, beta, Shat)
+      
+      ## r-norm
+      Sstar = ( sqrt( -log(beta)/(2*n) ) + sqrt( Shat + (-log(beta)/(2*n)) ) )^2
+      rn = log( Sstar / (-log(1-alfa+beta)) ) + log(n) - log(log(n))
+      ub_Ubb_rnorm_mat[ii,b] = compute_UB_rnorm(n, alfa, beta, rn, Shat)
     }
     
     pb$tick()
@@ -115,6 +127,8 @@ if(run_n_fix){
                    "ub_RegAn_mat" = ub_An_mat,
                    "lb_An_mat"    = lb_An_mat,
                    "ub_RegAn_mat" = ub_RegAn_mat,
+                   "ub_Ubb_inter_mat" = ub_Ubb_inter_mat,
+                   "ub_Ubb_rnorm_mat" = ub_Ubb_rnorm_mat,
                    "oracle" = oracle )
   
   if(save_exp)
@@ -130,9 +144,11 @@ ub_Bench  = apply(ub_Bench_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 ub_An     = apply(ub_An_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 ub_RegAn  = apply(ub_RegAn_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 lb_An     = apply(lb_An_mat, 1, quantile, probs = c(0.025,0.5,0.975))
+ub_Ubb_inter = apply(ub_Ubb_inter_mat, 1, quantile, probs = c(0.025,0.5,0.975))
+ub_Ubb_rnorm  = apply(ub_Ubb_rnorm_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 
-ymax = max(ub_Bench[3,],ub_An[3,],ub_RegAn[3,],lb_An[3,],oracle) * 1.05 #18*1e-3
-ymin = min(ub_Bench[1,],ub_An[1,],ub_RegAn[1,],lb_An[1,],oracle) #5*1e-3
+ymax = max(ub_Bench[3,],ub_An[3,],ub_RegAn[3,],lb_An[3,],ub_Ubb_inter[3,],ub_Ubb_rnorm[3,],oracle) * 1.05 #18*1e-3
+ymin = min(ub_Bench[1,],ub_An[1,],ub_RegAn[1,],lb_An[1,],ub_Ubb_inter[1,],ub_Ubb_rnorm[1,],oracle) #5*1e-3
 if(ymin < 0)
   ymin = 0
 ylabs = round(seq(ymin*1e3,ymax*1e3,by = 1),3)
@@ -160,6 +176,10 @@ points( x = Mgrid, y = ub_An[2,],
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "darkgreen" ) 
+points( x = Mgrid, y = ub_Ubb_rnorm[2,], 
+        type = "l", 
+        lwd = 3, pch = 16, lty = 1,
+        col = "darkorange" ) 
 # points( x = Mgrid, y = ub_RegAn[2,], 
 #         type = "l", 
 #         lwd = 3, pch = 16, lty = 1,
@@ -172,8 +192,8 @@ points( x = Mgrid, y = lb_An[2,],
 #         type = "l", 
 #         lwd = 3, pch = 16, lty = 1,
 #         col = "black" )
-legend("bottomright",c("Benchmark","Analytic","Reg.Analytic","Lower bound"), 
-       lwd = 3, col = c("darkred","darkgreen","darkblue","grey45"))
+legend("bottomright",c("Benchmark","Analytic","Unbounded","Lower bound"), 
+       lwd = 3, col = c("darkred","darkgreen","darkorange","grey45"))
 if(save_img)
   dev.off()
 
@@ -202,7 +222,7 @@ run_M_fix = TRUE
 if(run_M_fix){
   
   oracle_mat <- matrix(-Inf,Nexp,Bor) 
-  ub_Bench_mat <- ub_An_mat <- ub_RegAn_mat <- lb_An_mat <- matrix(-Inf,Nexp,Brep) 
+  ub_Bench_mat <- ub_An_mat <- ub_RegAn_mat <- lb_An_mat <- ub_Ubb_inter_mat <- ub_Ubb_rnorm_mat <- matrix(-Inf,Nexp,Brep) 
   oracle <- rep(NA,Nexp)
   
   # Generate true distribution
@@ -260,6 +280,16 @@ if(run_M_fix){
       bn_reg = sqrt(n) - log(n)
       ub_RegAn_mat[ii,b] = compute_UB_analytical(n,n_i,M,bn_reg,alfa,TRUE)
       
+      # Unbounded alphabet:
+      Shat = sum( n_i )/n
+      
+      ## Intersection
+      ub_Ubb_inter_mat[ii,b] = compute_UB_intersection(n, alfa, beta, Shat)
+      
+      ## r-norm
+      Sstar = ( sqrt( -log(beta)/(2*n) ) + sqrt( Shat + (-log(beta)/(2*n)) ) )^2
+      rn = log( Sstar / (-log(1-alfa+beta)) ) + log(n) - log(log(n))
+      ub_Ubb_rnorm_mat[ii,b] = compute_UB_rnorm(n, alfa, beta, rn, Shat)
     }
     
     pb$tick()
@@ -271,6 +301,8 @@ if(run_M_fix){
                    "ub_RegAn_mat" = ub_An_mat,
                    "lb_An_mat"    = lb_An_mat,
                    "ub_RegAn_mat" = ub_RegAn_mat,
+                   "ub_Ubb_inter_mat" = ub_Ubb_inter_mat,
+                   "ub_Ubb_rnorm_mat" = ub_Ubb_rnorm_mat,
                    "oracle" = oracle )
   
   if(save_exp)
@@ -286,12 +318,14 @@ ub_Bench  = apply(ub_Bench_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 ub_An     = apply(ub_An_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 ub_RegAn  = apply(ub_RegAn_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 lb_An     = apply(lb_An_mat, 1, quantile, probs = c(0.025,0.5,0.975))
+ub_Ubb_inter = apply(ub_Ubb_inter_mat, 1, quantile, probs = c(0.025,0.5,0.975))
+ub_Ubb_rnorm  = apply(ub_Ubb_rnorm_mat, 1, quantile, probs = c(0.025,0.5,0.975))
 
-ymax = max(ub_Bench[3,],ub_An[3,],ub_RegAn[3,],lb_An[3,],oracle) * 1.05 #18*1e-3
-ymin = min(ub_Bench[1,],ub_An[1,],ub_RegAn[1,],lb_An[1,],oracle) #5*1e-3
+ymax = max(ub_Bench[3,],ub_An[3,],ub_RegAn[3,],lb_An[3,],ub_Ubb_inter[3,],ub_Ubb_rnorm[3,],oracle) * 1.05 #18*1e-3
+ymin = min(ub_Bench[1,],ub_An[1,],ub_RegAn[1,],lb_An[1,],ub_Ubb_inter[1,],ub_Ubb_rnorm[1,],oracle) #5*1e-3
 if(ymin < 0)
   ymin = 0
-ylabs = round(seq(ymin*1e3,ymax*1e3,by = 3),3)
+ylabs = round(seq(ymin*1e3,ymax*1e3,by = 1),3)
 
 
 
@@ -317,10 +351,10 @@ points( x = Ngrid, y = ub_An[2,],
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "darkgreen" ) 
-# points( x = Ngrid, y = ub_RegAn[2,], 
-#         type = "l", 
-#         lwd = 3, pch = 16, lty = 1,
-#         col = "darkblue" ) 
+points( x = Ngrid, y = ub_Ubb_rnorm[2,],
+        type = "l",
+        lwd = 3, pch = 16, lty = 1,
+        col = "darkorange" )
 points( x = Ngrid, y = lb_An[2,], 
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
@@ -329,7 +363,7 @@ points( x = Ngrid, y = lb_An[2,],
 #         type = "l", 
 #         lwd = 3, pch = 16, lty = 1,
 #         col = "black" )
-legend("topright",c("Benchmark","Analytic","Lower bound"), 
-       lwd = 3, col = c("darkred","darkgreen","darkblue","grey45"))
+legend("topright",c("Benchmark","Analytic","Unbounded","Lower bound"), 
+       lwd = 3, col = c("darkred","darkgreen","darkorange","grey45"))
 if(save_img)
   dev.off()
