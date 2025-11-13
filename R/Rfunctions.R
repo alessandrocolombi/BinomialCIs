@@ -68,6 +68,45 @@ get_first3digits <- function(x,d=3) {
 
 
 
+# Lorenzo Ghilotti's functions for extrapolation curves -------------------------------------
+convert_features_list <- function(feature_matrix){
+  
+  feat_list <- vector("list", nrow(feature_matrix))
+  
+  for (i in 1:nrow(feature_matrix)){
+    feat_list[[i]] <- which(feature_matrix[i,]==1, arr.ind = TRUE)
+  }
+  
+  return (feat_list)
+}
+rarefaction.array <- function(object, n_reorderings = 1, seed = 1234) {
+  
+  feature_list <- convert_features_list(object)
+  n <- nrow(object)
+  
+  if (n_reorderings == 1){
+    
+    rare_curve <- sapply(1:n, function(i) length(unique(unlist(feature_list[1:i]))) )
+    
+  } else {
+    
+    rare_curve <- matrix(NA, nrow = n_reorderings, ncol = n)
+    
+    for (j in 1:n_reorderings){
+      
+      f_list <- sample(feature_list)
+      
+      rare_curve[j, ] <- sapply(1:n, function(i) length(unique(unlist(f_list[1:i]))) )
+    }
+    
+    # rare_curve <- colMeans(rare_curve)
+    rare_curve_qnt = apply(rare_curve,2,quantile, prob = c(0.025,0.5,0.975))
+  }
+  
+  return(rare_curve_qnt)
+  
+}
+
 
 
 

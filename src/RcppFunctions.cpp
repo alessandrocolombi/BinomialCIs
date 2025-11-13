@@ -179,6 +179,88 @@ double HurwitzZeta(const double& a, const unsigned int& m)
 }
 
 //------------------------------------------------------------------------------------------------------------------------------------------------------
+//	Sample from truncated Beta process
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// [[Rcpp::export]]
+NumericMatrix r_BetaPr( const int& Nrep, const int& Natoms, const double& gamma, const int& seed)
+{
+	sample::rbeta beta; 
+	sample::GSL_RNG engine(seed);
+
+	if(Nrep <= 0)
+		throw std::runtime_error("Error in r_BetaPr: Nrep must be positive");
+	if(Natoms < 1)
+		throw std::runtime_error("Error in r_BetaPr: Natoms must be at least one");
+	if(gamma <= 0)
+		throw std::runtime_error("Error in r_BetaPr: gamma must be > 0");
+
+	NumericMatrix res(Nrep,Natoms);
+	for(int b = 0; b < Nrep; b++){
+		double cumprod{1.0};
+		for(int i = 0; i < Natoms; i++){
+			//Rcpp::Rcout<<"("<<b<<","<<i<<"); cumprod = "<<cumprod<<std::endl;
+			double beta_i =  beta(engine, gamma, 1.0);
+			res(b,i) = beta_i * cumprod ; // save i-th value
+			cumprod *= beta_i; // update cumulative product 
+		}
+	}
+
+	return res;
+}
+
+// Note: if sigma < 1e-5, then it is consider as 0
+// [[Rcpp::export]]
+NumericMatrix r_3ParamBetaPr( const int& Nrep, const int& Natoms, 
+							  const double& gamma, const double& sigma, const double& c,
+							  const int& seed)
+{
+	sample::rgamma rgamma; 
+	sample::GSL_RNG engine(seed);
+
+	if(Nrep <= 0)
+		throw std::runtime_error("Error in r_3ParamBetaPr: Nrep must be positive");
+	if(Natoms < 1)
+		throw std::runtime_error("Error in r_3ParamBetaPr: Natoms must be at least one");
+	if(gamma <= 0)
+		throw std::runtime_error("Error in r_3ParamBetaPr: gamma must be > 0");
+	if(sigma < 0 || sigma >= 1)
+		throw std::runtime_error("Error in r_3ParamBetaPr: sigma must be in [0,1)");
+	if(c <= -sigma)
+		throw std::runtime_error("Error in r_3ParamBetaPr: c must be > -sigma");
+
+	auto invPsi = [gamma, sigma, c](const double& xi){
+		if(xi < 0)
+			throw std::runtime_error("Error in invPsi: xi can not be negative");
+
+		double arg = (sigma*xi)/(gamma*c);
+		double res;
+		if( sigma < 1e-5 ){
+			res = gsl_expm1(arg);
+		}
+		else{
+			res = gsl_expm1( gsl_log1p( arg ) ); 
+		}
+		if(res < 0)
+			throw std::runtime_error("Error in invPsi: res can not be negative");
+		return res;
+	};
+
+	NumericMatrix res(Nrep,Natoms);
+	for(int b = 0; b < Nrep; b++){
+		for(int i = 0; i < Natoms; i++){
+			double xi = rgamma(engine, 1.0, 1.0);
+			double ti = invPsi(xi);
+			double z = rgamma(engine, 1.0 - sigma, 1.0/(1.0 + ti));
+			double y = rgamma(engine, c+sigma, 1.0);
+			double z_over_y = z/y;
+			res(b,i) = (z_over_y)/(z_over_y + 1.0);
+		}
+	}
+
+	return res;
+}
+//------------------------------------------------------------------------------------------------------------------------------------------------------
 //	Features - Frequentist - Bounded alphabet
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 
