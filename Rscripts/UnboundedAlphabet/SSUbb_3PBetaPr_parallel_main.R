@@ -1,20 +1,14 @@
-wd = "C:/Users/colom/BinomialCIs/Rscripts/BoundedAlphabet/"
-# wd = "~/Lucia/Ale/BinomialCIs/Rscripts/BoundedAlphabet/"
+wd = "C:/Users/colom/BinomialCIs/Rscripts/UnboundedAlphabet/"
+# wd = "~/Lucia/Ale/BinomialCIs/Rscripts/UnboundedAlphabet/"
 setwd(wd)
 
 # The path to the script to execute in parallel
-scriptpath = "./SimStudyGeneric.R"
+scriptpath = "./SSUbb_3PBetaPr.R"
 
-# Constant
-params = c(0.1,0.25,0.5,0.75,1.02) # zipfs case
-params = c(0.001,0.005,0.015,0.05,0.1,0.25) # geom case
-params = c(0.001,0.01,0.05,0.25,0.5) # constant case
-
-
-SimNo <- seq_along(params)
-for(i in seq_along(SimNo)){
+idxs = c(1)
+for(i in seq_along(idxs)){
   # Parallel execution 
-  param <- params[SimNo[i]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+  idx <- idxs[i]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
 }
 
 

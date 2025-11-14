@@ -1,6 +1,6 @@
 # Generate Distributions (features) ----------------------------------------------------
-sim_Uniform_features = function(M){
-  w = runif(M)
+sim_Uniform_features = function(M, a){
+  w = runif(M,min = 0, max = a)
   w
 }
 
@@ -15,8 +15,23 @@ sim_TruncatedZipfs_features = function(M,s){
 }
 
 sim_TruncatedGeom_features = function(M,a){
+  if(a >= 1)
+    stop("a must be strictly less than 1")
   w = sapply(2:(M+1),function(j) (1-a)^(j-1) )
   w 
+}
+
+sim_TruncatedGamma_features = function(M,lambda){
+  w = sapply(2:(M+1),function(j) exp(-lambda*j) )
+  w 
+}
+
+sim_TruncatedUnif_features = function(M, Meff = 2000, pmax = 1){
+  if(M < Meff)
+    stop("Error in sim_TruncatedUnif_features. M must be >= than Meff")
+  w = rep(0,M)
+  w[1:Meff] = runif(n = Meff, min = 0, max = pmax)
+  w
 }
 
 
@@ -28,7 +43,13 @@ sim_generic = function(name,M,param){
   }else if( name == "Geom" ){
     sim_TruncatedGeom_features(M,param)
   }else if( name == "Uniform"){
-    sim_Uniform_features(M)
+    sim_Uniform_features(M, param)
+  }
+  else if( name == "TrUnif"){
+    sim_TruncatedUnif_features(M, Meff = 2000, param)
+  }
+  else if( name == "gamma"){
+    sim_TruncatedGamma_features(M,param)
   }
   else
     stop("Invalid name")
@@ -51,7 +72,48 @@ sim_zipfs_features = function(s,n,eps){
 }
 
 
+# Generate pj controlling S
 
+sim_CntS_Constant = function(S,M){
+  if(S <= 0)
+    stop("Error in sim_CntS_Constant. S must be positive")
+  w = rep(S/M,M)
+  w
+}
+
+# sim_CntS_Zipfs = function(S,s){
+#   if(S <= 0)
+#     stop("Error in sim_CntS_Constant. S must be positive")
+#   Mmax = 1000000
+#   cumS = 0
+#   j = 1 
+#   flag = TRUE
+#   w = c()
+#   while(flag) {
+#     new = (j+1)^(-s)
+#     w = c(w,new)
+#     cumS = cumS + new
+#     if(cumS >= S)
+#       flag = FALSE
+#     if( (j+1) > Mmax  )
+#       flag = FALSE
+#     
+#     j = j + 1
+#   }
+#   if( sum(w) < S )
+#     stop("The sum is smaller than S")
+#   w
+# }
+
+sim_CntS_gamma = function(M,S,lambda){
+  if(S <= 0)
+    stop("Error in sim_CntS_Constant. S must be positive")
+  w = sapply(1:(M),function(j) exp(-lambda*j)  )
+  stop("DEVO GARANTIRE CHE w SIA IN (0,1)")
+}
+
+
+# utilities ---------------------------------------------------------------
 
 
 
@@ -106,6 +168,8 @@ rarefaction.array <- function(object, n_reorderings = 1, seed = 1234) {
   return(rare_curve_qnt)
   
 }
+
+
 
 
 

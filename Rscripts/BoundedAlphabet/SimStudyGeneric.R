@@ -11,14 +11,14 @@ Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
 source("../../R/Rfunctions.R")
 
 # Sim specific param ----------------------------------------------------------------
-RunParallel = TRUE
+RunParallel = FALSE
 if(!RunParallel){
   idx = 1 
-  param = 1e-5
+  param = 1
 }
 
-names = c("Zipfs","Geom","Constant","Uniform")
-name = names[3] # choose the name here
+names = c("Zipfs","Geom","Constant","Uniform","TrUnif")
+name = names[5] # choose the name here
 
 
 # Common parameters -------------------------------------------------------
@@ -34,7 +34,7 @@ save_cov = TRUE
 ## Options -----------------------------------------------------------------
 
 n = 2000
-Mgrid_min =  100
+Mgrid_min =  2000 
 Mgrid_max =  10000
 Mgrid_step = 250
 
@@ -196,7 +196,7 @@ if(ymin < 0)
 ylabs = round(seq(ymin*1e3,ymax*1e3,by = 1),1)
 
 
-save_img = TRUE
+save_img = FALSE
 
 if(save_img)
   pdf(img_name)

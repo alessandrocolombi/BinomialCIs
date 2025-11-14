@@ -178,6 +178,58 @@ double HurwitzZeta(const double& a, const unsigned int& m)
 		return gsl_sf_hzeta(a, m);
 }
 
+// [[Rcpp::export]]
+double LambertW(const double& x){
+	return gsl_sf_lambert_W0(x);
+}
+
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+//	Sample while controlling S
+//------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// [[Rcpp::export]]
+NumericVector sim_CntS_Zipfs(double S, double s) {
+  if(S <= 0.0)
+    throw std::runtime_error("Error in sim_CntS_Constant. S must be positive");
+  if( s > 1.0){
+  	double Smax = RiemannZeta(s);
+  	if(S > Smax)
+  		throw std::runtime_error("Error in sim_CntS_Constant. It is impossible to achieve such S given the requested s");
+  }
+
+  const int Mmax = 1000000;
+  double cumS = 0.0;
+  int j = 1;
+  std::vector<double> w;
+  w.reserve(1000); // preallocate modestly to avoid frequent reallocations
+  
+  bool flag = true;
+  
+  while(flag) {
+    double newval = std::pow(j + 1.0, -s);
+    w.push_back(newval);
+    cumS += newval;
+    
+    if(cumS >= S)
+      flag = false;
+    
+    if((j + 1) > Mmax)
+      flag = false;
+    
+    j++;
+  }
+  
+  double total = std::accumulate(w.begin(), w.end(), 0.0);
+  if (total < S){
+  	Rcpp::Rcout<<"total = "<<total<<std::endl;
+  	throw std::runtime_error("Error in sim_CntS_Constant. The sum is smaller than S after 1 million points");
+  }
+    
+  
+  return wrap(w);
+}
+
+
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 //	Sample from truncated Beta process
 //------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -233,12 +285,13 @@ NumericMatrix r_3ParamBetaPr( const int& Nrep, const int& Natoms,
 		if(xi < 0)
 			throw std::runtime_error("Error in invPsi: xi can not be negative");
 
-		double arg = (sigma*xi)/(gamma*c);
+		double arg = (xi)/(gamma*c);
 		double res;
 		if( sigma < 1e-5 ){
 			res = gsl_expm1(arg);
 		}
 		else{
+			arg *= sigma;
 			res = gsl_expm1( gsl_log1p( arg ) ); 
 		}
 		if(res < 0)
@@ -249,7 +302,8 @@ NumericMatrix r_3ParamBetaPr( const int& Nrep, const int& Natoms,
 	NumericMatrix res(Nrep,Natoms);
 	for(int b = 0; b < Nrep; b++){
 		for(int i = 0; i < Natoms; i++){
-			double xi = rgamma(engine, 1.0, 1.0);
+			// double xi = rgamma(engine, 1.0, 1.0);
+			double xi = rgamma(engine, i+1.0, 1.0);
 			double ti = invPsi(xi);
 			double z = rgamma(engine, 1.0 - sigma, 1.0/(1.0 + ti));
 			double y = rgamma(engine, c+sigma, 1.0);
@@ -260,9 +314,103 @@ NumericMatrix r_3ParamBetaPr( const int& Nrep, const int& Natoms,
 
 	return res;
 }
+
+
+// [[Rcpp::export]]
+NumericMatrix r_iid3ParamBetaPr( const int& Nrep, const int& Natoms, 
+								 const double& gamma, const double& sigma, const double& c,
+							     const int& seed)
+{
+	sample::rgamma rgamma; 
+	sample::runif  runif; 
+	sample::GSL_RNG engine(seed);
+
+	if(Nrep <= 0)
+		throw std::runtime_error("Error in r_3ParamBetaPr: Nrep must be positive");
+	if(Natoms < 1)
+		throw std::runtime_error("Error in r_3ParamBetaPr: Natoms must be at least one");
+	if(gamma <= 0)
+		throw std::runtime_error("Error in r_3ParamBetaPr: gamma must be > 0");
+	if(sigma < 0 || sigma >= 1)
+		throw std::runtime_error("Error in r_3ParamBetaPr: sigma must be in [0,1)");
+	if(c <= -sigma)
+		throw std::runtime_error("Error in r_3ParamBetaPr: c must be > -sigma");
+
+	auto invPsi = [gamma, sigma, c](const double& xi){
+		if(xi < 0)
+			throw std::runtime_error("Error in invPsi: xi can not be negative");
+
+		double arg = (xi)/(gamma*c);
+		double res;
+		if( sigma < 1e-5 ){
+			res = gsl_expm1(arg);
+		}
+		else{
+			arg *= sigma;
+			res = gsl_expm1( gsl_log1p( arg ) ); 
+		}
+		if(res < 0)
+			throw std::runtime_error("Error in invPsi: res can not be negative");
+		return res;
+	};
+
+	NumericMatrix res(Nrep,Natoms);
+	double t = invPsi((double)Natoms);
+	for(int b = 0; b < Nrep; b++){
+		for(int i = 0; i < Natoms; i++){
+			double G = rgamma(engine, 1.0 - sigma, 1.0);
+			double u = runif(engine);
+			double z;
+			if(sigma < 1e-5){
+				z = G * std::pow(t+1.0, -(1.0 - u));
+			}
+			else{
+				double arg = gsl_expm1( sigma * std::log(t+1.0) );
+				double loga = std::log1p((1.0 - u) * arg);
+				z = G * std::exp(- (loga/sigma) );
+			}
+			double y = rgamma(engine, c+sigma, 1.0);
+			double z_over_y = z/y;
+			res(b,i) = z_over_y / (z_over_y + 1.0);
+		}
+	}
+
+	return res;
+}
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 //	Features - Frequentist - Bounded alphabet
 //------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// [[Rcpp::export]]
+double compute_UB_bdd_oracle( const int& n, const Rcpp::NumericVector& pj, const double& b, const double& alpha_lev)
+{
+	double inf = std::numeric_limits<double>::infinity();
+	int M = pj.size();
+	if(n <= 0)
+		throw std::runtime_error("Error in compute_UB_bdd_oracle: n must be strictly positive ");
+	if(alpha_lev <= 0 || alpha_lev >= 1)
+		throw std::runtime_error("Error in compute_UB_bdd_oracle: alpha_lev must be in (0,1) ");
+	if( b <= 0 )
+		throw std::runtime_error("Error in compute_UB_bdd_oracle: b must be strictly positive");
+
+	std::vector<double> log_mp_vec(M,-inf); // vector of log values
+	double max{-inf};
+	int idx_max{-1};
+	for(int j=0; j < M; j++){
+		log_mp_vec[j] = b * gsl_log1p( -pj[j] ); // compute log of jth element
+		if(log_mp_vec[j] > max){
+			max = log_mp_vec[j]; // save max
+			idx_max = j; // save position max
+		}	
+		if(std::isnan(log_mp_vec[j])){
+			throw std::runtime_error("Error in compute_UB_bdd_oracle. Get a NaN");
+		}
+	}
+	//mp = std::exp( log_stable_sum(log_mp_vec, TRUE, max, idx_max) );
+	double log_mp = log_stable_sum(log_mp_vec, TRUE, max, idx_max);
+	return 1.0/( (double)n - b )*( log_mp - std::log(alpha_lev) );
+}
+
 
 // [[Rcpp::export]]
 double compute_UB_analytical( const int& n, const Rcpp::IntegerVector& Nj, const int& M, 
@@ -311,6 +459,8 @@ double compute_UB_analytical( const int& n, const Rcpp::IntegerVector& Nj, const
 	return 1.0/( (double)n - b )*( log_mp - std::log(a1) );
 }
 
+
+
 // [[Rcpp::export]]
 double compute_LB_analytical( const int& n, const Rcpp::IntegerVector& Nj, const double& alpha_lev)
 {
@@ -334,6 +484,27 @@ double compute_LB_analytical( const int& n, const Rcpp::IntegerVector& Nj, const
 //------------------------------------------------------------------------------------------------------------------------------------------------------
 //	Features - Frequentist - Unbounded alphabet
 //------------------------------------------------------------------------------------------------------------------------------------------------------
+
+// [[Rcpp::export]]
+double compute_UB_Unbdd_oracle(const int& n, const double& alpha_lev, const double& S)
+{
+	if(n <= 0)
+		throw std::runtime_error("Error in compute_UB_Unbdd_oracle: n must be strictly positive ");
+	if(alpha_lev <= 0 || alpha_lev >= 1)
+		throw std::runtime_error("Error in compute_UB_Unbdd_oracle: alpha_lev must be in (0,1) ");
+	if(S < 0)
+		throw std::runtime_error("Error in compute_UB_Unbdd_oracle: S must be positive ");
+
+	double Warg = ( S*(double)n )/( -std::log(1.0 - alpha_lev) ); 
+
+	if(Warg < 0)
+		throw std::runtime_error("Error in compute_UB_Unbdd_oracle: the argument of the Lambert W function can not be negative");
+
+	// UB = 1/n * W(..)
+	double res = gsl_sf_lambert_W0(Warg)/(double)n;
+	
+	return std::min(res,1.0);				
+}
 
 // [[Rcpp::export]]
 double compute_UB_intersection(const int& n, const double& alpha_lev, const double& beta_lev, const double& Shat)

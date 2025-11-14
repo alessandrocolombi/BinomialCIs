@@ -11,15 +11,20 @@ Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
 source("../../R/Rfunctions.R")
 
 # Sim specific param ----------------------------------------------------------------
-RunParallel = FALSE
+RunParallel = TRUE
 if(!RunParallel){
-  idx = 1 
-  param = 1.5
+  idx = 1
 }
 
-names = c("Zipfs","3PBetaPr","Constant","Uniform")
-name = names[2] # choose the name here
+name = "3PBetaPr" # choose the name here
 
+
+gammas = c(10,1000)
+sigmas = c(0,0.5,0.95)
+cs     = c(1,10,1000)
+param_grid = expand.grid(gammas,sigmas,cs)
+
+param = param_grid[idx,]
 
 # Common parameters -------------------------------------------------------
 alfa = 0.05
@@ -42,8 +47,7 @@ Ngrid_step = 250
 Ngrid = seq(Ngrid_min,Ngrid_max,by = Ngrid_step)
 Nexp = length(Ngrid)
 
-trimmed_param = get_first3digits(param,4)
-exp_name = paste0("SSUbb_Mfix_",name,"_",trimmed_param)
+exp_name = paste0("SSUbb_Mfix_",name,"_",idx)
 save_exp = FALSE
 file_name = paste0("save/",exp_name,".Rdat")
 img_name = paste0("img/",name,"/",exp_name,".pdf")
@@ -63,8 +67,11 @@ if(run_M_fix){
   
   # Generate true distribution
   BB = max(Bor,Brep)
-  gamma = 10; c = 1000; sigma = 0
-  prob_true_mat = r_3ParamBetaPr( BB, M, gamma, sigma, c, seed)
+  gamma = c(param[1]$Var1); sigma = c(param[2]$Var2); c = c(param[3]$Var3);
+  trimmed_gamma = get_first3digits(gamma,5)
+  trimmed_sigma = get_first3digits(sigma,5)
+  trimmed_c = get_first3digits(c,5)
+  prob_true_mat = r_iid3ParamBetaPr( BB, M, gamma, sigma, c, seed )
   
   pb <- progress_bar$new(total = Nexp)
   for(ii in 1:Nexp){
@@ -108,8 +115,12 @@ if(run_M_fix){
         pmax = max( prob_true_mat[b,n_i == 0] ) # get pmax true
       }
       
+      if(Kn > 0){
+        Mguess = 10*Kn
+      }else{
+        Mguess = 100
+      }
       ## Benchmark
-      Mguess = 10*Kn
       ub_Bench_mat[ii,b] = log(Mguess/alfa)/n
       if(pmax <= ub_Bench_mat[ii,b]){
         cov_Bench_mat[ii,b] = 1
@@ -184,11 +195,11 @@ save_img = TRUE
 
 if(save_img)
   pdf(img_name)
-par( mfrow = c(1,1), mar = c(4,4,1,0.5), mgp=c(2.5,0.5,0), bty = "l" )
+par( mfrow = c(1,1), mar = c(4,4,2,0.5), mgp=c(2.5,0.5,0), bty = "l" )
 plot(0,0,  yaxt = "n",
+     main = paste0("3PBetaPr"," - ", trimmed_gamma,",",trimmed_sigma,",",trimmed_c), 
      xlab = "n", ylab = "1000*bound",
      xlim = c(min(Ngrid),max(Ngrid) ) , ylim = c(ymin,ymax), 
-     main = paste0(" "),
      type = "n")
 grid(lty = 1,lwd = 1, col = "gray90" )
 axis(side = 2, at = ylabs*1e-3, 

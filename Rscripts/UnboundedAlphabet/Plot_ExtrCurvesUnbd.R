@@ -86,9 +86,9 @@ set.seed(seed)
 seeds = sample(1:999999, size = 5000, replace = FALSE)
 
 
-gammas = c(10)
-sigmas = c(0)
-cs     = c(1000)
+gammas = c(10,1000)
+sigmas = c(0,0.5,0.95)
+cs     = c(1,10,1000)
 param_grid = expand.grid(gammas,sigmas,cs)
 
 M = 5000
@@ -100,10 +100,10 @@ BB = 50
 save_plot_all = TRUE
 
 i = 1
+if(save_plot_all)
+  pdf(paste0("img/","3PBetaPr/ExtCurves",".pdf"))
 for(i in 1:nrow(param_grid)){
   cat("\n Start: ",i,"/",nrow(param_grid),"\n")
-  if(save_plot_all)
-    pdf(paste0("img/","3paramBetaPr_ExtCurve",".pdf"))
   par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
   
   gamma = param_grid[i,1]
@@ -114,7 +114,7 @@ for(i in 1:nrow(param_grid)){
   trimmed_sigma = get_first3digits(sigma,5)
   trimmed_c = get_first3digits(c,5)
   
-  prob_true_mat =  r_3ParamBetaPr( BB, M, gamma, sigma, c, seed[i]) # (BB x M) matrix
+  prob_true_mat =  r_iid3ParamBetaPr( BB, M, gamma, sigma, c, seed[i]) # (BB x M) matrix
   
   NumObs = matrix(0,nrow = length(ngrid), ncol = BB)
   for(nn in 1:length(ngrid)){
@@ -124,7 +124,7 @@ for(i in 1:nrow(param_grid)){
   
   ExtrCrv = apply(NumObs, 1, quantile, probs = c(0.025,0.5,0.975))
   plot(x = 0, y = 0, type = "n",
-       main = paste0("3paramBetaPr"," - ", trimmed_gamma,",",trimmed_sigma,",",trimmed_c), 
+       main = paste0("3PBetaPr"," - ", trimmed_gamma,",",trimmed_sigma,",",trimmed_c), 
        xlab = "#obs.", ylab = "#distincts",
        ylim = c(0,max(ExtrCrv)+1),
        xlim = c(0,n+1),
@@ -134,20 +134,22 @@ for(i in 1:nrow(param_grid)){
            col = "grey75",
            border = NA) # plot in-sample bands
   points(x = ngrid, y = ExtrCrv[2,], type = "l", lwd = 3) # plot mean obs
-  if(save_plot_all)
-    dev.off()
 }
+if(save_plot_all)
+  dev.off()
 
 
 
 
 
 # Brutta ------------------------------------------------------------------
-Nrep = 10
-Natoms = 1000
-gamma = 10000
-sigma = 0.999999
-c = 10000
+
+# 3 param Size biased
+Nrep = 100
+Natoms = 100
+gamma = 10
+sigma = 0
+c = 1
 seed = 1234
 
 pmat =  r_3ParamBetaPr( Nrep, Natoms, gamma, sigma, c, seed)
@@ -163,12 +165,12 @@ for(i in 1:nrow(pmat)){
 }
 
 
-
-Nrep = 10
+# 1 param Size biased
+Nrep = 100
 Natoms = 100
-gamma = 1000
+gamma = 10
 sigma = 0
-c = 100
+c = 1
 seed = 1234
 
 pmat =  r_BetaPr( Nrep, Natoms, gamma, seed)
@@ -182,3 +184,49 @@ for(i in 1:nrow(pmat)){
   points(x = 1:Natoms, y = sort(pmat[i,], decreasing = TRUE), 
          type = "b", lty = 2, lwd = 2, pch = 16)
 }
+
+
+# 1 param iid
+
+Nrep = 1000
+Natoms = 100
+gamma = 10
+sigma = 0
+c = 1
+seed = 1234
+
+pmat = matrix(0,Nrep,Natoms)
+pmat = t( apply(pmat,1, function(x){ rbeta(n = Natoms, gamma/Natoms, 1) } ) )
+dim(pmat)
+
+par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
+plot(x = 0, y = 0, type = "n", 
+     xlab = "Prob.", ylab = "Atoms",
+     ylim = c(0,1), xlim = c(0,Natoms)) # init plot
+for(i in 1:nrow(pmat)){
+  points(x = 1:Natoms, y = sort(pmat[i,], decreasing = TRUE), 
+         type = "b", lty = 2, lwd = 2, pch = 16)
+}
+
+
+# 3 param iid
+
+Nrep = 1000
+Natoms = 100
+gamma = 10
+sigma = 0
+c = 1
+seed = 1234
+
+pmat = r_iid3ParamBetaPr( Nrep, Natoms, gamma, sigma, c, seed)
+
+par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
+plot(x = 0, y = 0, type = "n", 
+     xlab = "Prob.", ylab = "Atoms",
+     ylim = c(0,1), xlim = c(0,Natoms)) # init plot
+for(i in 1:nrow(pmat)){
+  points(x = 1:Natoms, y = sort(pmat[i,], decreasing = TRUE), 
+         type = "b", lty = 2, lwd = 2, pch = 16)
+}
+
+

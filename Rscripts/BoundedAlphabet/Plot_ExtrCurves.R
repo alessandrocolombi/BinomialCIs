@@ -14,22 +14,24 @@ source("../../R/Rfunctions.R")
 # Plot extrapolation curves -----------------------------------------------
 
 experiments = list(
-  "Zipfs" = c(0.25,0.5,1.02,1.5),
-  "Geom" = c(0.005,0.1,0.25),
-  "Constant" = c(0.5,0.05,0.0001),
-  "Uniform" = c(NA)
+  "Zipfs" = c(0.75,0.8,0.825,0.85,0.9,0.95,1,1.02,1.05),
+  "Constant" = c(0.001,0.005,0.01,0.015,0.02),
+  "Geom" = c(0.25,0.1,0.08,0.05,0.02),
+  "gamma" = c(0.7,0.8,0.9,1,1.1,1.2),
+  "Uniform" = c(NA),
+  "TrUnif" = c(1,0.5,0.01)
 )
 
-M = 5000
-n = 2500
+M = 1500
+n = 1000
 ngrid = ceiling(seq(1,n, length.out = 100))
 BB = 50
 
 
-save_plot_all = TRUE
+save_plot_all = FALSE
 
-i = 1
-for(i in 1:length(experiments)){
+i = 3
+for(i in 1:3){
   name_exp = names(experiments)[i]
   cat("\n Start: ",name_exp,"\n")
   if(save_plot_all)
