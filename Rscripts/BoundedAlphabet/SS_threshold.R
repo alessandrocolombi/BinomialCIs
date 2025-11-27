@@ -296,14 +296,14 @@ if(save_img)
 
 
 
-# Run gamma ---------------------------------------------------------------
+# Run Geom ---------------------------------------------------------------
 n = 1000
 M = 1500 
 soglia = M/n * log(20*M)
 soglia
 
 
-j = 3;
+j = 4;
 name_exp = names(experiments)[j]
 cat("\n Start: ",name_exp,"\n")
 
@@ -328,7 +328,7 @@ for(ii in 1:Nparams){
   Strue_rep <- rep(0,Brep)
   
   prob_true_mat = matrix(0,nrow = BB, ncol = M) # (BB x M) matrix
-  prob_true_mat = t(apply(prob_true_mat, 1, function(x) { sim_TruncatedZipfs_features(M,param) } ))
+  prob_true_mat = t(apply(prob_true_mat, 1, function(x) { sim_TruncatedGeom_features(M,param) } ))
   data = apply(prob_true_mat, 2, function(pj) {rbinom(n = BB, size = n, prob = pj)} ) # (BB x M) matrix
   # data[b,j]: number of obs. of j-th features in b-th repetition
   
@@ -432,14 +432,14 @@ if(save_img)
 
 
 
-# Run Geom ---------------------------------------------------------------
+# Run gamma ---------------------------------------------------------------
 n = 1000
 M = 1500 
 soglia = M/n * log(20*M)
 soglia
 
 
-j = 4;
+j = 3;
 name_exp = names(experiments)[j]
 cat("\n Start: ",name_exp,"\n")
 
@@ -464,7 +464,7 @@ for(ii in 1:Nparams){
   Strue_rep <- rep(0,Brep)
   
   prob_true_mat = matrix(0,nrow = BB, ncol = M) # (BB x M) matrix
-  prob_true_mat = t(apply(prob_true_mat, 1, function(x) { sim_TruncatedGeom_features(M,param) } ))
+  prob_true_mat = t(apply(prob_true_mat, 1, function(x) { sim_TruncatedZipfs_features(M,param) } ))
   data = apply(prob_true_mat, 2, function(pj) {rbinom(n = BB, size = n, prob = pj)} ) # (BB x M) matrix
   # data[b,j]: number of obs. of j-th features in b-th repetition
   
