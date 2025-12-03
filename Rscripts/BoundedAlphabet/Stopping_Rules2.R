@@ -1,4 +1,5 @@
-setwd("~/Documents/uni/papers/unseen/BinomialCIs/Rscripts/BoundedAlphabet")
+# setwd("~/Documents/uni/papers/unseen/BinomialCIs/Rscripts/BoundedAlphabet")
+setwd("C:/Users/colom/BinomialCIs/Rscripts/BoundedAlphabet")
 
 # Librerie ----------------------------------------------------------------
 suppressWarnings(suppressPackageStartupMessages(library(tibble)))
@@ -49,24 +50,43 @@ build_geom_p <- function(M = 1500L, a = 0.1) {
 
 # Chao–Jost sample coverage for abundance data
 # counts: vector of species abundances (only observed species)
-coverage_ChaoJost <- function(counts) {
+coverage_ChaoJost <- function(n,counts) {
+  if (n <= 1) return(NA_real_)
   counts <- counts[counts > 0]
-  n <- sum(counts)
-  if (n == 0) return(NA_real_)
   
   f1 <- sum(counts == 1L)
   f2 <- sum(counts == 2L)
   
   if (f1 == 0L) return(1)  # all species have count >= 2, coverage ~ 1
   
-  if (f2 > 0L) {
-    # Chao & Jost (2012), abundance-based sample coverage
-    C_hat <- 1 - (f1 / n) * (( (n - 1) * f1 ) / ( (n - 1) * f1 + 2 * f2 ))
-  } else {
-    # modified formula when there are no doubletons
-    C_hat <- 1 - (f1 / n) * (( (n - 1) * f1 ) / ( (n - 1) * f1 + 2 ))
-  }
+  # Chao & Jost (2012), incidence-based sample coverage
+  C_hat <- 1 - (f1 / n) * ( ( (n - 1) * f1 ) / ( (n - 1) * f1 + 2 * f2 ) )
   C_hat
+}
+
+
+Nsample_Chao2009 <- function(n,counts,g_Chao2009){
+  
+  if (n <= 1) return(NA_real_)
+  counts <- counts[counts > 0]
+  
+  f1 <- sum(counts == 1L) # num. sigleton
+  f2 <- sum(counts == 2L) # num. doubleton
+  
+  Sobs <- length(counts)  # num. distinct observed
+  Sest <- Sobs
+  if(f2 > 0){
+    Sest <- Sest + ( (1 - 1/n)*f1*f1 )/(2*f2) # num. distinct estimated
+  } else {
+    Sest <- Sest + ( f1*(f1 - 1) )/(2) # num. distinct estimated
+  }
+  
+  if(g_Chao2009*Sest < Sobs)
+    return( 0 )
+  
+  num = log( 1 - (n*2*f2*(g_Chao2009*Sest - Sobs))/( (n-1)*f1*f1 )  ) # numerator of Eq.(15) in Chao et. al. (2009)
+  den = log( 1 - (2*f2)/( (n-1)*f1 + 2*f2 )  )                        # denominator of Eq.(15) in Chao et. al. (2009)
+  num/den
 }
 
 ## ------------------------------------------------------------
@@ -82,8 +102,9 @@ simulate_one_run <- function(p,
                              eps            = 0.01,
                              alpha          = 0.05,
                              C_target       = 0.95,
+                             g_Chao2009     = 0.95,
                              batch_size     = 50L,
-                             n_max          = 10000L,
+                             n_max          = 5000L,
                              beta           = 1e-5) {
   
   M <- length(p)
@@ -99,26 +120,32 @@ simulate_one_run <- function(p,
   stopped_bounded   <- FALSE
   stopped_unbounded <- FALSE
   stopped_cov       <- FALSE
+  stopped_Chao2009  <- FALSE
   
   Nstop_bounded   <- NA_integer_
   Nstop_unbounded <- NA_integer_
   Nstop_cov       <- NA_integer_
+  Nstop_Chao2009  <- NA_integer_
   
   ok_bounded   <- NA
   ok_unbounded <- NA
   ok_cov       <- NA
+  ok_Chao2009  <- NA
   
   # New metrics: missed big species and extra species at stopping
   missed_big_bounded      <- NA_integer_
   missed_big_unbounded    <- NA_integer_
   missed_big_coverage     <- NA_integer_
+  missed_big_Chao2009     <- NA_integer_
   extra_species_bounded   <- NA_integer_
   extra_species_unbounded <- NA_integer_
   extra_species_coverage  <- NA_integer_
+  extra_species_Chao2009  <- NA_integer_
   
   n_batches <- ceiling(n_max / batch_size)
   
   for (b in seq_len(n_batches)) {
+    # cat("\n n = ",n," \n")
     # Allow for a non-multiple n_max if needed
     remaining <- n_max - n
     if (remaining <= 0L) break
@@ -206,8 +233,9 @@ simulate_one_run <- function(p,
     
     ## ---- 5.3 Chao–Jost coverage-based rule (same counts_obs) ----
     if (!stopped_cov) {
-      C_hat <- coverage_ChaoJost(counts_obs)
+      C_hat <- coverage_ChaoJost(n,counts_obs)
       if (!is.na(C_hat) && C_hat >= C_target) {
+        # cat(" --> n = ",n," C_hat = ",C_hat," ---> fine Coverage \n")
         stopped_cov <- TRUE
         Nstop_cov   <- n
         ok_cov      <- all(counts_true[big_species] > 0L)
@@ -226,29 +254,60 @@ simulate_one_run <- function(p,
       }
     }
     
-    # Early exit if all three rules have stopped
-    if (stopped_bounded && stopped_unbounded && stopped_cov) break
+    ## ---- 5.4 Chao2009 Eq.15 stopping rule (same counts_obs) ----
+    if (!stopped_Chao2009) {
+      mg <- Nsample_Chao2009(n,counts_obs,g_Chao2009)
+      if (!is.na(mg) && this_b >= mg) {
+        # cat(" --> n = ",n," mg = ",mg," ---> fine Chao2009 \n")
+        stopped_Chao2009 <- TRUE
+        Nstop_Chao2009   <- n + mg
+        ok_Chao2009      <- all(counts_true[big_species] > 0L)
+        
+        # Missed big species at stopping
+        if (length(big_species) > 0L) {
+          big_seen <- counts_true[big_species] > 0L
+          missed_big_Chao2009 <- sum(!big_seen)
+        } else {
+          missed_big_Chao2009 <- 0L
+        }
+        # Extra species at stopping
+        K_true_seen <- sum(counts_true > 0L)
+        observed_big <- if (length(big_species) > 0L) sum(counts_true[big_species] > 0L) else 0L
+        extra_species_Chao2009 <- K_true_seen + n_error - observed_big
+      }
+    }
+    
+    # Early exit if all four rules have stopped
+    if (stopped_bounded && stopped_unbounded && stopped_cov && stopped_Chao2009) break
   }
+  cat("\n ################## \n")
   
   # If a rule never stopped by n_max, set Nstop_* = n_max
   # (missed/extra and ok_* remain NA to distinguish "never stopped").
   if (!stopped_bounded)   Nstop_bounded   <- n_max
   if (!stopped_unbounded) Nstop_unbounded <- n_max
   if (!stopped_cov)       Nstop_cov       <- n_max
+  if (!stopped_Chao2009)  Nstop_Chao2009 <- n_max
+  
+  cat("\n ","Nbdd = ",Nstop_bounded,"; Nubb = ",Nstop_unbounded,"; Ncov = ",Nstop_cov,"; Nchao = ",Nstop_Chao2009)
   
   list(
     Nstop_bounded          = Nstop_bounded,
     Nstop_unbounded        = Nstop_unbounded,
     Nstop_coverage         = Nstop_cov,
+    Nstop_Chao2009         = Nstop_Chao2009,
     ok_bounded             = ok_bounded,
     ok_unbounded           = ok_unbounded,
     ok_coverage            = ok_cov,
+    ok_Chao2009            = ok_Chao2009,
     missed_big_bounded     = missed_big_bounded,
     missed_big_unbounded   = missed_big_unbounded,
     missed_big_coverage    = missed_big_coverage,
+    missed_big_Chao2009    = missed_big_Chao2009,
     extra_species_bounded  = extra_species_bounded,
     extra_species_unbounded= extra_species_unbounded,
-    extra_species_coverage = extra_species_coverage
+    extra_species_coverage = extra_species_coverage,
+    extra_species_Chao2009 = extra_species_Chao2009
   )
 }
 
@@ -265,8 +324,9 @@ run_simulation_sequential <- function(distro         = c("zipf_heavy",
                                       eps            = 0.01,
                                       alpha          = 0.05,
                                       C_target       = 0.99,
+                                      g_Chao2009     = 0.99,
                                       batch_size     = 50L,
-                                      n_max          = 10000L,
+                                      n_max          = 5000L,
                                       n_reps         = 200L,
                                       beta           = 1e-5,
                                       seed           = 123) {
@@ -308,6 +368,7 @@ run_simulation_sequential <- function(distro         = c("zipf_heavy",
       eps        = eps,
       alpha      = alpha,
       C_target   = C_target,
+      g_Chao2009 = g_Chao2009,
       batch_size = batch_size,
       n_max      = n_max,
       beta       = beta
@@ -334,18 +395,36 @@ eps <- 0.005
 hyperparams <- list(
   distros      = c("zipf_heavy",
                    "unif_small",
+                   "unif_big",
                    "geom_0.005"),
   M            = 1500L,
   q_vec        = c(0, 0.0001, 0.0005, 0.001, 0.0025, 0.005),
   eps          = eps,
   alpha        = 0.05,
   batch_size   = 10L,
-  n_max        = 10000L,
+  n_max        = 5000L,
   C_target     = 0.99,
+  g_Chao2009   = 0.99,
   n_reps       = 200L,
   beta         = 1e-5,
   seed_regular = 123L,
   seed_heavy   = 456L  # you can reuse or add more seeds if you want
+)
+
+
+# Uniform big
+res_unif_big <- run_simulation_sequential(
+  distro     = "unif_big",
+  M          = hyperparams$M,
+  q_vec      = hyperparams$q_vec,
+  eps        = hyperparams$eps,
+  alpha      = hyperparams$alpha,
+  C_target   = hyperparams$C_target,
+  g_Chao2009 = hyperparams$g_Chao2009,
+  batch_size = hyperparams$batch_size,
+  n_max      = hyperparams$n_max,
+  n_reps     = hyperparams$n_reps,
+  seed       = 789L
 )
 
 
@@ -357,6 +436,7 @@ res_heavy <- run_simulation_sequential(
   eps        = hyperparams$eps,
   alpha      = hyperparams$alpha,
   C_target   = hyperparams$C_target,
+  g_Chao2009 = hyperparams$g_Chao2009,
   batch_size = hyperparams$batch_size,
   n_max      = hyperparams$n_max,
   n_reps     = hyperparams$n_reps,
@@ -371,6 +451,7 @@ res_unif_small <- run_simulation_sequential(
   eps        = hyperparams$eps,
   alpha      = hyperparams$alpha,
   C_target   = hyperparams$C_target,
+  g_Chao2009 = hyperparams$g_Chao2009,
   batch_size = hyperparams$batch_size,
   n_max      = hyperparams$n_max,
   n_reps     = hyperparams$n_reps,
@@ -378,19 +459,6 @@ res_unif_small <- run_simulation_sequential(
 )
 
 
-# Uniform small
-res_unif_big <- run_simulation_sequential(
-  distro     = "unif_big",
-  M          = hyperparams$M,
-  q_vec      = hyperparams$q_vec,
-  eps        = hyperparams$eps,
-  alpha      = hyperparams$alpha,
-  C_target   = hyperparams$C_target,
-  batch_size = hyperparams$batch_size,
-  n_max      = hyperparams$n_max,
-  n_reps     = hyperparams$n_reps,
-  seed       = 789L
-)
 
 
 
@@ -402,6 +470,7 @@ res_geom_005 <- run_simulation_sequential(
   eps        = hyperparams$eps,
   alpha      = hyperparams$alpha,
   C_target   = hyperparams$C_target,
+  g_Chao2009 = hyperparams$g_Chao2009,
   batch_size = hyperparams$batch_size,
   n_max      = hyperparams$n_max,
   n_reps     = hyperparams$n_reps,
@@ -457,6 +526,7 @@ agg_sd <- function(x, name) {
 type1_bounded   <- agg_mean(!res_all$ok_bounded,   "type1_bounded")
 type1_unbounded <- agg_mean(!res_all$ok_unbounded, "type1_unbounded")
 type1_coverage  <- agg_mean(!res_all$ok_coverage,  "type1_coverage")
+type1_Chao2009  <- agg_mean(!res_all$ok_Chao2009,  "type1_Chao2009")
 
 ## ------------------------------------------------------------
 ## Stopping probabilities
@@ -465,6 +535,7 @@ type1_coverage  <- agg_mean(!res_all$ok_coverage,  "type1_coverage")
 prop_stop_bounded   <- agg_mean(!is.na(res_all$ok_bounded),   "prop_stopped_bounded")
 prop_stop_unbounded <- agg_mean(!is.na(res_all$ok_unbounded), "prop_stopped_unbounded")
 prop_stop_coverage  <- agg_mean(!is.na(res_all$ok_coverage),  "prop_stopped_coverage")
+prop_stop_Chao2009  <- agg_mean(!is.na(res_all$ok_Chao2009),  "prop_stopped_Chao2009")
 
 ## ------------------------------------------------------------
 ## N_stop: mean, median, sd
@@ -473,14 +544,17 @@ prop_stop_coverage  <- agg_mean(!is.na(res_all$ok_coverage),  "prop_stopped_cove
 mean_Nstop_bounded    <- agg_mean(res_all$Nstop_bounded,    "mean_Nstop_bounded")
 mean_Nstop_unbounded  <- agg_mean(res_all$Nstop_unbounded,  "mean_Nstop_unbounded")
 mean_Nstop_coverage   <- agg_mean(res_all$Nstop_coverage,   "mean_Nstop_coverage")
+mean_Nstop_Chao2009   <- agg_mean(res_all$Nstop_Chao2009,   "mean_Nstop_Chao2009")
 
 median_Nstop_bounded   <- agg_median(res_all$Nstop_bounded,   "median_Nstop_bounded")
 median_Nstop_unbounded <- agg_median(res_all$Nstop_unbounded, "median_Nstop_unbounded")
 median_Nstop_coverage  <- agg_median(res_all$Nstop_coverage,  "median_Nstop_coverage")
+median_Nstop_Chao2009  <- agg_median(res_all$Nstop_Chao2009,  "median_Nstop_Chao2009")
 
 sd_Nstop_bounded    <- agg_sd(res_all$Nstop_bounded,    "sd_Nstop_bounded")
 sd_Nstop_unbounded  <- agg_sd(res_all$Nstop_unbounded,  "sd_Nstop_unbounded")
 sd_Nstop_coverage   <- agg_sd(res_all$Nstop_coverage,   "sd_Nstop_coverage")
+sd_Nstop_Chao2009   <- agg_sd(res_all$Nstop_Chao2009,   "sd_Nstop_Chao2009")
 
 ## ------------------------------------------------------------
 ## Missed big species and extra species: mean / sd
@@ -490,19 +564,23 @@ sd_Nstop_coverage   <- agg_sd(res_all$Nstop_coverage,   "sd_Nstop_coverage")
 mean_missed_bounded    <- agg_mean(res_all$missed_big_bounded,    "mean_missed_bounded")
 mean_missed_unbounded  <- agg_mean(res_all$missed_big_unbounded,  "mean_missed_unbounded")
 mean_missed_coverage   <- agg_mean(res_all$missed_big_coverage,   "mean_missed_coverage")
+mean_missed_Chao2009   <- agg_mean(res_all$missed_big_Chao2009,   "mean_missed_Chao2009")
 
 sd_missed_bounded      <- agg_sd(res_all$missed_big_bounded,      "sd_missed_bounded")
 sd_missed_unbounded    <- agg_sd(res_all$missed_big_unbounded,    "sd_missed_unbounded")
 sd_missed_coverage     <- agg_sd(res_all$missed_big_coverage,     "sd_missed_coverage")
+sd_missed_Chao2009     <- agg_sd(res_all$missed_big_Chao2009,     "sd_missed_Chao2009")
 
 # Extra species
 mean_extra_bounded     <- agg_mean(res_all$extra_species_bounded,   "mean_extra_bounded")
 mean_extra_unbounded   <- agg_mean(res_all$extra_species_unbounded, "mean_extra_unbounded")
 mean_extra_coverage    <- agg_mean(res_all$extra_species_coverage,  "mean_extra_coverage")
+mean_extra_Chao2009    <- agg_mean(res_all$extra_species_Chao2009,  "mean_extra_Chao2009")
 
 sd_extra_bounded       <- agg_sd(res_all$extra_species_bounded,     "sd_extra_bounded")
 sd_extra_unbounded     <- agg_sd(res_all$extra_species_unbounded,   "sd_extra_unbounded")
 sd_extra_coverage      <- agg_sd(res_all$extra_species_coverage,    "sd_extra_coverage")
+sd_extra_Chao2009      <- agg_sd(res_all$extra_species_Chao2009,    "sd_extra_Chao2009")
 
 ## ------------------------------------------------------------
 ## Combine everything into one data frame
@@ -514,30 +592,39 @@ summary_df <- Reduce(
     type1_bounded,
     type1_unbounded,
     type1_coverage,
+    type1_Chao2009,
     prop_stop_bounded,
     prop_stop_unbounded,
     prop_stop_coverage,
+    prop_stop_Chao2009,
     mean_Nstop_bounded,
     mean_Nstop_unbounded,
     mean_Nstop_coverage,
+    mean_Nstop_Chao2009,
     median_Nstop_bounded,
     median_Nstop_unbounded,
     median_Nstop_coverage,
+    median_Nstop_Chao2009,
     sd_Nstop_bounded,
     sd_Nstop_unbounded,
     sd_Nstop_coverage,
+    sd_Nstop_Chao2009,
     mean_missed_bounded,
     mean_missed_unbounded,
     mean_missed_coverage,
+    mean_missed_Chao2009,
     sd_missed_bounded,
     sd_missed_unbounded,
     sd_missed_coverage,
+    sd_missed_Chao2009,
     mean_extra_bounded,
     mean_extra_unbounded,
     mean_extra_coverage,
+    mean_extra_Chao2009,
     sd_extra_bounded,
     sd_extra_unbounded,
-    sd_extra_coverage
+    sd_extra_coverage,
+    sd_extra_Chao2009
   )
 )
 
@@ -554,6 +641,7 @@ q_label    <- paste(hyperparams$q_vec, collapse = "_")
 eps_str   <- gsub("\\.", "p", as.character(hyperparams$eps))
 alpha_str <- gsub("\\.", "p", as.character(hyperparams$alpha))
 C_str     <- gsub("\\.", "p", as.character(hyperparams$C_target))
+g_str     <- gsub("\\.", "p", as.character(hyperparams$g))
 
 file_name <- sprintf(
   "sim_tail-%s_M-%d_eps-%s_alpha-%s_C-%s_batch-%d_nmax-%d_reps-%d_q-%s.RData",
@@ -623,9 +711,17 @@ for (tt in scenarios) {
   row_c$method   <- "coverage"
   row_c <- row_c[, c("scenario", "method", q_cols)]
   
+  # Chao 2009
+  row_d <- as.data.frame(t(df_tt$type1_coverage))
+  names(row_d) <- q_cols
+  row_d$scenario <- tt
+  row_d$method   <- "Chao2009"
+  row_d <- row_d[, c("scenario", "method", q_cols)]
+  
   rows_type1[[length(rows_type1) + 1L]] <- row_b
   rows_type1[[length(rows_type1) + 1L]] <- row_u
   rows_type1[[length(rows_type1) + 1L]] <- row_c
+  rows_type1[[length(rows_type1) + 1L]] <- row_d
 }
 
 type1_table <- do.call(rbind, rows_type1)
@@ -725,9 +821,33 @@ for (tt in scenarios) {
   q_cols_this <- setdiff(colnames(row_c_chr), c("scenario", "method"))
   row_c_chr   <- row_c_chr[, c("scenario", "method", q_cols_this)]
   
+  ## ---- Chao2009 ----
+  row_d_mean <- as.data.frame(t(df_tt$mean_Nstop_Chao2009))
+  row_d_sd   <- as.data.frame(t(df_tt$sd_Nstop_Chao2009))
+  row_d_chr <- as.data.frame(
+    setNames(
+      lapply(seq_along(q_levels), function(j) {
+        ns <- row_d_mean[1, j]
+        ss <- row_d_sd[1, j]
+        t1 <- df_tt$type1_Chao2009[j]
+        if (is.na(ns)) {
+          NA_character_
+        } else {
+          sprintf("%.1f (%.1f)", ns, ss)
+        }
+      }),
+      q_names
+    )
+  )
+  row_d_chr$scenario <- tt
+  row_d_chr$method   <- "Chao2009"
+  q_cols_this <- setdiff(colnames(row_c_chr), c("scenario", "method"))
+  row_d_chr   <- row_d_chr[, c("scenario", "method", q_cols_this)]
+  
   rows_Nstop[[length(rows_Nstop) + 1L]] <- row_b_chr
   rows_Nstop[[length(rows_Nstop) + 1L]] <- row_u_chr
   rows_Nstop[[length(rows_Nstop) + 1L]] <- row_c_chr
+  rows_Nstop[[length(rows_Nstop) + 1L]] <- row_d_chr
 }
 
 Nstop_table <- do.call(rbind, rows_Nstop)
@@ -843,9 +963,32 @@ for (tt in scenarios) {
   q_cols_this <- setdiff(colnames(row_c_chr), c("scenario", "method"))
   row_c_chr   <- row_c_chr[, c("scenario", "method", q_cols_this)]
   
+  ## ---- Chao2009 ----
+  row_d_mean <- as.data.frame(t(df_tt$mean_missed_Chao2009 / n_big))
+  row_d_sd   <- as.data.frame(t(df_tt$sd_missed_Chao2009   / n_big))
+  row_d_chr <- as.data.frame(
+    setNames(
+      lapply(seq_along(q_levels), function(j) {
+        mm <- row_d_mean[1, j]
+        ss <- row_d_sd[1, j]
+        if (is.na(mm)) {
+          NA_character_
+        } else {
+          sprintf("%.3f (%.3f)", mm, ss)
+        }
+      }),
+      q_names
+    )
+  )
+  row_d_chr$scenario <- tt
+  row_d_chr$method   <- "Chao2009"
+  q_cols_this <- setdiff(colnames(row_d_chr), c("scenario", "method"))
+  row_d_chr   <- row_d_chr[, c("scenario", "method", q_cols_this)]
+  
   rows_missed[[length(rows_missed) + 1L]] <- row_b_chr
   rows_missed[[length(rows_missed) + 1L]] <- row_u_chr
   rows_missed[[length(rows_missed) + 1L]] <- row_c_chr
+  rows_missed[[length(rows_missed) + 1L]] <- row_d_chr
 }
 
 missed_table <- do.call(rbind, rows_missed)
@@ -939,9 +1082,32 @@ for (tt in scenarios) {
   q_cols_this <- setdiff(colnames(row_c_chr), c("scenario", "method"))
   row_c_chr   <- row_c_chr[, c("scenario", "method", q_cols_this)]
   
+  ## ---- Chao2009 ----
+  row_d_mean <- as.data.frame(t(df_tt$mean_extra_Chao2009))
+  row_d_sd   <- as.data.frame(t(df_tt$sd_extra_Chao2009))
+  row_d_chr <- as.data.frame(
+    setNames(
+      lapply(seq_along(q_levels), function(j) {
+        mm <- row_d_mean[1, j]
+        ss <- row_d_sd[1, j]
+        if (is.na(mm)) {
+          NA_character_
+        } else {
+          sprintf("%.2f (%.2f)", mm, ss)
+        }
+      }),
+      q_names
+    )
+  )
+  row_d_chr$scenario <- tt
+  row_d_chr$method   <- "Chao2009"
+  q_cols_this <- setdiff(colnames(row_d_chr), c("scenario", "method"))
+  row_d_chr   <- row_d_chr[, c("scenario", "method", q_cols_this)]
+  
   rows_extra[[length(rows_extra) + 1L]] <- row_b_chr
   rows_extra[[length(rows_extra) + 1L]] <- row_u_chr
   rows_extra[[length(rows_extra) + 1L]] <- row_c_chr
+  rows_extra[[length(rows_extra) + 1L]] <- row_d_chr
 }
 
 extra_table <- do.call(rbind, rows_extra)
@@ -1045,6 +1211,14 @@ for (d in distro_levels) {
                     df_d$mean_Nstop_coverage,
                     df_d$mean_missed_coverage,
                     df_d$mean_extra_coverage)
+  
+  # Chao2009
+  plot_rows[[length(plot_rows) + 1L]] <-
+    add_method_rows(df_d, d, n_big,
+                    "Chao2009",
+                    df_d$mean_Nstop_Chao2009,
+                    df_d$mean_missed_Chao2009,
+                    df_d$mean_extra_Chao2009)
 }
 
 plot_df <- do.call(rbind, plot_rows)
@@ -1061,8 +1235,8 @@ plot_df$metric <- factor(
 
 plot_df$method <- factor(
   plot_df$method,
-  levels = c("bounded", "unbounded", "coverage"),
-  labels = c("Bounded CI", "Unbounded CI", "Coverage")
+  levels = c("bounded", "unbounded", "coverage", "Chao2009"),
+  labels = c("Bounded CI", "Unbounded CI", "Coverage", "Chao2009")
 )
 
 ## Nice facet labels
