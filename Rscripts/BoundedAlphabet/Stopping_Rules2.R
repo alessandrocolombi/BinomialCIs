@@ -1,5 +1,5 @@
-setwd("~/Documents/uni/papers/unseen/BinomialCIs/Rscripts/BoundedAlphabet")
-#setwd("C:/Users/colom/BinomialCIs/Rscripts/BoundedAlphabet")
+# setwd("~/Documents/uni/papers/unseen/BinomialCIs/Rscripts/BoundedAlphabet")
+setwd("C:/Users/colom/BinomialCIs/Rscripts/BoundedAlphabet")
 
 # Librerie ----------------------------------------------------------------
 suppressWarnings(suppressPackageStartupMessages(library(tibble)))
