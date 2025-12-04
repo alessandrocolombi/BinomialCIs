@@ -1,5 +1,5 @@
-# setwd("~/Documents/uni/papers/unseen/BinomialCIs/Rscripts/BoundedAlphabet")
-setwd("C:/Users/colom/BinomialCIs/Rscripts/BoundedAlphabet")
+setwd("~/Documents/uni/papers/unseen/BinomialCIs/Rscripts/BoundedAlphabet")
+#setwd("C:/Users/colom/BinomialCIs/Rscripts/BoundedAlphabet")
 
 # Librerie ----------------------------------------------------------------
 suppressWarnings(suppressPackageStartupMessages(library(tibble)))
@@ -97,7 +97,7 @@ Nsample_Chao2009 <- function(n,counts,g_Chao2009){
 #   compute_UB_rnorm(n, alpha, beta, r_n, Shat)
 # already defined somewhere in your project.
 
-simulate_one_run <- function(p,
+simulate_one_run_old <- function(p,
                              q_error        = 0,
                              eps            = 0.01,
                              alpha          = 0.05,
@@ -289,8 +289,6 @@ simulate_one_run <- function(p,
   if (!stopped_cov)       Nstop_cov       <- n_max
   if (!stopped_Chao2009)  Nstop_Chao2009 <- n_max
   
-  cat("\n ","Nbdd = ",Nstop_bounded,"; Nubb = ",Nstop_unbounded,"; Ncov = ",Nstop_cov,"; Nchao = ",Nstop_Chao2009)
-  
   list(
     Nstop_bounded          = Nstop_bounded,
     Nstop_unbounded        = Nstop_unbounded,
@@ -310,6 +308,218 @@ simulate_one_run <- function(p,
     extra_species_Chao2009 = extra_species_Chao2009
   )
 }
+
+simulate_one_run <- function(p,
+                             q_error        = 0,
+                             eps            = 0.01,
+                             alpha          = 0.05,
+                             C_target       = 0.95,
+                             g_Chao2009     = 0.95,
+                             batch_size     = 50L,
+                             n_max          = 5000L,
+                             beta           = 1e-5) {
+  
+  M <- length(p)
+  # "Big" true species for correctness check: p_j >= eps
+  big_species <- which(p >= eps)
+  
+  # Counters
+  n        <- 0L            # number of sampling units (rows)
+  n_error  <- 0L            # number of singleton error species observed so far
+  counts_true <- integer(M) # counts of true species across all rows
+  
+  # Stopping flags and outputs
+  stopped_bounded   <- FALSE
+  stopped_unbounded <- FALSE
+  stopped_cov       <- FALSE
+  stopped_Chao2009  <- FALSE
+  
+  Nstop_bounded   <- NA_integer_
+  Nstop_unbounded <- NA_integer_
+  Nstop_cov       <- NA_integer_
+  Nstop_Chao2009  <- NA_integer_
+  
+  ok_bounded   <- NA
+  ok_unbounded <- NA
+  ok_cov       <- NA
+  ok_Chao2009  <- NA
+  
+  # New metrics: missed big species and extra species at stopping
+  missed_big_bounded      <- NA_integer_
+  missed_big_unbounded    <- NA_integer_
+  missed_big_coverage     <- NA_integer_
+  missed_big_Chao2009     <- NA_integer_
+  extra_species_bounded   <- NA_integer_
+  extra_species_unbounded <- NA_integer_
+  extra_species_coverage  <- NA_integer_
+  extra_species_Chao2009  <- NA_integer_
+  
+  # Helper: compute (# missed big species, # extra species) given current counts
+  compute_missed_and_extra <- function() {
+    if (length(big_species) > 0L) {
+      big_seen    <- counts_true[big_species] > 0L
+      missed_big  <- sum(!big_seen)
+      observed_big <- sum(big_seen)
+    } else {
+      missed_big   <- 0L
+      observed_big <- 0L
+    }
+    K_true_seen   <- sum(counts_true > 0L)
+    extra_species <- K_true_seen + n_error - observed_big
+    list(missed_big = missed_big, extra_species = extra_species)
+  }
+  
+  n_batches <- ceiling(n_max / batch_size)
+  
+  for (b in seq_len(n_batches)) {
+    # Allow for a non-multiple n_max if needed
+    remaining <- n_max - n
+    if (remaining <= 0L) break
+    this_b <- min(batch_size, remaining)
+    
+    ## ---- Bernoulli product: X_{i,j} ~ Bern(p_j), i = 1,...,this_b ----
+    # For each species j, number of 1's in this batch: Binomial(this_b, p_j)
+    successes <- stats::rbinom(n = M, size = this_b, prob = p)
+    
+    ## ---- Entry-level contamination ----
+    # Each 1 can be an error with prob q_error:
+    # if it's an error, we remove it from the true species and
+    # create a new singleton error species.
+    if (q_error > 0) {
+      errors <- stats::rbinom(n = M, size = successes, prob = q_error)
+    } else {
+      errors <- integer(M)
+    }
+    
+    counts_true <- counts_true + (successes - errors)
+    n_error     <- n_error     + sum(errors)
+    n           <- n + this_b
+    
+    ## ---- Observed abundance vector (true + error species) ----
+    counts_obs <- c(counts_true[counts_true > 0L],
+                    rep(1L, n_error))   # n_error singleton OTUs
+    M_obs <- length(counts_obs)         # observed alphabet size
+    
+    if (length(counts_obs) == 0L) next   # nothing observed yet
+    
+    ## ---- 5.1 Bounded-alphabet CI rule (on observed data) ----
+    if (!stopped_bounded) {
+      b_n <- log(n)
+      # Now Nj has length M_obs and we pass 10*M to the C++ routine
+      nj <- c(counts_obs, rep(0L, 10 * M - M_obs))
+      U_bounded <- compute_UB_analytical(n, nj, 10 * M, b_n, alpha, FALSE)
+      
+      if (!is.na(U_bounded) && U_bounded < eps) {
+        stopped_bounded <- TRUE
+        Nstop_bounded   <- n
+        ok_bounded      <- all(counts_true[big_species] > 0L)
+        
+        me <- compute_missed_and_extra()
+        missed_big_bounded    <- me$missed_big
+        extra_species_bounded <- me$extra_species
+      }
+    }
+    
+    ## ---- 5.2 Unbounded-alphabet CI rule (on observed data) ----
+    if (!stopped_unbounded) {
+      Shat  <- sum(counts_obs) / n
+      Sstar <- ( sqrt( -log(beta) / (2 * n) ) +
+                   sqrt( Shat + (-log(beta) / (2 * n)) ) )^2
+      r_n   <- log( Sstar / (-log(1 - alpha + beta)) ) +
+        log(n) - log(log(n))
+      U_unbounded <- compute_UB_rnorm(n, alpha, beta, r_n, Shat)
+      
+      if (!is.na(U_unbounded) && U_unbounded <= eps) {
+        stopped_unbounded <- TRUE
+        Nstop_unbounded   <- n
+        ok_unbounded      <- all(counts_true[big_species] > 0L)
+        
+        me <- compute_missed_and_extra()
+        missed_big_unbounded    <- me$missed_big
+        extra_species_unbounded <- me$extra_species
+      }
+    }
+    
+    ## ---- 5.3 Chao–Jost coverage-based rule (same counts_obs) ----
+    if (!stopped_cov) {
+      C_hat <- coverage_ChaoJost(n, counts_obs)
+      if (!is.na(C_hat) && C_hat >= C_target) {
+        stopped_cov <- TRUE
+        Nstop_cov   <- n
+        ok_cov      <- all(counts_true[big_species] > 0L)
+        
+        me <- compute_missed_and_extra()
+        missed_big_coverage    <- me$missed_big
+        extra_species_coverage <- me$extra_species
+      }
+    }
+    
+    ## ---- 5.4 Chao2009 Eq.15 stopping rule (same counts_obs) ----
+    if (!stopped_Chao2009) {
+      mg <- Nsample_Chao2009(n, counts_obs, g_Chao2009)
+      if (!is.na(mg) && this_b >= mg) {
+        stopped_Chao2009 <- TRUE
+        Nstop_Chao2009   <- n + mg
+        ok_Chao2009      <- all(counts_true[big_species] > 0L)
+        
+        me <- compute_missed_and_extra()
+        missed_big_Chao2009    <- me$missed_big
+        extra_species_Chao2009 <- me$extra_species
+      }
+    }
+    
+    # Early exit if all four rules have stopped
+    if (stopped_bounded && stopped_unbounded && stopped_cov && stopped_Chao2009) break
+  }
+  
+  ## ------------------------------------------------------------
+  ## Post-loop: handle rules that *never* stopped by n_max
+  ## ------------------------------------------------------------
+  # For those, set Nstop_* = n_max and compute missed/extra at n_max.
+  # ok_* stays NA to keep your current type I error definition.
+  me_final <- compute_missed_and_extra()
+  
+  if (!stopped_bounded) {
+    Nstop_bounded          <- n_max
+    missed_big_bounded     <- me_final$missed_big
+    extra_species_bounded  <- me_final$extra_species
+  }
+  if (!stopped_unbounded) {
+    Nstop_unbounded        <- n_max
+    missed_big_unbounded   <- me_final$missed_big
+    extra_species_unbounded<- me_final$extra_species
+  }
+  if (!stopped_cov) {
+    Nstop_cov              <- n_max
+    missed_big_coverage    <- me_final$missed_big
+    extra_species_coverage <- me_final$extra_species
+  }
+  if (!stopped_Chao2009) {
+    Nstop_Chao2009         <- n_max
+    missed_big_Chao2009    <- me_final$missed_big
+    extra_species_Chao2009 <- me_final$extra_species
+  }
+  
+  list(
+    Nstop_bounded           = Nstop_bounded,
+    Nstop_unbounded         = Nstop_unbounded,
+    Nstop_coverage          = Nstop_cov,
+    Nstop_Chao2009          = Nstop_Chao2009,
+    ok_bounded              = ok_bounded,
+    ok_unbounded            = ok_unbounded,
+    ok_coverage             = ok_cov,
+    ok_Chao2009             = ok_Chao2009,
+    missed_big_bounded      = missed_big_bounded,
+    missed_big_unbounded    = missed_big_unbounded,
+    missed_big_coverage     = missed_big_coverage,
+    missed_big_Chao2009     = missed_big_Chao2009,
+    extra_species_bounded   = extra_species_bounded,
+    extra_species_unbounded = extra_species_unbounded,
+    extra_species_coverage  = extra_species_coverage,
+    extra_species_Chao2009  = extra_species_Chao2009
+  )
+}
+
 
 ## ------------------------------------------------------------
 ## 3'. SEQUENTIAL driver over many synthetic datasets
@@ -401,11 +611,11 @@ hyperparams <- list(
   q_vec        = c(0, 0.0001, 0.0005, 0.001, 0.0025, 0.005),
   eps          = eps,
   alpha        = 0.05,
-  batch_size   = 10L,
-  n_max        = 5000L,
+  batch_size   = 50L,
+  n_max        = 10000L,
   C_target     = 0.99,
   g_Chao2009   = 0.99,
-  n_reps       = 200L,
+  n_reps       = 500L,
   beta         = 1e-5,
   seed_regular = 123L,
   seed_heavy   = 456L  # you can reuse or add more seeds if you want
@@ -1135,21 +1345,6 @@ library(ggplot2)
 ## 1) Number of "big" species per scenario (p_j >= eps)
 ## ------------------------------------------------------------
 
-distro_levels <- sort(unique(summary_df$distro))
-
-n_big_vec <- setNames(
-  sapply(distro_levels, function(d) {
-    p_d <- switch(
-      d,
-      "zipf_heavy" = build_zipf_p(M = hyperparams$M, gamma = 1.05),
-      "unif_small" = build_uniform_p(M = hyperparams$M, c = 0.006),
-      "geom_0.05"  = build_geom_p(M = hyperparams$M, a = 0.05),
-      stop(sprintf("Unknown distro '%s' when computing n_big", d))
-    )
-    sum(p_d >= hyperparams$eps)
-  }),
-  distro_levels
-)
 
 ## ------------------------------------------------------------
 ## 2) Build long data frame for plotting
@@ -1243,7 +1438,7 @@ plot_df$method <- factor(
 plot_df$metric <- factor(
   plot_df$metric,
   levels = c("N[stop]", "Missed big species (proportion)", "Extra species"),
-  labels = c("N stop", "# missed", "# extra")
+  labels = c("N stop", "% missed", "num. extra")
 )
 
 plot_df$distro <- factor(
@@ -1257,7 +1452,17 @@ plot_df$distro <- factor(
 ## 3) Plot: rows = scenarios, columns = metrics
 ## ------------------------------------------------------------
 
-p <- ggplot(plot_df, aes(x = q, y = value, colour = method)) +
+sqrt_transform <- function(y) sign(y) * sqrt(abs(y))
+
+inv_sqrt_label <- function(y) {
+  sign(y) * (abs(y)^2)
+}
+
+df_main <- plot_df2 |> dplyr::filter(metric != "% missed")
+df_missed <- plot_df2 |> dplyr::filter(metric == "% missed") |>
+  dplyr::mutate(value_trans = sqrt_transform(value))
+
+p1 <- ggplot(df_main, aes(x = q, y = value, colour = method)) +
   geom_line() +
   geom_point(size = 1.5) +
   facet_grid(metric ~ distro, scales = "free_y") +
@@ -1270,12 +1475,40 @@ p <- ggplot(plot_df, aes(x = q, y = value, colour = method)) +
   theme(
     strip.background = element_rect(fill = "grey90"),
     panel.grid.minor = element_blank(),
+    legend.position = "none",      # legend only in p2
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
+
+p2 <- ggplot(df_missed, aes(x = q, y = value_trans, colour = method)) +
+  geom_line() +
+  geom_point(size = 1.5) +
+  facet_grid(metric ~ distro, scales = "free_y") +
+  labs(
+    x = expression(q),
+    y = NULL,
+    colour = "Stopping rule"
+  ) +
+  scale_y_continuous(labels = inv_sqrt_label) +
+  theme_bw() +
+  theme(
+    # Remove only column strips (top)
+    strip.background.x = element_blank(),
+    strip.text.x       = element_blank(),
+    strip.background.y = element_rect(fill = "grey90"),
+    strip.text.y       = element_text(),
+    panel.grid.minor = element_blank(),
     legend.position = "bottom",
     axis.text.x = element_text(angle = 45, hjust = 1)
   )
 
-print(p)
+library(patchwork)
+
+p2_adj <- p2 + theme(plot.margin = margin(t = -30, r = 5, b = 0, l = 5))
+
+p_final <- p1 / p2_adj + 
+  plot_layout(heights = c(2, 1))
+
+print(p_final)
 
 ggsave("stopping_rules_figure.pdf", p, width = 9, height = 7)
-
 
