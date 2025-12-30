@@ -171,6 +171,48 @@ rarefaction.array <- function(object, n_reorderings = 1, seed = 1234) {
 
 
 
+# Stopping rule functions -------------------------------------------------
+
+# Chao–Jost sample coverage for abundance data
+# counts: vector of species abundances (only observed species)
+coverage_ChaoJost <- function(n,counts) {
+  if (n <= 1) return(NA_real_)
+  counts <- counts[counts > 0]
+  
+  f1 <- sum(counts == 1L)
+  f2 <- sum(counts == 2L)
+  
+  if (f1 == 0L) return(1)  # all species have count >= 2, coverage ~ 1
+  
+  # Chao & Jost (2012), incidence-based sample coverage
+  C_hat <- 1 - (f1 / n) * ( ( (n - 1) * f1 ) / ( (n - 1) * f1 + 2 * f2 ) )
+  C_hat
+}
+
+
+Nsample_Chao2009 <- function(n,counts,g_Chao2009){
+  
+  if (n <= 1) return(NA_real_)
+  counts <- counts[counts > 0]
+  
+  f1 <- sum(counts == 1L) # num. sigleton
+  f2 <- sum(counts == 2L) # num. doubleton
+  
+  Sobs <- length(counts)  # num. distinct observed
+  Sest <- Sobs
+  if(f2 > 0){
+    Sest <- Sest + ( (1 - 1/n)*f1*f1 )/(2*f2) # num. distinct estimated
+  } else {
+    Sest <- Sest + ( f1*(f1 - 1) )/(2) # num. distinct estimated
+  }
+  
+  if(g_Chao2009*Sest < Sobs)
+    return( 0 )
+  
+  num = log( 1 - (n*2*f2*(g_Chao2009*Sest - Sobs))/( (n-1)*f1*f1 )  ) # numerator of Eq.(15) in Chao et. al. (2009)
+  den = log( 1 - (2*f2)/( (n-1)*f1 + 2*f2 )  )                        # denominator of Eq.(15) in Chao et. al. (2009)
+  num/den
+}
 
 
 
