@@ -1,0 +1,6 @@
+Job started on r502n001 at Wed Jan  7 15:01:22 CET 2026
+Error in checkForRemoteErrors(val) : 
+  32 nodes produced errors; first error: there is no package called ‘ACutils’
+Calls: parLapply ... clusterApply -> staticClusterApply -> checkForRemoteErrors
+Execution halted
+Job finished at Wed Jan  7 15:30:24 CET 2026
