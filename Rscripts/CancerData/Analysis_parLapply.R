@@ -216,7 +216,7 @@ idxs = 1:d
 cluster <- makeCluster(num_cores, type = "SOCK")
 doSNOW::registerDoSNOW(cluster)
 clusterExport(cluster, list("cancer_names","cancer_types",
-                            "wd"),
+                            "wd", "compute_UB_rnorm", "compute_UB_analytical"),
               envir = environment())
 inner_result = parLapply( cl = cluster, x = idxs,
                           fun = CancerData_run )
