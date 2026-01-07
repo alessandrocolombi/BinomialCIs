@@ -142,18 +142,18 @@ CancerData_run = function(idx){
           type = "l", 
           lwd = 3, pch = 16, lty = 1,
           col = "darkred" )
-  polygon( c(n_train_vec, rev(n_train_vec)),
-           c(ub_unb[1,], rev(ub_unb[3,])),
-           col = ACutils::t_col("darkred",30),
-           border = NA) # plot in-sample bands
+  # polygon( c(n_train_vec, rev(n_train_vec)),
+  #          c(ub_unb[1,], rev(ub_unb[3,])),
+  #          col = ACutils::t_col("darkred",30),
+  #          border = NA) # plot in-sample bands
   points( x = n_train_vec, y = ub_bdd[2,], 
           type = "l", 
           lwd = 3, pch = 16, lty = 1,
           col = "darkgreen" ) 
-  polygon( c(n_train_vec, rev(n_train_vec)),
-           c(ub_bdd[1,], rev(ub_bdd[3,])),
-           col = ACutils::t_col("darkgreen",30),
-           border = NA) # plot in-sample bands
+  # polygon( c(n_train_vec, rev(n_train_vec)),
+  #          c(ub_bdd[1,], rev(ub_bdd[3,])),
+  #          col = ACutils::t_col("darkgreen",30),
+  #          border = NA) # plot in-sample bands
   legend("topright",c("Unbounded","Bounded"), 
          lwd = 3, col = c("darkred","darkgreen"))
   if(save_img_1)
@@ -185,18 +185,18 @@ CancerData_run = function(idx){
           type = "l", 
           lwd = 3, pch = 16, lty = 1,
           col = "darkred" )
-  polygon( c(n_train_vec, rev(n_train_vec)),
-           c(nub_unb[1,], rev(nub_unb[3,])),
-           col = ACutils::t_col("darkred",30),
-           border = NA) # plot in-sample bands
+  # polygon( c(n_train_vec, rev(n_train_vec)),
+  #          c(nub_unb[1,], rev(nub_unb[3,])),
+  #          col = ACutils::t_col("darkred",30),
+  #          border = NA) # plot in-sample bands
   points( x = n_train_vec, y = nub_bdd[2,], 
           type = "l", 
           lwd = 3, pch = 16, lty = 1,
           col = "darkgreen" )
-  polygon( c(n_train_vec, rev(n_train_vec)),
-           c(nub_bdd[1,], rev(nub_bdd[3,])),
-           col = ACutils::t_col("darkgreen",30),
-           border = NA) # plot in-sample bands
+  # polygon( c(n_train_vec, rev(n_train_vec)),
+  #          c(nub_bdd[1,], rev(nub_bdd[3,])),
+  #          col = ACutils::t_col("darkgreen",30),
+  #          border = NA) # plot in-sample bands
   legend("topright",c("Unbounded","Bounded"), 
          lwd = 3, col = c("darkred","darkgreen"))
   if(save_img_2)
