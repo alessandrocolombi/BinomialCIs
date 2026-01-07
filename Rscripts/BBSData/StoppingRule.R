@@ -1,20 +1,19 @@
-setwd("C:/Users/colom/BinomialCIs/Rscripts/BBSData")
+# Wd and functions ----------------------------------------------------------------------
+wd_pc = "C:/Users/colom/"
+wd_unicatt = "C:/Users/alessandro.colombi/"
+wd_g100 = "/g100/home/userexternal/acolombi/"
+wd = paste0(wd_g100,"BinomialCIs/Rscripts/CancerData/")
+setwd(wd)
 
 # Librerie ----------------------------------------------------------------
 suppressWarnings(suppressPackageStartupMessages(library(tibble)))
 suppressWarnings(suppressPackageStartupMessages(library(parallel)))
 suppressWarnings(suppressPackageStartupMessages(library(doSNOW)))
 suppressWarnings(suppressPackageStartupMessages(library(progress)))
-suppressWarnings(suppressPackageStartupMessages(library(VGAM)))
+# suppressWarnings(suppressPackageStartupMessages(library(VGAM)))
+
 Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
 source("../../R/Rfunctions.R")
-
-## ------------------------------------------------------------
-## Packages and data
-## ------------------------------------------------------------
-library(future.apply)
-
-
 
 ## ------------------------------------------------------------
 ## 1. Load functions
@@ -199,10 +198,11 @@ beta           = 1e-5
 
 Nrep = 100
 seed0 = 4224
-num_cores = 5
+num_cores = 34
 res = stopping_rule( data, Nrep, num_cores, seed0, 
                      eps, alpha, C_target, g_Chao2009, beta)
 
+save(res, file = "save/res_Data2019_allRoutes.Rdat")
 
 # res
 colMeans(res)
