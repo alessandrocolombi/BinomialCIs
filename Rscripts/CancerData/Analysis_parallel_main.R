@@ -1,26 +1,21 @@
 wd_pc = "C:/Users/colom/"
 wd_unicatt = "C:/Users/alessandro.colombi/"
 wd_g100 = "/g100/home/userexternal/acolombi/"
-wd = paste0(wd_g100,"BinomialCIs/Rscripts/CancerData/")
+wd = paste0(wd_pc,"BinomialCIs/Rscripts/CancerData/")
 setwd(wd)
 
-cat("\n Cambiata wd \n")
 # The path to the script to execute in parallel
 scriptpath = "./Analysis_exec.R"
 Datasets = 1:32
 SimNo <- 11:15
 
 # Parallel execution 
-# idx <- Datasets[SimNo[1]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
-# idx <- Datasets[SimNo[2]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
-# idx <- Datasets[SimNo[3]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
-# idx <- Datasets[SimNo[4]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
-# idx <- Datasets[SimNo[5]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- Datasets[SimNo[1]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- Datasets[SimNo[2]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- Datasets[SimNo[3]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- Datasets[SimNo[4]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
+idx <- Datasets[SimNo[5]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
 
-for(SimNo in 1:32){
-  idx <- Datasets[SimNo] 
-  rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
-}
 
 # idx <- Datasets[SimNo[7]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
 # idx <- Datasets[SimNo[8]]; rstudioapi::jobRunScript(path = scriptpath, importEnv = TRUE)
