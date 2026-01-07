@@ -1,8 +1,10 @@
-# wd = "C:/Users/colom/BinomialCIs/Rscripts/CancerData/"
-wd = "C:/Users/alessandro.colombi/BinomialCIs/Rscripts/CancerData/"
+wd_pc = "C:/Users/colom/"
+wd_unicatt = "C:/Users/alessandro.colombi/"
+wd_g100 = "/g100/home/userexternal/acolombi/"
+wd = paste0(wd_g100,"BinomialCIs/Rscripts/CancerData/")
 setwd(wd)
 
-
+cat("\n Cambiata wd \n")
 # The path to the script to execute in parallel
 scriptpath = "./Analysis_exec.R"
 Datasets = 1:32
