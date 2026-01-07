@@ -1,0 +1,14 @@
+Job started on r502n002 at Wed Jan  7 14:49:43 CET 2026
+Registered S3 methods overwritten by 'RcppGSL':
+  method               from     
+  predict.fastLm       RcppEigen
+  print.fastLm         RcppEigen
+  summary.fastLm       RcppEigen
+  print.summary.fastLm RcppEigen
+
+ Compiled! 
+ Error in checkForRemoteErrors(val) : 
+  32 nodes produced errors; first error: object 'wd' not found
+Calls: parLapply ... clusterApply -> staticClusterApply -> checkForRemoteErrors
+Execution halted
+Job finished at Wed Jan  7 14:50:02 CET 2026
