@@ -5,18 +5,17 @@ wd_g100 = "/g100/home/userexternal/acolombi/"
 wd = paste0(wd_g100,"BinomialCIs/Rscripts/CancerData/")
 setwd(wd)
 
-Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
-source("../../R/Rfunctions.R")
 suppressWarnings(suppressPackageStartupMessages(library(parallel)))
 suppressWarnings(suppressPackageStartupMessages(library(doSNOW)))
-
-cat("\n Compiled! \n ")
 
 
 # Main function definition ------------------------------------------------
 
 # idx = 2
 CancerData_run = function(idx){
+  Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
+  source("../../R/Rfunctions.R")
+  cat("\n Compiled! \n ")
   
   cancer_name = cancer_names[idx]
   filename = paste0(wd,"TCGA/",cancer_types[idx],"_targeted.RData")
@@ -216,7 +215,7 @@ idxs = 1:d
 cluster <- makeCluster(num_cores, type = "SOCK")
 doSNOW::registerDoSNOW(cluster)
 clusterExport(cluster, list("cancer_names","cancer_types",
-                            "wd", "compute_UB_rnorm", "compute_UB_analytical"),
+                            "wd"),
               envir = environment())
 inner_result = parLapply( cl = cluster, x = idxs,
                           fun = CancerData_run )
