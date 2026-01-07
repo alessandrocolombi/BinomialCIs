@@ -7,6 +7,8 @@ setwd(wd)
 
 Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
 source("../../R/Rfunctions.R")
+suppressWarnings(suppressPackageStartupMessages(library(parallel)))
+suppressWarnings(suppressPackageStartupMessages(library(doSNOW)))
 
 cat("\n Compiled! \n ")
 
