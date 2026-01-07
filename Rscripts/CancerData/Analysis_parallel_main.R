@@ -1,5 +1,5 @@
-# wd = "C:/Users/colom/ScriptSpecies_shared/RevBA"
-wd = "C:/Users/alessandro.colombi/ScriptSpecies_shared/RevBA"
+# wd = "C:/Users/colom/BinomialCIs/Rscripts/CancerData/"
+wd = "C:/Users/alessandro.colombi/BinomialCIs/Rscripts/CancerData/"
 setwd(wd)
 
 
