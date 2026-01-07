@@ -215,7 +215,8 @@ idxs = 1:d
 ## Parallel run (no prints allowed)
 cluster <- makeCluster(num_cores, type = "SOCK")
 doSNOW::registerDoSNOW(cluster)
-clusterExport(cluster, list("cancer_names","cancer_types"),
+clusterExport(cluster, list("cancer_names","cancer_types",
+                            "wd"),
               envir = environment())
 inner_result = parLapply( cl = cluster, x = idxs,
                           fun = CancerData_run )
