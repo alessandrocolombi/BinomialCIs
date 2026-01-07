@@ -183,15 +183,15 @@ stopping_rule = function( data, Nrep, num_cores, seed0,
 ## ------------------------------------------------------------
 ## 2. Run
 ## ------------------------------------------------------------
-target_state = 14
-load(paste0("data/BBS_2019_",target_state,".Rdat"))
-data = incidence_matrix_large
+# target_state = 14
+# load(paste0("data/BBS_2019_",target_state,".Rdat"))
+# data = incidence_matrix_large
 
 load(paste0("data/Data2019_allRoutes.Rdat"))
 data = incidence_matrix
 n = nrow(data)
 
-eps            = 0.05
+eps            = 0.01
 alpha          = 0.05
 C_target       = 0.95
 g_Chao2009     = 0.95
@@ -204,8 +204,8 @@ res = stopping_rule( data, Nrep, num_cores, seed0,
                      eps, alpha, C_target, g_Chao2009, beta)
 
 
-res
+# res
 colMeans(res)
-
+apply(res, 2, quantile, probs = c(0.025,0.5,0.975))
 
 

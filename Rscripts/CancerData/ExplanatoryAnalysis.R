@@ -5,13 +5,16 @@ setwd(wd)
 load("cancer_types.Rdat")
 load("cancer_names_easy.Rdat")
 
+
+# Accumulation curves -----------------------------------------------------
+
 TabNj_list = vector("list", length = length(cancer_names))
 ExtrCurve_list = vector("list", length = length(cancer_names))
 N = 0
 
 idx = 1
 save_plot_all = FALSE
-save_plot_individual = TRUE
+save_plot_individual = FALSE
 
 if(save_plot_all)
   pdf("img/ExtrapolationCurvs_all.pdf")
@@ -116,4 +119,40 @@ for(idx in 1:Ncancers){
 
 if(save_plot)
   dev.off()
+
+
+# Bounded or not? ---------------------------------------------------------
+
+# Rcpp::sourceCpp("../../src/RcppFunctions.cpp")
+# source("../../R/Rfunctions.R")
+
+d = length(cancer_names)
+idx = 5;
+Mstar <- rep(-1,d)
+for(idx in 1:d){
+  cancer_name = cancer_names[idx]
+  cat("\n idx = ",idx,"; cancer name: ",cancer_name," ")
+  
+  exp_name = paste0("Cancer_",cancer_types[idx])
+  
+  filename = paste0(wd,"TCGA/",cancer_types[idx],"_targeted.RData")
+  load(filename)
+  Nj = c(apply(Z, 2, sum))
+  n = nrow(Z)
+  Kobs = length( which(Nj > 0) )
+  TabNj = c(length(which(Nj == 0)), tabulate(Nj, nbins = n) )
+  S<-Shat<- sum( Nj )/n
+  library(VGAM)
+  z <- S*n - log(20)
+  W <- ifelse(z < 700, VGAM::lambertW(exp(z)), z - log(z))
+  cat("...",W,"\n")
+  Mstar[idx] = W
+}
+
+
+par(mfrow = c(1,1), mgp=c(2.5,0.5,0), mar = c(2.5,3.5,1,0), bty = "l")
+plot(Mstar)
+
+
+
 

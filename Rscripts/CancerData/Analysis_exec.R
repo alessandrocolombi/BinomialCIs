@@ -46,8 +46,8 @@ beta = 1e-5
 
 # Run ---------------------------------------------------------------------
 
-ub_Inter_list <- lapply(1:Nexp, function(ii){rep(NA,Nrep[ii])})
-ub_rnorm_list <- nub_Inter_list <- nub_rnorm_list <- ub_Inter_list
+ub_unb_list <- lapply(1:Nexp, function(ii){rep(NA,Nrep[ii])})
+ub_bdd_list <- nub_bdd_list <- nub_unb_list <- ub_unb_list
 
 
 for(ii in 1:Nexp){ # Loop for each training size
@@ -67,42 +67,51 @@ for(ii in 1:Nexp){ # Loop for each training size
     Shat = sum( Nj_train )/n_train
     
     ## Intersection
-    ub_Inter_list[[ii]][b] = compute_UB_intersection(n_train, alfa, beta, Shat)
-    nub_Inter_list[[ii]][b] = n_train * ub_Inter_list[[ii]][b]
+    # ub_Inter_list[[ii]][b] = compute_UB_intersection(n_train, alfa, beta, Shat)
+    # nub_Inter_list[[ii]][b] = n_train * ub_Inter_list[[ii]][b]
     
-    ## r-norm
+    ## Unbounded
     Sstar = ( sqrt( -log(beta)/(2*n_train) ) + sqrt( Shat + (-log(beta)/(2*n_train)) ) )^2
     rn = log( Sstar / (-log(1-alfa+beta)) ) + log(n_train) - log(log(n_train))
-    ub_rnorm_list[[ii]][b] = compute_UB_rnorm(n_train, alfa, beta, rn, Shat)
-    nub_rnorm_list[[ii]][b] = n_train * ub_rnorm_list[[ii]][b]
+    ub_unb_list[[ii]][b] = compute_UB_rnorm(n_train, alfa, beta, rn, Shat)
+    nub_unb_list[[ii]][b] = n_train * ub_unb_list[[ii]][b]
+    
+    ## Bounded
+    b_n <- log(n_train)
+    Mguess = 10000000 # 10millions
+    Nj_guess = c(Nj_train, rep(0,Mguess - length(Nj_train) ))
+    U_bounded <- compute_UB_analytical(n_train, Nj_guess, Mguess, b_n, alfa, FALSE)
+    ub_bdd_list[[ii]][b] = U_bounded
+    nub_bdd_list[[ii]][b] = n_train * U_bounded
   }
 }
 
-res = list( "ub_Inter_list" = ub_Inter_list, "nub_Inter_list" = nub_Inter_list,
-            "ub_rnorm_list" = ub_rnorm_list, "nub_rnorm_list" = nub_rnorm_list,
+res = list( "ub_unb_list" = ub_unb_list, "nub_unb_list" = nub_unb_list,
+            "ub_bdd_list" = ub_bdd_list, "nub_bdd_list" = nub_bdd_list,
             "n_train_vec" = ceiling( n*train_prop ) )
 
 
 if(save_exp)
   save(res, file = file_name)
 
+cat("\n Saved! \n")
 
 
 # Final summary and plot ---------------------------------------------------
 
-ub_Inter  = lapply(ub_Inter_list, quantile, probs = c(0.025,0.5,0.975)); ub_Inter = do.call(cbind, ub_Inter)
-ub_rnorm  = lapply(ub_rnorm_list, quantile, probs = c(0.025,0.5,0.975)); ub_rnorm = do.call(cbind, ub_rnorm)
+ub_unb  = lapply(ub_unb_list, quantile, probs = c(0.025,0.5,0.975)); ub_unb = do.call(cbind, ub_unb)
+ub_bdd  = lapply(ub_bdd_list, quantile, probs = c(0.025,0.5,0.975)); ub_bdd = do.call(cbind, ub_bdd)
 
-nub_Inter = lapply(nub_Inter_list, quantile, probs = c(0.025,0.5,0.975)); nub_Inter = do.call(cbind, nub_Inter)
-nub_rnorm = lapply(nub_rnorm_list, quantile, probs = c(0.025,0.5,0.975)); nub_rnorm = do.call(cbind, nub_rnorm)
+nub_unb = lapply(nub_unb_list, quantile, probs = c(0.025,0.5,0.975)); nub_unb = do.call(cbind, nub_unb)
+nub_bdd = lapply(nub_bdd_list, quantile, probs = c(0.025,0.5,0.975)); nub_bdd = do.call(cbind, nub_bdd)
 
 
 
 
 ## plot (1) : CI length ----------------------------------------------------
 
-ymax = max( c( ub_Inter[3,],ub_rnorm[3,])) * 1.05
-ymin = 0 #min( c( nub_Inter[1,],nub_rnorm[1,])) 
+ymax = max( c( ub_unb[3,],ub_bdd[3,])) * 1.05
+ymin = 0 #min( c( nub_unb[1,],nub_bdd[1,])) 
 ylabs = round(seq(ymin,ymax,length.out = 5),1)
 
 n_train_vec = ceiling( n*train_prop )
@@ -121,23 +130,23 @@ grid(lty = 1,lwd = 1, col = "gray90" )
 axis(side = 2, at = ylabs, 
      labels = ylabs, las = 1, 
      cex.axis = 1 )
-points( x = n_train_vec, y = ub_Inter[2,], 
+points( x = n_train_vec, y = ub_unb[2,], 
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "darkred" )
 polygon( c(n_train_vec, rev(n_train_vec)),
-         c(ub_Inter[1,], rev(ub_Inter[3,])),
+         c(ub_unb[1,], rev(ub_unb[3,])),
          col = ACutils::t_col("darkred",30),
          border = NA) # plot in-sample bands
-points( x = n_train_vec, y = ub_rnorm[2,], 
+points( x = n_train_vec, y = ub_bdd[2,], 
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "darkgreen" ) 
 polygon( c(n_train_vec, rev(n_train_vec)),
-         c(ub_rnorm[1,], rev(ub_rnorm[3,])),
+         c(ub_bdd[1,], rev(ub_bdd[3,])),
          col = ACutils::t_col("darkgreen",30),
          border = NA) # plot in-sample bands
-legend("topright",c("Intersection","r-norm"), 
+legend("topright",c("Unbounded","Bounded"), 
        lwd = 3, col = c("darkred","darkgreen"))
 if(save_img_1)
   dev.off()
@@ -145,8 +154,8 @@ if(save_img_1)
 
 ## plot (2) : CI length x n ----------------------------------------------------
 
-ymax = max( c( nub_Inter[3,],nub_rnorm[3,])) * 1.05
-ymin = 0 #min( c( nub_Inter[1,],nub_rnorm[1,])) 
+ymax = max( c( nub_unb[3,],nub_bdd[3,])) * 1.05
+ymin = 0 #min( c( nub_unb[1,],nub_bdd[1,])) 
 ylabs = round(seq(ymin,ymax,length.out = 5),1)
 
 n_train_vec = ceiling( n*train_prop )
@@ -164,23 +173,23 @@ grid(lty = 1,lwd = 1, col = "gray90" )
 axis(side = 2, at = ylabs, 
      labels = ylabs, las = 1, 
      cex.axis = 1 )
-points( x = n_train_vec, y = nub_Inter[2,], 
+points( x = n_train_vec, y = nub_unb[2,], 
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "darkred" )
 polygon( c(n_train_vec, rev(n_train_vec)),
-         c(nub_Inter[1,], rev(nub_Inter[3,])),
+         c(nub_unb[1,], rev(nub_unb[3,])),
          col = ACutils::t_col("darkred",30),
          border = NA) # plot in-sample bands
-points( x = n_train_vec, y = nub_rnorm[2,], 
+points( x = n_train_vec, y = nub_bdd[2,], 
         type = "l", 
         lwd = 3, pch = 16, lty = 1,
         col = "darkgreen" )
 polygon( c(n_train_vec, rev(n_train_vec)),
-         c(nub_rnorm[1,], rev(nub_rnorm[3,])),
+         c(nub_bdd[1,], rev(nub_bdd[3,])),
          col = ACutils::t_col("darkgreen",30),
          border = NA) # plot in-sample bands
-legend("bottomright",c("Intersection","r-norm"), 
+legend("topright",c("Unbounded","Bounded"), 
        lwd = 3, col = c("darkred","darkgreen"))
 if(save_img_2)
   dev.off()
