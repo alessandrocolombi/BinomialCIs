@@ -15,7 +15,6 @@ remotes::install_github("https://github.com/trashbirdecology/bbsAssistant")
 
 # 3. Load the library
 library(bbsAssistant)
-
 library(Matrix)
 library(tidyverse)
 bbs <- grab_bbs_data()
@@ -25,7 +24,9 @@ names(bbs)
 obs_raw <- bbs$observations
 
 save(obs_raw, file = "DataRaw_all.Rdat")
+
 # Select all roads in a single year ----------------------------------------------------
+load(paste0("data/DataRaw_all.Rdat"))
 year = 2019
 # Select a single year (e.g., 2019) to get a clean 'n x T' snapshot
 matrix_prep <- obs_raw %>%
@@ -138,6 +139,46 @@ print(dim(incidence_matrix_large))
 
 save(incidence_matrix_large, file = paste0("data/BBS_2019_",target_state,".Rdat"))
 
+# Read and save specific data in a all states, all plots for a single year ----------------------------------------------------
+
+library(tidyverse)
+library(Matrix)
+
+# Configuration
+
+# list of available states
+target_year <- 2019
+
+# 1. Filter and Reshape
+stop_level_data <- obs_raw %>%
+    filter(Year == target_year) %>%
+    # Select the ID, Species, and all 50 stop columns
+    select(RouteDataID, AOU, Stop1:Stop50) %>%
+    # Pivot the stops from columns into rows
+    pivot_longer(cols = Stop1:Stop50, 
+                 names_to = "StopNumber", 
+                 values_to = "Count") %>%
+    # Convert to binary: keep only rows where bird was present
+    filter(Count > 0) %>%
+    # Create a unique ID for each Plot (Route + Stop)
+    mutate(PlotID = paste0(RouteDataID, "_", StopNumber)) %>%
+    select(PlotID, AOU) %>%
+    distinct()
+
+# 2. Create the n x T Sparse Matrix
+# This ensures R doesn't crash from memory usage
+incidence_matrix_large <- stop_level_data %>%
+  mutate(presence = 1) %>%
+  pivot_wider(names_from = AOU, 
+              values_from = presence, 
+              values_fill = 0) %>%
+  column_to_rownames("PlotID") %>%
+  as.matrix()
+
+# 3. Verify the size
+print(dim(incidence_matrix_large))
+
+save(incidence_matrix_large, file = paste0("data/BBS_2019_allPlots.Rdat"))
 
 
 # Extr Curves -------------------------------------------------------------
