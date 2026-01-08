@@ -205,8 +205,17 @@ res = stopping_rule( data, Nrep, num_cores, seed0,
 save(res, file = "save/res_eps005_Data2019_allRoutes.Rdat")
 
 # # res
-# load("save/res_eps001_Data2019_allRoutes.Rdat")
-# colMeans(res)
-# apply(res, 2, quantile, probs = c(0.025,0.5,0.975))
+load("save/res_eps005_Data2019_allRoutes.Rdat")
+colMeans(res)
+apply(res, 2, quantile, probs = c(0.025,0.5,0.975))
 
 
+mycol = c("darkgreen","darkred","deeppink","lightblue")
+
+par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
+plot(0,0,type = "n", main = "eps = 0.05", ylab = "Nstop",
+     xlim = c(0.5,4.5), ylim = c(150,3200), xlab = "")
+for(i in 1:4){
+  boxplot(res[,i], at = i, add = T, 
+          col = mycol[i], pch = 16, yaxt = "n")
+}
