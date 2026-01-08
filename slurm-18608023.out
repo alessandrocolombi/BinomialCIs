@@ -1,0 +1,14 @@
+Job started on r507n001 at Wed Jan  7 18:06:43 CET 2026
+Registered S3 methods overwritten by 'RcppGSL':
+  method               from     
+  predict.fastLm       RcppEigen
+  print.fastLm         RcppEigen
+  summary.fastLm       RcppEigen
+  print.summary.fastLm RcppEigen
+Error in gzfile(file, "wb") : cannot open the connection
+Calls: save -> gzfile
+In addition: Warning message:
+In gzfile(file, "wb") :
+  cannot open compressed file 'save/res_Data2019_allRoutes.Rdat', probable reason 'No such file or directory'
+Execution halted
+Job finished at Wed Jan  7 18:11:57 CET 2026
