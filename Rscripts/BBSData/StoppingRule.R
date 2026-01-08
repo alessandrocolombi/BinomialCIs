@@ -2,7 +2,7 @@
 wd_pc = "C:/Users/colom/"
 wd_unicatt = "C:/Users/alessandro.colombi/"
 wd_g100 = "/g100/home/userexternal/acolombi/"
-wd = paste0(wd_g100,"BinomialCIs/Rscripts/BBSData/")
+wd = paste0(wd_pc,"BinomialCIs/Rscripts/BBSData/")
 setwd(wd)
 
 # Librerie ----------------------------------------------------------------
@@ -190,7 +190,7 @@ load(paste0("data/Data2019_allRoutes.Rdat"))
 data = incidence_matrix
 n = nrow(data)
 
-eps            = 0.01
+eps            = 0.05
 alpha          = 0.05
 C_target       = 0.95
 g_Chao2009     = 0.95
@@ -202,10 +202,11 @@ num_cores = 34
 res = stopping_rule( data, Nrep, num_cores, seed0, 
                      eps, alpha, C_target, g_Chao2009, beta)
 
-save(res, file = "save/res_Data2019_allRoutes.Rdat")
+save(res, file = "save/res_eps005_Data2019_allRoutes.Rdat")
 
-# res
-colMeans(res)
-apply(res, 2, quantile, probs = c(0.025,0.5,0.975))
+# # res
+# load("save/res_eps001_Data2019_allRoutes.Rdat")
+# colMeans(res)
+# apply(res, 2, quantile, probs = c(0.025,0.5,0.975))
 
 
