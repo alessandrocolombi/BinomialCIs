@@ -2,7 +2,7 @@
 wd_pc = "C:/Users/colom/"
 wd_unicatt = "C:/Users/alessandro.colombi/"
 wd_g100 = "/g100/home/userexternal/acolombi/"
-wd = paste0(wd_pc,"BinomialCIs/Rscripts/BBSData/")
+wd = paste0(wd_g100,"BinomialCIs/Rscripts/BBSData/")
 setwd(wd)
 
 # Librerie ----------------------------------------------------------------
