@@ -1,9 +1,0 @@
-Job started on r505n009 at Fri Jan  9 10:33:16 CET 2026
-Error: file not found: '../../src/RcppFunctions.cpp'
-In addition: Warning messages:
-1: In normalizePath(dirname(file)) :
-  path[1]="../../src": No such file or directory
-2: In normalizePath(file, winslash = "/") :
-  path[1]="../../src/RcppFunctions.cpp": No such file or directory
-Execution halted
-Job finished at Fri Jan  9 10:33:42 CET 2026
