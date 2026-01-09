@@ -3,7 +3,7 @@ wd_unicatt = "C:/Users/alessandro.colombi/"
 wd_g100 = "/g100/home/userexternal/acolombi/"
 wd_vec = c(wd_pc,wd_unicatt,wd_g100)
 choose_wd = wd_vec[3] # <--- modify here
-wd = paste0(choose_wd,"ScriptSpecies_shared/RevBA/DatiTrieste/")
+wd = paste0(choose_wd,"BinomialCIs/Rscripts/BBSData/")
 setwd(wd)
 
 
