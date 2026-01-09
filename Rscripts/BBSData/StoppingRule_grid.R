@@ -297,7 +297,7 @@ load(paste0("data/Data2019_allRoutes.Rdat"))
 data = incidence_matrix
 n = nrow(data)
 
-eps_grid = seq(0.001,0.1,length.out = 34*2)
+eps_grid = seq(0.001,0.1,length.out = 34*2 )
 alpha = 0.05
 beta = 1e-5
 
