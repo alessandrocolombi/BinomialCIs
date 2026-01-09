@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --job-name=Exp_n1small
+#SBATCH --job-name=Binomial_CI
 #SBATCH --time=96:00:00                   # Maximum wall time (hh:mm:ss)
 #SBATCH --nodes=1                         # Request one node
 #SBATCH --ntasks=1                        # One task (process) total

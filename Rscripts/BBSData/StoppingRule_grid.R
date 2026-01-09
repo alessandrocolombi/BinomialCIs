@@ -297,7 +297,7 @@ load(paste0("data/Data2019_allRoutes.Rdat"))
 data = incidence_matrix
 n = nrow(data)
 
-eps_grid = seq(0.001,0.05,length.out = 34)
+eps_grid = seq(0.001,0.1,length.out = 34*2)
 alpha = 0.05
 beta = 1e-5
 
@@ -315,9 +315,9 @@ load(paste0("data/Data2019_allRoutes.Rdat"))
 data = incidence_matrix
 n = nrow(data)
 
-cov_grid = seq(0.9,0.99,length.out = 34)
+cov_grid = seq(0.9,0.99,length.out = 34*2)
 
-Nrep = 10
+Nrep = 20
 seed0 = 4224
 num_cores = 34
 
@@ -335,19 +335,25 @@ if(!stop_here){
   res_cov_list = lapply(res_cov, function(x) apply(x,2,quantile,probs = 0.5));res_cov_med = do.call(rbind,res_cov_list)
   
   mycol = c("darkgreen","darkred","deeppink","lightblue")
+  shift = c(0,0.001)
+  
   
   par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
   plot(0,0,type = "n", main = "", ylab = "Nstop",
-       xlim = range(eps_grid), ylim = c(0,n), xlab = "")
+       xlim = range(eps_grid), ylim = c(0,n), xlab = expression(epsilon) )
   for(i in 1:2){
-    points(eps_grid,res_med[,i], type = "b", lwd = 3, col = mycol[i])
+    points(x = eps_grid, y = res_med[,i], 
+           type = "b", lwd = 3, col = mycol[i], pch = 16)
   }
+  legend("topright", c("Bounded","Unbounded"), col = mycol[1:2], pch = 16)
   
   par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
   plot(0,0,type = "n", main = "", ylab = "Nstop",
-       xlim = range(cov_grid), ylim = c(0,n), xlab = "")
+       xlim = range(cov_grid), ylim = c(0,n), xlab = "Target coverage")
   for(i in 3:4){
-    points(cov_grid,res_cov_med[,i-2], type = "b", lwd = 3, col = mycol[i])
+    points(x = cov_grid, y = res_cov_med[,i-2], 
+           type = "b", lwd = 3, col = mycol[i], pch = 16)
   }
+  legend("topleft", c("Coverage","Chao2009"), col = mycol[3:4], pch = 16)
   
 }
