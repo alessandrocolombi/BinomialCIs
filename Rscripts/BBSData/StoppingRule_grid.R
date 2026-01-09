@@ -2,7 +2,7 @@ wd_pc = "C:/Users/colom/"
 wd_unicatt = "C:/Users/alessandro.colombi/"
 wd_g100 = "/g100/home/userexternal/acolombi/"
 wd_vec = c(wd_pc,wd_unicatt,wd_g100)
-choose_wd = wd_vec[3] # <--- modify here
+choose_wd = wd_vec[1] # <--- modify here
 wd = paste0(choose_wd,"BinomialCIs/Rscripts/BBSData/")
 setwd(wd)
 
@@ -19,7 +19,7 @@ source("../../R/Rfunctions.R")
 
 ## ------------------------------------------------------------
 ## 1. Load functions
-## ------------------------------------------------------------
+## 7------------------------------------------------------------
 
 ## Bounded and Unbounded UB stopping rules
 SR_grid_multiple_run <- function(eps, data, seed0, Nrep, alpha, beta)
@@ -321,8 +321,8 @@ Nrep = 20
 seed0 = 4224
 num_cores = 34
 
-res_cov = SRcov_grid( cov_grid, data, Nrep, num_cores, seed0)
-save(res_cov, file = "save/Data2019_allroutes_covgrid.Rdat")
+# res_cov = SRcov_grid( cov_grid, data, Nrep, num_cores, seed0)
+# save(res_cov, file = "save/Data2019_allroutes_covgrid.Rdat")
 
 ## ------------------------------------------------------------
 ## 3. Read and plot
