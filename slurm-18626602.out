@@ -1,0 +1,8 @@
+Job started on r504n004 at Fri Jan  9 11:35:24 CET 2026
+Registered S3 methods overwritten by 'RcppGSL':
+  method               from     
+  predict.fastLm       RcppEigen
+  print.fastLm         RcppEigen
+  summary.fastLm       RcppEigen
+  print.summary.fastLm RcppEigen
+Job finished at Fri Jan  9 12:00:24 CET 2026
