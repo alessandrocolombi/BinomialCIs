@@ -2,7 +2,7 @@ wd_pc = "C:/Users/colom/"
 wd_unicatt = "C:/Users/alessandro.colombi/"
 wd_g100 = "/g100/home/userexternal/acolombi/"
 wd_vec = c(wd_pc,wd_unicatt,wd_g100)
-choose_wd = wd_vec[3] # <--- modify here
+choose_wd = wd_vec[1] # <--- modify here
 wd = paste0(choose_wd,"BinomialCIs/Rscripts/BBSData/")
 setwd(wd)
 
@@ -305,8 +305,8 @@ Nrep = 10
 seed0 = 4224
 num_cores = 34
 
-res = SR_grid( eps_grid, data, Nrep, num_cores, seed0, alpha, beta)
-save(res, file = "save/Data2019_allroutes_epsgrid.Rdat")
+# res = SR_grid( eps_grid, data, Nrep, num_cores, seed0, alpha, beta)
+# save(res, file = "save/Data2019_allroutes_epsgrid.Rdat")
 
 ## ------------------------------------------------------------
 ## 3. Run - Coverage
@@ -315,7 +315,7 @@ load(paste0("data/Data2019_allRoutes.Rdat"))
 data = incidence_matrix
 n = nrow(data)
 
-cov_grid = seq(0.9,0.99,length.out = 34*2)
+cov_grid = 1 - eps_grid
 
 Nrep = 20
 seed0 = 4224
@@ -323,37 +323,35 @@ num_cores = 34
 
 res_cov = SRcov_grid( cov_grid, data, Nrep, num_cores, seed0)
 save(res_cov, file = "save/Data2019_allroutes_covgrid.Rdat")
+
 ## ------------------------------------------------------------
 ## 3. Read and plot
 ## ------------------------------------------------------------
 stop_here = TRUE
+ltype = c(1,1,2,2)
+mycol = c("darkgreen","darkred","deeppink","lightblue")
+ygrids = vector("list",4)
+ygrids[[1]]<-ygrids[[2]]<-eps_grid
+ygrids[[3]]<-ygrids[[4]]<-(1-cov_grid)
+
 if(!stop_here){
   load("save/Data2019_allroutes_epsgrid.Rdat")
   load("save/Data2019_allroutes_covgrid.Rdat")
   
   res_list = lapply(res, function(x) apply(x,2,quantile,probs = 0.5));res_med = do.call(rbind,res_list)
   res_cov_list = lapply(res_cov, function(x) apply(x,2,quantile,probs = 0.5));res_cov_med = do.call(rbind,res_cov_list)
-  
-  mycol = c("darkgreen","darkred","deeppink","lightblue")
-  shift = c(0,0.001)
-  
+  res_all = cbind(res_med,res_cov_med)
   
   par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
   plot(0,0,type = "n", main = "", ylab = "Nstop",
-       xlim = range(eps_grid), ylim = c(0,n), xlab = expression(epsilon) )
-  for(i in 1:2){
-    points(x = eps_grid, y = res_med[,i], 
-           type = "b", lwd = 3, col = mycol[i], pch = 16)
+       xlim = range(eps_grid), ylim = c(0,n), 
+       xlab = paste0(expression(epsilon)," / 1 - coverage") )
+  for(i in 1:4){
+    points(y = res_all[,i], x = ygrids[[i]], 
+           type = "l", lty = ltype[i], 
+           lwd = 3, col = mycol[i], pch = 16)
   }
-  legend("topright", c("Bounded","Unbounded"), col = mycol[1:2], pch = 16)
-  
-  par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
-  plot(0,0,type = "n", main = "", ylab = "Nstop",
-       xlim = range(cov_grid), ylim = c(0,n), xlab = "Target coverage")
-  for(i in 3:4){
-    points(x = cov_grid, y = res_cov_med[,i-2], 
-           type = "b", lwd = 3, col = mycol[i], pch = 16)
-  }
-  legend("topleft", c("Coverage","Chao2009"), col = mycol[3:4], pch = 16)
+  legend("topright", c("Bounded","Unbounded","Coverage","Chao2009"), 
+         col = mycol, lty = ltype, lwd = 3)
   
 }
