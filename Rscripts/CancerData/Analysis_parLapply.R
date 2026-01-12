@@ -2,8 +2,11 @@
 wd_pc = "C:/Users/colom/"
 wd_unicatt = "C:/Users/alessandro.colombi/"
 wd_g100 = "/g100/home/userexternal/acolombi/"
-wd = paste0(wd_g100,"BinomialCIs/Rscripts/CancerData/")
+wd_vec = c(wd_pc,wd_unicatt,wd_g100)
+choose_wd = wd_vec[1] # <--- modify here
+wd = paste0(choose_wd,"BinomialCIs/Rscripts/CancerData/")
 setwd(wd)
+
 
 suppressWarnings(suppressPackageStartupMessages(library(parallel)))
 suppressWarnings(suppressPackageStartupMessages(library(doSNOW)))
@@ -184,7 +187,7 @@ CancerData_run = function(idx){
   points( x = n_train_vec, y = nub_unb[2,], 
           type = "l", 
           lwd = 3, pch = 16, lty = 1,
-          col = "darkred" )
+          col = "darkorange" )
   # polygon( c(n_train_vec, rev(n_train_vec)),
   #          c(nub_unb[1,], rev(nub_unb[3,])),
   #          col = ACutils::t_col("darkred",30),
@@ -197,8 +200,8 @@ CancerData_run = function(idx){
   #          c(nub_bdd[1,], rev(nub_bdd[3,])),
   #          col = ACutils::t_col("darkgreen",30),
   #          border = NA) # plot in-sample bands
-  legend("topright",c("Unbounded","Bounded"), 
-         lwd = 3, col = c("darkred","darkgreen"))
+  legend("topright",c("Bounded","Unbounded"), 
+         lwd = 3, col = c("darkgreen","darkorange"))
   if(save_img_2)
     dev.off()
 }

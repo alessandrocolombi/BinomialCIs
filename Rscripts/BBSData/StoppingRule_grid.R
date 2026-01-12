@@ -329,7 +329,7 @@ num_cores = 34
 ## ------------------------------------------------------------
 stop_here = TRUE
 ltype = c(1,1,2,2)
-mycol = c("darkgreen","darkred","deeppink","lightblue")
+mycol = c("darkgreen","darkorange","deeppink","lightblue")
 ygrids = vector("list",4)
 ygrids[[1]]<-ygrids[[2]]<-eps_grid
 ygrids[[3]]<-ygrids[[4]]<-(1-cov_grid)
