@@ -146,20 +146,6 @@ stop_Bounded_new <- function(log_m_bar, eps, n, alpha, delta, b) {
 }
 
 
-## ============================================================================
-## TODO UTENTE: DEFINIRE QUI LE DUE STATISTICHE DELLE NUOVE STOPPING RULES
-## ============================================================================
-## Ogni funzione deve restituire un solo numero: il logaritmo naturale della
-## statistica richiesta, calcolata usando il campione disponibile al tempo n.
-
-compute_log_Sn_bar <- function(n, counts_obs, counts_true, n_error, M) {
-  stop("TODO: definire log_Sn_bar in compute_log_Sn_bar()")
-}
-
-compute_log_m_bar <- function(n, counts_obs, counts_true, n_error, M, b) {
-  stop("TODO: definire log_m_bar in compute_log_m_bar()")
-}
-
 ## ------------------------------------------------------------
 ## 2. One simulation run for a fixed community and (q, ε, C_target)
 ## ------------------------------------------------------------
@@ -667,6 +653,16 @@ simulate_one_run <- function(p,
 ## 3'. SEQUENTIAL driver over many synthetic datasets
 ## ------------------------------------------------------------
 
+# Converte un numero di secondi in una stringa leggibile nei log della VM.
+format_elapsed_time <- function(seconds) {
+  if (!is.finite(seconds) || seconds < 0) return("n/a")
+  seconds <- as.integer(round(seconds))
+  hours <- seconds %/% 3600L
+  minutes <- (seconds %% 3600L) %/% 60L
+  secs <- seconds %% 60L
+  sprintf("%02d:%02d:%02d", hours, minutes, secs)
+}
+
 run_simulation_sequential <- function(distro         = c("zipf_heavy",
                                                          "unif_small",
                                                          "unif_big",
@@ -683,6 +679,8 @@ run_simulation_sequential <- function(distro         = c("zipf_heavy",
                                       beta           = 1e-5,
                                       delta          = 1e-5,
                                       b_new          = 1L,
+                                      progress_every = 50L,
+                                      verbose        = TRUE,
                                       seed           = 123) {
   
   distro <- match.arg(distro)
@@ -710,6 +708,29 @@ run_simulation_sequential <- function(distro         = c("zipf_heavy",
   # Reproducible seeds per row
   set.seed(seed)
   grid$sim_seed <- sample.int(.Machine$integer.max, nrow(grid))
+
+  ## ------------------------------------------------------------------------
+  ## Monitoraggio dell'esecuzione
+  ## ------------------------------------------------------------------------
+  ## Un job corrisponde a una coppia (livello di contaminazione q, replica).
+  ## progress_every controlla ogni quanti job viene scritta una riga nel log.
+  total_jobs <- nrow(grid)
+  progress_every <- max(1L, as.integer(progress_every))
+  start_time <- Sys.time()
+
+  if (isTRUE(verbose)) {
+    cat(sprintf(
+      "[%s] START  scenario=%s | jobs=%d (%d q x %d repliche) | M=%d | n_max=%d\n",
+      format(start_time, "%Y-%m-%d %H:%M:%S"),
+      distro,
+      total_jobs,
+      length(q_vec),
+      n_reps,
+      M,
+      n_max
+    ))
+    flush.console()
+  }
   
   # Sequential loop (no future.apply)
   res_list <- lapply(seq_len(nrow(grid)), function(i) {
@@ -730,7 +751,7 @@ run_simulation_sequential <- function(distro         = c("zipf_heavy",
       b_new      = b_new
     )
     
-    c(
+    result_i <- c(
       list(
         distro  = distro,
         q_error = g$q_error,
@@ -738,7 +759,48 @@ run_simulation_sequential <- function(distro         = c("zipf_heavy",
       ),
       out
     )
+
+    # Scrive un aggiornamento periodico e sempre alla conclusione dello scenario.
+    if (isTRUE(verbose) && (i %% progress_every == 0L || i == total_jobs)) {
+      now <- Sys.time()
+      elapsed_seconds <- as.numeric(difftime(now, start_time, units = "secs"))
+      jobs_per_second <- i / max(elapsed_seconds, .Machine$double.eps)
+      eta_seconds <- (total_jobs - i) / jobs_per_second
+
+      cat(sprintf(
+        paste0(
+          "[%s] PROGRESS scenario=%s | %d/%d (%.1f%%) | ",
+          "q=%g rep=%d | elapsed=%s | ETA=%s | rate=%.3f job/s\n"
+        ),
+        format(now, "%Y-%m-%d %H:%M:%S"),
+        distro,
+        i,
+        total_jobs,
+        100 * i / total_jobs,
+        g$q_error,
+        g$rep_id,
+        format_elapsed_time(elapsed_seconds),
+        format_elapsed_time(eta_seconds),
+        jobs_per_second
+      ))
+      flush.console()
+    }
+
+    result_i
   })
+
+  if (isTRUE(verbose)) {
+    end_time <- Sys.time()
+    total_seconds <- as.numeric(difftime(end_time, start_time, units = "secs"))
+    cat(sprintf(
+      "[%s] DONE   scenario=%s | jobs=%d | total elapsed=%s\n",
+      format(end_time, "%Y-%m-%d %H:%M:%S"),
+      distro,
+      total_jobs,
+      format_elapsed_time(total_seconds)
+    ))
+    flush.console()
+  }
   
   # Back to a data.frame
   res_df <- do.call(rbind, lapply(res_list, as.data.frame))
@@ -765,9 +827,28 @@ hyperparams <- list(
   beta         = 1e-5,
   delta        = 1e-5,
   b_new        = 1L,
+  # Una riga di avanzamento ogni 50 job; ridurre per log piu' frequenti.
+  progress_every = 50L,
+  verbose        = TRUE,
   seed_regular = 123L,
   seed_heavy   = 456L  # you can reuse or add more seeds if you want
 )
+
+# Riepilogo iniziale dell'intero esperimento. Questo messaggio permette di
+# verificare subito dal log della VM che i parametri caricati siano corretti.
+experiment_start_time <- Sys.time()
+cat(sprintf(
+  paste0(
+    "[%s] EXPERIMENT START | scenarios=%d | q-levels=%d | ",
+    "repliche/scenario/q=%d | total jobs=%d\n"
+  ),
+  format(experiment_start_time, "%Y-%m-%d %H:%M:%S"),
+  length(hyperparams$distros),
+  length(hyperparams$q_vec),
+  hyperparams$n_reps,
+  length(hyperparams$distros) * length(hyperparams$q_vec) * hyperparams$n_reps
+))
+flush.console()
 
 
 # Uniform big
@@ -785,6 +866,8 @@ res_unif_big <- run_simulation_sequential(
   beta       = hyperparams$beta,
   delta      = hyperparams$delta,
   b_new      = hyperparams$b_new,
+  progress_every = hyperparams$progress_every,
+  verbose    = hyperparams$verbose,
   seed       = 789L
 )
 
@@ -804,6 +887,8 @@ res_heavy <- run_simulation_sequential(
   beta       = hyperparams$beta,
   delta      = hyperparams$delta,
   b_new      = hyperparams$b_new,
+  progress_every = hyperparams$progress_every,
+  verbose    = hyperparams$verbose,
   seed       = hyperparams$seed_heavy
 )
 
@@ -822,6 +907,8 @@ res_unif_small <- run_simulation_sequential(
   beta       = hyperparams$beta,
   delta      = hyperparams$delta,
   b_new      = hyperparams$b_new,
+  progress_every = hyperparams$progress_every,
+  verbose    = hyperparams$verbose,
   seed       = 789L
 )
 
@@ -844,6 +931,8 @@ res_geom_005 <- run_simulation_sequential(
   beta       = hyperparams$beta,
   delta      = hyperparams$delta,
   b_new      = hyperparams$b_new,
+  progress_every = hyperparams$progress_every,
+  verbose    = hyperparams$verbose,
   seed       = 792L
 )
 
@@ -854,6 +943,19 @@ res_all <- rbind(
   res_unif_big,
   res_geom_005
 )
+
+# Da questo punto le simulazioni sono concluse; iniziano aggregazioni, tabelle
+# e grafici, che normalmente richiedono molto meno tempo.
+simulation_end_time <- Sys.time()
+cat(sprintf(
+  "[%s] ALL SIMULATIONS DONE | rows=%d | elapsed=%s | starting summaries\n",
+  format(simulation_end_time, "%Y-%m-%d %H:%M:%S"),
+  nrow(res_all),
+  format_elapsed_time(as.numeric(difftime(
+    simulation_end_time, experiment_start_time, units = "secs"
+  )))
+))
+flush.console()
 
 ## ------------------------------------------------------------
 ## Aggregation helpers
@@ -1047,7 +1149,7 @@ q_label    <- paste(hyperparams$q_vec, collapse = "_")
 eps_str   <- gsub("\\.", "p", as.character(hyperparams$eps))
 alpha_str <- gsub("\\.", "p", as.character(hyperparams$alpha))
 C_str     <- gsub("\\.", "p", as.character(hyperparams$C_target))
-g_str     <- gsub("\\.", "p", as.character(hyperparams$g))
+g_str     <- gsub("\\.", "p", as.character(hyperparams$g_Chao2009))
 
 file_name <- sprintf(
   "sim_tail-%s_M-%d_eps-%s_alpha-%s_C-%s_batch-%d_nmax-%d_reps-%d_q-%s.RData",
@@ -1074,6 +1176,12 @@ sim_out <- list(
 
 # Save to disk
 save(sim_out, file = file_name)
+cat(sprintf(
+  "[%s] RESULTS SAVED | file=%s\n",
+  format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+  file_name
+))
+flush.console()
 
 summary_df
 
@@ -1777,8 +1885,8 @@ inv_sqrt_label <- function(y) {
   sign(y) * (abs(y)^2)
 }
 
-df_main <- plot_df2 |> dplyr::filter(metric != "% missed")
-df_missed <- plot_df2 |> dplyr::filter(metric == "% missed") |>
+df_main <- plot_df |> dplyr::filter(metric != "% missed")
+df_missed <- plot_df |> dplyr::filter(metric == "% missed") |>
   dplyr::mutate(value_trans = sqrt_transform(value))
 
 p1 <- ggplot(df_main, aes(x = q, y = value, colour = method)) +
@@ -1829,5 +1937,15 @@ p_final <- p1 / p2_adj +
 
 print(p_final)
 
-ggsave("stopping_rules_figure.pdf", p, width = 9, height = 7)
+ggsave("stopping_rules_figure.pdf", p_final, width = 9, height = 7)
+
+experiment_end_time <- Sys.time()
+cat(sprintf(
+  "[%s] EXPERIMENT DONE | total elapsed=%s | output=stopping_rules_figure.pdf\n",
+  format(experiment_end_time, "%Y-%m-%d %H:%M:%S"),
+  format_elapsed_time(as.numeric(difftime(
+    experiment_end_time, experiment_start_time, units = "secs"
+  )))
+))
+flush.console()
 
