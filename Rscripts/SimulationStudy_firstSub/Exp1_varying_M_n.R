@@ -18,7 +18,7 @@ if(!RunParallel){
 }
 
 names = c("Zipfs","Geom","Constant")#,"Uniform","TrUnif")
-name = names[3] # choose the name here
+name = names[1] # choose the name here
 
 
 # Common parameters -------------------------------------------------------

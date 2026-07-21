@@ -2,6 +2,8 @@
 # Load and read all --------------------------------------------------------------------
 wd = "C:/Users/colom/BinomialCIs/Rscripts/CancerData/"
 setwd(wd)
+source("../../R/Rfunctions.R")
+
 load("cancer_types.Rdat")
 load("cancer_names_easy.Rdat")
 
@@ -12,14 +14,18 @@ TabNj_list = vector("list", length = length(cancer_names))
 ExtrCurve_list = vector("list", length = length(cancer_names))
 N = 0
 
-idx = 1
 save_plot_all = FALSE
-save_plot_individual = FALSE
+save_plot_individual = TRUE
+width = 8; height = 6
+cex.lab = 2
+cex.axis = 2
 
-if(save_plot_all)
+if(save_plot_all){
   pdf("img/ExtrapolationCurvs_all.pdf")
+  par(mfrow = c(2,2),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
+}
 
-par(mfrow = c(2,2),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
+idx = 15
 for(idx in 1:length(cancer_names)){
   cat("\n idx = ",idx,"\n")
   cancer_name = cancer_names[idx]
@@ -39,17 +45,33 @@ for(idx in 1:length(cancer_names)){
   # Plot
   if(save_plot_individual)
     pdf(paste0("img/ExtrapolationCurvs_",cancer_types[idx],".pdf"))
-  par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
-  plot(x = 0, y = 0, type = "n",
-       main = cancer_name, xlab = "#obs.", ylab = "#variants",
-       ylim = c(0,Kobs+1),
-       xlim = c(0,n+1),
-       pch = 1) # init plot
+  if(idx == 15){
+    par(mfrow = c(1,1), bty = "l",  mar = c(4,6,1,1), mgp=c(4.5,1,0), las = 1, cex.lab = cex.lab)
+    plot(x = 0, y = 0, type = "n",
+         main = " ",#cancer_name, 
+         xlab = "", xaxt = "n",
+         ylab = "#variants",
+         ylim = c(0,Kobs+1),
+         xlim = c(0,n+1),
+         pch = 1,
+         cex.axis = cex.axis) # init plot
+  } else{
+    par(mfrow = c(1,1), bty = "l",  mar = c(4,5,1,1), mgp=c(4.5,1,0), las = 1, cex.lab = cex.lab)
+    plot(x = 0, y = 0, type = "n",
+         main = " ",#cancer_name, 
+         xlab = "", xaxt = "n",
+         ylab = " ",
+         ylim = c(0,Kobs+1),
+         xlim = c(0,n+1),
+         pch = 1,
+         cex.axis = cex.axis) # init plot
+  }
+  axis(1, cex.axis = cex.axis);mtext("n", side = 1, line = 2.5, cex = cex.axis)
   polygon( c(1:n, rev(1:n)),
            c(ExtrCurve[1,], rev(ExtrCurve[3,])),
            col = "grey75",
            border = NA) # plot in-sample bands
-  points(x = 1:n, y = ExtrCurve[2,], type = "l", lwd = 3) # plot mean obs
+  points(x = 1:n, y = ExtrCurve[2,], type = "l", lwd = 5) # plot mean obs
   if(save_plot_individual)
     dev.off()
 }

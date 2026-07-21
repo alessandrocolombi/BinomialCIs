@@ -25,7 +25,11 @@ seed = 42
 set.seed(seed)
 
 save_img = TRUE
-  
+width = 8; height = 6
+ymax = 12*1e-3;ymin = 8*1e-3
+ylabs = round(seq(ymin*1e3,ymax*1e3,by = 1),1)
+cex.lab = 2
+cex.axis = 2
 
 # Run Constant ---------------------------------------------------------------
 n = 1000
@@ -37,6 +41,7 @@ name_exp = names(experiments)[j]
 cat("\n Start: ",name_exp,"\n")
 
 # Names
+name = name_exp
 exp_name = paste0("Exp3_",name_exp)
 file_name = paste0("save/",exp_name,".Rdat")
 img_name = paste0("img/",name,"/",exp_name,".pdf")
@@ -110,39 +115,33 @@ rownames(res_mat) = as.character(experiments[[j]])
 res_mat
 
 
-ymax = max(ub_Bdd_all,ub_Unbdd_all,ub_BddOracle_all,ub_UnbddOracle_all,ub_bnc_all) * 1.05 #18*1e-3
-ymin = 7*1e-3
-ylabs = round(seq(ymin*1e3,ymax*1e3,by = 1),1)
 
 
 if(save_img)
-  pdf(img_name)
-par( mfrow = c(1,1), mar = c(3,3,1,0.5), mgp=c(2,0.5,0), bty = "l" )
-plot(0,0,  yaxt = "n",
-     xlab = "S", ylab = "1000 * bound",
+  pdf(img_name, width = width, height = height)
+par( mfrow = c(1,1), mar = c(4,3,1,1),  mgp=c(3,1,0), bty = "l", las = 1, cex.lab = cex.lab )
+plot(0,0,  yaxt = "n", xaxt = "n",
+     xlab = "S", ylab = "",
      xlim = range(avg_S) , ylim = c(ymin,ymax), 
      main = paste0(" "),
      type = "n")
 grid(lty = 1,lwd = 1, col = "gray90" )
 axis(side = 2, at = ylabs*1e-3, 
      labels = ylabs, las = 1, 
-     cex.axis = 1 )
-abline(v = soglia, lty = 2, col = "grey45" )
-# points( x = avg_S, y = ub_bnc_all, 
-#         type = "b", 
-#         lwd = 3, pch = 16, lty = 1,
-#         col = "black" ) 
+     cex.axis = cex.axis )
+axis(1, cex.axis = cex.axis)
+abline(v = soglia, lty = 2, col = "grey45", lwd = 3 )
 points( x = avg_S, y = ub_Bdd_all, 
         type = "b", 
-        lwd = 3, pch = 16, lty = 1,
+        lwd = 5, pch = 16, lty = 1,
         col = "darkgreen" ) 
 points( x = avg_S, y = ub_Unbdd_all, 
         type = "b", 
-        lwd = 3, pch = 16, lty = 1,
+        lwd = 5, pch = 16, lty = 1,
         col = "darkorange" ) 
 legend("bottomright",c("Bounded","Unbounded"), 
-       lwd = 3, col = c("darkgreen","darkorange"))
-
+       lwd = 5, col = c("darkgreen","darkorange"),
+       cex = 1.5)
 if(save_img)
   dev.off()
 
@@ -159,6 +158,7 @@ name_exp = names(experiments)[j]
 cat("\n Start: ",name_exp,"\n")
 
 # Names
+name = name_exp
 exp_name = paste0("Exp3_",name_exp)
 file_name = paste0("save/",exp_name,".Rdat")
 img_name = paste0("img/",name,"/",exp_name,".pdf")
@@ -232,15 +232,11 @@ rownames(res_mat) = as.character(experiments[[j]])
 res_mat
 
 
-ymax = max(ub_Bdd_all,ub_Unbdd_all,ub_BddOracle_all,ub_UnbddOracle_all,ub_bnc_all) * 1.05 #18*1e-3
-ymin = 7*1e-3
-ylabs = round(seq(ymin*1e3,ymax*1e3,by = 1),1)
-
 
 if(save_img)
-  pdf(img_name)
-par( mfrow = c(1,1), mar = c(3,3,1,0.5), mgp=c(2,0.5,0), bty = "l" )
-plot(0,0,  yaxt = "n",
+  pdf(img_name, width = width, height = height)
+par( mfrow = c(1,1), mar = c(4,4.5,1,1), mgp=c(3,1,0), bty = "l", las = 1, cex.lab = cex.lab )
+plot(0,0,  yaxt = "n", xaxt = "n",
      xlab = "S", ylab = "1000 * bound",
      xlim = range(avg_S) , ylim = c(ymin,ymax), 
      main = paste0(" "),
@@ -248,19 +244,20 @@ plot(0,0,  yaxt = "n",
 grid(lty = 1,lwd = 1, col = "gray90" )
 axis(side = 2, at = ylabs*1e-3, 
      labels = ylabs, las = 1, 
-     cex.axis = 1 )
-abline(v = soglia, lty = 2, col = "grey45" )
+     cex.axis = cex.axis )
+axis(1, cex.axis = cex.axis)
+abline(v = soglia, lty = 2, col = "grey45", lwd = 3 )
 points( x = avg_S, y = ub_Bdd_all, 
         type = "b", 
-        lwd = 3, pch = 16, lty = 1,
+        lwd = 5, pch = 16, lty = 1,
         col = "darkgreen" ) 
 points( x = avg_S, y = ub_Unbdd_all, 
         type = "b", 
-        lwd = 3, pch = 16, lty = 1,
+        lwd = 5, pch = 16, lty = 1,
         col = "darkorange" ) 
 legend("bottomright",c("Bounded","Unbounded"), 
-       lwd = 3, col = c("darkgreen","darkorange"))
-
+       lwd = 5, col = c("darkgreen","darkorange"),
+       cex = 1.5)
 if(save_img)
   dev.off()
 
@@ -278,6 +275,7 @@ name_exp = names(experiments)[j]
 cat("\n Start: ",name_exp,"\n")
 
 # Names
+name = name_exp
 exp_name = paste0("Exp3_",name_exp)
 file_name = paste0("save/",exp_name,".Rdat")
 img_name = paste0("img/",name,"/",exp_name,".pdf")
@@ -351,35 +349,33 @@ rownames(res_mat) = as.character(experiments[[j]])
 res_mat
 
 
-ymax = max(ub_Bdd_all,ub_Unbdd_all,ub_BddOracle_all,ub_UnbddOracle_all,ub_bnc_all) * 1.05 #18*1e-3
-ymin = 7*1e-3
-ylabs = round(seq(ymin*1e3,ymax*1e3,by = 1),1)
 
 
 if(save_img)
-  pdf(img_name)
-par( mfrow = c(1,1), mar = c(3,3,1,0.5), mgp=c(2,0.5,0), bty = "l" )
-plot(0,0,  yaxt = "n",
-     xlab = "S", ylab = "1000 * bound",
+  pdf(img_name, width = width, height = height)
+par( mfrow = c(1,1), mar = c(4,3,1,1),  mgp=c(3,1,0), bty = "l", las = 1, cex.lab = cex.lab )
+plot(0,0,  yaxt = "n", xaxt = "n",
+     xlab = "S", ylab = "",
      xlim = range(avg_S) , ylim = c(ymin,ymax), 
      main = paste0(" "),
      type = "n")
 grid(lty = 1,lwd = 1, col = "gray90" )
 axis(side = 2, at = ylabs*1e-3, 
      labels = ylabs, las = 1, 
-     cex.axis = 1 )
-abline(v = soglia, lty = 2, col = "grey45" )
+     cex.axis = cex.axis )
+axis(1, cex.axis = cex.axis)
+abline(v = soglia, lty = 2, col = "grey45", lwd = 3 )
 points( x = avg_S, y = ub_Bdd_all, 
         type = "b", 
-        lwd = 3, pch = 16, lty = 1,
+        lwd = 5, pch = 16, lty = 1,
         col = "darkgreen" ) 
 points( x = avg_S, y = ub_Unbdd_all, 
         type = "b", 
-        lwd = 3, pch = 16, lty = 1,
+        lwd = 5, pch = 16, lty = 1,
         col = "darkorange" ) 
 legend("bottomright",c("Bounded","Unbounded"), 
-       lwd = 3, col = c("darkgreen","darkorange"))
-
+       lwd = 5, col = c("darkgreen","darkorange"),
+       cex = 1.5)
 if(save_img)
   dev.off()
 

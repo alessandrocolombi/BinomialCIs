@@ -327,6 +327,11 @@ num_cores = 34
 ## ------------------------------------------------------------
 ## 3. Read and plot
 ## ------------------------------------------------------------
+save_img = TRUE
+width = 12; height = 6
+cex.lab = 2
+cex.axis = 2
+
 stop_here = TRUE
 ltype = c(1,1,2,2)
 mycol = c("darkgreen","darkorange","deeppink","lightblue")
@@ -342,16 +347,23 @@ if(!stop_here){
   res_cov_list = lapply(res_cov, function(x) apply(x,2,quantile,probs = 0.5));res_cov_med = do.call(rbind,res_cov_list)
   res_all = cbind(res_med,res_cov_med)
   
-  par(mfrow = c(1,1),bty = "l",  mgp=c(1.5,0.5,0), mar = c(2.5,2.5,1,0))
+  img_name = "img/Data2019_allroutes_SRgrid.pdf"
+  if(save_img)
+    pdf(img_name, width = width, height = height)
+  par(mfrow = c(1,1), bty = "l",  mar = c(3.75,6.5,1,1), mgp=c(5,1,0), las = 1, cex.lab = cex.lab)
   plot(0,0,type = "n", main = "", ylab = "Nstop",
+       xaxt = "n", yaxt = "n",
        xlim = range(eps_grid), ylim = c(0,n), 
-       xlab = paste0(expression(epsilon)," / 1 - coverage") )
+       xlab = "" )
+  axis(2, cex.axis = cex.axis)
+  axis(1, cex.axis = cex.axis)
+  mtext(paste0(expression(epsilon)," / 1 - coverage"), side = 1, line = 2.5, cex = cex.axis)
   for(i in 1:4){
     points(y = res_all[,i], x = ygrids[[i]], 
            type = "l", lty = ltype[i], 
-           lwd = 3, col = mycol[i], pch = 16)
+           lwd = 5, col = mycol[i], pch = 16)
   }
   legend("topright", c("Bounded","Unbounded","Coverage","Chao2009"), 
-         col = mycol, lty = ltype, lwd = 3)
+         col = mycol, lty = ltype, lwd = 5, cex = 1.5)
   
 }

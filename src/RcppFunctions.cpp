@@ -459,6 +459,48 @@ double compute_UB_analytical( const int& n, const Rcpp::IntegerVector& Nj, const
 	return 1.0/( (double)n - b )*( log_mp - std::log(a1) );
 }
 
+// [[Rcpp::export]]
+double compute_lmbar_bounded( const int& n, const Rcpp::IntegerVector& Nj, const int& M, 
+							               const double& b, const double& alpha_lev, const int& nmax)
+{
+	double inf = std::numeric_limits<double>::infinity();
+
+	if(n <= 0)
+		throw std::runtime_error("Error in compute_mbar_bounded: n must be strictly positive ");
+	if(M <= 0)
+		throw std::runtime_error("Error in compute_mbar_bounded: M must be strictly positive ");
+	if(Nj.size()!= M)
+		throw std::runtime_error("Error in compute_mbar_bounded: the length of Nj must be equal to M ");
+	if(alpha_lev <= 0 || alpha_lev >= 1)
+		throw std::runtime_error("Error in compute_mbar_bounded: alpha_lev must be in (0,1) ");
+	if( b <= 0 )
+		throw std::runtime_error("Error in compute_mbar_bounded: b must be strictly positive");
+
+	double a1 = 0.99*alpha_lev; // \alpha in the paper
+	double a2 = 0.01*alpha_lev; // \delta in the paper
+
+	std::vector<double> log_mp_vec(M+1,-inf); // vector of log values
+	double max{-inf};
+	int idx_max{-1};
+	for(int j=0; j < M; j++){
+		if(Nj[j] < n){
+			log_mp_vec[j] = b * gsl_log1p( -(double)Nj[j]/(double)n ); // compute log of jth element	
+		}
+		if(log_mp_vec[j] > max){
+			max = log_mp_vec[j]; // save max
+			idx_max = j; // save position max
+		}
+	}
+	
+	// define extra term that is the eps(..) term
+	log_mp_vec[M] = std::log(b) + 0.5*( std::log( (double)M ) - std::log( (double)n ) + std::log(-std::log(a2/nmax)) );
+	if(log_mp_vec[M] > max){
+		max = log_mp_vec[M]; // save max
+		idx_max = M; // save position max
+	}
+	double log_mp = log_stable_sum(log_mp_vec, TRUE, max, idx_max);
+	return log_mp;
+}
 
 
 // [[Rcpp::export]]
