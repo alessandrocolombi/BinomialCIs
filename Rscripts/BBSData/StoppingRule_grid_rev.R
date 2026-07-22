@@ -7,6 +7,16 @@ choose_wd = wd_vec[4] # <--- modify here
 wd = paste0(choose_wd,"BinomialCIs/Rscripts/BBSData")
 setwd(wd)
 
+# Timestamp iniziale: utile per verificare dal log della VM che lo script sia
+# partito nella working directory attesa.
+script_start_time <- Sys.time()
+cat(sprintf(
+  "[%s] SCRIPT START | working directory: %s\n",
+  format(script_start_time, "%Y-%m-%d %H:%M:%S"),
+  getwd()
+))
+flush.console()
+
 # Librerie ----------------------------------------------------------------
 suppressWarnings(suppressPackageStartupMessages(library(tibble)))
 suppressWarnings(suppressPackageStartupMessages(library(parallel)))
@@ -24,6 +34,18 @@ source("../../R/Rfunctions.R")
 ## Bounded and Unbounded UB stopping rules
 SR_grid_multiple_run <- function(eps, data, seed0, Nrep, alpha, beta, n_max)
 {
+  # Ogni worker gestisce un valore di eps e tutte le relative repliche.
+  # Il PID permette di distinguere i messaggi prodotti in parallelo.
+  worker_start_time <- Sys.time()
+  worker_pid <- Sys.getpid()
+  report_every <- max(1L, ceiling(Nrep / 5L))  # circa 5 update per eps
+  cat(sprintf(
+    "[%s] EPS START | pid=%d | eps=%.6f | repliche=%d\n",
+    format(worker_start_time, "%Y-%m-%d %H:%M:%S"),
+    worker_pid, eps, Nrep
+  ))
+  flush.console()
+
   ## Functions
   suppressWarnings(suppressPackageStartupMessages(library(tibble)))
   suppressWarnings(suppressPackageStartupMessages(library(parallel)))
@@ -43,7 +65,34 @@ SR_grid_multiple_run <- function(eps, data, seed0, Nrep, alpha, beta, n_max)
   for(ii in 1:Nrep){
     seed = seeds[ii]
     res[ii,] = SR_grid_single_run(eps, data, seed, alpha, beta, n_max)
+
+    # Aggiornamento periodico senza stampare ogni singola replica.
+    if (ii %% report_every == 0L || ii == Nrep) {
+      elapsed_seconds <- as.numeric(difftime(
+        Sys.time(), worker_start_time, units = "secs"
+      ))
+      cat(sprintf(
+        paste0(
+          "[%s] EPS PROGRESS | pid=%d | eps=%.6f | ",
+          "replica=%d/%d (%.0f%%) | elapsed=%.1f min\n"
+        ),
+        format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        worker_pid, eps, ii, Nrep, 100 * ii / Nrep,
+        elapsed_seconds / 60
+      ))
+      flush.console()
+    }
   }
+
+  worker_elapsed <- as.numeric(difftime(
+    Sys.time(), worker_start_time, units = "secs"
+  ))
+  cat(sprintf(
+    "[%s] EPS DONE | pid=%d | eps=%.6f | elapsed=%.1f min\n",
+    format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+    worker_pid, eps, worker_elapsed / 60
+  ))
+  flush.console()
   return(res)
 }
 
@@ -177,6 +226,7 @@ SR_grid_single_run <- function(eps, data, seed, alpha, beta, Nmax)
 SR_grid = function( eps_grid, data, Nrep, num_cores, seed0,
                     n_max, alpha = 0.05, beta = 1e-5)
 {
+  grid_start_time <- Sys.time()
   Lgrid = length(eps_grid) # grid length
   res_list = vector("list",Lgrid)
   res_list = lapply(res_list, function(x) {
@@ -187,8 +237,18 @@ SR_grid = function( eps_grid, data, Nrep, num_cores, seed0,
   }  )
   
   
-  ## Parallel run (no prints allowed)
-  cluster <- makeCluster(num_cores, type = "SOCK")
+  ## Parallel run. outfile="" inoltra al log principale i messaggi dei worker.
+  cat(sprintf(
+    paste0(
+      "[%s] EPS GRID START | grid points=%d | repliche/punto=%d | ",
+      "total runs=%d | cores=%d\n"
+    ),
+    format(grid_start_time, "%Y-%m-%d %H:%M:%S"),
+    Lgrid, Nrep, Lgrid * Nrep, num_cores
+  ))
+  flush.console()
+
+  cluster <- makeCluster(num_cores, type = "SOCK", outfile = "")
   doSNOW::registerDoSNOW(cluster)
   clusterExport(cluster, list("SR_grid_single_run"),
                 envir = environment())
@@ -197,6 +257,16 @@ SR_grid = function( eps_grid, data, Nrep, num_cores, seed0,
                         data = data, alpha = alpha, beta = beta,
                         seed0 = seed0, Nrep = Nrep, n_max = n_max)
   stopCluster(cluster)
+
+  grid_elapsed <- as.numeric(difftime(
+    Sys.time(), grid_start_time, units = "secs"
+  ))
+  cat(sprintf(
+    "[%s] EPS GRID DONE | grid points=%d | elapsed=%.1f min\n",
+    format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+    Lgrid, grid_elapsed / 60
+  ))
+  flush.console()
   
   return(res_list)
 }
@@ -205,6 +275,18 @@ SR_grid = function( eps_grid, data, Nrep, num_cores, seed0,
 ## Coverages stopping rules
 SRcov_grid_multiple_run <- function(cov, data, seed0, Nrep)
 {
+  # Monitoraggio analogo alla griglia epsilon, pronto anche se questa analisi
+  # viene riattivata in futuro.
+  worker_start_time <- Sys.time()
+  worker_pid <- Sys.getpid()
+  report_every <- max(1L, ceiling(Nrep / 5L))
+  cat(sprintf(
+    "[%s] COVERAGE START | pid=%d | target=%.6f | repliche=%d\n",
+    format(worker_start_time, "%Y-%m-%d %H:%M:%S"),
+    worker_pid, cov, Nrep
+  ))
+  flush.console()
+
   ## Functions
   suppressWarnings(suppressPackageStartupMessages(library(tibble)))
   suppressWarnings(suppressPackageStartupMessages(library(parallel)))
@@ -222,7 +304,33 @@ SRcov_grid_multiple_run <- function(cov, data, seed0, Nrep)
   for(ii in 1:Nrep){
     seed = seeds[ii]
     res[ii,] = SRcov_grid_single_run(cov, data, seed)
+
+    if (ii %% report_every == 0L || ii == Nrep) {
+      elapsed_seconds <- as.numeric(difftime(
+        Sys.time(), worker_start_time, units = "secs"
+      ))
+      cat(sprintf(
+        paste0(
+          "[%s] COVERAGE PROGRESS | pid=%d | target=%.6f | ",
+          "replica=%d/%d (%.0f%%) | elapsed=%.1f min\n"
+        ),
+        format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+        worker_pid, cov, ii, Nrep, 100 * ii / Nrep,
+        elapsed_seconds / 60
+      ))
+      flush.console()
+    }
   }
+
+  worker_elapsed <- as.numeric(difftime(
+    Sys.time(), worker_start_time, units = "secs"
+  ))
+  cat(sprintf(
+    "[%s] COVERAGE DONE | pid=%d | target=%.6f | elapsed=%.1f min\n",
+    format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+    worker_pid, cov, worker_elapsed / 60
+  ))
+  flush.console()
   return(res)
 }
 
@@ -308,6 +416,7 @@ SRcov_grid_single_run <- function(cov, data, seed)
 
 SRcov_grid = function( cov_grid, data, Nrep, num_cores, seed0)
 {
+  grid_start_time <- Sys.time()
   Lgrid = length(cov_grid) # grid length
   res_list = vector("list",Lgrid)
   res_list = lapply(res_list, function(x) {
@@ -317,8 +426,18 @@ SRcov_grid = function( cov_grid, data, Nrep, num_cores, seed0)
   }  )
   
   
-  ## Parallel run (no prints allowed)
-  cluster <- makeCluster(num_cores, type = "SOCK")
+  ## Parallel run con inoltro dei messaggi dei worker al log principale.
+  cat(sprintf(
+    paste0(
+      "[%s] COVERAGE GRID START | grid points=%d | repliche/punto=%d | ",
+      "total runs=%d | cores=%d\n"
+    ),
+    format(grid_start_time, "%Y-%m-%d %H:%M:%S"),
+    Lgrid, Nrep, Lgrid * Nrep, num_cores
+  ))
+  flush.console()
+
+  cluster <- makeCluster(num_cores, type = "SOCK", outfile = "")
   doSNOW::registerDoSNOW(cluster)
   clusterExport(cluster, list("SRcov_grid_single_run"),
                 envir = environment())
@@ -326,6 +445,16 @@ SRcov_grid = function( cov_grid, data, Nrep, num_cores, seed0)
                         fun = SRcov_grid_multiple_run,
                         data = data, seed0 = seed0, Nrep = Nrep)
   stopCluster(cluster)
+
+  grid_elapsed <- as.numeric(difftime(
+    Sys.time(), grid_start_time, units = "secs"
+  ))
+  cat(sprintf(
+    "[%s] COVERAGE GRID DONE | grid points=%d | elapsed=%.1f min\n",
+    format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+    Lgrid, grid_elapsed / 60
+  ))
+  flush.console()
   
   return(res_list)
 }
@@ -338,17 +467,39 @@ load(paste0("data/Data2019_allRoutes.Rdat"))
 data = incidence_matrix
 n = nrow(data)
 
+cat(sprintf(
+  "[%s] DATA LOADED | observations=%d | species=%d\n",
+  format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+  nrow(data), ncol(data)
+))
+flush.console()
+
 eps_grid = seq(0.001,0.1,length.out = 34*2 )
 alpha = 0.05
 beta = 1e-5
 n_max = n
 
-Nrep = 50
+Nrep = 5
 seed0 = 4224
 num_cores = 34
 
+cat(sprintf(
+  paste0(
+    "[%s] LAUNCH EPS ANALYSIS | eps range=[%.6f, %.6f] | ",
+    "grid points=%d | repliche=%d | cores=%d\n"
+  ),
+  format(Sys.time(), "%Y-%m-%d %H:%M:%S"),
+  min(eps_grid), max(eps_grid), length(eps_grid), Nrep, num_cores
+))
+flush.console()
+
 res = SR_grid( eps_grid, data, Nrep, num_cores, seed0, n_max, alpha, beta)
 save(res, file = "save/Data2019_allroutes_epsgrid_rev.Rdat")
+cat(sprintf(
+  "[%s] RESULTS SAVED | file=save/Data2019_allroutes_epsgrid_rev.Rdat\n",
+  format(Sys.time(), "%Y-%m-%d %H:%M:%S")
+))
+flush.console()
 
 ## ------------------------------------------------------------
 ## 3. Run - Coverage
@@ -365,6 +516,12 @@ num_cores = 34
 
 # res_cov = SRcov_grid( cov_grid, data, Nrep, num_cores, seed0)
 # save(res_cov, file = "save/Data2019_allroutes_covgrid.Rdat")
+
+cat(sprintf(
+  "[%s] COVERAGE ANALYSIS SKIPPED | calls are currently commented out\n",
+  format(Sys.time(), "%Y-%m-%d %H:%M:%S")
+))
+flush.console()
 
 ## ------------------------------------------------------------
 ## 3. Read and plot
@@ -409,3 +566,14 @@ if(!stop_here){
          col = mycol, lty = ltype, lwd = 5, cex = 1.5)
   
 }
+
+script_end_time <- Sys.time()
+script_elapsed <- as.numeric(difftime(
+  script_end_time, script_start_time, units = "secs"
+))
+cat(sprintf(
+  "[%s] SCRIPT DONE | elapsed=%.1f min\n",
+  format(script_end_time, "%Y-%m-%d %H:%M:%S"),
+  script_elapsed / 60
+))
+flush.console()
