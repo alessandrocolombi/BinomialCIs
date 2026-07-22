@@ -1,0 +1,1200 @@
+Registered S3 methods overwritten by 'RcppGSL':
+  method               from     
+  predict.fastLm       RcppEigen
+  print.fastLm         RcppEigen
+  summary.fastLm       RcppEigen
+  print.summary.fastLm RcppEigen
+Loading required package: future
+[2026-07-22 13:58:19] EXPERIMENT START | scenarios=4 | q-levels=6 | repliche/scenario/q=500 | total jobs=12000
+[2026-07-22 13:58:20] START  scenario=unif_big | jobs=3000 (6 q x 500 repliche) | M=1500 | n_max=10000
+[2026-07-22 13:58:26] PROGRESS scenario=unif_big | 50/3000 (1.7%) | q=0.0001 rep=9 | elapsed=00:00:07 | ETA=00:06:40 | rate=7.374 job/s
+[2026-07-22 13:58:31] PROGRESS scenario=unif_big | 100/3000 (3.3%) | q=0.001 rep=17 | elapsed=00:00:12 | ETA=00:05:44 | rate=8.420 job/s
+[2026-07-22 13:58:37] PROGRESS scenario=unif_big | 150/3000 (5.0%) | q=0.005 rep=25 | elapsed=00:00:17 | ETA=00:05:23 | rate=8.817 job/s
+[2026-07-22 13:58:42] PROGRESS scenario=unif_big | 200/3000 (6.7%) | q=0.0001 rep=34 | elapsed=00:00:22 | ETA=00:05:10 | rate=9.034 job/s
+[2026-07-22 13:58:47] PROGRESS scenario=unif_big | 250/3000 (8.3%) | q=0.001 rep=42 | elapsed=00:00:27 | ETA=00:04:59 | rate=9.192 job/s
+[2026-07-22 13:58:52] PROGRESS scenario=unif_big | 300/3000 (10.0%) | q=0.005 rep=50 | elapsed=00:00:32 | ETA=00:04:51 | rate=9.287 job/s
+[2026-07-22 13:58:57] PROGRESS scenario=unif_big | 350/3000 (11.7%) | q=0.0001 rep=59 | elapsed=00:00:37 | ETA=00:04:42 | rate=9.382 job/s
+[2026-07-22 13:59:02] PROGRESS scenario=unif_big | 400/3000 (13.3%) | q=0.001 rep=67 | elapsed=00:00:43 | ETA=00:04:37 | rate=9.399 job/s
+[2026-07-22 13:59:07] PROGRESS scenario=unif_big | 450/3000 (15.0%) | q=0.005 rep=75 | elapsed=00:00:48 | ETA=00:04:30 | rate=9.449 job/s
+[2026-07-22 13:59:12] PROGRESS scenario=unif_big | 500/3000 (16.7%) | q=0.0001 rep=84 | elapsed=00:00:53 | ETA=00:04:23 | rate=9.506 job/s
+[2026-07-22 13:59:17] PROGRESS scenario=unif_big | 550/3000 (18.3%) | q=0.001 rep=92 | elapsed=00:00:58 | ETA=00:04:17 | rate=9.536 job/s
+[2026-07-22 13:59:22] PROGRESS scenario=unif_big | 600/3000 (20.0%) | q=0.005 rep=100 | elapsed=00:01:03 | ETA=00:04:11 | rate=9.559 job/s
+[2026-07-22 13:59:27] PROGRESS scenario=unif_big | 650/3000 (21.7%) | q=0.0001 rep=109 | elapsed=00:01:08 | ETA=00:04:05 | rate=9.574 job/s
+[2026-07-22 13:59:32] PROGRESS scenario=unif_big | 700/3000 (23.3%) | q=0.001 rep=117 | elapsed=00:01:13 | ETA=00:04:00 | rate=9.594 job/s
+[2026-07-22 13:59:38] PROGRESS scenario=unif_big | 750/3000 (25.0%) | q=0.005 rep=125 | elapsed=00:01:18 | ETA=00:03:54 | rate=9.611 job/s
+[2026-07-22 13:59:43] PROGRESS scenario=unif_big | 800/3000 (26.7%) | q=0.0001 rep=134 | elapsed=00:01:23 | ETA=00:03:48 | rate=9.635 job/s
+[2026-07-22 13:59:48] PROGRESS scenario=unif_big | 850/3000 (28.3%) | q=0.001 rep=142 | elapsed=00:01:28 | ETA=00:03:43 | rate=9.631 job/s
+[2026-07-22 13:59:53] PROGRESS scenario=unif_big | 900/3000 (30.0%) | q=0.005 rep=150 | elapsed=00:01:33 | ETA=00:03:38 | rate=9.643 job/s
+[2026-07-22 13:59:58] PROGRESS scenario=unif_big | 950/3000 (31.7%) | q=0.0001 rep=159 | elapsed=00:01:38 | ETA=00:03:32 | rate=9.664 job/s
+[2026-07-22 14:00:03] PROGRESS scenario=unif_big | 1000/3000 (33.3%) | q=0.001 rep=167 | elapsed=00:01:43 | ETA=00:03:27 | rate=9.673 job/s
+[2026-07-22 14:00:08] PROGRESS scenario=unif_big | 1050/3000 (35.0%) | q=0.005 rep=175 | elapsed=00:01:48 | ETA=00:03:21 | rate=9.678 job/s
+[2026-07-22 14:00:13] PROGRESS scenario=unif_big | 1100/3000 (36.7%) | q=0.0001 rep=184 | elapsed=00:01:54 | ETA=00:03:16 | rate=9.684 job/s
+[2026-07-22 14:00:18] PROGRESS scenario=unif_big | 1150/3000 (38.3%) | q=0.001 rep=192 | elapsed=00:01:59 | ETA=00:03:11 | rate=9.689 job/s
+[2026-07-22 14:00:23] PROGRESS scenario=unif_big | 1200/3000 (40.0%) | q=0.005 rep=200 | elapsed=00:02:04 | ETA=00:03:06 | rate=9.693 job/s
+[2026-07-22 14:00:28] PROGRESS scenario=unif_big | 1250/3000 (41.7%) | q=0.0001 rep=209 | elapsed=00:02:09 | ETA=00:03:00 | rate=9.704 job/s
+[2026-07-22 14:00:34] PROGRESS scenario=unif_big | 1300/3000 (43.3%) | q=0.001 rep=217 | elapsed=00:02:14 | ETA=00:02:55 | rate=9.698 job/s
+[2026-07-22 14:00:39] PROGRESS scenario=unif_big | 1350/3000 (45.0%) | q=0.005 rep=225 | elapsed=00:02:19 | ETA=00:02:50 | rate=9.703 job/s
+[2026-07-22 14:00:44] PROGRESS scenario=unif_big | 1400/3000 (46.7%) | q=0.0001 rep=234 | elapsed=00:02:24 | ETA=00:02:45 | rate=9.714 job/s
+[2026-07-22 14:00:49] PROGRESS scenario=unif_big | 1450/3000 (48.3%) | q=0.001 rep=242 | elapsed=00:02:29 | ETA=00:02:40 | rate=9.718 job/s
+[2026-07-22 14:00:54] PROGRESS scenario=unif_big | 1500/3000 (50.0%) | q=0.005 rep=250 | elapsed=00:02:34 | ETA=00:02:34 | rate=9.718 job/s
+[2026-07-22 14:00:59] PROGRESS scenario=unif_big | 1550/3000 (51.7%) | q=0.0001 rep=259 | elapsed=00:02:39 | ETA=00:02:29 | rate=9.721 job/s
+[2026-07-22 14:01:04] PROGRESS scenario=unif_big | 1600/3000 (53.3%) | q=0.001 rep=267 | elapsed=00:02:45 | ETA=00:02:24 | rate=9.724 job/s
+[2026-07-22 14:01:09] PROGRESS scenario=unif_big | 1650/3000 (55.0%) | q=0.005 rep=275 | elapsed=00:02:50 | ETA=00:02:19 | rate=9.730 job/s
+[2026-07-22 14:01:14] PROGRESS scenario=unif_big | 1700/3000 (56.7%) | q=0.0001 rep=284 | elapsed=00:02:55 | ETA=00:02:13 | rate=9.738 job/s
+[2026-07-22 14:01:19] PROGRESS scenario=unif_big | 1750/3000 (58.3%) | q=0.001 rep=292 | elapsed=00:03:00 | ETA=00:02:08 | rate=9.734 job/s
+[2026-07-22 14:01:24] PROGRESS scenario=unif_big | 1800/3000 (60.0%) | q=0.005 rep=300 | elapsed=00:03:05 | ETA=00:02:03 | rate=9.737 job/s
+[2026-07-22 14:01:29] PROGRESS scenario=unif_big | 1850/3000 (61.7%) | q=0.0001 rep=309 | elapsed=00:03:10 | ETA=00:01:58 | rate=9.745 job/s
+[2026-07-22 14:01:34] PROGRESS scenario=unif_big | 1900/3000 (63.3%) | q=0.001 rep=317 | elapsed=00:03:15 | ETA=00:01:53 | rate=9.747 job/s
+[2026-07-22 14:01:40] PROGRESS scenario=unif_big | 1950/3000 (65.0%) | q=0.005 rep=325 | elapsed=00:03:20 | ETA=00:01:48 | rate=9.748 job/s
+[2026-07-22 14:01:45] PROGRESS scenario=unif_big | 2000/3000 (66.7%) | q=0.0001 rep=334 | elapsed=00:03:25 | ETA=00:01:43 | rate=9.750 job/s
+[2026-07-22 14:01:50] PROGRESS scenario=unif_big | 2050/3000 (68.3%) | q=0.001 rep=342 | elapsed=00:03:30 | ETA=00:01:37 | rate=9.751 job/s
+[2026-07-22 14:01:55] PROGRESS scenario=unif_big | 2100/3000 (70.0%) | q=0.005 rep=350 | elapsed=00:03:35 | ETA=00:01:32 | rate=9.752 job/s
+[2026-07-22 14:02:00] PROGRESS scenario=unif_big | 2150/3000 (71.7%) | q=0.0001 rep=359 | elapsed=00:03:40 | ETA=00:01:27 | rate=9.757 job/s
+[2026-07-22 14:02:05] PROGRESS scenario=unif_big | 2200/3000 (73.3%) | q=0.001 rep=367 | elapsed=00:03:46 | ETA=00:01:22 | rate=9.754 job/s
+[2026-07-22 14:02:10] PROGRESS scenario=unif_big | 2250/3000 (75.0%) | q=0.005 rep=375 | elapsed=00:03:51 | ETA=00:01:17 | rate=9.756 job/s
+[2026-07-22 14:02:15] PROGRESS scenario=unif_big | 2300/3000 (76.7%) | q=0.0001 rep=384 | elapsed=00:03:56 | ETA=00:01:12 | rate=9.761 job/s
+[2026-07-22 14:02:20] PROGRESS scenario=unif_big | 2350/3000 (78.3%) | q=0.001 rep=392 | elapsed=00:04:01 | ETA=00:01:07 | rate=9.762 job/s
+[2026-07-22 14:02:26] PROGRESS scenario=unif_big | 2400/3000 (80.0%) | q=0.005 rep=400 | elapsed=00:04:06 | ETA=00:01:01 | rate=9.757 job/s
+[2026-07-22 14:02:30] PROGRESS scenario=unif_big | 2450/3000 (81.7%) | q=0.0001 rep=409 | elapsed=00:04:11 | ETA=00:00:56 | rate=9.763 job/s
+[2026-07-22 14:02:36] PROGRESS scenario=unif_big | 2500/3000 (83.3%) | q=0.001 rep=417 | elapsed=00:04:16 | ETA=00:00:51 | rate=9.765 job/s
+[2026-07-22 14:02:41] PROGRESS scenario=unif_big | 2550/3000 (85.0%) | q=0.005 rep=425 | elapsed=00:04:21 | ETA=00:00:46 | rate=9.764 job/s
+[2026-07-22 14:02:46] PROGRESS scenario=unif_big | 2600/3000 (86.7%) | q=0.0001 rep=434 | elapsed=00:04:26 | ETA=00:00:41 | rate=9.768 job/s
+[2026-07-22 14:02:51] PROGRESS scenario=unif_big | 2650/3000 (88.3%) | q=0.001 rep=442 | elapsed=00:04:31 | ETA=00:00:36 | rate=9.765 job/s
+[2026-07-22 14:02:56] PROGRESS scenario=unif_big | 2700/3000 (90.0%) | q=0.005 rep=450 | elapsed=00:04:36 | ETA=00:00:31 | rate=9.766 job/s
+[2026-07-22 14:03:01] PROGRESS scenario=unif_big | 2750/3000 (91.7%) | q=0.0001 rep=459 | elapsed=00:04:41 | ETA=00:00:26 | rate=9.769 job/s
+[2026-07-22 14:03:06] PROGRESS scenario=unif_big | 2800/3000 (93.3%) | q=0.001 rep=467 | elapsed=00:04:47 | ETA=00:00:20 | rate=9.769 job/s
+[2026-07-22 14:03:14] PROGRESS scenario=unif_big | 2850/3000 (95.0%) | q=0.005 rep=475 | elapsed=00:04:54 | ETA=00:00:15 | rate=9.692 job/s
+[2026-07-22 14:03:19] PROGRESS scenario=unif_big | 2900/3000 (96.7%) | q=0.0001 rep=484 | elapsed=00:04:59 | ETA=00:00:10 | rate=9.695 job/s
+[2026-07-22 14:03:24] PROGRESS scenario=unif_big | 2950/3000 (98.3%) | q=0.001 rep=492 | elapsed=00:05:04 | ETA=00:00:05 | rate=9.698 job/s
+[2026-07-22 14:03:29] PROGRESS scenario=unif_big | 3000/3000 (100.0%) | q=0.005 rep=500 | elapsed=00:05:09 | ETA=00:00:00 | rate=9.699 job/s
+[2026-07-22 14:03:29] DONE   scenario=unif_big | jobs=3000 | total elapsed=00:05:09
+[2026-07-22 14:03:37] START  scenario=zipf_heavy | jobs=3000 (6 q x 500 repliche) | M=1500 | n_max=10000
+[2026-07-22 14:03:42] PROGRESS scenario=zipf_heavy | 50/3000 (1.7%) | q=0.0001 rep=9 | elapsed=00:00:05 | ETA=00:05:02 | rate=9.781 job/s
+[2026-07-22 14:03:47] PROGRESS scenario=zipf_heavy | 100/3000 (3.3%) | q=0.001 rep=17 | elapsed=00:00:10 | ETA=00:04:49 | rate=10.043 job/s
+[2026-07-22 14:03:52] PROGRESS scenario=zipf_heavy | 150/3000 (5.0%) | q=0.005 rep=25 | elapsed=00:00:15 | ETA=00:04:44 | rate=10.034 job/s
+[2026-07-22 14:03:57] PROGRESS scenario=zipf_heavy | 200/3000 (6.7%) | q=0.0001 rep=34 | elapsed=00:00:20 | ETA=00:04:42 | rate=9.915 job/s
+[2026-07-22 14:04:02] PROGRESS scenario=zipf_heavy | 250/3000 (8.3%) | q=0.001 rep=42 | elapsed=00:00:25 | ETA=00:04:35 | rate=9.992 job/s
+[2026-07-22 14:04:07] PROGRESS scenario=zipf_heavy | 300/3000 (10.0%) | q=0.005 rep=50 | elapsed=00:00:30 | ETA=00:04:29 | rate=10.044 job/s
+[2026-07-22 14:04:11] PROGRESS scenario=zipf_heavy | 350/3000 (11.7%) | q=0.0001 rep=59 | elapsed=00:00:35 | ETA=00:04:23 | rate=10.062 job/s
+[2026-07-22 14:04:16] PROGRESS scenario=zipf_heavy | 400/3000 (13.3%) | q=0.001 rep=67 | elapsed=00:00:40 | ETA=00:04:18 | rate=10.092 job/s
+[2026-07-22 14:04:21] PROGRESS scenario=zipf_heavy | 450/3000 (15.0%) | q=0.005 rep=75 | elapsed=00:00:44 | ETA=00:04:12 | rate=10.123 job/s
+[2026-07-22 14:04:26] PROGRESS scenario=zipf_heavy | 500/3000 (16.7%) | q=0.0001 rep=84 | elapsed=00:00:49 | ETA=00:04:06 | rate=10.159 job/s
+[2026-07-22 14:04:31] PROGRESS scenario=zipf_heavy | 550/3000 (18.3%) | q=0.001 rep=92 | elapsed=00:00:54 | ETA=00:04:01 | rate=10.156 job/s
+[2026-07-22 14:04:36] PROGRESS scenario=zipf_heavy | 600/3000 (20.0%) | q=0.005 rep=100 | elapsed=00:00:59 | ETA=00:03:56 | rate=10.172 job/s
+[2026-07-22 14:04:40] PROGRESS scenario=zipf_heavy | 650/3000 (21.7%) | q=0.0001 rep=109 | elapsed=00:01:04 | ETA=00:03:51 | rate=10.187 job/s
+[2026-07-22 14:04:45] PROGRESS scenario=zipf_heavy | 700/3000 (23.3%) | q=0.001 rep=117 | elapsed=00:01:09 | ETA=00:03:46 | rate=10.199 job/s
+[2026-07-22 14:04:50] PROGRESS scenario=zipf_heavy | 750/3000 (25.0%) | q=0.005 rep=125 | elapsed=00:01:14 | ETA=00:03:41 | rate=10.188 job/s
+[2026-07-22 14:04:55] PROGRESS scenario=zipf_heavy | 800/3000 (26.7%) | q=0.0001 rep=134 | elapsed=00:01:18 | ETA=00:03:36 | rate=10.202 job/s
+[2026-07-22 14:05:00] PROGRESS scenario=zipf_heavy | 850/3000 (28.3%) | q=0.001 rep=142 | elapsed=00:01:23 | ETA=00:03:31 | rate=10.193 job/s
+[2026-07-22 14:05:05] PROGRESS scenario=zipf_heavy | 900/3000 (30.0%) | q=0.005 rep=150 | elapsed=00:01:28 | ETA=00:03:26 | rate=10.198 job/s
+[2026-07-22 14:05:10] PROGRESS scenario=zipf_heavy | 950/3000 (31.7%) | q=0.0001 rep=159 | elapsed=00:01:33 | ETA=00:03:21 | rate=10.199 job/s
+[2026-07-22 14:05:15] PROGRESS scenario=zipf_heavy | 1000/3000 (33.3%) | q=0.001 rep=167 | elapsed=00:01:38 | ETA=00:03:16 | rate=10.208 job/s
+[2026-07-22 14:05:19] PROGRESS scenario=zipf_heavy | 1050/3000 (35.0%) | q=0.005 rep=175 | elapsed=00:01:43 | ETA=00:03:11 | rate=10.214 job/s
+[2026-07-22 14:05:24] PROGRESS scenario=zipf_heavy | 1100/3000 (36.7%) | q=0.0001 rep=184 | elapsed=00:01:48 | ETA=00:03:06 | rate=10.221 job/s
+[2026-07-22 14:05:29] PROGRESS scenario=zipf_heavy | 1150/3000 (38.3%) | q=0.001 rep=192 | elapsed=00:01:53 | ETA=00:03:01 | rate=10.216 job/s
+[2026-07-22 14:05:34] PROGRESS scenario=zipf_heavy | 1200/3000 (40.0%) | q=0.005 rep=200 | elapsed=00:01:57 | ETA=00:02:56 | rate=10.219 job/s
+[2026-07-22 14:05:39] PROGRESS scenario=zipf_heavy | 1250/3000 (41.7%) | q=0.0001 rep=209 | elapsed=00:02:02 | ETA=00:02:51 | rate=10.229 job/s
+[2026-07-22 14:05:44] PROGRESS scenario=zipf_heavy | 1300/3000 (43.3%) | q=0.001 rep=217 | elapsed=00:02:07 | ETA=00:02:46 | rate=10.230 job/s
+[2026-07-22 14:05:49] PROGRESS scenario=zipf_heavy | 1350/3000 (45.0%) | q=0.005 rep=225 | elapsed=00:02:12 | ETA=00:02:41 | rate=10.223 job/s
+[2026-07-22 14:05:54] PROGRESS scenario=zipf_heavy | 1400/3000 (46.7%) | q=0.0001 rep=234 | elapsed=00:02:17 | ETA=00:02:36 | rate=10.226 job/s
+[2026-07-22 14:05:58] PROGRESS scenario=zipf_heavy | 1450/3000 (48.3%) | q=0.001 rep=242 | elapsed=00:02:22 | ETA=00:02:32 | rate=10.228 job/s
+[2026-07-22 14:06:03] PROGRESS scenario=zipf_heavy | 1500/3000 (50.0%) | q=0.005 rep=250 | elapsed=00:02:27 | ETA=00:02:27 | rate=10.228 job/s
+[2026-07-22 14:06:08] PROGRESS scenario=zipf_heavy | 1550/3000 (51.7%) | q=0.0001 rep=259 | elapsed=00:02:32 | ETA=00:02:22 | rate=10.228 job/s
+[2026-07-22 14:06:13] PROGRESS scenario=zipf_heavy | 1600/3000 (53.3%) | q=0.001 rep=267 | elapsed=00:02:36 | ETA=00:02:17 | rate=10.229 job/s
+[2026-07-22 14:06:18] PROGRESS scenario=zipf_heavy | 1650/3000 (55.0%) | q=0.005 rep=275 | elapsed=00:02:41 | ETA=00:02:12 | rate=10.233 job/s
+[2026-07-22 14:06:23] PROGRESS scenario=zipf_heavy | 1700/3000 (56.7%) | q=0.0001 rep=284 | elapsed=00:02:46 | ETA=00:02:07 | rate=10.237 job/s
+[2026-07-22 14:06:28] PROGRESS scenario=zipf_heavy | 1750/3000 (58.3%) | q=0.001 rep=292 | elapsed=00:02:51 | ETA=00:02:02 | rate=10.233 job/s
+[2026-07-22 14:06:32] PROGRESS scenario=zipf_heavy | 1800/3000 (60.0%) | q=0.005 rep=300 | elapsed=00:02:56 | ETA=00:01:57 | rate=10.237 job/s
+[2026-07-22 14:06:37] PROGRESS scenario=zipf_heavy | 1850/3000 (61.7%) | q=0.0001 rep=309 | elapsed=00:03:01 | ETA=00:01:52 | rate=10.241 job/s
+[2026-07-22 14:06:42] PROGRESS scenario=zipf_heavy | 1900/3000 (63.3%) | q=0.001 rep=317 | elapsed=00:03:05 | ETA=00:01:47 | rate=10.243 job/s
+[2026-07-22 14:06:47] PROGRESS scenario=zipf_heavy | 1950/3000 (65.0%) | q=0.005 rep=325 | elapsed=00:03:10 | ETA=00:01:43 | rate=10.239 job/s
+[2026-07-22 14:06:52] PROGRESS scenario=zipf_heavy | 2000/3000 (66.7%) | q=0.0001 rep=334 | elapsed=00:03:15 | ETA=00:01:38 | rate=10.244 job/s
+[2026-07-22 14:06:57] PROGRESS scenario=zipf_heavy | 2050/3000 (68.3%) | q=0.001 rep=342 | elapsed=00:03:20 | ETA=00:01:33 | rate=10.248 job/s
+[2026-07-22 14:07:02] PROGRESS scenario=zipf_heavy | 2100/3000 (70.0%) | q=0.005 rep=350 | elapsed=00:03:25 | ETA=00:01:28 | rate=10.243 job/s
+[2026-07-22 14:07:07] PROGRESS scenario=zipf_heavy | 2150/3000 (71.7%) | q=0.0001 rep=359 | elapsed=00:03:30 | ETA=00:01:23 | rate=10.244 job/s
+[2026-07-22 14:07:11] PROGRESS scenario=zipf_heavy | 2200/3000 (73.3%) | q=0.001 rep=367 | elapsed=00:03:35 | ETA=00:01:18 | rate=10.246 job/s
+[2026-07-22 14:07:16] PROGRESS scenario=zipf_heavy | 2250/3000 (75.0%) | q=0.005 rep=375 | elapsed=00:03:40 | ETA=00:01:13 | rate=10.246 job/s
+[2026-07-22 14:07:21] PROGRESS scenario=zipf_heavy | 2300/3000 (76.7%) | q=0.0001 rep=384 | elapsed=00:03:44 | ETA=00:01:08 | rate=10.248 job/s
+[2026-07-22 14:07:26] PROGRESS scenario=zipf_heavy | 2350/3000 (78.3%) | q=0.001 rep=392 | elapsed=00:03:49 | ETA=00:01:03 | rate=10.244 job/s
+[2026-07-22 14:07:31] PROGRESS scenario=zipf_heavy | 2400/3000 (80.0%) | q=0.005 rep=400 | elapsed=00:03:54 | ETA=00:00:59 | rate=10.246 job/s
+[2026-07-22 14:07:36] PROGRESS scenario=zipf_heavy | 2450/3000 (81.7%) | q=0.0001 rep=409 | elapsed=00:03:59 | ETA=00:00:54 | rate=10.248 job/s
+[2026-07-22 14:07:41] PROGRESS scenario=zipf_heavy | 2500/3000 (83.3%) | q=0.001 rep=417 | elapsed=00:04:04 | ETA=00:00:49 | rate=10.246 job/s
+[2026-07-22 14:07:46] PROGRESS scenario=zipf_heavy | 2550/3000 (85.0%) | q=0.005 rep=425 | elapsed=00:04:09 | ETA=00:00:44 | rate=10.241 job/s
+[2026-07-22 14:07:50] PROGRESS scenario=zipf_heavy | 2600/3000 (86.7%) | q=0.0001 rep=434 | elapsed=00:04:14 | ETA=00:00:39 | rate=10.244 job/s
+[2026-07-22 14:07:56] PROGRESS scenario=zipf_heavy | 2650/3000 (88.3%) | q=0.001 rep=442 | elapsed=00:04:19 | ETA=00:00:34 | rate=10.212 job/s
+[2026-07-22 14:08:05] PROGRESS scenario=zipf_heavy | 2700/3000 (90.0%) | q=0.005 rep=450 | elapsed=00:04:28 | ETA=00:00:30 | rate=10.075 job/s
+[2026-07-22 14:08:13] PROGRESS scenario=zipf_heavy | 2750/3000 (91.7%) | q=0.0001 rep=459 | elapsed=00:04:37 | ETA=00:00:25 | rate=9.945 job/s
+[2026-07-22 14:08:22] PROGRESS scenario=zipf_heavy | 2800/3000 (93.3%) | q=0.001 rep=467 | elapsed=00:04:45 | ETA=00:00:20 | rate=9.824 job/s
+[2026-07-22 14:08:30] PROGRESS scenario=zipf_heavy | 2850/3000 (95.0%) | q=0.005 rep=475 | elapsed=00:04:54 | ETA=00:00:15 | rate=9.708 job/s
+[2026-07-22 14:08:39] PROGRESS scenario=zipf_heavy | 2900/3000 (96.7%) | q=0.0001 rep=484 | elapsed=00:05:02 | ETA=00:00:10 | rate=9.599 job/s
+[2026-07-22 14:08:46] PROGRESS scenario=zipf_heavy | 2950/3000 (98.3%) | q=0.001 rep=492 | elapsed=00:05:09 | ETA=00:00:05 | rate=9.534 job/s
+[2026-07-22 14:08:51] PROGRESS scenario=zipf_heavy | 3000/3000 (100.0%) | q=0.005 rep=500 | elapsed=00:05:15 | ETA=00:00:00 | rate=9.533 job/s
+[2026-07-22 14:08:51] DONE   scenario=zipf_heavy | jobs=3000 | total elapsed=00:05:15
+[2026-07-22 14:09:00] START  scenario=unif_small | jobs=3000 (6 q x 500 repliche) | M=1500 | n_max=10000
+[2026-07-22 14:09:04] PROGRESS scenario=unif_small | 50/3000 (1.7%) | q=0.0001 rep=9 | elapsed=00:00:04 | ETA=00:04:00 | rate=12.297 job/s
+[2026-07-22 14:09:08] PROGRESS scenario=unif_small | 100/3000 (3.3%) | q=0.001 rep=17 | elapsed=00:00:08 | ETA=00:03:52 | rate=12.477 job/s
+[2026-07-22 14:09:12] PROGRESS scenario=unif_small | 150/3000 (5.0%) | q=0.005 rep=25 | elapsed=00:00:12 | ETA=00:03:48 | rate=12.484 job/s
+[2026-07-22 14:09:16] PROGRESS scenario=unif_small | 200/3000 (6.7%) | q=0.0001 rep=34 | elapsed=00:00:16 | ETA=00:03:43 | rate=12.544 job/s
+[2026-07-22 14:09:19] PROGRESS scenario=unif_small | 250/3000 (8.3%) | q=0.001 rep=42 | elapsed=00:00:20 | ETA=00:03:39 | rate=12.578 job/s
+[2026-07-22 14:09:23] PROGRESS scenario=unif_small | 300/3000 (10.0%) | q=0.005 rep=50 | elapsed=00:00:24 | ETA=00:03:35 | rate=12.549 job/s
+[2026-07-22 14:09:28] PROGRESS scenario=unif_small | 350/3000 (11.7%) | q=0.0001 rep=59 | elapsed=00:00:28 | ETA=00:03:32 | rate=12.525 job/s
+[2026-07-22 14:09:31] PROGRESS scenario=unif_small | 400/3000 (13.3%) | q=0.001 rep=67 | elapsed=00:00:32 | ETA=00:03:27 | rate=12.546 job/s
+[2026-07-22 14:09:35] PROGRESS scenario=unif_small | 450/3000 (15.0%) | q=0.005 rep=75 | elapsed=00:00:36 | ETA=00:03:24 | rate=12.530 job/s
+[2026-07-22 14:09:39] PROGRESS scenario=unif_small | 500/3000 (16.7%) | q=0.0001 rep=84 | elapsed=00:00:40 | ETA=00:03:19 | rate=12.545 job/s
+[2026-07-22 14:09:43] PROGRESS scenario=unif_small | 550/3000 (18.3%) | q=0.001 rep=92 | elapsed=00:00:44 | ETA=00:03:15 | rate=12.550 job/s
+[2026-07-22 14:09:48] PROGRESS scenario=unif_small | 600/3000 (20.0%) | q=0.005 rep=100 | elapsed=00:00:48 | ETA=00:03:12 | rate=12.500 job/s
+[2026-07-22 14:09:52] PROGRESS scenario=unif_small | 650/3000 (21.7%) | q=0.0001 rep=109 | elapsed=00:00:52 | ETA=00:03:08 | rate=12.515 job/s
+[2026-07-22 14:09:56] PROGRESS scenario=unif_small | 700/3000 (23.3%) | q=0.001 rep=117 | elapsed=00:00:56 | ETA=00:03:04 | rate=12.512 job/s
+[2026-07-22 14:10:00] PROGRESS scenario=unif_small | 750/3000 (25.0%) | q=0.005 rep=125 | elapsed=00:01:00 | ETA=00:03:00 | rate=12.509 job/s
+[2026-07-22 14:10:03] PROGRESS scenario=unif_small | 800/3000 (26.7%) | q=0.0001 rep=134 | elapsed=00:01:04 | ETA=00:02:56 | rate=12.529 job/s
+[2026-07-22 14:10:07] PROGRESS scenario=unif_small | 850/3000 (28.3%) | q=0.001 rep=142 | elapsed=00:01:08 | ETA=00:02:52 | rate=12.534 job/s
+[2026-07-22 14:10:12] PROGRESS scenario=unif_small | 900/3000 (30.0%) | q=0.005 rep=150 | elapsed=00:01:12 | ETA=00:02:48 | rate=12.512 job/s
+[2026-07-22 14:10:15] PROGRESS scenario=unif_small | 950/3000 (31.7%) | q=0.0001 rep=159 | elapsed=00:01:16 | ETA=00:02:44 | rate=12.523 job/s
+[2026-07-22 14:10:19] PROGRESS scenario=unif_small | 1000/3000 (33.3%) | q=0.001 rep=167 | elapsed=00:01:20 | ETA=00:02:40 | rate=12.536 job/s
+[2026-07-22 14:10:23] PROGRESS scenario=unif_small | 1050/3000 (35.0%) | q=0.005 rep=175 | elapsed=00:01:24 | ETA=00:02:36 | rate=12.535 job/s
+[2026-07-22 14:10:27] PROGRESS scenario=unif_small | 1100/3000 (36.7%) | q=0.0001 rep=184 | elapsed=00:01:28 | ETA=00:02:31 | rate=12.545 job/s
+[2026-07-22 14:10:31] PROGRESS scenario=unif_small | 1150/3000 (38.3%) | q=0.001 rep=192 | elapsed=00:01:32 | ETA=00:02:27 | rate=12.548 job/s
+[2026-07-22 14:10:35] PROGRESS scenario=unif_small | 1200/3000 (40.0%) | q=0.005 rep=200 | elapsed=00:01:36 | ETA=00:02:24 | rate=12.534 job/s
+[2026-07-22 14:10:39] PROGRESS scenario=unif_small | 1250/3000 (41.7%) | q=0.0001 rep=209 | elapsed=00:01:40 | ETA=00:02:20 | rate=12.543 job/s
+[2026-07-22 14:10:43] PROGRESS scenario=unif_small | 1300/3000 (43.3%) | q=0.001 rep=217 | elapsed=00:01:44 | ETA=00:02:16 | rate=12.543 job/s
+[2026-07-22 14:10:47] PROGRESS scenario=unif_small | 1350/3000 (45.0%) | q=0.005 rep=225 | elapsed=00:01:48 | ETA=00:02:12 | rate=12.539 job/s
+[2026-07-22 14:10:51] PROGRESS scenario=unif_small | 1400/3000 (46.7%) | q=0.0001 rep=234 | elapsed=00:01:52 | ETA=00:02:08 | rate=12.546 job/s
+[2026-07-22 14:10:55] PROGRESS scenario=unif_small | 1450/3000 (48.3%) | q=0.001 rep=242 | elapsed=00:01:56 | ETA=00:02:04 | rate=12.535 job/s
+[2026-07-22 14:10:59] PROGRESS scenario=unif_small | 1500/3000 (50.0%) | q=0.005 rep=250 | elapsed=00:02:00 | ETA=00:02:00 | rate=12.530 job/s
+[2026-07-22 14:11:03] PROGRESS scenario=unif_small | 1550/3000 (51.7%) | q=0.0001 rep=259 | elapsed=00:02:04 | ETA=00:01:56 | rate=12.534 job/s
+[2026-07-22 14:11:07] PROGRESS scenario=unif_small | 1600/3000 (53.3%) | q=0.001 rep=267 | elapsed=00:02:08 | ETA=00:01:52 | rate=12.538 job/s
+[2026-07-22 14:11:11] PROGRESS scenario=unif_small | 1650/3000 (55.0%) | q=0.005 rep=275 | elapsed=00:02:12 | ETA=00:01:48 | rate=12.535 job/s
+[2026-07-22 14:11:15] PROGRESS scenario=unif_small | 1700/3000 (56.7%) | q=0.0001 rep=284 | elapsed=00:02:16 | ETA=00:01:44 | rate=12.537 job/s
+[2026-07-22 14:11:19] PROGRESS scenario=unif_small | 1750/3000 (58.3%) | q=0.001 rep=292 | elapsed=00:02:20 | ETA=00:01:40 | rate=12.531 job/s
+[2026-07-22 14:11:23] PROGRESS scenario=unif_small | 1800/3000 (60.0%) | q=0.005 rep=300 | elapsed=00:02:24 | ETA=00:01:36 | rate=12.525 job/s
+[2026-07-22 14:11:27] PROGRESS scenario=unif_small | 1850/3000 (61.7%) | q=0.0001 rep=309 | elapsed=00:02:28 | ETA=00:01:32 | rate=12.527 job/s
+[2026-07-22 14:11:31] PROGRESS scenario=unif_small | 1900/3000 (63.3%) | q=0.001 rep=317 | elapsed=00:02:32 | ETA=00:01:28 | rate=12.529 job/s
+[2026-07-22 14:11:35] PROGRESS scenario=unif_small | 1950/3000 (65.0%) | q=0.005 rep=325 | elapsed=00:02:36 | ETA=00:01:24 | rate=12.526 job/s
+[2026-07-22 14:11:39] PROGRESS scenario=unif_small | 2000/3000 (66.7%) | q=0.0001 rep=334 | elapsed=00:02:40 | ETA=00:01:20 | rate=12.520 job/s
+[2026-07-22 14:11:43] PROGRESS scenario=unif_small | 2050/3000 (68.3%) | q=0.001 rep=342 | elapsed=00:02:44 | ETA=00:01:16 | rate=12.520 job/s
+[2026-07-22 14:11:47] PROGRESS scenario=unif_small | 2100/3000 (70.0%) | q=0.005 rep=350 | elapsed=00:02:48 | ETA=00:01:12 | rate=12.517 job/s
+[2026-07-22 14:11:51] PROGRESS scenario=unif_small | 2150/3000 (71.7%) | q=0.0001 rep=359 | elapsed=00:02:52 | ETA=00:01:08 | rate=12.521 job/s
+[2026-07-22 14:11:55] PROGRESS scenario=unif_small | 2200/3000 (73.3%) | q=0.001 rep=367 | elapsed=00:02:56 | ETA=00:01:04 | rate=12.522 job/s
+[2026-07-22 14:11:59] PROGRESS scenario=unif_small | 2250/3000 (75.0%) | q=0.005 rep=375 | elapsed=00:03:00 | ETA=00:01:00 | rate=12.516 job/s
+[2026-07-22 14:12:03] PROGRESS scenario=unif_small | 2300/3000 (76.7%) | q=0.0001 rep=384 | elapsed=00:03:04 | ETA=00:00:56 | rate=12.509 job/s
+[2026-07-22 14:12:07] PROGRESS scenario=unif_small | 2350/3000 (78.3%) | q=0.001 rep=392 | elapsed=00:03:08 | ETA=00:00:52 | rate=12.514 job/s
+[2026-07-22 14:12:11] PROGRESS scenario=unif_small | 2400/3000 (80.0%) | q=0.005 rep=400 | elapsed=00:03:12 | ETA=00:00:48 | rate=12.513 job/s
+[2026-07-22 14:12:15] PROGRESS scenario=unif_small | 2450/3000 (81.7%) | q=0.0001 rep=409 | elapsed=00:03:16 | ETA=00:00:44 | rate=12.515 job/s
+[2026-07-22 14:12:19] PROGRESS scenario=unif_small | 2500/3000 (83.3%) | q=0.001 rep=417 | elapsed=00:03:20 | ETA=00:00:40 | rate=12.518 job/s
+[2026-07-22 14:12:23] PROGRESS scenario=unif_small | 2550/3000 (85.0%) | q=0.005 rep=425 | elapsed=00:03:24 | ETA=00:00:36 | rate=12.506 job/s
+[2026-07-22 14:12:27] PROGRESS scenario=unif_small | 2600/3000 (86.7%) | q=0.0001 rep=434 | elapsed=00:03:28 | ETA=00:00:32 | rate=12.510 job/s
+[2026-07-22 14:12:31] PROGRESS scenario=unif_small | 2650/3000 (88.3%) | q=0.001 rep=442 | elapsed=00:03:32 | ETA=00:00:28 | rate=12.512 job/s
+[2026-07-22 14:12:38] PROGRESS scenario=unif_small | 2700/3000 (90.0%) | q=0.005 rep=450 | elapsed=00:03:38 | ETA=00:00:24 | rate=12.386 job/s
+[2026-07-22 14:12:42] PROGRESS scenario=unif_small | 2750/3000 (91.7%) | q=0.0001 rep=459 | elapsed=00:03:42 | ETA=00:00:20 | rate=12.389 job/s
+[2026-07-22 14:12:46] PROGRESS scenario=unif_small | 2800/3000 (93.3%) | q=0.001 rep=467 | elapsed=00:03:46 | ETA=00:00:16 | rate=12.388 job/s
+[2026-07-22 14:12:50] PROGRESS scenario=unif_small | 2850/3000 (95.0%) | q=0.005 rep=475 | elapsed=00:03:51 | ETA=00:00:12 | rate=12.353 job/s
+[2026-07-22 14:12:55] PROGRESS scenario=unif_small | 2900/3000 (96.7%) | q=0.0001 rep=484 | elapsed=00:03:55 | ETA=00:00:08 | rate=12.323 job/s
+[2026-07-22 14:12:59] PROGRESS scenario=unif_small | 2950/3000 (98.3%) | q=0.001 rep=492 | elapsed=00:03:59 | ETA=00:00:04 | rate=12.328 job/s
+[2026-07-22 14:13:03] PROGRESS scenario=unif_small | 3000/3000 (100.0%) | q=0.005 rep=500 | elapsed=00:04:03 | ETA=00:00:00 | rate=12.330 job/s
+[2026-07-22 14:13:03] DONE   scenario=unif_small | jobs=3000 | total elapsed=00:04:03
+[2026-07-22 14:13:11] START  scenario=geom_0.05 | jobs=3000 (6 q x 500 repliche) | M=1500 | n_max=10000
+[2026-07-22 14:13:15] PROGRESS scenario=geom_0.05 | 50/3000 (1.7%) | q=0.0001 rep=9 | elapsed=00:00:05 | ETA=00:04:34 | rate=10.773 job/s
+[2026-07-22 14:13:20] PROGRESS scenario=geom_0.05 | 100/3000 (3.3%) | q=0.001 rep=17 | elapsed=00:00:09 | ETA=00:04:29 | rate=10.779 job/s
+[2026-07-22 14:13:25] PROGRESS scenario=geom_0.05 | 150/3000 (5.0%) | q=0.005 rep=25 | elapsed=00:00:14 | ETA=00:04:25 | rate=10.736 job/s
+[2026-07-22 14:13:29] PROGRESS scenario=geom_0.05 | 200/3000 (6.7%) | q=0.0001 rep=34 | elapsed=00:00:19 | ETA=00:04:20 | rate=10.752 job/s
+[2026-07-22 14:13:34] PROGRESS scenario=geom_0.05 | 250/3000 (8.3%) | q=0.001 rep=42 | elapsed=00:00:23 | ETA=00:04:17 | rate=10.692 job/s
+[2026-07-22 14:13:39] PROGRESS scenario=geom_0.05 | 300/3000 (10.0%) | q=0.005 rep=50 | elapsed=00:00:28 | ETA=00:04:12 | rate=10.715 job/s
+[2026-07-22 14:13:44] PROGRESS scenario=geom_0.05 | 350/3000 (11.7%) | q=0.0001 rep=59 | elapsed=00:00:33 | ETA=00:04:07 | rate=10.710 job/s
+[2026-07-22 14:13:48] PROGRESS scenario=geom_0.05 | 400/3000 (13.3%) | q=0.001 rep=67 | elapsed=00:00:37 | ETA=00:04:03 | rate=10.699 job/s
+[2026-07-22 14:13:55] PROGRESS scenario=geom_0.05 | 450/3000 (15.0%) | q=0.005 rep=75 | elapsed=00:00:44 | ETA=00:04:08 | rate=10.262 job/s
+[2026-07-22 14:13:59] PROGRESS scenario=geom_0.05 | 500/3000 (16.7%) | q=0.0001 rep=84 | elapsed=00:00:49 | ETA=00:04:03 | rate=10.289 job/s
+[2026-07-22 14:14:04] PROGRESS scenario=geom_0.05 | 550/3000 (18.3%) | q=0.001 rep=92 | elapsed=00:00:53 | ETA=00:03:58 | rate=10.312 job/s
+[2026-07-22 14:14:09] PROGRESS scenario=geom_0.05 | 600/3000 (20.0%) | q=0.005 rep=100 | elapsed=00:00:58 | ETA=00:03:52 | rate=10.347 job/s
+[2026-07-22 14:14:13] PROGRESS scenario=geom_0.05 | 650/3000 (21.7%) | q=0.0001 rep=109 | elapsed=00:01:03 | ETA=00:03:46 | rate=10.378 job/s
+[2026-07-22 14:14:18] PROGRESS scenario=geom_0.05 | 700/3000 (23.3%) | q=0.001 rep=117 | elapsed=00:01:07 | ETA=00:03:41 | rate=10.397 job/s
+[2026-07-22 14:14:23] PROGRESS scenario=geom_0.05 | 750/3000 (25.0%) | q=0.005 rep=125 | elapsed=00:01:12 | ETA=00:03:36 | rate=10.416 job/s
+[2026-07-22 14:14:28] PROGRESS scenario=geom_0.05 | 800/3000 (26.7%) | q=0.0001 rep=134 | elapsed=00:01:17 | ETA=00:03:31 | rate=10.420 job/s
+[2026-07-22 14:14:32] PROGRESS scenario=geom_0.05 | 850/3000 (28.3%) | q=0.001 rep=142 | elapsed=00:01:21 | ETA=00:03:26 | rate=10.437 job/s
+[2026-07-22 14:14:37] PROGRESS scenario=geom_0.05 | 900/3000 (30.0%) | q=0.005 rep=150 | elapsed=00:01:26 | ETA=00:03:21 | rate=10.447 job/s
+[2026-07-22 14:14:42] PROGRESS scenario=geom_0.05 | 950/3000 (31.7%) | q=0.0001 rep=159 | elapsed=00:01:31 | ETA=00:03:16 | rate=10.460 job/s
+[2026-07-22 14:14:46] PROGRESS scenario=geom_0.05 | 1000/3000 (33.3%) | q=0.001 rep=167 | elapsed=00:01:36 | ETA=00:03:11 | rate=10.468 job/s
+[2026-07-22 14:14:51] PROGRESS scenario=geom_0.05 | 1050/3000 (35.0%) | q=0.005 rep=175 | elapsed=00:01:40 | ETA=00:03:06 | rate=10.476 job/s
+[2026-07-22 14:14:56] PROGRESS scenario=geom_0.05 | 1100/3000 (36.7%) | q=0.0001 rep=184 | elapsed=00:01:45 | ETA=00:03:01 | rate=10.481 job/s
+[2026-07-22 14:15:00] PROGRESS scenario=geom_0.05 | 1150/3000 (38.3%) | q=0.001 rep=192 | elapsed=00:01:50 | ETA=00:02:56 | rate=10.493 job/s
+[2026-07-22 14:15:05] PROGRESS scenario=geom_0.05 | 1200/3000 (40.0%) | q=0.005 rep=200 | elapsed=00:01:54 | ETA=00:02:51 | rate=10.506 job/s
+[2026-07-22 14:15:10] PROGRESS scenario=geom_0.05 | 1250/3000 (41.7%) | q=0.0001 rep=209 | elapsed=00:01:59 | ETA=00:02:46 | rate=10.515 job/s
+[2026-07-22 14:15:14] PROGRESS scenario=geom_0.05 | 1300/3000 (43.3%) | q=0.001 rep=217 | elapsed=00:02:04 | ETA=00:02:42 | rate=10.522 job/s
+[2026-07-22 14:15:19] PROGRESS scenario=geom_0.05 | 1350/3000 (45.0%) | q=0.005 rep=225 | elapsed=00:02:08 | ETA=00:02:37 | rate=10.521 job/s
+[2026-07-22 14:15:24] PROGRESS scenario=geom_0.05 | 1400/3000 (46.7%) | q=0.0001 rep=234 | elapsed=00:02:13 | ETA=00:02:32 | rate=10.529 job/s
+[2026-07-22 14:15:28] PROGRESS scenario=geom_0.05 | 1450/3000 (48.3%) | q=0.001 rep=242 | elapsed=00:02:18 | ETA=00:02:27 | rate=10.537 job/s
+[2026-07-22 14:15:33] PROGRESS scenario=geom_0.05 | 1500/3000 (50.0%) | q=0.005 rep=250 | elapsed=00:02:22 | ETA=00:02:22 | rate=10.542 job/s
+[2026-07-22 14:15:38] PROGRESS scenario=geom_0.05 | 1550/3000 (51.7%) | q=0.0001 rep=259 | elapsed=00:02:27 | ETA=00:02:17 | rate=10.549 job/s
+[2026-07-22 14:15:43] PROGRESS scenario=geom_0.05 | 1600/3000 (53.3%) | q=0.001 rep=267 | elapsed=00:02:32 | ETA=00:02:13 | rate=10.545 job/s
+[2026-07-22 14:15:47] PROGRESS scenario=geom_0.05 | 1650/3000 (55.0%) | q=0.005 rep=275 | elapsed=00:02:36 | ETA=00:02:08 | rate=10.547 job/s
+[2026-07-22 14:15:52] PROGRESS scenario=geom_0.05 | 1700/3000 (56.7%) | q=0.0001 rep=284 | elapsed=00:02:41 | ETA=00:02:03 | rate=10.552 job/s
+[2026-07-22 14:15:57] PROGRESS scenario=geom_0.05 | 1750/3000 (58.3%) | q=0.001 rep=292 | elapsed=00:02:46 | ETA=00:01:58 | rate=10.556 job/s
+[2026-07-22 14:16:01] PROGRESS scenario=geom_0.05 | 1800/3000 (60.0%) | q=0.005 rep=300 | elapsed=00:02:50 | ETA=00:01:54 | rate=10.562 job/s
+[2026-07-22 14:16:06] PROGRESS scenario=geom_0.05 | 1850/3000 (61.7%) | q=0.0001 rep=309 | elapsed=00:02:55 | ETA=00:01:49 | rate=10.565 job/s
+[2026-07-22 14:16:11] PROGRESS scenario=geom_0.05 | 1900/3000 (63.3%) | q=0.001 rep=317 | elapsed=00:03:00 | ETA=00:01:44 | rate=10.563 job/s
+[2026-07-22 14:16:15] PROGRESS scenario=geom_0.05 | 1950/3000 (65.0%) | q=0.005 rep=325 | elapsed=00:03:05 | ETA=00:01:39 | rate=10.566 job/s
+[2026-07-22 14:16:20] PROGRESS scenario=geom_0.05 | 2000/3000 (66.7%) | q=0.0001 rep=334 | elapsed=00:03:09 | ETA=00:01:35 | rate=10.573 job/s
+[2026-07-22 14:16:25] PROGRESS scenario=geom_0.05 | 2050/3000 (68.3%) | q=0.001 rep=342 | elapsed=00:03:14 | ETA=00:01:30 | rate=10.560 job/s
+[2026-07-22 14:16:30] PROGRESS scenario=geom_0.05 | 2100/3000 (70.0%) | q=0.005 rep=350 | elapsed=00:03:19 | ETA=00:01:25 | rate=10.563 job/s
+[2026-07-22 14:16:34] PROGRESS scenario=geom_0.05 | 2150/3000 (71.7%) | q=0.0001 rep=359 | elapsed=00:03:24 | ETA=00:01:20 | rate=10.563 job/s
+[2026-07-22 14:16:39] PROGRESS scenario=geom_0.05 | 2200/3000 (73.3%) | q=0.001 rep=367 | elapsed=00:03:28 | ETA=00:01:16 | rate=10.564 job/s
+[2026-07-22 14:16:44] PROGRESS scenario=geom_0.05 | 2250/3000 (75.0%) | q=0.005 rep=375 | elapsed=00:03:33 | ETA=00:01:11 | rate=10.560 job/s
+[2026-07-22 14:16:49] PROGRESS scenario=geom_0.05 | 2300/3000 (76.7%) | q=0.0001 rep=384 | elapsed=00:03:38 | ETA=00:01:06 | rate=10.565 job/s
+[2026-07-22 14:16:53] PROGRESS scenario=geom_0.05 | 2350/3000 (78.3%) | q=0.001 rep=392 | elapsed=00:03:42 | ETA=00:01:02 | rate=10.568 job/s
+[2026-07-22 14:16:58] PROGRESS scenario=geom_0.05 | 2400/3000 (80.0%) | q=0.005 rep=400 | elapsed=00:03:47 | ETA=00:00:57 | rate=10.571 job/s
+[2026-07-22 14:17:03] PROGRESS scenario=geom_0.05 | 2450/3000 (81.7%) | q=0.0001 rep=409 | elapsed=00:03:52 | ETA=00:00:52 | rate=10.569 job/s
+[2026-07-22 14:17:07] PROGRESS scenario=geom_0.05 | 2500/3000 (83.3%) | q=0.001 rep=417 | elapsed=00:03:56 | ETA=00:00:47 | rate=10.572 job/s
+[2026-07-22 14:17:12] PROGRESS scenario=geom_0.05 | 2550/3000 (85.0%) | q=0.005 rep=425 | elapsed=00:04:01 | ETA=00:00:43 | rate=10.576 job/s
+[2026-07-22 14:17:17] PROGRESS scenario=geom_0.05 | 2600/3000 (86.7%) | q=0.0001 rep=434 | elapsed=00:04:06 | ETA=00:00:38 | rate=10.581 job/s
+[2026-07-22 14:17:21] PROGRESS scenario=geom_0.05 | 2650/3000 (88.3%) | q=0.001 rep=442 | elapsed=00:04:11 | ETA=00:00:33 | rate=10.579 job/s
+[2026-07-22 14:17:26] PROGRESS scenario=geom_0.05 | 2700/3000 (90.0%) | q=0.005 rep=450 | elapsed=00:04:15 | ETA=00:00:28 | rate=10.582 job/s
+[2026-07-22 14:17:32] PROGRESS scenario=geom_0.05 | 2750/3000 (91.7%) | q=0.0001 rep=459 | elapsed=00:04:21 | ETA=00:00:24 | rate=10.542 job/s
+[2026-07-22 14:17:37] PROGRESS scenario=geom_0.05 | 2800/3000 (93.3%) | q=0.001 rep=467 | elapsed=00:04:26 | ETA=00:00:19 | rate=10.514 job/s
+[2026-07-22 14:17:42] PROGRESS scenario=geom_0.05 | 2850/3000 (95.0%) | q=0.005 rep=475 | elapsed=00:04:31 | ETA=00:00:14 | rate=10.515 job/s
+[2026-07-22 14:17:47] PROGRESS scenario=geom_0.05 | 2900/3000 (96.7%) | q=0.0001 rep=484 | elapsed=00:04:36 | ETA=00:00:10 | rate=10.514 job/s
+[2026-07-22 14:17:51] PROGRESS scenario=geom_0.05 | 2950/3000 (98.3%) | q=0.001 rep=492 | elapsed=00:04:41 | ETA=00:00:05 | rate=10.512 job/s
+[2026-07-22 14:17:56] PROGRESS scenario=geom_0.05 | 3000/3000 (100.0%) | q=0.005 rep=500 | elapsed=00:04:45 | ETA=00:00:00 | rate=10.517 job/s
+[2026-07-22 14:17:56] DONE   scenario=geom_0.05 | jobs=3000 | total elapsed=00:04:45
+[2026-07-22 14:18:04] ALL SIMULATIONS DONE | rows=12000 | elapsed=00:19:45 | starting summaries
+       distro q_error type1_bounded type1_unbounded type1_coverage
+1   geom_0.05  0.0000             0           0.002      0.0060000
+2   geom_0.05  0.0010             0           0.000            NaN
+3   geom_0.05  0.0025             0           0.000            NaN
+4   geom_0.05  0.0050             0           0.000            NaN
+5   geom_0.05  0.0001             0           0.000      0.0000000
+6   geom_0.05  0.0005             0           0.000      0.0000000
+7    unif_big  0.0000             0           0.000      0.0540000
+8    unif_big  0.0010             0           0.000            NaN
+9    unif_big  0.0025             0           0.000            NaN
+10   unif_big  0.0050             0           0.000            NaN
+11   unif_big  0.0001             0           0.000      0.0380000
+12   unif_big  0.0005             0           0.000      0.0000000
+13 unif_small  0.0000             0           0.000      0.7900000
+14 unif_small  0.0010             0           0.000      0.2650104
+15 unif_small  0.0025             0           0.006            NaN
+16 unif_small  0.0050             0           0.004            NaN
+17 unif_small  0.0001             0           0.002      0.7160000
+18 unif_small  0.0005             0           0.004      0.5740000
+19 zipf_heavy  0.0000             0           0.000      0.0000000
+20 zipf_heavy  0.0010             0           0.002      0.0000000
+21 zipf_heavy  0.0025             0           0.000            NaN
+22 zipf_heavy  0.0050             0           0.000            NaN
+23 zipf_heavy  0.0001             0           0.000      0.0000000
+24 zipf_heavy  0.0005             0           0.002      0.0000000
+   type1_Chao2009 type1_bounded_new type1_unbounded_new prop_stopped_bounded
+1       1.0000000                 0               0.000                    1
+2       1.0000000                 0               0.000                    1
+3       1.0000000                 0               0.000                    1
+4       1.0000000                 0               0.000                    1
+5       0.9285714                 0               0.000                    1
+6       1.0000000                 0               0.000                    1
+7       1.0000000                 0               0.000                    1
+8       1.0000000                 0               0.000                    1
+9       1.0000000                 0               0.000                    1
+10      1.0000000                 0               0.000                    1
+11      1.0000000                 0               0.000                    1
+12      1.0000000                 0               0.000                    1
+13      1.0000000                 0               0.000                    1
+14      1.0000000                 0               0.000                    1
+15      0.9881797                 0               0.000                    1
+16      0.9750000                 0               0.000                    1
+17      1.0000000                 0               0.000                    1
+18      1.0000000                 0               0.002                    1
+19      0.0000000                 0               0.000                    1
+20            NaN                 0               0.000                    1
+21            NaN                 0               0.000                    1
+22            NaN                 0               0.000                    1
+23      0.0000000                 0               0.000                    1
+24      0.0000000                 0               0.000                    1
+   prop_stopped_unbounded prop_stopped_coverage prop_stopped_Chao2009
+1                       1                 1.000                 0.040
+2                       1                 0.000                 0.024
+3                       1                 0.000                 0.014
+4                       1                 0.000                 0.004
+5                       1                 1.000                 0.028
+6                       1                 0.164                 0.032
+7                       1                 1.000                 1.000
+8                       1                 0.000                 1.000
+9                       1                 0.000                 1.000
+10                      1                 0.000                 0.992
+11                      1                 1.000                 1.000
+12                      1                 0.014                 1.000
+13                      1                 1.000                 1.000
+14                      1                 0.966                 1.000
+15                      1                 0.000                 0.846
+16                      1                 0.000                 0.080
+17                      1                 1.000                 1.000
+18                      1                 1.000                 1.000
+19                      1                 1.000                 1.000
+20                      1                 1.000                 0.000
+21                      1                 0.000                 0.000
+22                      1                 0.000                 0.000
+23                      1                 1.000                 1.000
+24                      1                 1.000                 0.446
+   prop_stopped_bounded_new prop_stopped_unbounded_new mean_Nstop_bounded
+1                         1                          1               2550
+2                         1                          1               2550
+3                         1                          1               2550
+4                         1                          1               2550
+5                         1                          1               2550
+6                         1                          1               2550
+7                         1                          1               2550
+8                         1                          1               2550
+9                         1                          1               2550
+10                        1                          1               2550
+11                        1                          1               2550
+12                        1                          1               2550
+13                        1                          1               2550
+14                        1                          1               2550
+15                        1                          1               2550
+16                        1                          1               2550
+17                        1                          1               2550
+18                        1                          1               2550
+19                        1                          1               2550
+20                        1                          1               2550
+21                        1                          1               2550
+22                        1                          1               2550
+23                        1                          1               2550
+24                        1                          1               2550
+   mean_Nstop_unbounded mean_Nstop_coverage mean_Nstop_Chao2009
+1                  2300              1890.8          9603.77341
+2                  2300             10000.0          9762.24720
+3                  2300             10000.0          9861.20736
+4                  2300             10000.0          9960.36908
+5                  2300              2330.4          9723.96027
+6                  2300              9546.0          9683.43223
+7                  2550               199.8            90.02035
+8                  2550             10000.0            90.98438
+9                  2550             10000.0            93.08580
+10                 2550             10000.0           176.23352
+11                 2550               332.5            89.97300
+12                 2550              9863.0            90.32303
+13                 2150              1154.0           763.33076
+14                 2150              2143.5           800.07938
+15                 2150             10000.0          2281.36698
+16                 2150             10000.0          9270.91109
+17                 2150              1169.8           768.52945
+18                 2150              1260.4           780.63384
+19                 2050              6270.4          6423.50421
+20                 2050              7752.2         10000.00000
+21                 2050             10000.0         10000.00000
+22                 2050             10000.0         10000.00000
+23                 2050              6386.5          6687.03237
+24                 2050              6833.2          8972.93918
+   mean_Nstop_bounded_new mean_Nstop_unbounded_new median_Nstop_bounded
+1                    2550                     2550                 2550
+2                    2550                     2550                 2550
+3                    2550                     2550                 2550
+4                    2550                     2550                 2550
+5                    2550                     2550                 2550
+6                    2550                     2550                 2550
+7                    2550                     2700                 2550
+8                    2550                     2700                 2550
+9                    2550                     2700                 2550
+10                   2550                     2700                 2550
+11                   2550                     2700                 2550
+12                   2550                     2700                 2550
+13                   2550                     2450                 2550
+14                   2550                     2450                 2550
+15                   2550                     2450                 2550
+16                   2550                     2450                 2550
+17                   2550                     2450                 2550
+18                   2550                     2450                 2550
+19                   2550                     2450                 2550
+20                   2550                     2450                 2550
+21                   2550                     2450                 2550
+22                   2550                     2450                 2550
+23                   2550                     2450                 2550
+24                   2550                     2450                 2550
+   median_Nstop_unbounded median_Nstop_coverage median_Nstop_Chao2009
+1                    2300                  1900           10000.00000
+2                    2300                 10000           10000.00000
+3                    2300                 10000           10000.00000
+4                    2300                 10000           10000.00000
+5                    2300                  2350           10000.00000
+6                    2300                 10000           10000.00000
+7                    2550                   200              90.14424
+8                    2550                 10000              90.83224
+9                    2550                 10000              92.28566
+10                   2550                 10000              94.29901
+11                   2550                   200              89.79319
+12                   2550                 10000              90.01954
+13                   2150                  1150             758.22735
+14                   2150                  1450             796.01183
+15                   2150                 10000             892.02199
+16                   2150                 10000           10000.00000
+17                   2150                  1150             764.30974
+18                   2150                  1250             781.30760
+19                   2050                  6250            6372.46880
+20                   2050                  7700           10000.00000
+21                   2050                 10000           10000.00000
+22                   2050                 10000           10000.00000
+23                   2050                  6400            6650.00000
+24                   2050                  6800           10000.00000
+   median_Nstop_bounded_new median_Nstop_unbounded_new sd_Nstop_bounded
+1                      2550                       2550                0
+2                      2550                       2550                0
+3                      2550                       2550                0
+4                      2550                       2550                0
+5                      2550                       2550                0
+6                      2550                       2550                0
+7                      2550                       2700                0
+8                      2550                       2700                0
+9                      2550                       2700                0
+10                     2550                       2700                0
+11                     2550                       2700                0
+12                     2550                       2700                0
+13                     2550                       2450                0
+14                     2550                       2450                0
+15                     2550                       2450                0
+16                     2550                       2450                0
+17                     2550                       2450                0
+18                     2550                       2450                0
+19                     2550                       2450                0
+20                     2550                       2450                0
+21                     2550                       2450                0
+22                     2550                       2450                0
+23                     2550                       2450                0
+24                     2550                       2450                0
+   sd_Nstop_unbounded sd_Nstop_coverage sd_Nstop_Chao2009 sd_Nstop_bounded_new
+1                   0        375.776231       1943.055870                    0
+2                   0          0.000000       1517.678383                    0
+3                   0          0.000000       1165.938977                    0
+4                   0          0.000000        625.991871                    0
+5                   0        523.176133       1628.115372                    0
+6                   0       1270.989705       1742.876970                    0
+7                   0          9.494224          4.968301                    0
+8                   0          0.000000          5.000535                    0
+9                   0          0.000000          6.394939                    0
+10                  0          0.000000        883.152192                    0
+11                  0        450.215658          4.921283                    0
+12                  0       1150.882296          4.998584                    0
+13                  0         51.373909         42.739401                    0
+14                  0       1969.985898         51.788106                    0
+15                  0          0.000000       3297.414484                    0
+16                  0          0.000000       2475.006089                    0
+17                  0         57.832943         48.429561                    0
+18                  0        109.021150         44.902773                    0
+19                  0        199.583334        474.973304                    0
+20                  0        471.252924          0.000000                    0
+21                  0          0.000000          0.000000                    0
+22                  0          0.000000          0.000000                    0
+23                  0        211.262903        569.235061                    0
+24                  0        285.272713       1271.075297                    0
+   sd_Nstop_unbounded_new mean_missed_bounded mean_missed_unbounded
+1                       0                   0                 0.002
+2                       0                   0                 0.000
+3                       0                   0                 0.000
+4                       0                   0                 0.000
+5                       0                   0                 0.000
+6                       0                   0                 0.000
+7                       0                   0                 0.000
+8                       0                   0                 0.000
+9                       0                   0                 0.000
+10                      0                   0                 0.000
+11                      0                   0                 0.000
+12                      0                   0                 0.000
+13                      0                   0                 0.000
+14                      0                   0                 0.000
+15                      0                   0                 0.006
+16                      0                   0                 0.004
+17                      0                   0                 0.002
+18                      0                   0                 0.004
+19                      0                   0                 0.000
+20                      0                   0                 0.002
+21                      0                   0                 0.000
+22                      0                   0                 0.000
+23                      0                   0                 0.000
+24                      0                   0                 0.002
+   mean_missed_coverage mean_missed_Chao2009 mean_missed_bounded_new
+1                 0.006                0.858                       0
+2                 0.000                0.520                       0
+3                 0.000                0.308                       0
+4                 0.000                0.092                       0
+5                 0.000                0.456                       0
+6                 0.000                0.568                       0
+7                 0.068              112.072                       0
+8                 0.000              111.232                       0
+9                 0.000              107.282                       0
+10                0.000              101.288                       0
+11                0.042              112.020                       0
+12                0.000              111.508                       0
+13                1.544               18.292                       0
+14                0.338               15.050                       0
+15                0.000                8.620                       0
+16                0.000                0.782                       0
+17                1.398               17.616                       0
+18                0.920               16.288                       0
+19                0.000                0.000                       0
+20                0.000                0.000                       0
+21                0.000                0.000                       0
+22                0.000                0.000                       0
+23                0.000                0.000                       0
+24                0.000                0.000                       0
+   mean_missed_unbounded_new sd_missed_bounded sd_missed_unbounded
+1                      0.000                 0          0.04472136
+2                      0.000                 0          0.00000000
+3                      0.000                 0          0.00000000
+4                      0.000                 0          0.00000000
+5                      0.000                 0          0.00000000
+6                      0.000                 0          0.00000000
+7                      0.000                 0          0.00000000
+8                      0.000                 0          0.00000000
+9                      0.000                 0          0.00000000
+10                     0.000                 0          0.00000000
+11                     0.000                 0          0.00000000
+12                     0.000                 0          0.00000000
+13                     0.000                 0          0.00000000
+14                     0.000                 0          0.00000000
+15                     0.000                 0          0.07730428
+16                     0.000                 0          0.06318215
+17                     0.000                 0          0.04472136
+18                     0.002                 0          0.06318215
+19                     0.000                 0          0.00000000
+20                     0.000                 0          0.04472136
+21                     0.000                 0          0.00000000
+22                     0.000                 0          0.00000000
+23                     0.000                 0          0.00000000
+24                     0.000                 0          0.04472136
+   sd_missed_coverage sd_missed_Chao2009 sd_missed_bounded_new
+1          0.07730428           4.275324                     0
+2          0.00000000           3.341246                     0
+3          0.00000000           2.622000                     0
+4          0.00000000           1.453189                     0
+5          0.00000000           3.037518                     0
+6          0.00000000           3.311693                     0
+7          0.34001061          20.521430                     0
+8          0.00000000          25.649053                     0
+9          0.00000000          32.439345                     0
+10         0.00000000          39.213933                     0
+11         0.21984691          21.467307                     0
+12         0.00000000          22.513188                     0
+13         1.26778490           6.324455                     0
+14         0.64543720           6.280317                     0
+15         0.00000000           6.506325                     0
+16         0.00000000           2.943434                     0
+17         1.30191627           6.810677                     0
+18         1.06200551           6.441743                     0
+19         0.00000000           0.000000                     0
+20         0.00000000           0.000000                     0
+21         0.00000000           0.000000                     0
+22         0.00000000           0.000000                     0
+23         0.00000000           0.000000                     0
+24         0.00000000           0.000000                     0
+   sd_missed_unbounded_new mean_extra_bounded mean_extra_unbounded
+1               0.00000000             60.636               58.600
+2               0.00000000            109.412              102.720
+3               0.00000000            181.578              167.380
+4               0.00000000            303.414              277.880
+5               0.00000000             65.480               63.114
+6               0.00000000             85.080               80.680
+7               0.00000000              0.000                0.000
+8               0.00000000            190.932              190.932
+9               0.00000000            477.370              477.370
+10              0.00000000            957.422              957.422
+11              0.00000000             18.986               18.986
+12              0.00000000             95.684               95.684
+13              0.00000000              0.000                0.000
+14              0.00000000             22.776               19.234
+15              0.00000000             57.610               48.666
+16              0.00000000            115.218               97.122
+17              0.00000000              2.422                2.054
+18              0.04472136             11.648                9.768
+19              0.00000000           1179.998             1112.702
+20              0.00000000           1193.976             1124.278
+21              0.00000000           1215.820             1141.048
+22              0.00000000           1252.092             1170.454
+23              0.00000000           1181.258             1113.314
+24              0.00000000           1187.372             1118.784
+   mean_extra_coverage mean_extra_Chao2009 mean_extra_bounded_new
+1               54.180              84.006                 60.636
+2              277.594             271.012                109.412
+3              560.640             552.794                181.578
+4             1037.540            1033.348                303.414
+5               62.578             103.194                 65.480
+6              176.666             176.712                 85.080
+7                0.000               0.000                  0.000
+8              751.506               3.868                190.932
+9             1873.656              10.190                477.370
+10            3752.688              51.080                957.422
+11               2.458               0.354                 18.986
+12             369.100               1.872                 95.684
+13               0.000               0.000                  0.000
+14              19.170               6.912                 22.776
+15             225.602              51.404                 57.610
+16             450.976             418.404                115.218
+17               1.150               0.768                  2.422
+18               5.716               3.412                 11.648
+19            1328.506            1329.360               1179.998
+20            1382.484            1401.092               1193.976
+21            1485.718            1485.718               1215.820
+22            1629.568            1629.568               1252.092
+23            1333.096            1335.122               1181.258
+24            1352.666            1366.438               1187.372
+   mean_extra_unbounded_new sd_extra_bounded sd_extra_unbounded
+1                    60.636         3.748013           3.739514
+2                   109.412         7.668106           7.306735
+3                   181.578        11.614547          10.797072
+4                   303.414        15.804118          15.228704
+5                    65.480         4.139550           4.092738
+6                    85.080         5.972012           5.766116
+7                     0.000         0.000000           0.000000
+8                   202.186        14.035575          14.035575
+9                   505.080        21.527842          21.527842
+10                 1013.480        31.338924          31.338924
+11                   20.070         4.381346           4.381346
+12                  101.324         9.721582           9.721582
+13                    0.000         0.000000           0.000000
+14                   21.892         4.777392           4.351680
+15                   55.352         7.777846           7.129102
+16                  110.720        11.245417          10.127796
+17                    2.352         1.569983           1.441958
+18                   11.176         3.596382           3.275918
+19                 1168.434        11.509428          12.893630
+20                 1182.050        12.513697          13.806301
+21                 1202.768        13.125248          14.215550
+22                 1237.764        13.681444          14.599527
+23                 1169.734        11.512450          12.998204
+24                 1175.544        11.531503          13.609106
+   sd_extra_coverage sd_extra_Chao2009 sd_extra_bounded_new
+1           7.163395        16.8489090             3.748013
+2          13.582420        44.0442010             7.668106
+3          23.581318        69.4081735            11.614547
+4          30.762527        72.0423146            15.804118
+5           9.042092        17.4890852             4.139550
+6          22.584476        33.0201411             5.972012
+7           0.000000         0.0000000             0.000000
+8          26.706187         2.1344056            14.035575
+9          42.853080         4.2433373            21.527842
+10         61.353657       334.1091850            31.338924
+11          4.809418         0.5808259             4.381346
+12         47.999436         1.4197349             9.721582
+13          0.000000         0.0000000             0.000000
+14         21.875057         2.6822836             4.777392
+15         14.580562        78.0247172             7.777846
+16         21.871996       116.6229592            11.245417
+17          1.118034         0.8852929             1.569983
+18          2.943582         1.9641721             3.596382
+19          4.765226         5.9174685            11.509428
+20         11.316088         7.8632817            12.513697
+21         11.739254        11.7392545            13.125248
+22         16.533969        16.5339687            13.681444
+23          5.148962         6.8367095            11.512450
+24          7.378572        11.1706635            11.531503
+   sd_extra_unbounded_new
+1                3.748013
+2                7.668106
+3               11.614547
+4               15.804118
+5                4.139550
+6                5.972012
+7                0.000000
+8               14.248700
+9               22.182645
+10              32.096136
+11               4.449348
+12              10.035360
+13               0.000000
+14               4.662598
+15               7.622618
+16              11.026185
+17               1.568763
+18               3.570788
+19              11.678803
+20              13.094213
+21              13.330025
+22              13.766311
+23              11.803469
+24              11.768477
+[2026-07-22 14:18:05] RESULTS SAVED | file=sim_tail-zipf_heavy-unif_small-unif_big-geom_0.005_M-1500_eps-0p005_alpha-0p05_C-0p99_batch-50_nmax-10000_reps-500_q-0_1e-04_5e-04_0.001_0.0025_0.005.RData
+       distro q_error type1_bounded type1_unbounded type1_coverage
+1   geom_0.05  0.0000             0           0.002      0.0060000
+2   geom_0.05  0.0010             0           0.000            NaN
+3   geom_0.05  0.0025             0           0.000            NaN
+4   geom_0.05  0.0050             0           0.000            NaN
+5   geom_0.05  0.0001             0           0.000      0.0000000
+6   geom_0.05  0.0005             0           0.000      0.0000000
+7    unif_big  0.0000             0           0.000      0.0540000
+8    unif_big  0.0010             0           0.000            NaN
+9    unif_big  0.0025             0           0.000            NaN
+10   unif_big  0.0050             0           0.000            NaN
+11   unif_big  0.0001             0           0.000      0.0380000
+12   unif_big  0.0005             0           0.000      0.0000000
+13 unif_small  0.0000             0           0.000      0.7900000
+14 unif_small  0.0010             0           0.000      0.2650104
+15 unif_small  0.0025             0           0.006            NaN
+16 unif_small  0.0050             0           0.004            NaN
+17 unif_small  0.0001             0           0.002      0.7160000
+18 unif_small  0.0005             0           0.004      0.5740000
+19 zipf_heavy  0.0000             0           0.000      0.0000000
+20 zipf_heavy  0.0010             0           0.002      0.0000000
+21 zipf_heavy  0.0025             0           0.000            NaN
+22 zipf_heavy  0.0050             0           0.000            NaN
+23 zipf_heavy  0.0001             0           0.000      0.0000000
+24 zipf_heavy  0.0005             0           0.002      0.0000000
+   type1_Chao2009 type1_bounded_new type1_unbounded_new prop_stopped_bounded
+1       1.0000000                 0               0.000                    1
+2       1.0000000                 0               0.000                    1
+3       1.0000000                 0               0.000                    1
+4       1.0000000                 0               0.000                    1
+5       0.9285714                 0               0.000                    1
+6       1.0000000                 0               0.000                    1
+7       1.0000000                 0               0.000                    1
+8       1.0000000                 0               0.000                    1
+9       1.0000000                 0               0.000                    1
+10      1.0000000                 0               0.000                    1
+11      1.0000000                 0               0.000                    1
+12      1.0000000                 0               0.000                    1
+13      1.0000000                 0               0.000                    1
+14      1.0000000                 0               0.000                    1
+15      0.9881797                 0               0.000                    1
+16      0.9750000                 0               0.000                    1
+17      1.0000000                 0               0.000                    1
+18      1.0000000                 0               0.002                    1
+19      0.0000000                 0               0.000                    1
+20            NaN                 0               0.000                    1
+21            NaN                 0               0.000                    1
+22            NaN                 0               0.000                    1
+23      0.0000000                 0               0.000                    1
+24      0.0000000                 0               0.000                    1
+   prop_stopped_unbounded prop_stopped_coverage prop_stopped_Chao2009
+1                       1                 1.000                 0.040
+2                       1                 0.000                 0.024
+3                       1                 0.000                 0.014
+4                       1                 0.000                 0.004
+5                       1                 1.000                 0.028
+6                       1                 0.164                 0.032
+7                       1                 1.000                 1.000
+8                       1                 0.000                 1.000
+9                       1                 0.000                 1.000
+10                      1                 0.000                 0.992
+11                      1                 1.000                 1.000
+12                      1                 0.014                 1.000
+13                      1                 1.000                 1.000
+14                      1                 0.966                 1.000
+15                      1                 0.000                 0.846
+16                      1                 0.000                 0.080
+17                      1                 1.000                 1.000
+18                      1                 1.000                 1.000
+19                      1                 1.000                 1.000
+20                      1                 1.000                 0.000
+21                      1                 0.000                 0.000
+22                      1                 0.000                 0.000
+23                      1                 1.000                 1.000
+24                      1                 1.000                 0.446
+   prop_stopped_bounded_new prop_stopped_unbounded_new mean_Nstop_bounded
+1                         1                          1               2550
+2                         1                          1               2550
+3                         1                          1               2550
+4                         1                          1               2550
+5                         1                          1               2550
+6                         1                          1               2550
+7                         1                          1               2550
+8                         1                          1               2550
+9                         1                          1               2550
+10                        1                          1               2550
+11                        1                          1               2550
+12                        1                          1               2550
+13                        1                          1               2550
+14                        1                          1               2550
+15                        1                          1               2550
+16                        1                          1               2550
+17                        1                          1               2550
+18                        1                          1               2550
+19                        1                          1               2550
+20                        1                          1               2550
+21                        1                          1               2550
+22                        1                          1               2550
+23                        1                          1               2550
+24                        1                          1               2550
+   mean_Nstop_unbounded mean_Nstop_coverage mean_Nstop_Chao2009
+1                  2300              1890.8          9603.77341
+2                  2300             10000.0          9762.24720
+3                  2300             10000.0          9861.20736
+4                  2300             10000.0          9960.36908
+5                  2300              2330.4          9723.96027
+6                  2300              9546.0          9683.43223
+7                  2550               199.8            90.02035
+8                  2550             10000.0            90.98438
+9                  2550             10000.0            93.08580
+10                 2550             10000.0           176.23352
+11                 2550               332.5            89.97300
+12                 2550              9863.0            90.32303
+13                 2150              1154.0           763.33076
+14                 2150              2143.5           800.07938
+15                 2150             10000.0          2281.36698
+16                 2150             10000.0          9270.91109
+17                 2150              1169.8           768.52945
+18                 2150              1260.4           780.63384
+19                 2050              6270.4          6423.50421
+20                 2050              7752.2         10000.00000
+21                 2050             10000.0         10000.00000
+22                 2050             10000.0         10000.00000
+23                 2050              6386.5          6687.03237
+24                 2050              6833.2          8972.93918
+   mean_Nstop_bounded_new mean_Nstop_unbounded_new median_Nstop_bounded
+1                    2550                     2550                 2550
+2                    2550                     2550                 2550
+3                    2550                     2550                 2550
+4                    2550                     2550                 2550
+5                    2550                     2550                 2550
+6                    2550                     2550                 2550
+7                    2550                     2700                 2550
+8                    2550                     2700                 2550
+9                    2550                     2700                 2550
+10                   2550                     2700                 2550
+11                   2550                     2700                 2550
+12                   2550                     2700                 2550
+13                   2550                     2450                 2550
+14                   2550                     2450                 2550
+15                   2550                     2450                 2550
+16                   2550                     2450                 2550
+17                   2550                     2450                 2550
+18                   2550                     2450                 2550
+19                   2550                     2450                 2550
+20                   2550                     2450                 2550
+21                   2550                     2450                 2550
+22                   2550                     2450                 2550
+23                   2550                     2450                 2550
+24                   2550                     2450                 2550
+   median_Nstop_unbounded median_Nstop_coverage median_Nstop_Chao2009
+1                    2300                  1900           10000.00000
+2                    2300                 10000           10000.00000
+3                    2300                 10000           10000.00000
+4                    2300                 10000           10000.00000
+5                    2300                  2350           10000.00000
+6                    2300                 10000           10000.00000
+7                    2550                   200              90.14424
+8                    2550                 10000              90.83224
+9                    2550                 10000              92.28566
+10                   2550                 10000              94.29901
+11                   2550                   200              89.79319
+12                   2550                 10000              90.01954
+13                   2150                  1150             758.22735
+14                   2150                  1450             796.01183
+15                   2150                 10000             892.02199
+16                   2150                 10000           10000.00000
+17                   2150                  1150             764.30974
+18                   2150                  1250             781.30760
+19                   2050                  6250            6372.46880
+20                   2050                  7700           10000.00000
+21                   2050                 10000           10000.00000
+22                   2050                 10000           10000.00000
+23                   2050                  6400            6650.00000
+24                   2050                  6800           10000.00000
+   median_Nstop_bounded_new median_Nstop_unbounded_new sd_Nstop_bounded
+1                      2550                       2550                0
+2                      2550                       2550                0
+3                      2550                       2550                0
+4                      2550                       2550                0
+5                      2550                       2550                0
+6                      2550                       2550                0
+7                      2550                       2700                0
+8                      2550                       2700                0
+9                      2550                       2700                0
+10                     2550                       2700                0
+11                     2550                       2700                0
+12                     2550                       2700                0
+13                     2550                       2450                0
+14                     2550                       2450                0
+15                     2550                       2450                0
+16                     2550                       2450                0
+17                     2550                       2450                0
+18                     2550                       2450                0
+19                     2550                       2450                0
+20                     2550                       2450                0
+21                     2550                       2450                0
+22                     2550                       2450                0
+23                     2550                       2450                0
+24                     2550                       2450                0
+   sd_Nstop_unbounded sd_Nstop_coverage sd_Nstop_Chao2009 sd_Nstop_bounded_new
+1                   0        375.776231       1943.055870                    0
+2                   0          0.000000       1517.678383                    0
+3                   0          0.000000       1165.938977                    0
+4                   0          0.000000        625.991871                    0
+5                   0        523.176133       1628.115372                    0
+6                   0       1270.989705       1742.876970                    0
+7                   0          9.494224          4.968301                    0
+8                   0          0.000000          5.000535                    0
+9                   0          0.000000          6.394939                    0
+10                  0          0.000000        883.152192                    0
+11                  0        450.215658          4.921283                    0
+12                  0       1150.882296          4.998584                    0
+13                  0         51.373909         42.739401                    0
+14                  0       1969.985898         51.788106                    0
+15                  0          0.000000       3297.414484                    0
+16                  0          0.000000       2475.006089                    0
+17                  0         57.832943         48.429561                    0
+18                  0        109.021150         44.902773                    0
+19                  0        199.583334        474.973304                    0
+20                  0        471.252924          0.000000                    0
+21                  0          0.000000          0.000000                    0
+22                  0          0.000000          0.000000                    0
+23                  0        211.262903        569.235061                    0
+24                  0        285.272713       1271.075297                    0
+   sd_Nstop_unbounded_new mean_missed_bounded mean_missed_unbounded
+1                       0                   0                 0.002
+2                       0                   0                 0.000
+3                       0                   0                 0.000
+4                       0                   0                 0.000
+5                       0                   0                 0.000
+6                       0                   0                 0.000
+7                       0                   0                 0.000
+8                       0                   0                 0.000
+9                       0                   0                 0.000
+10                      0                   0                 0.000
+11                      0                   0                 0.000
+12                      0                   0                 0.000
+13                      0                   0                 0.000
+14                      0                   0                 0.000
+15                      0                   0                 0.006
+16                      0                   0                 0.004
+17                      0                   0                 0.002
+18                      0                   0                 0.004
+19                      0                   0                 0.000
+20                      0                   0                 0.002
+21                      0                   0                 0.000
+22                      0                   0                 0.000
+23                      0                   0                 0.000
+24                      0                   0                 0.002
+   mean_missed_coverage mean_missed_Chao2009 mean_missed_bounded_new
+1                 0.006                0.858                       0
+2                 0.000                0.520                       0
+3                 0.000                0.308                       0
+4                 0.000                0.092                       0
+5                 0.000                0.456                       0
+6                 0.000                0.568                       0
+7                 0.068              112.072                       0
+8                 0.000              111.232                       0
+9                 0.000              107.282                       0
+10                0.000              101.288                       0
+11                0.042              112.020                       0
+12                0.000              111.508                       0
+13                1.544               18.292                       0
+14                0.338               15.050                       0
+15                0.000                8.620                       0
+16                0.000                0.782                       0
+17                1.398               17.616                       0
+18                0.920               16.288                       0
+19                0.000                0.000                       0
+20                0.000                0.000                       0
+21                0.000                0.000                       0
+22                0.000                0.000                       0
+23                0.000                0.000                       0
+24                0.000                0.000                       0
+   mean_missed_unbounded_new sd_missed_bounded sd_missed_unbounded
+1                      0.000                 0          0.04472136
+2                      0.000                 0          0.00000000
+3                      0.000                 0          0.00000000
+4                      0.000                 0          0.00000000
+5                      0.000                 0          0.00000000
+6                      0.000                 0          0.00000000
+7                      0.000                 0          0.00000000
+8                      0.000                 0          0.00000000
+9                      0.000                 0          0.00000000
+10                     0.000                 0          0.00000000
+11                     0.000                 0          0.00000000
+12                     0.000                 0          0.00000000
+13                     0.000                 0          0.00000000
+14                     0.000                 0          0.00000000
+15                     0.000                 0          0.07730428
+16                     0.000                 0          0.06318215
+17                     0.000                 0          0.04472136
+18                     0.002                 0          0.06318215
+19                     0.000                 0          0.00000000
+20                     0.000                 0          0.04472136
+21                     0.000                 0          0.00000000
+22                     0.000                 0          0.00000000
+23                     0.000                 0          0.00000000
+24                     0.000                 0          0.04472136
+   sd_missed_coverage sd_missed_Chao2009 sd_missed_bounded_new
+1          0.07730428           4.275324                     0
+2          0.00000000           3.341246                     0
+3          0.00000000           2.622000                     0
+4          0.00000000           1.453189                     0
+5          0.00000000           3.037518                     0
+6          0.00000000           3.311693                     0
+7          0.34001061          20.521430                     0
+8          0.00000000          25.649053                     0
+9          0.00000000          32.439345                     0
+10         0.00000000          39.213933                     0
+11         0.21984691          21.467307                     0
+12         0.00000000          22.513188                     0
+13         1.26778490           6.324455                     0
+14         0.64543720           6.280317                     0
+15         0.00000000           6.506325                     0
+16         0.00000000           2.943434                     0
+17         1.30191627           6.810677                     0
+18         1.06200551           6.441743                     0
+19         0.00000000           0.000000                     0
+20         0.00000000           0.000000                     0
+21         0.00000000           0.000000                     0
+22         0.00000000           0.000000                     0
+23         0.00000000           0.000000                     0
+24         0.00000000           0.000000                     0
+   sd_missed_unbounded_new mean_extra_bounded mean_extra_unbounded
+1               0.00000000             60.636               58.600
+2               0.00000000            109.412              102.720
+3               0.00000000            181.578              167.380
+4               0.00000000            303.414              277.880
+5               0.00000000             65.480               63.114
+6               0.00000000             85.080               80.680
+7               0.00000000              0.000                0.000
+8               0.00000000            190.932              190.932
+9               0.00000000            477.370              477.370
+10              0.00000000            957.422              957.422
+11              0.00000000             18.986               18.986
+12              0.00000000             95.684               95.684
+13              0.00000000              0.000                0.000
+14              0.00000000             22.776               19.234
+15              0.00000000             57.610               48.666
+16              0.00000000            115.218               97.122
+17              0.00000000              2.422                2.054
+18              0.04472136             11.648                9.768
+19              0.00000000           1179.998             1112.702
+20              0.00000000           1193.976             1124.278
+21              0.00000000           1215.820             1141.048
+22              0.00000000           1252.092             1170.454
+23              0.00000000           1181.258             1113.314
+24              0.00000000           1187.372             1118.784
+   mean_extra_coverage mean_extra_Chao2009 mean_extra_bounded_new
+1               54.180              84.006                 60.636
+2              277.594             271.012                109.412
+3              560.640             552.794                181.578
+4             1037.540            1033.348                303.414
+5               62.578             103.194                 65.480
+6              176.666             176.712                 85.080
+7                0.000               0.000                  0.000
+8              751.506               3.868                190.932
+9             1873.656              10.190                477.370
+10            3752.688              51.080                957.422
+11               2.458               0.354                 18.986
+12             369.100               1.872                 95.684
+13               0.000               0.000                  0.000
+14              19.170               6.912                 22.776
+15             225.602              51.404                 57.610
+16             450.976             418.404                115.218
+17               1.150               0.768                  2.422
+18               5.716               3.412                 11.648
+19            1328.506            1329.360               1179.998
+20            1382.484            1401.092               1193.976
+21            1485.718            1485.718               1215.820
+22            1629.568            1629.568               1252.092
+23            1333.096            1335.122               1181.258
+24            1352.666            1366.438               1187.372
+   mean_extra_unbounded_new sd_extra_bounded sd_extra_unbounded
+1                    60.636         3.748013           3.739514
+2                   109.412         7.668106           7.306735
+3                   181.578        11.614547          10.797072
+4                   303.414        15.804118          15.228704
+5                    65.480         4.139550           4.092738
+6                    85.080         5.972012           5.766116
+7                     0.000         0.000000           0.000000
+8                   202.186        14.035575          14.035575
+9                   505.080        21.527842          21.527842
+10                 1013.480        31.338924          31.338924
+11                   20.070         4.381346           4.381346
+12                  101.324         9.721582           9.721582
+13                    0.000         0.000000           0.000000
+14                   21.892         4.777392           4.351680
+15                   55.352         7.777846           7.129102
+16                  110.720        11.245417          10.127796
+17                    2.352         1.569983           1.441958
+18                   11.176         3.596382           3.275918
+19                 1168.434        11.509428          12.893630
+20                 1182.050        12.513697          13.806301
+21                 1202.768        13.125248          14.215550
+22                 1237.764        13.681444          14.599527
+23                 1169.734        11.512450          12.998204
+24                 1175.544        11.531503          13.609106
+   sd_extra_coverage sd_extra_Chao2009 sd_extra_bounded_new
+1           7.163395        16.8489090             3.748013
+2          13.582420        44.0442010             7.668106
+3          23.581318        69.4081735            11.614547
+4          30.762527        72.0423146            15.804118
+5           9.042092        17.4890852             4.139550
+6          22.584476        33.0201411             5.972012
+7           0.000000         0.0000000             0.000000
+8          26.706187         2.1344056            14.035575
+9          42.853080         4.2433373            21.527842
+10         61.353657       334.1091850            31.338924
+11          4.809418         0.5808259             4.381346
+12         47.999436         1.4197349             9.721582
+13          0.000000         0.0000000             0.000000
+14         21.875057         2.6822836             4.777392
+15         14.580562        78.0247172             7.777846
+16         21.871996       116.6229592            11.245417
+17          1.118034         0.8852929             1.569983
+18          2.943582         1.9641721             3.596382
+19          4.765226         5.9174685            11.509428
+20         11.316088         7.8632817            12.513697
+21         11.739254        11.7392545            13.125248
+22         16.533969        16.5339687            13.681444
+23          5.148962         6.8367095            11.512450
+24          7.378572        11.1706635            11.531503
+   sd_extra_unbounded_new
+1                3.748013
+2                7.668106
+3               11.614547
+4               15.804118
+5                4.139550
+6                5.972012
+7                0.000000
+8               14.248700
+9               22.182645
+10              32.096136
+11               4.449348
+12              10.035360
+13               0.000000
+14               4.662598
+15               7.622618
+16              11.026185
+17               1.568763
+18               3.570788
+19              11.678803
+20              13.094213
+21              13.330025
+22              13.766311
+23              11.803469
+24              11.768477
+\begin{table}[!h]
+\centering
+\caption{\label{tab:tab:type1}Estimated type I error by scenario, method, and contamination level $q$}
+\centering
+\begin{tabular}[t]{llrrrrrr}
+\toprule
+scenario & method & q\_0 & q\_1e-04 & q\_5e-04 & q\_0p001 & q\_0p0025 & q\_0p005\\
+\midrule
+geom\_0.05 & bounded & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+geom\_0.05 & unbounded & 0.002 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+geom\_0.05 & coverage & 0.006 & 0.000 & 0.000 & NaN & NaN & NaN\\
+geom\_0.05 & Chao2009 & 0.006 & 0.000 & 0.000 & NaN & NaN & NaN\\
+geom\_0.05 & bounded new & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+\addlinespace
+geom\_0.05 & unbounded new & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+unif\_big & bounded & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+unif\_big & unbounded & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+unif\_big & coverage & 0.054 & 0.038 & 0.000 & NaN & NaN & NaN\\
+unif\_big & Chao2009 & 0.054 & 0.038 & 0.000 & NaN & NaN & NaN\\
+\addlinespace
+unif\_big & bounded new & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+unif\_big & unbounded new & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+unif\_small & bounded & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+unif\_small & unbounded & 0.000 & 0.002 & 0.004 & 0.000 & 0.006 & 0.004\\
+unif\_small & coverage & 0.790 & 0.716 & 0.574 & 0.265 & NaN & NaN\\
+\addlinespace
+unif\_small & Chao2009 & 0.790 & 0.716 & 0.574 & 0.265 & NaN & NaN\\
+unif\_small & bounded new & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+unif\_small & unbounded new & 0.000 & 0.000 & 0.002 & 0.000 & 0.000 & 0.000\\
+zipf\_heavy & bounded & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+zipf\_heavy & unbounded & 0.000 & 0.000 & 0.002 & 0.002 & 0.000 & 0.000\\
+\addlinespace
+zipf\_heavy & coverage & 0.000 & 0.000 & 0.000 & 0.000 & NaN & NaN\\
+zipf\_heavy & Chao2009 & 0.000 & 0.000 & 0.000 & 0.000 & NaN & NaN\\
+zipf\_heavy & bounded new & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+zipf\_heavy & unbounded new & 0.000 & 0.000 & 0.000 & 0.000 & 0.000 & 0.000\\
+\bottomrule
+\end{tabular}
+\end{table}Error in `[.data.frame`(out, , c("scenario", "method", q_names)) : 
+  undefined columns selected
+Calls: make_new_Nstop_row -> [ -> [.data.frame
+Execution halted
