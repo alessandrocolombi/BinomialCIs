@@ -178,7 +178,7 @@ SR_grid_single_run <- function(eps, data, seed, alpha, beta, Nmax)
       alpha1 = 0.99*alpha
       delta = 0.01*alpha
       log_m_bar = compute_lmbar_bounded(ni, Nj_guess, Mguess, b_n, alpha, n_max)
-      lhs <- log_m_bar + log(ni - b_n) + log(eps) - log(1 - eps)
+      lhs <- log_m_bar + (ni - b_n)*log(1-eps) 
       rhs <- log(alpha - delta)
       if (!is.na(lhs) && lhs < rhs) {
         stopped_bounded_rev <- TRUE
@@ -493,8 +493,13 @@ cat(sprintf(
 ))
 flush.console()
 
+#############
+# Run
+#############
 res = SR_grid( eps_grid, data, Nrep, num_cores, seed0, n_max, alpha, beta)
 save(res, file = "save/Data2019_allroutes_epsgrid_rev.Rdat")
+
+
 cat(sprintf(
   "[%s] RESULTS SAVED | file=save/Data2019_allroutes_epsgrid_rev.Rdat\n",
   format(Sys.time(), "%Y-%m-%d %H:%M:%S")
@@ -524,7 +529,7 @@ cat(sprintf(
 flush.console()
 
 ## ------------------------------------------------------------
-## 3. Read and plot
+## 4. Read and plot
 ## ------------------------------------------------------------
 save_img = FALSE
 width = 12; height = 6
@@ -532,21 +537,21 @@ cex.lab = 2
 cex.axis = 2
 
 stop_here = TRUE
-ltype = c(1,1,2,2)
-mycol = c("darkgreen","darkorange","deeppink","lightblue")
-ygrids = vector("list",4)
-ygrids[[1]]<-ygrids[[2]]<-eps_grid
-ygrids[[3]]<-ygrids[[4]]<-(1-cov_grid)
+ltype = c(1,1,2,2,2,2)
+mycol = c("darkgreen","darkorange","darkgreen","darkorange","deeppink","lightblue")
+ygrids = vector("list",length(mycol) )
+ygrids[[1]]<-ygrids[[2]]<-ygrids[[3]]<-ygrids[[4]]<-eps_grid
+ygrids[[5]]<-ygrids[[6]]<-(1-cov_grid)
 
 if(!stop_here){
-  load("save/Data2019_allroutes_epsgrid.Rdat")
+  load("save/Data2019_allroutes_epsgrid_rev.Rdat")
   load("save/Data2019_allroutes_covgrid.Rdat")
   
   res_list = lapply(res, function(x) apply(x,2,quantile,probs = 0.5));res_med = do.call(rbind,res_list)
   res_cov_list = lapply(res_cov, function(x) apply(x,2,quantile,probs = 0.5));res_cov_med = do.call(rbind,res_cov_list)
   res_all = cbind(res_med,res_cov_med)
   
-  img_name = "img/Data2019_allroutes_SRgrid.pdf"
+  img_name = "img/Data2019_allroutes_SRgrid_rev.pdf"
   if(save_img)
     pdf(img_name, width = width, height = height)
   par(mfrow = c(1,1), bty = "l",  mar = c(3.75,6.5,1,1), mgp=c(5,1,0), las = 1, cex.lab = cex.lab)
@@ -557,7 +562,7 @@ if(!stop_here){
   axis(2, cex.axis = cex.axis)
   axis(1, cex.axis = cex.axis)
   mtext(paste0(expression(epsilon)," / 1 - coverage"), side = 1, line = 2.5, cex = cex.axis)
-  for(i in 1:4){
+  for(i in 1:6){
     points(y = res_all[,i], x = ygrids[[i]], 
            type = "l", lty = ltype[i], 
            lwd = 5, col = mycol[i], pch = 16)
