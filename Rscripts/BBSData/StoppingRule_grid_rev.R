@@ -479,7 +479,7 @@ alpha = 0.05
 beta = 1e-5
 n_max = n
 
-Nrep = 5
+Nrep = 50
 seed0 = 4224
 num_cores = 34
 
