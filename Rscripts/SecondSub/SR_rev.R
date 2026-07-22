@@ -140,7 +140,7 @@ stop_Unbounded_new <- function(log_Sn_bar, eps, n, alpha, beta) {
 
 # 6) Bounded new.
 stop_Bounded_new <- function(log_m_bar, eps, n, alpha, delta, b) {
-  lhs <- log_m_bar + log(n - b) + log(eps) - log(1 - eps)
+  lhs <- log_m_bar + (n - b)*log(1-eps) 
   rhs <- log(alpha - delta)
   !is.na(log_m_bar) && lhs < rhs
 }

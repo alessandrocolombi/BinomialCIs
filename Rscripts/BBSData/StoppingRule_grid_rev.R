@@ -3,7 +3,7 @@ wd_unicatt = "C:/Users/alessandro.colombi/"
 wd_g100 = "/g100/home/userexternal/acolombi/"
 wd_bocconi = "/home/colombi/"
 wd_vec = c(wd_pc,wd_unicatt,wd_g100,wd_bocconi)
-choose_wd = wd_vec[4] # <--- modify here
+choose_wd = wd_vec[1] # <--- modify here
 wd = paste0(choose_wd,"BinomialCIs/Rscripts/BBSData")
 setwd(wd)
 
@@ -496,8 +496,8 @@ flush.console()
 #############
 # Run
 #############
-res = SR_grid( eps_grid, data, Nrep, num_cores, seed0, n_max, alpha, beta)
-save(res, file = "save/Data2019_allroutes_epsgrid_rev.Rdat")
+# res = SR_grid( eps_grid, data, Nrep, num_cores, seed0, n_max, alpha, beta)
+# save(res, file = "save/Data2019_allroutes_epsgrid_rev.Rdat")
 
 
 cat(sprintf(
@@ -531,7 +531,7 @@ flush.console()
 ## ------------------------------------------------------------
 ## 4. Read and plot
 ## ------------------------------------------------------------
-save_img = FALSE
+save_img = TRUE
 width = 12; height = 6
 cex.lab = 2
 cex.axis = 2
