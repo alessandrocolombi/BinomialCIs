@@ -4,7 +4,7 @@ wd_g100 = "/g100/home/userexternal/acolombi/"
 wd_bocconi = "/home/colombi/"
 wd_vec = c(wd_pc,wd_unicatt,wd_g100,wd_bocconi)
 choose_wd = wd_vec[1] # <--- modify here
-wd = paste0(choose_wd,"BinomialCIs/Rscripts/SecondSub")
+wd = paste0(choose_wd,"BinomialCIs/Rscripts/BBSData")
 setwd(wd)
 
 # Librerie ----------------------------------------------------------------
@@ -22,7 +22,7 @@ source("../../R/Rfunctions.R")
 ## 7------------------------------------------------------------
 
 ## Bounded and Unbounded UB stopping rules
-SR_grid_multiple_run <- function(eps, data, seed0, Nrep, alpha, beta)
+SR_grid_multiple_run <- function(eps, data, seed0, Nrep, alpha, beta, n_max)
 {
   ## Functions
   suppressWarnings(suppressPackageStartupMessages(library(tibble)))
@@ -35,17 +35,19 @@ SR_grid_multiple_run <- function(eps, data, seed0, Nrep, alpha, beta)
   
   set.seed(seed0)
   seeds = sample(1:999999, size = Nrep)
-  res = matrix(nrow = Nrep, ncol = 2)
-  colnames(res) = c("Bounded","Unbounded")
+  names_methods = c("Bounded","Unbounded","Bounded_rev","Unbounded_rev")
+  res = matrix(nrow = Nrep, ncol = length(names_methods))
+  colnames(res) = names_methods
   
+  ii = 1
   for(ii in 1:Nrep){
     seed = seeds[ii]
-    res[ii,] = SR_grid_single_run(eps, data, seed, alpha, beta)
+    res[ii,] = SR_grid_single_run(eps, data, seed, alpha, beta, n_max)
   }
   return(res)
 }
 
-SR_grid_single_run <- function(eps, data, seed, alpha, beta)
+SR_grid_single_run <- function(eps, data, seed, alpha, beta, Nmax)
 {
   ## Functions
   # suppressWarnings(suppressPackageStartupMessages(library(tibble)))
@@ -66,8 +68,12 @@ SR_grid_single_run <- function(eps, data, seed, alpha, beta)
   # Stopping flags and outputs
   stopped_bounded   <- FALSE
   stopped_unbounded <- FALSE
+  stopped_bounded_rev   <- FALSE
+  stopped_unbounded_rev <- FALSE
   Nstop_bounded   <- NA_integer_
   Nstop_unbounded <- NA_integer_
+  Nstop_bounded_rev   <- NA_integer_
+  Nstop_unbounded_rev <- NA_integer_
   
   ## ------------------------------------------------------------
   ## Run loop up to n_max = n
@@ -81,7 +87,6 @@ SR_grid_single_run <- function(eps, data, seed, alpha, beta)
     
     ## ---- Observed abundance vector (true + error species) ----
     idx_species_i = ordered_idx[1:ni] # select obs. up to time ni
-    # data_i = matrix(data[idx_species_i,], nrow = ni, ncol = Kn) # get data
     data_i = data[idx_species_i,] 
     Nj_i = colSums(data_i) # compute frequencies
     Nj_i = Nj_i[Nj_i > 0]
@@ -116,36 +121,72 @@ SR_grid_single_run <- function(eps, data, seed, alpha, beta)
       }
     }
     
+    ## ---- 5.3 Bounded-alphabet CI rule - revision (on observed data) ----
+    if (!stopped_bounded_rev) {
+      b_n <- log(ni)
+      Mguess = 10 * Kobs_i
+      Nj_guess = c(Nj_i, rep(0,Mguess - length(Nj_i) ))
+      alpha1 = 0.99*alpha
+      delta = 0.01*alpha
+      log_m_bar = compute_lmbar_bounded(ni, Nj_guess, Mguess, b_n, alpha, n_max)
+      lhs <- log_m_bar + log(ni - b_n) + log(eps) - log(1 - eps)
+      rhs <- log(alpha - delta)
+      if (!is.na(lhs) && lhs < rhs) {
+        stopped_bounded_rev <- TRUE
+        Nstop_bounded_rev   <- ni
+      }
+    }
+    
+    ## ---- 5.4 Unbounded-alphabet CI rule - revision (on observed data) ----
+    if (!stopped_unbounded_rev) {
+      Shat  <- sum(Nj_i) / ni
+      Sbar <- ( sqrt( log(Nmax)-log(beta) / (2 * ni) ) + sqrt( Shat + (log(Nmax)-log(beta) / (2 * ni)) ) )^2
+      lhs <- log(Sbar) + ni * log(1 - eps) - log(eps)
+      rhs <- log(alpha - beta)
+      
+      if (!is.na(lhs) && lhs <= rhs) {
+        stopped_unbounded_rev <- TRUE
+        Nstop_unbounded_rev   <- ni
+      }
+    }
+    
     # Early exit if all four rules have stopped
-    if (stopped_bounded && stopped_unbounded) break
+    if (stopped_bounded && stopped_unbounded && stopped_bounded_rev && stopped_unbounded_rev) break
   }
   
   ## ------------------------------------------------------------
   ## Post-loop: handle rules that *never* stopped by n_max
   ## ------------------------------------------------------------
   if (!stopped_bounded) {
-    Nstop_bounded          <- n_max
+    Nstop_bounded <- n_max
   }
   if (!stopped_unbounded) {
-    Nstop_unbounded        <- n_max
+    Nstop_unbounded <- n_max
+  }
+  if (!stopped_bounded_rev) {
+    Nstop_bounded_rev <- n_max
+  }
+  if (!stopped_unbounded_rev) {
+    Nstop_unbounded_rev <- n_max
   }
   
-  return(c(Nstop_bounded,Nstop_unbounded))
+  return(c(Nstop_bounded,Nstop_unbounded,Nstop_bounded_rev,Nstop_unbounded_rev))
 }
 
 
 SR_grid = function( eps_grid, data, Nrep, num_cores, seed0,
-                    alpha = 0.05, beta = 1e-5)
+                    n_max, alpha = 0.05, beta = 1e-5)
 {
   Lgrid = length(eps_grid) # grid length
   res_list = vector("list",Lgrid)
   res_list = lapply(res_list, function(x) {
-    y = matrix(nrow = Nrep, ncol = 2)
-    colnames(y) = c("Bounded","Unbounded")
+    names_methods = c("Bounded","Unbounded","Bounded_rev","Unbounded_rev")
+    y = matrix( nrow = Nrep, ncol = length(names_methods) )
+    colnames(y) = names_methods
     y
-    }  )
-
-
+  }  )
+  
+  
   ## Parallel run (no prints allowed)
   cluster <- makeCluster(num_cores, type = "SOCK")
   doSNOW::registerDoSNOW(cluster)
@@ -154,9 +195,9 @@ SR_grid = function( eps_grid, data, Nrep, num_cores, seed0,
   res_list = parLapply( cl = cluster, x = eps_grid,
                         fun = SR_grid_multiple_run,
                         data = data, alpha = alpha, beta = beta,
-                        seed0 = seed0, Nrep = Nrep)
+                        seed0 = seed0, Nrep = Nrep, n_max = n_max)
   stopCluster(cluster)
-
+  
   return(res_list)
 }
 
@@ -300,13 +341,14 @@ n = nrow(data)
 eps_grid = seq(0.001,0.1,length.out = 34*2 )
 alpha = 0.05
 beta = 1e-5
+n_max = n
 
-Nrep = 10
+Nrep = 50
 seed0 = 4224
 num_cores = 34
 
-# res = SR_grid( eps_grid, data, Nrep, num_cores, seed0, alpha, beta)
-# save(res, file = "save/Data2019_allroutes_epsgrid.Rdat")
+res = SR_grid( eps_grid, data, Nrep, num_cores, seed0, n_max, alpha, beta)
+save(res, file = "save/Data2019_allroutes_epsgrid_rev.Rdat")
 
 ## ------------------------------------------------------------
 ## 3. Run - Coverage
@@ -327,7 +369,7 @@ num_cores = 34
 ## ------------------------------------------------------------
 ## 3. Read and plot
 ## ------------------------------------------------------------
-save_img = TRUE
+save_img = FALSE
 width = 12; height = 6
 cex.lab = 2
 cex.axis = 2
