@@ -1,6 +1,7 @@
 # VM launch, from the repository root:
 # ./run_job.sh LowerBound/Exp_LB_M_n.R choose_wd=2
 # Optional: wd=/absolute/path/to/BinomialCIs workers=15 Brep=1000 seed=42
+# Rebuild figures/tables without simulating: choose_wd=2 report_only=TRUE
 # This script starts the experiment when launched; prepared for the VM.
 # Only base R and parallel (bundled with R) are required.
 
@@ -9,7 +10,7 @@ main <- function() {
   # so it also works when the VM user's home is not /home/colombi.
   args <- commandArgs(trailingOnly = TRUE)
   opts <- list()
-  allowed <- c("choose_wd", "wd", "workers", "Brep", "seed", "alpha")
+  allowed <- c("choose_wd", "wd", "workers", "Brep", "seed", "alpha", "report_only")
   for (arg in args) {
     eq <- regexpr("=", arg, fixed = TRUE)[1]
     if (eq <= 1) stop("Arguments must have the form key=value: ", arg)
@@ -41,6 +42,14 @@ main <- function() {
     stop("wd must be the BinomialCIs repository root: ", wd)
   }
   setwd(wd)
+  report_only <- if (is.null(opts$report_only)) FALSE else {
+    value <- tolower(opts$report_only)
+    if (!value %in% c("true", "false")) stop("report_only must be TRUE or FALSE.")
+    value == "true"
+  }
+  if (report_only && any(c("Brep", "alpha", "seed", "workers") %in% names(opts))) {
+    stop("report_only uses the saved configuration; omit Brep, alpha, seed and workers.")
+  }
 
   # The master also needs get_first3digits() for output names. Previously
   # Rfunctions.R was sourced only on workers, which do not share environments.
@@ -89,6 +98,7 @@ main <- function() {
     dir.create(file.path(lower_dir, "save", name), recursive = TRUE, showWarnings = FALSE)
     dir.create(file.path(lower_dir, "save", "Coverage", name),
                recursive = TRUE, showWarnings = FALSE)
+    dir.create(file.path(lower_dir, "res", name), recursive = TRUE, showWarnings = FALSE)
   }
 
   # Independent reproducible L'Ecuyer streams per task. Results do not depend
@@ -180,8 +190,12 @@ main <- function() {
 
   cat(sprintf("wd=%s\nchoose_wd=%d workers=%d Brep=%d alpha=%g seed=%d\n",
               wd, choose_wd, workers, Brep, alpha, seed))
-  cat(sprintf("%d tasks; %d repetitions; outputs: %s\n",
-              nrow(tasks), nrow(tasks) * Brep, lower_dir))
+  if (report_only) {
+    cat("Modalita report_only: caricamento del checkpoint, senza simulazioni.\n")
+  } else {
+    cat(sprintf("%d tasks; %d repetitions; outputs: %s\n",
+                nrow(tasks), nrow(tasks) * Brep, lower_dir))
+  }
   flush.console()
   started <- proc.time()["elapsed"]
   config <- list(wd = wd, choose_wd = choose_wd, workers = workers,
@@ -189,22 +203,125 @@ main <- function() {
                  Mgrid = Mgrid, Ngrid = Ngrid, n_fixed = n_fixed, M_fixed = M_fixed,
                  benchmarks = benchmarks, RNGkind = RNGkind(), session = sessionInfo())
 
-  cluster <- parallel::makePSOCKcluster(workers, outfile = "")
-  on.exit(if (!is.null(cluster)) parallel::stopCluster(cluster), add = TRUE)
-  parallel::clusterCall(cluster, function(root) {
-    setwd(root)
-    source(file.path(root, "LowerBound", "lower_bound.R"), local = .GlobalEnv)
-    source(file.path(root, "R", "Rfunctions.R"), local = .GlobalEnv)
-    NULL
-  }, wd)
-  results <- parallel::parLapplyLB(cluster, jobs, simulate_cell,
-                                  Brep = Brep, alpha = alpha, oracle_lower = oracle_lower)
-  parallel::stopCluster(cluster)
-  cluster <- NULL
+  if (report_only) {
+    checkpoint_file <- file.path(lower_dir, "save", "Exp_LB_checkpoint.rds")
+    if (!file.exists(checkpoint_file)) stop("Checkpoint not found: ", checkpoint_file)
+    checkpoint <- readRDS(checkpoint_file)
+    config <- checkpoint$config
+    results <- checkpoint$results
+    if (!length(results) || !is.data.frame(config$benchmarks)) stop("Invalid checkpoint.")
+    benchmarks <- config$benchmarks
+    if (is.null(benchmarks$tag)) {
+      benchmarks$tag <- vapply(benchmarks$param, get_first3digits, character(1), d = 4)
+    }
+    tasks <- do.call(rbind, lapply(results, `[[`, "task"))
+    alpha <- config$alpha
+    Brep <- config$Brep
+    seed <- config$seed
+    workers <- config$workers
+    cat("REPORT ONLY: rebuilding saved results; no simulation or workers started.\n")
+  } else {
+    cluster <- parallel::makePSOCKcluster(workers, outfile = "")
+    on.exit(if (!is.null(cluster)) parallel::stopCluster(cluster), add = TRUE)
+    parallel::clusterCall(cluster, function(root) {
+      setwd(root)
+      source(file.path(root, "LowerBound", "lower_bound.R"), local = .GlobalEnv)
+      source(file.path(root, "R", "Rfunctions.R"), local = .GlobalEnv)
+      NULL
+    }, wd)
+    results <- parallel::parLapplyLB(cluster, jobs, simulate_cell,
+                                    Brep = Brep, alpha = alpha, oracle_lower = oracle_lower)
+    parallel::stopCluster(cluster)
+    cluster <- NULL
+  }
   summary_results <- do.call(rbind, lapply(results, `[[`, "summary"))
   # Preserve completed simulations even if a subsequent figure cannot be saved.
-  saveRDS(list(config = config, results = results),
-          file.path(lower_dir, "save", "Exp_LB_checkpoint.rds"))
+  if (!report_only) {
+    saveRDS(list(config = config, results = results),
+            file.path(lower_dir, "save", "Exp_LB_checkpoint.rds"))
+  }
+
+  # Add diagnostics to both new and existing checkpoints before exporting.
+  for (i in seq_along(results)) {
+    runs <- results[[i]]$runs
+    seen <- runs[, "Mmax"] > 0
+    results[[i]]$summary$coverage_given_unseen <- if (any(seen)) {
+      mean(runs[seen, "lower"] <= runs[seen, "Mmax"])
+    } else NA_real_
+    results[[i]]$summary$positive_rate_given_unseen <- if (any(seen)) {
+      mean(runs[seen, "lower"] > 0)
+    } else NA_real_
+    # Exact probability that all positive-prevalence features have been seen.
+    # It can be >= alpha even when some samples still have unseen features.
+    task <- results[[i]]$task
+    p <- switch(task$distribution,
+                Zipfs = (seq_len(task$M) + 1)^(-task$param),
+                Geom = (1 - task$param)^seq_len(task$M),
+                Constant = rep(task$param, task$M),
+                stop("Unsupported benchmark: ", task$distribution))
+    p <- p[p > 0]
+    log_p0 <- sum(log(-expm1(task$n * log1p(-p))))
+    results[[i]]$summary$prob_Mmax_zero <- exp(log_p0)
+    results[[i]]$summary$oracle_is_zero <- results[[i]]$summary$oracle == 0
+    results[[i]]$summary$oracle_equals_lb_median <-
+      results[[i]]$summary$oracle == results[[i]]$summary$lb_median
+    covered <- sum(runs[, "lower"] <= runs[, "Mmax"])
+    ci <- binom.test(covered, nrow(runs))$conf.int
+    results[[i]]$summary$coverage_ci_low <- ci[1]
+    results[[i]]$summary$coverage_ci_high <- ci[2]
+  }
+  summary_results <- do.call(rbind, lapply(results, `[[`, "summary"))
+
+  # Readable, offline HTML tables, plus full-precision CSV exports.
+  html_escape <- function(x) {
+    x <- gsub("&", "&amp;", x, fixed = TRUE)
+    x <- gsub("<", "&lt;", x, fixed = TRUE)
+    gsub(">", "&gt;", x, fixed = TRUE)
+  }
+  write_results_table <- function(z, title, stem) {
+    columns <- c("distribution", "param", "arm", "M", "n", "Brep", "alpha", "oracle",
+                 "lb_q025", "lb_median", "lb_q975", "coverage", "coverage_ci_low",
+                 "coverage_ci_high", "coverage_mcse", "oracle_coverage", "failure_count",
+                 "positive_rate", "unseen_rate", "coverage_given_unseen",
+                 "positive_rate_given_unseen", "prob_Mmax_zero", "oracle_is_zero",
+                 "oracle_equals_lb_median", "mean_Mmax", "mean_moment_ratio",
+                 "mean_relative_lower", "M1_coverage", "M2_coverage")
+    table <- z[, columns, drop = FALSE]
+    write.csv(table, paste0(stem, ".csv"), row.names = FALSE, na = "NA")
+    cells <- lapply(table, function(x) {
+      if (is.numeric(x)) {
+        vapply(x, function(v) if (is.na(v)) "NA" else format(v, digits = 7, trim = TRUE),
+               character(1))
+      } else as.character(x)
+    })
+    rows <- vapply(seq_len(nrow(table)), function(i) {
+      paste0("<tr>", paste0("<td>", html_escape(vapply(cells, `[`, character(1), i)),
+                            "</td>", collapse = ""), "</tr>")
+    }, character(1))
+    page <- c('<!DOCTYPE html><html lang="it"><head><meta charset="utf-8">',
+      paste0("<title>", html_escape(title), "</title>"),
+      '<meta name="viewport" content="width=device-width,initial-scale=1">',
+      '<style>body{font:16px/1.5 system-ui,sans-serif;margin:30px;color:#202b36}',
+      'table{border-collapse:collapse;white-space:nowrap}th,td{padding:8px 12px;border:1px solid #ddd}',
+      'th{background:#eef2f6;position:sticky;top:0}tr:nth-child(even){background:#fafafa}',
+      'td{text-align:right}td:first-child{text-align:left}.scroll{overflow:auto;max-height:75vh}',
+      'a{color:#125d9a}code{background:#f0f3f6;padding:2px 4px}</style></head><body>',
+      paste0("<h1>", html_escape(title), "</h1>"),
+      paste0('<p><a href="', basename(stem), '.csv">Scarica CSV</a>. ',
+             'Valori di oracle e LB nella scala originale delle probabilita; nei grafici sono moltiplicati per 1000.</p>'),
+      '<p>Ogni riga e una coppia (M,n). coverage = frequenza di LB &lt;= Mmax; ',
+      'oracle_coverage = frequenza di oracle &lt;= Mmax. Gli intervalli della coverage sono ',
+      'intervalli binomiali Monte Carlo al 95%. positive_rate = frequenza di LB &gt; 0; ',
+      'unseen_rate = frequenza di Mmax &gt; 0. Le quantita given_unseen sono condizionate ',
+      'a Mmax &gt; 0 e valgono NA se non ci sono tali campioni.</p>',
+      '<p>prob_Mmax_zero e la probabilita esatta di Mmax = 0; oracle_is_zero segnala ',
+      'un oracle nullo, oracle_equals_lb_median segnala curve coincidenti in quel punto. ',
+      'M1_coverage e M2_coverage riportano le coperture delle due componenti del bound.</p>',
+      '<div class="scroll"><table><thead><tr>',
+      paste0("<th>", html_escape(names(table)), "</th>", collapse = ""),
+      '</tr></thead><tbody>', rows, '</tbody></table></div></body></html>')
+    writeLines(enc2utf8(page), paste0(stem, ".html"), useBytes = TRUE)
+  }
 
   # Original figure style: base-R PDF, grey grid, bty='l', lwd=3,
   # 1000 * bound on the vertical axis; only the median curve is displayed.
@@ -218,18 +335,28 @@ main <- function() {
     if (ymax <= 0) ymax <- 1e-3
     pdf(filename)
     on.exit(dev.off(), add = TRUE)
-    par(mfrow = c(1, 1), mar = c(4, 4, 1, 0.5), mgp = c(2.5, 0.5, 0), bty = "l")
+    par(mfrow = c(1, 1), mar = c(4, 4, 3, 0.5), mgp = c(2.5, 0.5, 0), bty = "l")
     plot(0, 0, type = "n", xaxt = "s", yaxt = "n", xlim = range(x),
-         ylim = c(0, ymax), xlab = if (arm == "nfix") "M" else "n",
+         ylim = c(-0.04 * ymax, ymax), xlab = if (arm == "nfix") "M" else "n",
          ylab = "1000 * bound", main = " ")
     grid(lty = 1, lwd = 1, col = "gray90")
     ticks <- pretty(c(0, ymax * 1e3))
     ticks <- ticks[ticks >= 0 & ticks <= ymax * 1e3]
     axis(2, at = ticks * 1e-3, labels = ticks, las = 1, cex.axis = 1)
-    lines(x, z$oracle, lwd = 3, lty = 1, col = "black")
     lines(x, z$lb_median, lwd = 3, lty = 1, col = "darkorange")
+    lines(x, z$oracle, lwd = 3, lty = 1, col = "black")
+    points(x, z$oracle, pch = 1, cex = 0.7, col = "black")
+    points(x, z$lb_median, pch = 4, cex = 0.7, col = "darkorange")
+    note <- if (all(z$oracle == 0) && all(z$lb_median == 0)) {
+      "Oracle e mediana LB entrambi nulli"
+    } else if (all(z$oracle == 0)) "Oracle nullo su tutta la griglia" else {
+      if (all(z$oracle == z$lb_median)) "Oracle e mediana LB coincidenti" else ""
+    }
+    mtext(sprintf("Oracle: min=%.4g; max=%.4g (scala originale)",
+                  min(z$oracle), max(z$oracle)), side = 3, line = 1.1, cex = 0.7)
+    if (nzchar(note)) mtext(note, side = 3, line = 0.1, cex = 0.7)
     legend("topright", c("Oracle lower", "Lower bound"),
-           lwd = 3, col = c("black", "darkorange"), bty = "n")
+           lwd = 3, pch = c(1, 4), col = c("black", "darkorange"), bty = "n")
   }
 
   for (d in seq_len(nrow(benchmarks))) {
@@ -251,6 +378,9 @@ main <- function() {
                        cells = selected)
       save(save_res, file = file.path(lower_dir, "save", name, paste0(exp_name, ".Rdat")))
       write.csv(z, file.path(lower_dir, "save", name, paste0(exp_name, ".csv")), row.names = FALSE)
+      dir.create(file.path(lower_dir, "res", name), recursive = TRUE, showWarnings = FALSE)
+      write_results_table(z, sprintf("%s, parametro %g, %s", name, param, arm),
+                          file.path(lower_dir, "res", name, exp_name))
       cov_mat <- cbind(if (arm == "nfix") z$M else z$n,
                        Lower = z$coverage, Oracle = z$oracle_coverage)
       colnames(cov_mat)[1] <- if (arm == "nfix") "M" else "n"
@@ -260,6 +390,8 @@ main <- function() {
     }
   }
   write.csv(summary_results, file.path(lower_dir, "save", "Exp_LB_summary.csv"), row.names = FALSE)
+  write_results_table(summary_results, "Lower bound: tutti gli scenari",
+                      file.path(lower_dir, "res", "Exp_LB_summary"))
   saveRDS(config, file.path(lower_dir, "save", "Exp_LB_config.rds"))
   recap <- aggregate(cbind(coverage, positive_rate, unseen_rate) ~ distribution + param,
                      data = summary_results, FUN = mean)
@@ -276,6 +408,10 @@ main <- function() {
   cat("Figure PDF salvate: ", 2L * nrow(benchmarks), "\n", sep = "")
   cat("Figure: ", file.path(lower_dir, "img"), "\n", sep = "")
   cat("Risultati: ", file.path(lower_dir, "save"), "\n", sep = "")
+  cat("Tabelle HTML/CSV: ", file.path(lower_dir, "res"), "\n", sep = "")
+  cat(sprintf("Oracle nullo in %d/%d celle; coincidente con mediana LB in %d/%d celle.\n",
+              sum(summary_results$oracle_is_zero), nrow(summary_results),
+              sum(summary_results$oracle_equals_lb_median), nrow(summary_results)))
   cat("Summary: ", file.path(lower_dir, "save", "Exp_LB_summary.csv"), "\n", sep = "")
   cat("FINITO\n")
   flush.console()

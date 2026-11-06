@@ -280,3 +280,47 @@ it is not printed on errors. The current fixes have not been run as a simulation
 locally.
 
 The earlier four-pair script `simulate_lower_bound.R` is retained unchanged.
+
+### Oracle visibility and readable result tables
+
+The vertical axis already includes the maximum oracle value, so the oracle
+is not cut off above the plot. In the earlier drawing order, an orange zero
+LB curve could cover the black zero oracle curve. Plots now distinguish them
+with black circles for the oracle and darkorange crosses for the LB. A little
+space is left below zero, and each plot states the minimum and maximum oracle
+in the original probability scale. A note explicitly flags an entirely zero
+oracle or two coincident curves.
+
+The oracle lower endpoint can genuinely be zero. In particular, if
+\(\Pr_p(M_{\max}=0)>\alpha\), every strictly positive deterministic endpoint
+fails the required lower-coverage guarantee. This does not require
+\(M_{\max}=0\) in every repetition.
+
+The experiment also creates `LowerBound/res/`, subdivided into `Zipfs`, `Geom`
+and `Constant`. For each figure there is a matching HTML table and CSV file,
+with one row per \((M,n)\). Thus the 18 figures have 18 corresponding tables;
+the aggregate `res/Exp_LB_summary.html` and `.csv` contain all 450 rows.
+HTML files are readable offline, and CSV files retain numerical precision.
+
+Tables contain the oracle, LB median and 2.5%/97.5% repetition quantiles,
+empirical coverage, exact binomial 95% Monte Carlo intervals, coverage standard
+error, violation count, oracle coverage, positive-bound and unseen rates,
+conditional coverage and positive-bound rate given \(M_{\max}>0\), component
+coverage for \(M_1,M_2\), and tightness diagnostics. Values are in the original
+probability scale; plotted bounds are multiplied by 1000.
+Additional columns identify zero oracles, oracle/LB median coincidences, and
+the exact probability of \(M_{\max}=0\), so a hidden line is unambiguous.
+
+To regenerate figures and tables from an existing checkpoint without running
+the experiment again, use:
+
+```bash
+./run_job.sh LowerBound/Exp_LB_M_n.R choose_wd=2 report_only=TRUE
+```
+
+This reads `LowerBound/save/Exp_LB_checkpoint.rds`; it starts no workers and
+generates no new samples. The original saved configuration determines alpha,
+seed, benchmarks and repetition count. Do not pass overrides for those settings
+in report-only mode. If the checkpoint is absent, the script stops with a clear
+error rather than starting a simulation. The output directory is the selected
+checkout. A recap and `FINITO` are printed after all outputs are written.
