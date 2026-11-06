@@ -1,0 +1,27 @@
+wd=/home/colombi/BinomialCIs
+choose_wd=2 workers=15 Brep=1000 alpha=0.05 seed=42
+Modalita report_only: caricamento del checkpoint, senza simulazioni.
+REPORT ONLY: rebuilding saved results; no simulation or workers started.
+
+RIEPILOGO RISULTATI
+Scenari: 450 | Repliche per scenario: 1000 | Repliche totali: 450000
+alpha=0.05 | seed=42 | workers=20 | Tempo: 9.0 secondi
+Copertura empirica: min=1.0000, max=1.0000 | Violazioni totali: 0
+Medie sulle celle di ciascun benchmark (coverage, positive_rate, unseen_rate):
+ distribution param coverage positive_rate unseen_rate
+     Constant 0.001        1        1.0000           1
+         Geom 0.005        1        0.9888           1
+     Constant 0.050        1        0.0000           0
+         Geom 0.100        1        0.0000           1
+         Geom 0.250        1        0.0000           1
+        Zipfs 0.250        1        0.0000           0
+     Constant 0.500        1        0.0000           0
+        Zipfs 0.500        1        0.0000           0
+        Zipfs 1.020        1        1.0000           1
+Figure PDF salvate: 18
+Figure: /home/colombi/BinomialCIs/LowerBound/img
+Risultati: /home/colombi/BinomialCIs/LowerBound/save
+Tabelle HTML/CSV: /home/colombi/BinomialCIs/LowerBound/res
+Oracle nullo in 200/450 celle; coincidente con mediana LB in 200/450 celle.
+Summary: /home/colombi/BinomialCIs/LowerBound/save/Exp_LB_summary.csv
+FINITO
