@@ -296,20 +296,38 @@ The oracle lower endpoint can genuinely be zero. In particular, if
 fails the required lower-coverage guarantee. This does not require
 \(M_{\max}=0\) in every repetition.
 
-The experiment also creates `LowerBound/res/`, subdivided into `Zipfs`, `Geom`
-and `Constant`. For each figure there is a matching HTML table and CSV file,
-with one row per \((M,n)\). Thus the 18 figures have 18 corresponding tables;
-the aggregate `res/Exp_LB_summary.html` and `.csv` contain all 450 rows.
-HTML files are readable offline, and CSV files retain numerical precision.
+The single readable report is `LowerBound/res/Exp_LB_summary.html`. It contains
+18 separate tables, one per distribution, parameter and arm, with only three
+columns: **oracle**, **lb_median**, and coverage. All metadata (distribution,
+parameter, arm, fixed M or n, range of the varying quantity, Brep and alpha)
+appear in the caption. Each row group is labelled with its varying M or n value.
+The HTML is self-contained and works offline.
 
-Tables contain the oracle, LB median and 2.5%/97.5% repetition quantiles,
-empirical coverage, exact binomial 95% Monte Carlo intervals, coverage standard
-error, violation count, oracle coverage, positive-bound and unseen rates,
-conditional coverage and positive-bound rate given \(M_{\max}>0\), component
-coverage for \(M_1,M_2\), and tightness diagnostics. Values are in the original
-probability scale; plotted bounds are multiplied by 1000.
-Additional columns identify zero oracles, oracle/LB median coincidences, and
-the exact probability of \(M_{\max}=0\), so a hidden line is unambiguous.
+Coverage is computed on the individual Monte Carlo repetitions:
+\[
+\operatorname{coverage}=\frac1{B_{\mathrm{rep}}}
+\sum_{b=1}^{B_{\mathrm{rep}}}\mathbf 1\{LB_b\le M_{\max,b}\}.
+\]
+It uses the realized true maximum unseen prevalence in the same sample, not
+the deterministic oracle and not the median LB. `coverage_Mmax` is an explicit
+alias in diagnostic exports; `coverage_vs_oracle` is a separate comparison
+\(B_{\mathrm{rep}}^{-1}\sum_b\mathbf 1\{LB_b\le\mathrm{oracle}\}\).
+
+Full numerical diagnostics remain in `res/Exp_LB_summary.csv` and the
+distribution-specific CSVs: quantiles, Monte Carlo confidence intervals,
+violation counts, positive-bound and unseen rates, component coverage, and
+tightness. Values are in the original probability scale; plotted bounds are
+multiplied by 1000. Old per-scenario HTML files are retired on report rebuild.
+
+To rebuild just this HTML and its CSVs from the saved MC repetitions, without
+generating figures, starting workers or drawing any new samples, run:
+
+```bash
+Rscript LowerBound/render_results.R
+```
+
+The reporting-only script uses the checkpoint when available, otherwise the
+existing CSV summary. It prints a short recap followed by `FINITO`.
 
 To regenerate figures and tables from an existing checkpoint without running
 the experiment again, use:
@@ -324,3 +342,43 @@ seed, benchmarks and repetition count. Do not pass overrides for those settings
 in report-only mode. If the checkpoint is absent, the script stops with a clear
 error rather than starting a simulation. The output directory is the selected
 checkout. A recap and `FINITO` are printed after all outputs are written.
+
+### Add Zipf exponents 1.2 and 2 without repeating completed cells
+
+The default benchmark list now also includes Zipf \(s=1.2\) and \(s=2\).
+The original nine benchmarks and the new two use exactly the same M/n grids,
+sample counts, alpha and seed. The complete experiment has 550 cells and
+22 figures/tables (11 distribution/parameter combinations, two arms each).
+
+After updating the code on the VM, run from the repository root:
+
+```bash
+git pull
+./run_job.sh LowerBound/Exp_LB_M_n.R choose_wd=2 resume=TRUE workers=15
+```
+
+`resume=TRUE` requires `LowerBound/save/Exp_LB_checkpoint.rds`. It matches saved
+cells by distribution, exact parameter, arm, M and n, preserving their samples.
+It checks that Brep, alpha, seed and both grids agree with the saved run. With
+the original 450-cell checkpoint it simulates only the 100 missing cells
+(100,000 new repetitions with Brep=1000). A repeated incremental launch after
+those cells are saved simulates no cells.
+
+Before replacing the checkpoint, the script copies the previous file to
+`save/Exp_LB_checkpoint_before_resume_<timestamp>_<pid>.rds`. New cells are
+appended after the original task list so the original random-stream assignments
+remain stable. Parallel scheduling and worker count do not change the streams.
+Checkpoints from earlier script versions may have fewer diagnostic columns;
+these are normalized when old and new results are combined.
+
+The same command automatically rebuilds all PDFs in `img/`, CSV results and
+coverage diagnostics in `save/` and `res/`, and the single readable
+`res/Exp_LB_summary.html`. The recap reports reused and simulated cell counts;
+wait for the final `FINITO` line in the log indicated by `run_job.sh`.
+
+Defaults remain Brep=1000, alpha=0.05, seed=42. If the previous run used
+different values, provide the same saved values on the incremental command.
+`resume=TRUE` and `report_only=TRUE` cannot be combined. Omitting both flags
+runs the full current 550-cell experiment; using `report_only=TRUE` refreshes
+only cells already present in the checkpoint and does not add new benchmarks.
+The incremental simulation has been prepared, not executed locally.

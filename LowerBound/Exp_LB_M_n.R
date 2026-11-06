@@ -2,6 +2,7 @@
 # ./run_job.sh LowerBound/Exp_LB_M_n.R choose_wd=2
 # Optional: wd=/absolute/path/to/BinomialCIs workers=15 Brep=1000 seed=42
 # Rebuild figures/tables without simulating: choose_wd=2 report_only=TRUE
+# Add only missing cells to an existing checkpoint: choose_wd=2 resume=TRUE
 # This script starts the experiment when launched; prepared for the VM.
 # Only base R and parallel (bundled with R) are required.
 
@@ -10,7 +11,7 @@ main <- function() {
   # so it also works when the VM user's home is not /home/colombi.
   args <- commandArgs(trailingOnly = TRUE)
   opts <- list()
-  allowed <- c("choose_wd", "wd", "workers", "Brep", "seed", "alpha", "report_only")
+  allowed <- c("choose_wd", "wd", "workers", "Brep", "seed", "alpha", "report_only", "resume")
   for (arg in args) {
     eq <- regexpr("=", arg, fixed = TRUE)[1]
     if (eq <= 1) stop("Arguments must have the form key=value: ", arg)
@@ -42,11 +43,18 @@ main <- function() {
     stop("wd must be the BinomialCIs repository root: ", wd)
   }
   setwd(wd)
+  source(file.path(wd, "LowerBound", "results_report.R"), local = TRUE)
   report_only <- if (is.null(opts$report_only)) FALSE else {
     value <- tolower(opts$report_only)
     if (!value %in% c("true", "false")) stop("report_only must be TRUE or FALSE.")
     value == "true"
   }
+  resume <- if (is.null(opts$resume)) FALSE else {
+    value <- tolower(opts$resume)
+    if (!value %in% c("true", "false")) stop("resume must be TRUE or FALSE.")
+    value == "true"
+  }
+  if (resume && report_only) stop("Use either resume=TRUE or report_only=TRUE, not both.")
   if (report_only && any(c("Brep", "alpha", "seed", "workers") %in% names(opts))) {
     stop("report_only uses the saved configuration; omit Brep, alpha, seed and workers.")
   }
@@ -81,6 +89,11 @@ main <- function() {
     distribution = rep(c("Zipfs", "Geom", "Constant"), each = 3),
     param = c(0.25, 0.5, 1.02, 0.005, 0.1, 0.25, 0.001, 0.05, 0.5),
     stringsAsFactors = FALSE)
+  # Append new benchmarks, retaining the old 450 task/stream assignments.
+  additional_benchmarks <- data.frame(distribution = c("Zipfs", "Zipfs"),
+                                      param = c(1.2, 2), stringsAsFactors = FALSE)
+  original_benchmarks <- nrow(benchmarks)
+  benchmarks <- rbind(benchmarks, additional_benchmarks)
   # Resolve names before starting the expensive parallel experiment.
   benchmarks$tag <- vapply(benchmarks$param, get_first3digits, character(1), d = 4)
   if (anyDuplicated(paste(benchmarks$distribution, benchmarks$tag))) {
@@ -88,7 +101,10 @@ main <- function() {
   }
   grid <- rbind(data.frame(arm = "nfix", M = Mgrid, n = n_fixed),
                 data.frame(arm = "Mfix", M = M_fixed, n = Ngrid))
-  tasks <- merge(benchmarks, grid, by = NULL, sort = FALSE)
+  tasks <- merge(benchmarks[seq_len(original_benchmarks), ], grid, by = NULL, sort = FALSE)
+  for (i in seq.int(original_benchmarks + 1L, nrow(benchmarks))) {
+    tasks <- rbind(tasks, merge(benchmarks[i, , drop = FALSE], grid, by = NULL, sort = FALSE))
+  }
   tasks$task_id <- seq_len(nrow(tasks))
   workers <- min(workers, nrow(tasks))
 
@@ -165,10 +181,14 @@ main <- function() {
     q <- quantile(runs[, "lower"], c(0.025, 0.5, 0.975), names = FALSE)
     has_unseen <- runs[, "Mmax"] > 0
     covered <- runs[, "lower"] <= runs[, "Mmax"]
+    covered_Mmax <- runs[, "lower"] <= runs[, "Mmax"]
     summary <- cbind(task, data.frame(
       Brep = Brep, alpha = alpha, S = sum(p), oracle = oracle,
       lb_q025 = q[1], lb_median = q[2], lb_q975 = q[3],
-      coverage = mean(covered), failure_count = sum(!covered),
+      coverage = mean(covered), coverage_definition = "LB <= Mmax",
+      coverage_vs_oracle = mean(runs[, "lower"] <= oracle),
+      coverage_Mmax = mean(covered_Mmax), failure_count = sum(!covered),
+      failure_count_Mmax = sum(!covered_Mmax),
       coverage_mcse = sqrt(mean(covered) * (1 - mean(covered)) / Brep),
       oracle_coverage = mean(oracle <= runs[, "Mmax"]),
       positive_rate = mean(runs[, "lower"] > 0), unseen_rate = mean(has_unseen),
@@ -214,27 +234,64 @@ main <- function() {
     if (is.null(benchmarks$tag)) {
       benchmarks$tag <- vapply(benchmarks$param, get_first3digits, character(1), d = 4)
     }
-    tasks <- do.call(rbind, lapply(results, `[[`, "task"))
+    tasks <- lb_bind_rows(lapply(results, `[[`, "task"))
     alpha <- config$alpha
     Brep <- config$Brep
     seed <- config$seed
     workers <- config$workers
     cat("REPORT ONLY: rebuilding saved results; no simulation or workers started.\n")
   } else {
-    cluster <- parallel::makePSOCKcluster(workers, outfile = "")
-    on.exit(if (!is.null(cluster)) parallel::stopCluster(cluster), add = TRUE)
-    parallel::clusterCall(cluster, function(root) {
-      setwd(root)
-      source(file.path(root, "LowerBound", "lower_bound.R"), local = .GlobalEnv)
-      source(file.path(root, "R", "Rfunctions.R"), local = .GlobalEnv)
-      NULL
-    }, wd)
-    results <- parallel::parLapplyLB(cluster, jobs, simulate_cell,
-                                    Brep = Brep, alpha = alpha, oracle_lower = oracle_lower)
-    parallel::stopCluster(cluster)
-    cluster <- NULL
+    results <- vector("list", nrow(tasks))
+    pending <- seq_len(nrow(tasks))
+    reused <- 0L
+    if (resume) {
+      checkpoint_file <- file.path(lower_dir, "save", "Exp_LB_checkpoint.rds")
+      if (!file.exists(checkpoint_file)) stop("resume=TRUE requires checkpoint: ", checkpoint_file)
+      previous <- readRDS(checkpoint_file)
+      for (name in c("Brep", "alpha", "seed", "Mgrid", "Ngrid", "n_fixed", "M_fixed")) {
+        if (!isTRUE(all.equal(previous$config[[name]], config[[name]]))) {
+          stop("Checkpoint setting differs: ", name, ". Use the saved settings for resume.")
+        }
+      }
+      if (!length(previous$results)) stop("Checkpoint contains no completed cells.")
+      previous_tasks <- lb_bind_rows(lapply(previous$results, `[[`, "task"))
+      keys <- lb_task_key(tasks)
+      old_keys <- lb_task_key(previous_tasks)
+      if (anyDuplicated(keys) || anyDuplicated(old_keys)) stop("Duplicate cells in grid/checkpoint.")
+      positions <- match(old_keys, keys)
+      if (anyNA(positions)) stop("Checkpoint includes scenarios absent from the requested grid.")
+      if (any(vapply(previous$results, function(x) nrow(x$runs), integer(1)) != Brep)) {
+        stop("Checkpoint repetition count differs from Brep.")
+      }
+      results[positions] <- previous$results
+      reused <- length(positions)
+      pending <- setdiff(pending, positions)
+      cat(sprintf("RESUME: %d celle riutilizzate; %d nuove celle, %d nuove repliche.\n",
+                  reused, length(pending), length(pending) * Brep))
+      # Save an unchanged copy before the extended checkpoint is written.
+      backup <- file.path(lower_dir, "save", sprintf("Exp_LB_checkpoint_before_resume_%s_%d.rds",
+                          format(Sys.time(), "%Y%m%d_%H%M%S"), Sys.getpid()))
+      if (!file.copy(checkpoint_file, backup, overwrite = FALSE)) stop("Cannot back up checkpoint.")
+      cat("Backup: ", backup, "\n", sep = "")
+    }
+    config$reused_cells <- reused
+    config$simulated_cells <- length(pending)
+    if (length(pending)) {
+      cluster <- parallel::makePSOCKcluster(min(workers, length(pending)), outfile = "")
+      on.exit(if (!is.null(cluster)) parallel::stopCluster(cluster), add = TRUE)
+      parallel::clusterCall(cluster, function(root) {
+        setwd(root)
+        source(file.path(root, "LowerBound", "lower_bound.R"), local = .GlobalEnv)
+        source(file.path(root, "R", "Rfunctions.R"), local = .GlobalEnv)
+        NULL
+      }, wd)
+      results[pending] <- parallel::parLapplyLB(cluster, jobs[pending], simulate_cell,
+                                              Brep = Brep, alpha = alpha, oracle_lower = oracle_lower)
+      parallel::stopCluster(cluster)
+      cluster <- NULL
+    }
   }
-  summary_results <- do.call(rbind, lapply(results, `[[`, "summary"))
+  summary_results <- lb_bind_rows(lapply(results, `[[`, "summary"))
   # Preserve completed simulations even if a subsequent figure cannot be saved.
   if (!report_only) {
     saveRDS(list(config = config, results = results),
@@ -246,6 +303,9 @@ main <- function() {
     runs <- results[[i]]$runs
     seen <- runs[, "Mmax"] > 0
     results[[i]]$summary$coverage_given_unseen <- if (any(seen)) {
+      mean(runs[seen, "lower"] <= runs[seen, "Mmax"])
+    } else NA_real_
+    results[[i]]$summary$coverage_Mmax_given_unseen <- if (any(seen)) {
       mean(runs[seen, "lower"] <= runs[seen, "Mmax"])
     } else NA_real_
     results[[i]]$summary$positive_rate_given_unseen <- if (any(seen)) {
@@ -265,63 +325,21 @@ main <- function() {
     results[[i]]$summary$oracle_is_zero <- results[[i]]$summary$oracle == 0
     results[[i]]$summary$oracle_equals_lb_median <-
       results[[i]]$summary$oracle == results[[i]]$summary$lb_median
-    covered <- sum(runs[, "lower"] <= runs[, "Mmax"])
+    below_oracle <- runs[, "lower"] <= results[[i]]$summary$oracle[1]
+    below_Mmax <- runs[, "lower"] <= runs[, "Mmax"]
+    results[[i]]$summary$coverage_definition <- "LB <= Mmax"
+    results[[i]]$summary$coverage <- mean(below_Mmax)
+    results[[i]]$summary$coverage_vs_oracle <- mean(below_oracle)
+    results[[i]]$summary$failure_count <- sum(!below_Mmax)
+    results[[i]]$summary$coverage_mcse <- sqrt(mean(below_Mmax) * (1 - mean(below_Mmax)) / nrow(runs))
+    results[[i]]$summary$coverage_Mmax <- mean(runs[, "lower"] <= runs[, "Mmax"])
+    results[[i]]$summary$failure_count_Mmax <- sum(runs[, "lower"] > runs[, "Mmax"])
+    covered <- sum(below_Mmax)
     ci <- binom.test(covered, nrow(runs))$conf.int
     results[[i]]$summary$coverage_ci_low <- ci[1]
     results[[i]]$summary$coverage_ci_high <- ci[2]
   }
-  summary_results <- do.call(rbind, lapply(results, `[[`, "summary"))
-
-  # Readable, offline HTML tables, plus full-precision CSV exports.
-  html_escape <- function(x) {
-    x <- gsub("&", "&amp;", x, fixed = TRUE)
-    x <- gsub("<", "&lt;", x, fixed = TRUE)
-    gsub(">", "&gt;", x, fixed = TRUE)
-  }
-  write_results_table <- function(z, title, stem) {
-    columns <- c("distribution", "param", "arm", "M", "n", "Brep", "alpha", "oracle",
-                 "lb_q025", "lb_median", "lb_q975", "coverage", "coverage_ci_low",
-                 "coverage_ci_high", "coverage_mcse", "oracle_coverage", "failure_count",
-                 "positive_rate", "unseen_rate", "coverage_given_unseen",
-                 "positive_rate_given_unseen", "prob_Mmax_zero", "oracle_is_zero",
-                 "oracle_equals_lb_median", "mean_Mmax", "mean_moment_ratio",
-                 "mean_relative_lower", "M1_coverage", "M2_coverage")
-    table <- z[, columns, drop = FALSE]
-    write.csv(table, paste0(stem, ".csv"), row.names = FALSE, na = "NA")
-    cells <- lapply(table, function(x) {
-      if (is.numeric(x)) {
-        vapply(x, function(v) if (is.na(v)) "NA" else format(v, digits = 7, trim = TRUE),
-               character(1))
-      } else as.character(x)
-    })
-    rows <- vapply(seq_len(nrow(table)), function(i) {
-      paste0("<tr>", paste0("<td>", html_escape(vapply(cells, `[`, character(1), i)),
-                            "</td>", collapse = ""), "</tr>")
-    }, character(1))
-    page <- c('<!DOCTYPE html><html lang="it"><head><meta charset="utf-8">',
-      paste0("<title>", html_escape(title), "</title>"),
-      '<meta name="viewport" content="width=device-width,initial-scale=1">',
-      '<style>body{font:16px/1.5 system-ui,sans-serif;margin:30px;color:#202b36}',
-      'table{border-collapse:collapse;white-space:nowrap}th,td{padding:8px 12px;border:1px solid #ddd}',
-      'th{background:#eef2f6;position:sticky;top:0}tr:nth-child(even){background:#fafafa}',
-      'td{text-align:right}td:first-child{text-align:left}.scroll{overflow:auto;max-height:75vh}',
-      'a{color:#125d9a}code{background:#f0f3f6;padding:2px 4px}</style></head><body>',
-      paste0("<h1>", html_escape(title), "</h1>"),
-      paste0('<p><a href="', basename(stem), '.csv">Scarica CSV</a>. ',
-             'Valori di oracle e LB nella scala originale delle probabilita; nei grafici sono moltiplicati per 1000.</p>'),
-      '<p>Ogni riga e una coppia (M,n). coverage = frequenza di LB &lt;= Mmax; ',
-      'oracle_coverage = frequenza di oracle &lt;= Mmax. Gli intervalli della coverage sono ',
-      'intervalli binomiali Monte Carlo al 95%. positive_rate = frequenza di LB &gt; 0; ',
-      'unseen_rate = frequenza di Mmax &gt; 0. Le quantita given_unseen sono condizionate ',
-      'a Mmax &gt; 0 e valgono NA se non ci sono tali campioni.</p>',
-      '<p>prob_Mmax_zero e la probabilita esatta di Mmax = 0; oracle_is_zero segnala ',
-      'un oracle nullo, oracle_equals_lb_median segnala curve coincidenti in quel punto. ',
-      'M1_coverage e M2_coverage riportano le coperture delle due componenti del bound.</p>',
-      '<div class="scroll"><table><thead><tr>',
-      paste0("<th>", html_escape(names(table)), "</th>", collapse = ""),
-      '</tr></thead><tbody>', rows, '</tbody></table></div></body></html>')
-    writeLines(enc2utf8(page), paste0(stem, ".html"), useBytes = TRUE)
-  }
+  summary_results <- lb_bind_rows(lapply(results, `[[`, "summary"))
 
   # Original figure style: base-R PDF, grey grid, bty='l', lwd=3,
   # 1000 * bound on the vertical axis; only the median curve is displayed.
@@ -379,10 +397,12 @@ main <- function() {
       save(save_res, file = file.path(lower_dir, "save", name, paste0(exp_name, ".Rdat")))
       write.csv(z, file.path(lower_dir, "save", name, paste0(exp_name, ".csv")), row.names = FALSE)
       dir.create(file.path(lower_dir, "res", name), recursive = TRUE, showWarnings = FALSE)
-      write_results_table(z, sprintf("%s, parametro %g, %s", name, param, arm),
-                          file.path(lower_dir, "res", name, exp_name))
+      write.csv(z, file.path(lower_dir, "res", name, paste0(exp_name, ".csv")), row.names = FALSE)
+      obsolete <- file.path(lower_dir, "res", name, paste0(exp_name, ".html"))
+      if (file.exists(obsolete) && unlink(obsolete) != 0) stop("Cannot remove old report: ", obsolete)
       cov_mat <- cbind(if (arm == "nfix") z$M else z$n,
-                       Lower = z$coverage, Oracle = z$oracle_coverage)
+                       Lower_vs_oracle = z$coverage_vs_oracle, Lower_vs_Mmax = z$coverage,
+                       Oracle_vs_Mmax = z$oracle_coverage)
       colnames(cov_mat)[1] <- if (arm == "nfix") "M" else "n"
       save(cov_mat, file = file.path(lower_dir, "save", "Coverage", name,
                                     paste0(exp_name, ".Rdat")))
@@ -390,20 +410,22 @@ main <- function() {
     }
   }
   write.csv(summary_results, file.path(lower_dir, "save", "Exp_LB_summary.csv"), row.names = FALSE)
-  write_results_table(summary_results, "Lower bound: tutti gli scenari",
-                      file.path(lower_dir, "res", "Exp_LB_summary"))
+  write.csv(summary_results, file.path(lower_dir, "res", "Exp_LB_summary.csv"), row.names = FALSE)
+  write_lb_results_report(summary_results, file.path(lower_dir, "res", "Exp_LB_summary.html"))
   saveRDS(config, file.path(lower_dir, "save", "Exp_LB_config.rds"))
   recap <- aggregate(cbind(coverage, positive_rate, unseen_rate) ~ distribution + param,
                      data = summary_results, FUN = mean)
   cat("\nRIEPILOGO RISULTATI\n")
   cat(sprintf("Scenari: %d | Repliche per scenario: %d | Repliche totali: %d\n",
               nrow(summary_results), Brep, sum(summary_results$Brep)))
+  if (!report_only) cat(sprintf("Celle riutilizzate: %d | Celle simulate: %d | Nuove repliche: %d\n",
+                               reused, length(pending), length(pending) * Brep))
   cat(sprintf("alpha=%g | seed=%d | workers=%d | Tempo: %.1f secondi\n",
               alpha, seed, workers, proc.time()["elapsed"] - started))
-  cat(sprintf("Copertura empirica: min=%.4f, max=%.4f | Violazioni totali: %d\n",
+  cat(sprintf("Copertura LB <= Mmax: min=%.4f, max=%.4f | Violazioni totali: %d\n",
               min(summary_results$coverage), max(summary_results$coverage),
               sum(summary_results$failure_count)))
-  cat("Medie sulle celle di ciascun benchmark (coverage, positive_rate, unseen_rate):\n")
+  cat("Medie sulle celle: coverage = frequenza LB <= Mmax; positive_rate; unseen_rate.\n")
   print(recap, row.names = FALSE, digits = 4)
   cat("Figure PDF salvate: ", 2L * nrow(benchmarks), "\n", sep = "")
   cat("Figure: ", file.path(lower_dir, "img"), "\n", sep = "")

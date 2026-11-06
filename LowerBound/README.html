@@ -454,31 +454,41 @@ every strictly positive deterministic endpoint fails the required
 lower-coverage guarantee. This does not require
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_{\max}=0</annotation></semantics></math>
 in every repetition.</p>
-<p>The experiment also creates <code>LowerBound/res/</code>, subdivided
-into <code>Zipfs</code>, <code>Geom</code> and <code>Constant</code>.
-For each figure there is a matching HTML table and CSV file, with one
-row per
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>M</mi><mo>,</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(M,n)</annotation></semantics></math>.
-Thus the 18 figures have 18 corresponding tables; the aggregate
-<code>res/Exp_LB_summary.html</code> and <code>.csv</code> contain all
-450 rows. HTML files are readable offline, and CSV files retain
-numerical precision.</p>
-<p>Tables contain the oracle, LB median and 2.5%/97.5% repetition
-quantiles, empirical coverage, exact binomial 95% Monte Carlo intervals,
-coverage standard error, violation count, oracle coverage,
-positive-bound and unseen rates, conditional coverage and positive-bound
-rate given
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_{\max}&gt;0</annotation></semantics></math>,
-component coverage for
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>1</mn></msub><mo>,</mo><msub><mi>M</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">M_1,M_2</annotation></semantics></math>,
-and tightness diagnostics. Values are in the original probability scale;
-plotted bounds are multiplied by 1000. Additional columns identify zero
-oracles, oracle/LB median coincidences, and the exact probability of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_{\max}=0</annotation></semantics></math>,
-so a hidden line is unambiguous.</p>
+<p>The single readable report is
+<code>LowerBound/res/Exp_LB_summary.html</code>. It contains 18 separate
+tables, one per distribution, parameter and arm, with only three
+columns: <strong>oracle</strong>, <strong>lb_median</strong>, and
+coverage. All metadata (distribution, parameter, arm, fixed M or n,
+range of the varying quantity, Brep and alpha) appear in the caption.
+Each row group is labelled with its varying M or n value. The HTML is
+self-contained and works offline.</p>
+<p>Coverage is computed on the individual Monte Carlo repetitions:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">coverage</mi><mo>⁡</mo></mrow><mo>=</mo><mfrac><mn>1</mn><msub><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">p</mi></mrow></msub></mfrac><munderover><mo>∑</mo><mrow><mi>b</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">p</mi></mrow></msub></munderover><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mi>L</mi><msub><mi>B</mi><mi>b</mi></msub><mo>≤</mo><msub><mi>M</mi><mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo>,</mo><mi>b</mi></mrow></msub><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\operatorname{coverage}=\frac1{B_{\mathrm{rep}}}
+\sum_{b=1}^{B_{\mathrm{rep}}}\mathbf 1\{LB_b\le M_{\max,b}\}.
+</annotation></semantics></math> It uses the realized true maximum
+unseen prevalence in the same sample, not the deterministic oracle and
+not the median LB. <code>coverage_Mmax</code> is an explicit alias in
+diagnostic exports; <code>coverage_vs_oracle</code> is a separate
+comparison
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">p</mi></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msubsup><msub><mo>∑</mo><mi>b</mi></msub><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mi>L</mi><msub><mi>B</mi><mi>b</mi></msub><mo>≤</mo><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi></mrow><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">B_{\mathrm{rep}}^{-1}\sum_b\mathbf 1\{LB_b\le\mathrm{oracle}\}</annotation></semantics></math>.</p>
+<p>Full numerical diagnostics remain in
+<code>res/Exp_LB_summary.csv</code> and the distribution-specific CSVs:
+quantiles, Monte Carlo confidence intervals, violation counts,
+positive-bound and unseen rates, component coverage, and tightness.
+Values are in the original probability scale; plotted bounds are
+multiplied by 1000. Old per-scenario HTML files are retired on report
+rebuild.</p>
+<p>To rebuild just this HTML and its CSVs from the saved MC repetitions,
+without generating figures, starting workers or drawing any new samples,
+run:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> LowerBound/render_results.R</span></code></pre></div>
+<p>The reporting-only script uses the checkpoint when available,
+otherwise the existing CSV summary. It prints a short recap followed by
+<code>FINITO</code>.</p>
 <p>To regenerate figures and tables from an existing checkpoint without
 running the experiment again, use:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./run_job.sh</span> LowerBound/Exp_LB_M_n.R choose_wd=2 report_only=TRUE</span></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./run_job.sh</span> LowerBound/Exp_LB_M_n.R choose_wd=2 report_only=TRUE</span></code></pre></div>
 <p>This reads <code>LowerBound/save/Exp_LB_checkpoint.rds</code>; it
 starts no workers and generates no new samples. The original saved
 configuration determines alpha, seed, benchmarks and repetition count.
@@ -487,5 +497,46 @@ checkpoint is absent, the script stops with a clear error rather than
 starting a simulation. The output directory is the selected checkout. A
 recap and <code>FINITO</code> are printed after all outputs are
 written.</p>
+<h3 id="add-zipf-exponents-1.2-and-2-without-repeating-completed-cells">Add
+Zipf exponents 1.2 and 2 without repeating completed cells</h3>
+<p>The default benchmark list now also includes Zipf
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>1.2</mn></mrow><annotation encoding="application/x-tex">s=1.2</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">s=2</annotation></semantics></math>.
+The original nine benchmarks and the new two use exactly the same M/n
+grids, sample counts, alpha and seed. The complete experiment has 550
+cells and 22 figures/tables (11 distribution/parameter combinations, two
+arms each).</p>
+<p>After updating the code on the VM, run from the repository root:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">git</span> pull</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./run_job.sh</span> LowerBound/Exp_LB_M_n.R choose_wd=2 resume=TRUE workers=15</span></code></pre></div>
+<p><code>resume=TRUE</code> requires
+<code>LowerBound/save/Exp_LB_checkpoint.rds</code>. It matches saved
+cells by distribution, exact parameter, arm, M and n, preserving their
+samples. It checks that Brep, alpha, seed and both grids agree with the
+saved run. With the original 450-cell checkpoint it simulates only the
+100 missing cells (100,000 new repetitions with Brep=1000). A repeated
+incremental launch after those cells are saved simulates no cells.</p>
+<p>Before replacing the checkpoint, the script copies the previous file
+to
+<code>save/Exp_LB_checkpoint_before_resume_&lt;timestamp&gt;_&lt;pid&gt;.rds</code>.
+New cells are appended after the original task list so the original
+random-stream assignments remain stable. Parallel scheduling and worker
+count do not change the streams. Checkpoints from earlier script
+versions may have fewer diagnostic columns; these are normalized when
+old and new results are combined.</p>
+<p>The same command automatically rebuilds all PDFs in
+<code>img/</code>, CSV results and coverage diagnostics in
+<code>save/</code> and <code>res/</code>, and the single readable
+<code>res/Exp_LB_summary.html</code>. The recap reports reused and
+simulated cell counts; wait for the final <code>FINITO</code> line in
+the log indicated by <code>run_job.sh</code>.</p>
+<p>Defaults remain Brep=1000, alpha=0.05, seed=42. If the previous run
+used different values, provide the same saved values on the incremental
+command. <code>resume=TRUE</code> and <code>report_only=TRUE</code>
+cannot be combined. Omitting both flags runs the full current 550-cell
+experiment; using <code>report_only=TRUE</code> refreshes only cells
+already present in the checkpoint and does not add new benchmarks. The
+incremental simulation has been prepared, not executed locally.</p>
 </body>
 </html>
