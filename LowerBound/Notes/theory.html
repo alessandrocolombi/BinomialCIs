@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="it" xml:lang="it">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <meta name="author" content="Note teoriche: rapporti di momenti e controllo simultaneo" />
+  <title>LowerBound - Derivazioni formali</title>
+  <style>
+
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+</style>
+  <style type="text/css">:root { color-scheme: light; --ink: #202b36; --accent: #b85d13; }
+* { box-sizing: border-box; }
+body { max-width: 1020px; margin: 0 auto; padding: 44px 38px 72px;
+font: 17px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+color: var(--ink); background: #fff; }
+header { border-bottom: 3px solid var(--accent); padding-bottom: 18px; }
+header h1 { margin-bottom: 0; }
+h1, h2, h3 { line-height: 1.25; color: #152b40; }
+h1 { font-size: 2rem; } h2 { margin-top: 2.4rem; font-size: 1.45rem; }
+p, li { overflow-wrap: anywhere; }
+a { color: #125d9a; text-underline-offset: 3px; }
+nav { background: #f5f7fa; padding: 16px 24px; margin: 24px 0; border-radius: 8px; }
+nav ul { margin: 0; padding-left: 20px; }
+pre { overflow-x: auto; padding: 16px; background: #f5f7fa;
+border: 1px solid #dce3e9; border-radius: 6px; line-height: 1.5; }
+code { font: .88em/1.5 Consolas, "Liberation Mono", monospace; }
+p code, li code { background: #f0f3f6; padding: 2px 4px; border-radius: 3px; }
+table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+th, td { border-bottom: 1px solid #dce3e9; padding: 10px 14px; text-align: left; }
+th { background: #f5f7fa; }
+math { font-size: 1.08em; }
+math[display="block"] { display: block; overflow-x: auto; padding: 16px 4px; margin: 20px 0; }
+@media (max-width: 640px) { body { padding: 24px 18px 40px; font-size: 16px; } }
+@media print { body { max-width: none; padding: 0; font-size: 11pt; }
+nav { display: none; } pre, table, math { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">LowerBound - Derivazioni formali</h1>
+<p class="author">Note teoriche: rapporti di momenti e controllo
+simultaneo</p>
+<p class="date">6 novembre 2026</p>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#modello-notazione-e-fatti-probabilistici-comuni" id="toc-modello-notazione-e-fatti-probabilistici-comuni">Modello,
+notazione e fatti probabilistici comuni</a></li>
+<li><a href="#geometria-oracle-e-scelta-dei-rapporti-consecutivi" id="toc-geometria-oracle-e-scelta-dei-rapporti-consecutivi">Geometria
+oracle e scelta dei rapporti consecutivi</a></li>
+<li><a href="#prima-derivazione-rapporto-di-estremi-separati-ordine-fissato" id="toc-prima-derivazione-rapporto-di-estremi-separati-ordine-fissato">Prima
+derivazione: rapporto di estremi separati, ordine fissato</a></li>
+<li><a href="#seconda-derivazione-regione-congiunta-per-una-coppia-fissata" id="toc-seconda-derivazione-regione-congiunta-per-una-coppia-fissata">Seconda
+derivazione: regione congiunta per una coppia fissata</a></li>
+<li><a href="#terza-derivazione-controllo-simultaneo-degli-ordini-da-2-a-r" id="toc-terza-derivazione-controllo-simultaneo-degli-ordini-da-2-a-r">Terza
+derivazione: controllo simultaneo degli ordini da 2 a R</a></li>
+<li><a href="#corrispondenza-con-limplementazione-e-lettura-dei-risultati" id="toc-corrispondenza-con-limplementazione-e-lettura-dei-risultati">Corrispondenza
+con l’implementazione e lettura dei risultati</a></li>
+</ul>
+</nav>
+<h1 id="modello-notazione-e-fatti-probabilistici-comuni">Modello,
+notazione e fatti probabilistici comuni</h1>
+<p>Il tempo di campionamento
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+è fissato. Osserviamo variabili indipendenti
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>j</mi></msub><mo>∼</mo><mrow><mi mathvariant="normal">B</mi><mi mathvariant="normal">i</mi><mi mathvariant="normal">n</mi></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>,</mo><msub><mi>p</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">N_j\sim\mathrm{Bin}(n,p_j)</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">j\ge1</annotation></semantics></math>,
+con parametro fissato
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>p</mi><mo>∈</mo><mi>ℱ</mi><mo>:=</mo><mo stretchy="false" form="prefix">{</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>p</mi><mi>j</mi></msub><msub><mo stretchy="false" form="postfix">)</mo><mrow><mi>j</mi><mo>≥</mo><mn>1</mn></mrow></msub><mo>:</mo><mn>0</mn><mo>≤</mo><msub><mi>p</mi><mi>j</mi></msub><mo>≤</mo><mn>1</mn><mo>,</mo><mspace width="1.0em"></mspace><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mo>:=</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>≥</mo><mn>1</mn></mrow></munder><msub><mi>p</mi><mi>j</mi></msub><mo>&lt;</mo><mi>∞</mi><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">p\in\mathcal F:=\{(p_j)_{j\ge1}:0\le p_j\le1,\quad
+ S(p):=\sum_{j\ge1}p_j&lt;\infty\}.</annotation></semantics></math>
+Definiamo, per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">a\ge1</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>≤</mo><mi>k</mi><mo>≤</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1\le k\le n</annotation></semantics></math>,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>M</mi><mi>a</mi></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><msubsup><mi>p</mi><mi>j</mi><mi>a</mi></msubsup><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>=</mo><munder><mi mathvariant="normal">max</mi><mrow><mi>j</mi><mo>:</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></munder><msub><mi>p</mi><mi>j</mi></msub><mo>,</mo></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><msub><mi>K</mi><mi>k</mi></msub><mo>=</mo><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>k</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mi>k</mi><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>η</mi><mi>k</mi></msub><mo>=</mo><msub><mi>𝔼</mi><mi>p</mi></msub><msub><mi>K</mi><mi>k</mi></msub><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{gathered}
+ M_a=\sum_jp_j^a\mathbf 1\{N_j=0\},\qquad M_{\max}=\max_{j:N_j=0}p_j,\\
+ K_k=K_{n,k}=\sum_j\mathbf 1\{N_j=k\},\qquad \eta_k=\mathbb E_pK_k.
+ \end{gathered}</annotation></semantics></math> Il massimo è zero se non
+vi sono prevalenze positive non osservate; la missing mass è
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℳ</mi><mn>0</mn></msub><mo>=</mo><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">\mathcal M_0=M_1</annotation></semantics></math>.
+Le statistiche
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mi>a</mi></msub><annotation encoding="application/x-tex">M_a</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><annotation encoding="application/x-tex">M_{\max}</annotation></semantics></math>
+sono casuali, benché
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>p</mi><annotation encoding="application/x-tex">p</annotation></semantics></math>
+sia fissato. Tutte le garanzie sono a tempo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+fissato e non sono garanzie di arresto opzionale. Poiché
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>p</mi></msub><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mi>n</mi><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbb E_p\sum_jN_j=nS(p)</annotation></semantics></math>,
+i conteggi osservati e gli
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>η</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\eta_k</annotation></semantics></math>
+sono finiti. Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_{\max}&gt;0</annotation></semantics></math>,
+il massimo è raggiunto e ha molteplicità finita: la sommabilità implica
+che vi siano solo finitamente molti
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mi>j</mi></msub><annotation encoding="application/x-tex">p_j</annotation></semantics></math>
+sopra qualsiasi soglia positiva.</p>
+<p>Per interi
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>≤</mo><mi>j</mi><mo>≤</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1\le j\le n</annotation></semantics></math>,
+poniamo
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>j</mi></msub><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mi>j</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>T</mi><mi>j</mi></msub><mo>=</mo><msub><mi>a</mi><mi>j</mi></msub><msub><mi>K</mi><mi>j</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>D</mi><mi>j</mi></msub><mo>=</mo><msub><mi>T</mi><mi>j</mi></msub><mo>−</mo><msub><mi>M</mi><mi>j</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>b</mi><mi>j</mi></msub><mo>=</mo><msub><mi>𝔼</mi><mi>p</mi></msub><msub><mi>D</mi><mi>j</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>e</mi><mi>j</mi></msub><mo>=</mo><msub><mi>D</mi><mi>j</mi></msub><mo>−</mo><msub><mi>b</mi><mi>j</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">a_j=\binom nj^{-1},\quad T_j=a_jK_j,\quad D_j=T_j-M_j,
+ \quad b_j=\mathbb E_pD_j,\quad e_j=D_j-b_j.</annotation></semantics></math></p>
+<div id="prop:errors" class="proposition">
+<p><strong>Proposizione 1</strong> (Bias e varianza dell’errore). <em>Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>2</mn><mi>j</mi></mrow><annotation encoding="application/x-tex">n\ge2j</annotation></semantics></math>,
+allora
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>b</mi><mi>j</mi></msub><mo>≤</mo><msub><mover><mi>b</mi><mo accent="true">¯</mo></mover><mi>j</mi></msub><mo>:=</mo><mi>j</mi><msub><mi>a</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi>η</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mrow><mi mathvariant="normal">Var</mi><mo>⁡</mo></mrow><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>D</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><msub><mi>v</mi><mi>j</mi></msub><mo>:=</mo><msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>η</mi><mi>j</mi></msub><mo>+</mo><msub><mi>a</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><msub><mi>η</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">0\le b_j\le \overline b_j:=j a_{j+1}\eta_{j+1},\qquad
+ \operatorname{Var}_p(D_j)\le v_j:=a_j^2\eta_j+a_{2j}\eta_{2j}.</annotation></semantics></math>
+Per ogni
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">x&gt;0</annotation></semantics></math>
+ed
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\epsilon\in(0,1)</annotation></semantics></math>,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mi>ℙ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">{</mo><msub><mi>D</mi><mi>j</mi></msub><mo>&gt;</mo><msub><mover><mi>b</mi><mo accent="true">¯</mo></mover><mi>j</mi></msub><mo>+</mo><msqrt><mrow><mn>2</mn><msub><mi>v</mi><mi>j</mi></msub><mi>x</mi></mrow></msqrt><mo>+</mo><mn>2</mn><msub><mi>a</mi><mi>j</mi></msub><mi>x</mi><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">}</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>≤</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>x</mi></mrow></msup><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mi>ℙ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">{</mo><msub><mi>D</mi><mi>j</mi></msub><mo>&lt;</mo><mi>−</mi><msqrt><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo><msub><mi>v</mi><mi>j</mi></msub><mi>/</mi><mi>ϵ</mi></mrow></msqrt><mo stretchy="false" form="postfix">}</mo></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>≤</mo><mi>ϵ</mi><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">\begin{align}
+ \mathbb P_p\{D_j&gt;\overline b_j+\sqrt{2v_jx}+2a_jx/3\}&amp;\le e^{-x},\label{eq:bern}\\
+ \mathbb P_p\{D_j&lt;-\sqrt{(1-\epsilon)v_j/\epsilon}\}&amp;\le\epsilon.\label{eq:cant}
+\end{align}</annotation></semantics></math></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Scriviamo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>q</mi><mo>=</mo><mn>1</mn><mo>−</mo><mi>p</mi></mrow><annotation encoding="application/x-tex">q=1-p</annotation></semantics></math>
+per una singola categoria e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mi>j</mi></msub><mo>=</mo><msub><mi>a</mi><mi>j</mi></msub><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mi>N</mi><mo>=</mo><mi>j</mi><mo stretchy="false" form="postfix">}</mo><mo>−</mo><msup><mi>p</mi><mi>j</mi></msup><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><mi>N</mi><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">d_j=a_j\mathbf 1\{N=j\}-p^j\mathbf 1\{N=0\}</annotation></semantics></math>.
+Allora
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>𝔼</mi><msub><mi>d</mi><mi>j</mi></msub><mo>=</mo><msup><mi>p</mi><mi>j</mi></msup><msup><mi>q</mi><mrow><mi>n</mi><mo>−</mo><mi>j</mi></mrow></msup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msup><mi>q</mi><mi>j</mi></msup><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mi>j</mi><msup><mi>p</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msup><msup><mi>q</mi><mrow><mi>n</mi><mo>−</mo><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msup><mo>,</mo></mrow><annotation encoding="application/x-tex">\mathbb E d_j=p^jq^{n-j}(1-q^j)
+ \le j p^{j+1}q^{n-j-1},</annotation></semantics></math> poiché
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><msup><mi>q</mi><mi>j</mi></msup><mo>≤</mo><mi>j</mi><mi>p</mi></mrow><annotation encoding="application/x-tex">1-q^j\le jp</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>q</mi><mrow><mi>n</mi><mo>−</mo><mi>j</mi></mrow></msup><mo>≤</mo><msup><mi>q</mi><mrow><mi>n</mi><mo>−</mo><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">q^{n-j}\le q^{n-j-1}</annotation></semantics></math>.
+Sommando otteniamo il controllo del bias. Per disgiunzione degli eventi,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mo>∑</mo><mi>ℓ</mi></munder><mi>𝔼</mi><msubsup><mi>d</mi><mrow><mi>j</mi><mo>,</mo><mi>ℓ</mi></mrow><mn>2</mn></msubsup><mo>=</mo><msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>η</mi><mi>j</mi></msub><mo>+</mo><munder><mo>∑</mo><mi>ℓ</mi></munder><msubsup><mi>p</mi><mi>ℓ</mi><mrow><mn>2</mn><mi>j</mi></mrow></msubsup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>ℓ</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mi>n</mi></msup><mo>≤</mo><msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>η</mi><mi>j</mi></msub><mo>+</mo><msub><mi>a</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><msub><mi>η</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">\sum_\ell\mathbb E d_{j,\ell}^2
+ =a_j^2\eta_j+\sum_\ell p_\ell^{2j}(1-p_\ell)^n
+ \le a_j^2\eta_j+a_{2j}\eta_{2j}.</annotation></semantics></math>
+L’indipendenza dà il controllo della varianza. Inoltre
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mrow><mi>j</mi><mo>,</mo><mi>ℓ</mi></mrow></msub><mo>−</mo><mi>𝔼</mi><msub><mi>d</mi><mrow><mi>j</mi><mo>,</mo><mi>ℓ</mi></mrow></msub><mo>≤</mo><msub><mi>a</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">d_{j,\ell}-\mathbb E d_{j,\ell}\le a_j</annotation></semantics></math>,
+poiché la media è non negativa. Bernstein unilaterale dà <a href="#eq:bern" data-reference-type="eqref" data-reference="eq:bern">[eq:bern]</a>. Per <a href="#eq:cant" data-reference-type="eqref" data-reference="eq:cant">[eq:cant]</a>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>j</mi></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">b_j\ge0</annotation></semantics></math>
+e Cantelli implicano
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℙ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>D</mi><mi>j</mi></msub><mo>&lt;</mo><mi>−</mi><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><msub><mi>v</mi><mi>j</mi></msub><mi>/</mi><mo stretchy="false" form="prefix">(</mo><msub><mi>v</mi><mi>j</mi></msub><mo>+</mo><msup><mi>t</mi><mn>2</mn></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\mathbb P_p(D_j&lt;-t)\le v_j/(v_j+t^2)</annotation></semantics></math>.
+Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v_j=0</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mi>j</mi></msub><mo>=</mo><msub><mi>b</mi><mi>j</mi></msub><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">D_j=b_j\ge0</annotation></semantics></math>
+quasi certamente e la conclusione è diretta. Le somme infinite si
+ottengono per passaggio al limite: la somma dei valori attesi assoluti è
+finita e la somma delle varianze è finita. ◻</p>
+</div>
+<div id="lem:counts" class="lemma">
+<p><strong>Lemma 2</strong> (Upper bound osservabile dei conteggi medi).
+<em>Per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">k\ge1</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\epsilon\in(0,1)</annotation></semantics></math>,
+definiamo
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msqrt><mfrac><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><mn>2</mn></mfrac></msqrt><mo>+</mo><msqrt><mrow><msub><mi>K</mi><mi>k</mi></msub><mo>+</mo><mfrac><mn>7</mn><mn>6</mn></mfrac><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">C_k(\epsilon)=\left(\sqrt{\frac{\log(1/\epsilon)}2}
+ +\sqrt{K_k+\frac76\log(1/\epsilon)}\right)^2.</annotation></semantics></math>
+Allora
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℙ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">{</mo><msub><mi>η</mi><mi>k</mi></msub><mo>≤</mo><msub><mi>C</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\mathbb P_p\{\eta_k\le C_k(\epsilon)\}\ge1-\epsilon</annotation></semantics></math>.
+Per un insieme deterministico finito
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
+di
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+indici, con probabilità almeno
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>m</mi><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">1-m\epsilon</annotation></semantics></math>
+tutti questi bound valgono insieme.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>k</mi></msub><annotation encoding="application/x-tex">K_k</annotation></semantics></math>
+è somma di Bernoulli indipendenti e ha varianza al più
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>η</mi><mi>k</mi></msub><annotation encoding="application/x-tex">\eta_k</annotation></semantics></math>.
+Bernstein implica, con
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">x=\log(1/\epsilon)</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℙ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">{</mo><msub><mi>η</mi><mi>k</mi></msub><mo>−</mo><msub><mi>K</mi><mi>k</mi></msub><mo>&gt;</mo><msqrt><mrow><mn>2</mn><msub><mi>η</mi><mi>k</mi></msub><mi>x</mi></mrow></msqrt><mo>+</mo><mn>2</mn><mi>x</mi><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">}</mo><mo>≤</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">\mathbb P_p\{\eta_k-K_k&gt;\sqrt{2\eta_kx}+2x/3\}\le\epsilon</annotation></semantics></math>.
+Risolvendo la corrispondente disuguaglianza quadratica in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msqrt><msub><mi>η</mi><mi>k</mi></msub></msqrt><annotation encoding="application/x-tex">\sqrt{\eta_k}</annotation></semantics></math>
+si ottiene
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>C</mi><mi>k</mi></msub><annotation encoding="application/x-tex">C_k</annotation></semantics></math>.
+L’ultima affermazione segue dall’unione degli eventi. È il controllo dei
+conteggi usato anche da Ayed et al. (2019, Remark A.1). ◻</p>
+</div>
+<h1 id="geometria-oracle-e-scelta-dei-rapporti-consecutivi">Geometria
+oracle e scelta dei rapporti consecutivi</h1>
+<p>In questa sezione fissiamo anche il campione e supponiamo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>1</mn></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_1&gt;0</annotation></semantics></math>.</p>
+<div id="prop:oracle" class="proposition">
+<p><strong>Proposizione 3</strong> (Gerarchia oracle). <em>Per reali
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>≤</mo><mi>s</mi><mo>&lt;</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">1\le s&lt;r</annotation></semantics></math>,
+poniamo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mrow><mi>r</mi><mo>,</mo><mi>s</mi></mrow></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msub><mi>M</mi><mi>r</mi></msub><mi>/</mi><msub><mi>M</mi><mi>s</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>r</mi><mo>−</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">Q_{r,s}=(M_r/M_s)^{1/(r-s)}</annotation></semantics></math>.
+Allora
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mrow><mi>r</mi><mo>,</mo><mi>s</mi></mrow></msub><mo>≤</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub></mrow><annotation encoding="application/x-tex">Q_{r,s}\le M_{\max}</annotation></semantics></math>.
+La quantità
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>Q</mi><mrow><mi>r</mi><mo>,</mo><mi>s</mi></mrow></msub><annotation encoding="application/x-tex">Q_{r,s}</annotation></semantics></math>
+è non decrescente in ciascun estremo, mantenendo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>&lt;</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">s&lt;r</annotation></semantics></math>.
+Per interi
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">r\ge2</annotation></semantics></math>,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mrow><mi>r</mi><mo>,</mo><mn>1</mn></mrow></msub><mo>≤</mo><msub><mi>Q</mi><mrow><mi>r</mi><mo>,</mo><mn>2</mn></mrow></msub><mo>≤</mo><mi>⋯</mi><mo>≤</mo><msub><mi>Q</mi><mrow><mi>r</mi><mo>,</mo><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>=</mo><mfrac><msub><mi>M</mi><mi>r</mi></msub><msub><mi>M</mi><mrow><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msub></mfrac><mo>≤</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><mfrac><msub><mi>M</mi><mi>r</mi></msub><msub><mi>M</mi><mrow><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msub></mfrac><mo>↑</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">Q_{r,1}\le Q_{r,2}\le\cdots\le Q_{r,r-1}
+ =\frac{M_r}{M_{r-1}}\le M_{\max},
+ \qquad \frac{M_r}{M_{r-1}}\uparrow M_{\max}.</annotation></semantics></math>
+Tra le coppie intere
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>&gt;</mo><mi>s</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">r&gt;s\ge1</annotation></semantics></math>,
+il minimo oracle è
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>2</mn></msub><mi>/</mi><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">M_2/M_1</annotation></semantics></math>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Si ha
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>r</mi></msub><mo>≤</mo><msubsup><mi>M</mi><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mrow><mi>r</mi><mo>−</mo><mi>s</mi></mrow></msubsup><msub><mi>M</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">M_r\le M_{\max}^{r-s}M_s</annotation></semantics></math>.
+Per Hölder
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>f</mi><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msub><mi>M</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">f(t)=\log M_t</annotation></semantics></math>
+è convessa;
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><msub><mi>Q</mi><mrow><mi>r</mi><mo>,</mo><mi>s</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\log Q_{r,s}</annotation></semantics></math>
+è la pendenza della secante tra
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>s</mi><annotation encoding="application/x-tex">s</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>
+e cresce in ciascun estremo. Equivalentemente, posto
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>j</mi></msub><mo>=</mo><msub><mi>M</mi><mi>j</mi></msub><mi>/</mi><msub><mi>M</mi><mrow><mi>j</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">A_j=M_j/M_{j-1}</annotation></semantics></math>,
+la log-convessità dà
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>j</mi></msub><mo>≤</mo><msub><mi>A</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><annotation encoding="application/x-tex">A_j\le A_{j+1}</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>Q</mi><mrow><mi>r</mi><mo>,</mo><mi>s</mi></mrow></msub><mo>=</mo><mo stretchy="false" form="prefix">(</mo><msubsup><mo>∏</mo><mrow><mi>j</mi><mo>=</mo><mi>s</mi><mo>+</mo><mn>1</mn></mrow><mi>r</mi></msubsup><msub><mi>A</mi><mi>j</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>r</mi><mo>−</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">Q_{r,s}=(\prod_{j=s+1}^r A_j)^{1/(r-s)}</annotation></semantics></math>.
+Per il limite, sia
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">m=M_{\max}&gt;0</annotation></semantics></math>
+di molteplicità
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>k</mi><annotation encoding="application/x-tex">k</annotation></semantics></math>.
+Scriviamo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>j</mi></msub><mo>=</mo><msup><mi>m</mi><mi>j</mi></msup><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo>+</mo><msub><mo>∑</mo><mrow><mn>0</mn><mo>&lt;</mo><msub><mi>u</mi><mi>ℓ</mi></msub><mo>&lt;</mo><mi>m</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>u</mi><mi>ℓ</mi></msub><mi>/</mi><mi>m</mi><msup><mo stretchy="false" form="postfix">)</mo><mi>j</mi></msup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">M_j=m^j(k+\sum_{0&lt;u_\ell&lt;m}(u_\ell/m)^j)</annotation></semantics></math>,
+dove gli
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mi>ℓ</mi></msub><annotation encoding="application/x-tex">u_\ell</annotation></semantics></math>
+sono le prevalenze non osservate. La somma residua tende a zero per
+convergenza dominata, essendo dominata da
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo>∑</mo><msub><mi>u</mi><mi>ℓ</mi></msub><mi>/</mi><mi>m</mi><mo>&lt;</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">\sum u_\ell/m&lt;\infty</annotation></semantics></math>.
+Ne segue
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>j</mi></msub><mo>→</mo><mi>m</mi></mrow><annotation encoding="application/x-tex">A_j\to m</annotation></semantics></math>.
+Se tutte le prevalenze positive non osservate sono uguali, tutte le
+disuguaglianze sono uguaglianze. ◻</p>
+</div>
+<div class="proposition">
+<p><strong>Proposizione 4</strong> (Media pesata e quoziente di
+Rayleigh). <em>Con
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>u</mi><mi>j</mi></msub><mo>=</mo><msub><mi>p</mi><mi>j</mi></msub><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">u_j=p_j\mathbf 1\{N_j=0\}</annotation></semantics></math>,
+per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">r\ge2</annotation></semantics></math>,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><msub><mi>M</mi><mi>r</mi></msub><msub><mi>M</mi><mrow><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msub></mfrac><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mfrac><msubsup><mi>u</mi><mi>j</mi><mrow><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msubsup><msub><mi>M</mi><mrow><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msub></mfrac><msub><mi>u</mi><mi>j</mi></msub><mo>=</mo><mfrac><mrow><mo stretchy="false" form="prefix">⟨</mo><mi>v</mi><mo>,</mo><mrow><mi mathvariant="normal">diag</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>u</mi><mo stretchy="false" form="postfix">)</mo><mi>v</mi><mo stretchy="false" form="postfix">⟩</mo></mrow><mrow><mo stretchy="false" form="prefix">⟨</mo><mi>v</mi><mo>,</mo><mi>v</mi><mo stretchy="false" form="postfix">⟩</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>v</mi><mi>j</mi></msub><mo>=</mo><msubsup><mi>u</mi><mi>j</mi><mrow><mo stretchy="false" form="prefix">(</mo><mi>r</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo><mi>/</mi><mn>2</mn></mrow></msubsup><mi>.</mi></mrow><annotation encoding="application/x-tex">\frac{M_r}{M_{r-1}}=\sum_j\frac{u_j^{r-1}}{M_{r-1}}u_j
+ =\frac{\langle v,\operatorname{diag}(u)v\rangle}{\langle v,v\rangle},
+ \qquad v_j=u_j^{(r-1)/2}.</annotation></semantics></math></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Le identità sono immediate. La sommabilità assicura
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>∈</mo><msub><mi>ℓ</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">v\in\ell_2</annotation></semantics></math>.
+La norma di questo operatore è il massimo degli
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>u</mi><mi>j</mi></msub><annotation encoding="application/x-tex">u_j</annotation></semantics></math>,
+cioè
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><annotation encoding="application/x-tex">M_{\max}</annotation></semantics></math>. ◻</p>
+</div>
+<p>La gerarchia riguarda i momenti veri. Non implica che i rapporti
+stimati, dopo correzioni di bias e concentrazione, siano ordinati nello
+stesso modo.</p>
+<h1 id="prima-derivazione-rapporto-di-estremi-separati-ordine-fissato">Prima
+derivazione: rapporto di estremi separati, ordine fissato</h1>
+<div id="thm:separate" class="theorem">
+<p><strong>Teorema 5</strong> (Lower bound separato). <em>Fissiamo un
+intero
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">r\ge2</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>r</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">s=r-1</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>2</mn><mi>r</mi></mrow><annotation encoding="application/x-tex">n\ge2r</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\delta\in(0,1)</annotation></semantics></math>.
+Siano
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>J</mi><mo>=</mo><mo stretchy="false" form="prefix">{</mo><mi>s</mi><mo>,</mo><mi>r</mi><mo>,</mo><mi>r</mi><mo>+</mo><mn>1</mn><mo>,</mo><mn>2</mn><mi>s</mi><mo>,</mo><mn>2</mn><mi>r</mi><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="1.0em"></mspace><mi>m</mi><mo>=</mo><mo stretchy="false" form="prefix">|</mo><mi>J</mi><mo stretchy="false" form="prefix">|</mo><mo>,</mo><mspace width="1.0em"></mspace><mi>ϵ</mi><mo>=</mo><mfrac><mi>δ</mi><mrow><mi>m</mi><mo>+</mo><mn>2</mn></mrow></mfrac><mo>,</mo><mspace width="1.0em"></mspace><mi>x</mi><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>C</mi><mi>k</mi></msub><mo>=</mo><msub><mi>C</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo>∈</mo><mi>J</mi><mo stretchy="false" form="postfix">)</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">J=\{s,r,r+1,2s,2r\},\quad m=|J|,\quad
+ \epsilon=\frac{\delta}{m+2},\quad x=\log(1/\epsilon),\quad
+ C_k=C_k(\epsilon)\ (k\in J).</annotation></semantics></math> Per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mi>s</mi><mo>,</mo><mi>r</mi></mrow><annotation encoding="application/x-tex">j=s,r</annotation></semantics></math>
+definiamo
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mi>j</mi></msub><mo>=</mo><mi>j</mi><msub><mi>a</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>V</mi><mi>j</mi></msub><mo>=</mo><msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>C</mi><mi>j</mi></msub><mo>+</mo><msub><mi>a</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><msub><mi>C</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">B_j=j a_{j+1}C_{j+1},\qquad V_j=a_j^2C_j+a_{2j}C_{2j}.</annotation></semantics></math>
+Tutti gli indici richiesti sono in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>.
+Definiamo
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>r</mi></msub><mo>=</mo><mo stretchy="false" form="prefix">[</mo><msub><mi>T</mi><mi>r</mi></msub><mo>−</mo><msub><mi>B</mi><mi>r</mi></msub><mo>−</mo><msqrt><mrow><mn>2</mn><msub><mi>V</mi><mi>r</mi></msub><mi>x</mi></mrow></msqrt><mo>−</mo><mn>2</mn><msub><mi>a</mi><mi>r</mi></msub><mi>x</mi><mi>/</mi><mn>3</mn><msub><mo stretchy="false" form="postfix">]</mo><mo>+</mo></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>U</mi><mi>s</mi></msub><mo>=</mo><msub><mi>T</mi><mi>s</mi></msub><mo>+</mo><msqrt><mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo><msub><mi>V</mi><mi>s</mi></msub><mi>/</mi><mi>ϵ</mi></mrow></msqrt><mi>.</mi></mrow><annotation encoding="application/x-tex">L_r=[T_r-B_r-\sqrt{2V_rx}-2a_rx/3]_+,\qquad
+ U_s=T_s+\sqrt{(1-\epsilon)V_s/\epsilon}.</annotation></semantics></math>
+Allora
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℙ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">{</mo><msub><mi>L</mi><mi>r</mi></msub><mo>≤</mo><msub><mi>M</mi><mi>r</mi></msub><mo>,</mo><mspace width="0.222em"></mspace><msub><mi>M</mi><mi>s</mi></msub><mo>≤</mo><msub><mi>U</mi><mi>s</mi></msub><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">\mathbb P_p\{L_r\le M_r,\ M_s\le U_s\}\ge1-\delta</annotation></semantics></math>
+e
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℙ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">{</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≥</mo><msub><mi>L</mi><mi>r</mi></msub><mi>/</mi><msub><mi>U</mi><mi>s</mi></msub><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>δ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb P_p\{M_{\max}\ge L_r/U_s\}\ge1-\delta.</annotation></semantics></math>
+Il rapporto è definito zero se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mi>s</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">U_s=0</annotation></semantics></math>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Il Lemma <a href="#lem:counts" data-reference-type="ref" data-reference="lem:counts">2</a> controlla
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math>
+eventi. Aggiungiamo <a href="#eq:bern" data-reference-type="eqref" data-reference="eq:bern">[eq:bern]</a> per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>r</mi></msub><annotation encoding="application/x-tex">D_r</annotation></semantics></math>
+e <a href="#eq:cant" data-reference-type="eqref" data-reference="eq:cant">[eq:cant]</a> per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>D</mi><mi>s</mi></msub><annotation encoding="application/x-tex">D_s</annotation></semantics></math>,
+ciascuno con errore
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>ϵ</mi><annotation encoding="application/x-tex">\epsilon</annotation></semantics></math>.
+Sul loro evento congiunto
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>j</mi></msub><mo>≤</mo><msub><mi>B</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">b_j\le B_j</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>j</mi></msub><mo>≤</mo><msub><mi>V</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">v_j\le V_j</annotation></semantics></math>,
+e le formule danno gli estremi dichiarati. Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>s</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_s&gt;0</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≥</mo><msub><mi>M</mi><mi>r</mi></msub><mi>/</mi><msub><mi>M</mi><mi>s</mi></msub><mo>≥</mo><msub><mi>L</mi><mi>r</mi></msub><mi>/</mi><msub><mi>U</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">M_{\max}\ge M_r/M_s\ge L_r/U_s</annotation></semantics></math>.
+Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>s</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_s=0</annotation></semantics></math>,
+anche
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>r</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_r=0</annotation></semantics></math>
+e sullo stesso evento
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>r</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">L_r=0</annotation></semantics></math>.
+L’errore totale è
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>m</mi><mo>+</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mi>ϵ</mi></mrow><annotation encoding="application/x-tex">(m+2)\epsilon</annotation></semantics></math>. ◻</p>
+</div>
+<div class="remark">
+<p><em>Osservazione 6</em>. Questo teorema conserva la derivazione con
+Cantelli per il denominatore. Il benchmark già implementato
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mn>2</mn></msub><mi>/</mi><msub><mi>U</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">L_2/U_1</annotation></semantics></math>
+usa invece, per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>U</mi><mn>1</mn></msub><annotation encoding="application/x-tex">U_1</annotation></semantics></math>,
+lo specifico upper bound della missing mass di Ayed et al. (2019). Le
+due procedure non sono identiche e vengono tenute distinte.</p>
+</div>
+<h1 id="seconda-derivazione-regione-congiunta-per-una-coppia-fissata">Seconda
+derivazione: regione congiunta per una coppia fissata</h1>
+<div id="thm:pair" class="theorem">
+<p><strong>Teorema 7</strong> (Regione congiunta e controllo uniforme in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>).
+<em>Fissiamo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">r\ge2</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>s</mi><mo>=</mo><mi>r</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">s=r-1</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>2</mn><mi>r</mi></mrow><annotation encoding="application/x-tex">n\ge2r</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\delta\in(0,1)</annotation></semantics></math>
+e lo stesso insieme
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>J</mi><annotation encoding="application/x-tex">J</annotation></semantics></math>
+del Teorema <a href="#thm:separate" data-reference-type="ref" data-reference="thm:separate">5</a>. Ora poniamo
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>m</mi><mo>=</mo><mo stretchy="false" form="prefix">|</mo><mi>J</mi><mo stretchy="false" form="prefix">|</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>C</mi><mi>k</mi></msub><mo>=</mo><msub><mi>C</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>δ</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>m</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>B</mi><mi>j</mi></msub><mo>=</mo><mi>j</mi><msub><mi>a</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>V</mi><mi>j</mi></msub><mo>=</mo><msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>C</mi><mi>j</mi></msub><mo>+</mo><msub><mi>a</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><msub><mi>C</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><mo>,</mo><mspace width="1.0em"></mspace><mi>c</mi><mo>=</mo><mn>2</mn><mi>/</mi><msqrt><mi>δ</mi></msqrt><mi>.</mi></mrow><annotation encoding="application/x-tex">m=|J|,\quad C_k=C_k(\delta/(2m)),\quad
+ B_j=j a_{j+1}C_{j+1},\quad V_j=a_j^2C_j+a_{2j}C_{2j},
+ \quad c=2/\sqrt\delta.</annotation></semantics></math> Con probabilità
+almeno
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">1-\delta</annotation></semantics></math>,
+simultaneamente
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>b</mi><mi>j</mi></msub><mo>≤</mo><msub><mi>B</mi><mi>j</mi></msub><mspace width="0.222em"></mspace><mo stretchy="false" form="prefix">(</mo><mi>j</mi><mo>=</mo><mi>s</mi><mo>,</mo><mi>r</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mfrac><msubsup><mi>e</mi><mi>s</mi><mn>2</mn></msubsup><msub><mi>V</mi><mi>s</mi></msub></mfrac><mo>+</mo><mfrac><msubsup><mi>e</mi><mi>r</mi><mn>2</mn></msubsup><msub><mi>V</mi><mi>r</mi></msub></mfrac><mo>≤</mo><msup><mi>c</mi><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">0\le b_j\le B_j\ (j=s,r),\qquad
+ \frac{e_s^2}{V_s}+\frac{e_r^2}{V_r}\le c^2.</annotation></semantics></math>
+In particolare
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>M</mi><mi>s</mi></msub><mo>,</mo><msub><mi>M</mi><mi>r</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(M_s,M_r)</annotation></semantics></math>
+appartiene alla regione osservabile
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝒞</mi><mi>r</mi></msub><mo>=</mo><mrow><mo stretchy="true" form="prefix">{</mo><mo stretchy="false" form="prefix">(</mo><mi>u</mi><mo>,</mo><mi>v</mi><mo stretchy="false" form="postfix">)</mo><mo>:</mo><mtable><mtr><mtd columnalign="center" style="text-align: center"><mn>0</mn><mo>≤</mo><mi>v</mi><mo>≤</mo><mi>u</mi><mo>,</mo><mspace width="1.0em"></mspace><mo>∃</mo><msub><mi>β</mi><mi>s</mi></msub><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><msub><mi>B</mi><mi>s</mi></msub><mo stretchy="false" form="postfix">]</mo><mo>,</mo><mspace width="0.222em"></mspace><msub><mi>β</mi><mi>r</mi></msub><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><msub><mi>B</mi><mi>r</mi></msub><mo stretchy="false" form="postfix">]</mo><mo>:</mo></mtd></mtr><mtr><mtd columnalign="center" style="text-align: center"><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>T</mi><mi>s</mi></msub><mo>−</mo><mi>u</mi><mo>−</mo><msub><mi>β</mi><mi>s</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><msub><mi>V</mi><mi>s</mi></msub></mfrac><mo>+</mo><mfrac><mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>T</mi><mi>r</mi></msub><mo>−</mo><mi>v</mi><mo>−</mo><msub><mi>β</mi><mi>r</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup></mrow><msub><mi>V</mi><mi>r</mi></msub></mfrac><mo>≤</mo><msup><mi>c</mi><mn>2</mn></msup></mtd></mtr></mtable><mo stretchy="true" form="postfix">}</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathcal C_r=\left\{(u,v):\begin{gathered}
+ 0\le v\le u,\quad \exists\beta_s\in[0,B_s],\ \beta_r\in[0,B_r]:\\
+ \frac{(T_s-u-\beta_s)^2}{V_s}+
+ \frac{(T_r-v-\beta_r)^2}{V_r}\le c^2
+ \end{gathered}\right\}.</annotation></semantics></math> Sullo stesso
+evento, per ogni
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t\ge0</annotation></semantics></math>,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>r</mi></msub><mo>−</mo><mi>t</mi><msub><mi>M</mi><mi>s</mi></msub><mo>≥</mo><msub><mi>F</mi><mi>r</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>:=</mo><msub><mi>T</mi><mi>r</mi></msub><mo>−</mo><mi>t</mi><msub><mi>T</mi><mi>s</mi></msub><mo>−</mo><msub><mi>B</mi><mi>r</mi></msub><mo>−</mo><mi>c</mi><msqrt><mrow><msub><mi>V</mi><mi>r</mi></msub><mo>+</mo><msup><mi>t</mi><mn>2</mn></msup><msub><mi>V</mi><mi>s</mi></msub></mrow></msqrt><mi>.</mi></mrow><annotation encoding="application/x-tex">M_r-tM_s\ge F_r(t):=T_r-tT_s-B_r-c\sqrt{V_r+t^2V_s}.</annotation></semantics></math>
+Definito
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>r</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">sup</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>t</mi><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>:</mo><msub><mi>F</mi><mi>r</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="2.0em"></mspace><mrow><mi mathvariant="normal">sup</mi><mo>⁡</mo></mrow><mi>⌀</mi><mo>:=</mo><mn>0</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">\tau_r=\sup\{t\in[0,1]:F_r(t)&gt;0\},\qquad \sup\varnothing:=0,</annotation></semantics></math>
+si ha
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>ℙ</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">{</mo><msub><mi>τ</mi><mi>r</mi></msub><mo>≤</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">\mathbb P_p\{\tau_r\le M_{\max}\}\ge1-\delta</annotation></semantics></math>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>v</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">v_j=0</annotation></semantics></math>,
+poniamo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>e</mi><mi>j</mi><mn>2</mn></msubsup><mi>/</mi><msub><mi>v</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">e_j^2/v_j=0</annotation></semantics></math>:
+infatti
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">e_j=0</annotation></semantics></math>
+quasi certamente. La Proposizione <a href="#prop:errors" data-reference-type="ref" data-reference="prop:errors">1</a> dà
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><msubsup><mi>e</mi><mi>s</mi><mn>2</mn></msubsup><mi>/</mi><msub><mi>v</mi><mi>s</mi></msub><mo>+</mo><msubsup><mi>e</mi><mi>r</mi><mn>2</mn></msubsup><mi>/</mi><msub><mi>v</mi><mi>r</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">\mathbb E_p(e_s^2/v_s+e_r^2/v_r)\le2</annotation></semantics></math>.
+Markov controlla la somma con soglia
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>4</mn><mi>/</mi><mi>δ</mi></mrow><annotation encoding="application/x-tex">4/\delta</annotation></semantics></math>
+ed errore
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\delta/2</annotation></semantics></math>.
+Sull’evento dei conteggi, di errore al più
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\delta/2</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mi>j</mi></msub><mo>≥</mo><msub><mi>v</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">V_j\ge v_j</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mi>j</mi></msub><mo>≥</mo><msub><mi>b</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">B_j\ge b_j</annotation></semantics></math>.
+Per unione dei due eventi segue la regione. Non si è condizionato sui
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>V</mi><mi>j</mi></msub><annotation encoding="application/x-tex">V_j</annotation></semantics></math>
+casuali. Per Cauchy–Schwarz, contemporaneamente per tutti i
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>e</mi><mi>r</mi></msub><mo>−</mo><mi>t</mi><msub><mi>e</mi><mi>s</mi></msub><mo>≤</mo><mi>c</mi><msqrt><mrow><msub><mi>V</mi><mi>r</mi></msub><mo>+</mo><msup><mi>t</mi><mn>2</mn></msup><msub><mi>V</mi><mi>s</mi></msub></mrow></msqrt></mrow><annotation encoding="application/x-tex">e_r-te_s\le c\sqrt{V_r+t^2V_s}</annotation></semantics></math>.
+Inoltre
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>b</mi><mi>r</mi></msub><mo>−</mo><mi>t</mi><msub><mi>b</mi><mi>s</mi></msub><mo>≤</mo><msub><mi>B</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">b_r-tb_s\le B_r</annotation></semantics></math>.
+Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>r</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">F_r(t)&gt;0</annotation></semantics></math>,
+allora
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>r</mi></msub><mo>−</mo><mi>t</mi><msub><mi>M</mi><mi>s</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_r-tM_s&gt;0</annotation></semantics></math>:
+ciò implica
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>s</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_s&gt;0</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≥</mo><msub><mi>M</mi><mi>r</mi></msub><mi>/</mi><msub><mi>M</mi><mi>s</mi></msub><mo>&gt;</mo><mi>t</mi></mrow><annotation encoding="application/x-tex">M_{\max}\ge M_r/M_s&gt;t</annotation></semantics></math>.
+Prendendo il sup si ottiene il risultato. Questo argomento tratta anche
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>s</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_s=0</annotation></semantics></math>:
+in quel caso nessun
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+può essere certificato sul buon evento. ◻</p>
+</div>
+<div id="prop:root" class="proposition">
+<p><strong>Proposizione 8</strong> (Soglia esplicita e confronto
+geometrico). <em>Per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>V</mi><mi>r</mi></msub><mo>,</mo><msub><mi>V</mi><mi>s</mi></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">V_r,V_s&gt;0</annotation></semantics></math>,
+poniamo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>=</mo><msub><mi>T</mi><mi>r</mi></msub><mo>−</mo><msub><mi>B</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">A=T_r-B_r</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><msub><mi>T</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">D=T_s</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>v</mi><mo>=</mo><msup><mi>c</mi><mn>2</mn></msup><msub><mi>V</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">v=c^2V_r</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>w</mi><mo>=</mo><msup><mi>c</mi><mn>2</mn></msup><msub><mi>V</mi><mi>s</mi></msub></mrow><annotation encoding="application/x-tex">w=c^2V_s</annotation></semantics></math>.
+Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>≤</mo><msqrt><mi>v</mi></msqrt></mrow><annotation encoding="application/x-tex">A\le\sqrt v</annotation></semantics></math>,
+allora
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>r</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">\tau_r=0</annotation></semantics></math>.
+Altrimenti,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>N</mi><mo>=</mo><msup><mi>A</mi><mn>2</mn></msup><mo>−</mo><mi>v</mi><mo>&gt;</mo><mn>0</mn><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>τ</mi><mi>r</mi></msub><mo>=</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mrow><mo stretchy="true" form="prefix">{</mo><mn>1</mn><mo>,</mo><mfrac><mi>N</mi><mrow><mi>A</mi><mi>D</mi><mo>+</mo><msqrt><mrow><msup><mi>D</mi><mn>2</mn></msup><mi>v</mi><mo>+</mo><mi>w</mi><mi>N</mi></mrow></msqrt></mrow></mfrac><mo stretchy="true" form="postfix">}</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">N=A^2-v&gt;0,\qquad
+ \tau_r=\min\left\{1,\frac{N}{AD+\sqrt{D^2v+wN}}\right\}.</annotation></semantics></math>
+Inoltre
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>τ</mi><mi>r</mi></msub><annotation encoding="application/x-tex">\tau_r</annotation></semantics></math>
+è almeno il bound rettangolare ottenuto dalla stessa ellisse e con lo
+stesso
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>c</mi><annotation encoding="application/x-tex">c</annotation></semantics></math>:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>τ</mi><mi>r</mi></msub><mo>≥</mo><mrow><mi mathvariant="normal">min</mi><mo>⁡</mo></mrow><mrow><mo stretchy="true" form="prefix">{</mo><mn>1</mn><mo>,</mo><mfrac><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>T</mi><mi>r</mi></msub><mo>−</mo><msub><mi>B</mi><mi>r</mi></msub><mo>−</mo><mi>c</mi><msqrt><msub><mi>V</mi><mi>r</mi></msub></msqrt><msub><mo stretchy="false" form="postfix">]</mo><mo>+</mo></msub></mrow><mrow><msub><mi>T</mi><mi>s</mi></msub><mo>+</mo><mi>c</mi><msqrt><msub><mi>V</mi><mi>s</mi></msub></msqrt></mrow></mfrac><mo stretchy="true" form="postfix">}</mo></mrow><mi>.</mi></mrow><annotation encoding="application/x-tex">\tau_r\ge\min\left\{1,\frac{[T_r-B_r-c\sqrt{V_r}]_+}{T_s+c\sqrt{V_s}}\right\}.</annotation></semantics></math></em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>r</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><mi>A</mi><mo>−</mo><mi>D</mi><mi>t</mi><mo>−</mo><msqrt><mrow><mi>v</mi><mo>+</mo><mi>w</mi><msup><mi>t</mi><mn>2</mn></msup></mrow></msqrt></mrow><annotation encoding="application/x-tex">F_r(t)=A-Dt-\sqrt{v+wt^2}</annotation></semantics></math>
+è continua e strettamente decrescente su
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mi>∞</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">[0,\infty)</annotation></semantics></math>
+(salvo derivata nulla in zero quando
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>D</mi><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">D=0</annotation></semantics></math>).
+Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mi>r</mi></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">F_r(0)&gt;0</annotation></semantics></math>
+esiste una radice positiva unica. Elevando al quadrato
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>−</mo><mi>D</mi><mi>t</mi><mo>=</mo><msqrt><mrow><mi>v</mi><mo>+</mo><mi>w</mi><msup><mi>t</mi><mn>2</mn></msup></mrow></msqrt></mrow><annotation encoding="application/x-tex">A-Dt=\sqrt{v+wt^2}</annotation></semantics></math>
+e razionalizzando la radice si ottiene la formula; essa ha
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>A</mi><mo>−</mo><mi>D</mi><mi>t</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">A-Dt\ge0</annotation></semantics></math>
+e quindi risolve anche l’equazione non quadratica. Il confronto segue da
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msqrt><mrow><msub><mi>V</mi><mi>r</mi></msub><mo>+</mo><msup><mi>t</mi><mn>2</mn></msup><msub><mi>V</mi><mi>s</mi></msub></mrow></msqrt><mo>≤</mo><msqrt><msub><mi>V</mi><mi>r</mi></msub></msqrt><mo>+</mo><mi>t</mi><msqrt><msub><mi>V</mi><mi>s</mi></msub></msqrt></mrow><annotation encoding="application/x-tex">\sqrt{V_r+t^2V_s}\le\sqrt{V_r}+t\sqrt{V_s}</annotation></semantics></math>,
+troncando entrambe le soglie a uno. ◻</p>
+</div>
+<div class="remark">
+<p><em>Osservazione 9</em>. Più precisamente, il confronto vale con il
+minimo tra uno e il rapporto rettangolare. Nel confronto tra procedure
+non troncate su
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,1]</annotation></semantics></math>,
+si usano le radici non troncate. La regione è diagonale: non sfrutta
+esplicitamente la covarianza. Markov introduce penalità proporzionali a
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msup><mi>δ</mi><mrow><mi>−</mi><mn>1</mn><mi>/</mi><mn>2</mn></mrow></msup><annotation encoding="application/x-tex">\delta^{-1/2}</annotation></semantics></math>;
+il risultato non garantisce un miglioramento rispetto al diverso
+benchmark Bernstein–Ayed.</p>
+</div>
+<h1 id="terza-derivazione-controllo-simultaneo-degli-ordini-da-2-a-r">Terza
+derivazione: controllo simultaneo degli ordini da 2 a R</h1>
+<div id="thm:simultaneous" class="theorem">
+<p><strong>Teorema 10</strong> (Massimo adattivo con copertura
+simultanea). <em>Siano
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">R\ge2</annotation></semantics></math>
+un intero deterministico,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>2</mn><mi>R</mi></mrow><annotation encoding="application/x-tex">n\ge2R</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\delta\in(0,1)</annotation></semantics></math>.
+Per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mn>2</mn><mi>R</mi></mrow><annotation encoding="application/x-tex">k=1,\ldots,2R</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>j</mi><mo>=</mo><mn>1</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>R</mi></mrow><annotation encoding="application/x-tex">j=1,\ldots,R</annotation></semantics></math>
+definiamo
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>k</mi></msub><mo>=</mo><msub><mi>C</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>δ</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>4</mn><mi>R</mi><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>T</mi><mi>j</mi></msub><mo>=</mo><msub><mi>a</mi><mi>j</mi></msub><msub><mi>K</mi><mi>j</mi></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>B</mi><mi>j</mi></msub><mo>=</mo><mi>j</mi><msub><mi>a</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><msub><mi>C</mi><mrow><mi>j</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>V</mi><mi>j</mi></msub><mo>=</mo><msubsup><mi>a</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>C</mi><mi>j</mi></msub><mo>+</mo><msub><mi>a</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><msub><mi>C</mi><mrow><mn>2</mn><mi>j</mi></mrow></msub><mo>,</mo><mspace width="1.0em"></mspace><msub><mi>c</mi><mi>R</mi></msub><mo>=</mo><msqrt><mrow><mn>2</mn><mi>R</mi><mi>/</mi><mi>δ</mi></mrow></msqrt><mi>.</mi></mrow><annotation encoding="application/x-tex">C_k=C_k(\delta/(4R)),\quad
+ T_j=a_jK_j,\quad B_j=j a_{j+1}C_{j+1},\quad
+ V_j=a_j^2C_j+a_{2j}C_{2j},\quad c_R=\sqrt{2R/\delta}.</annotation></semantics></math>
+Per ogni
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>=</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>R</mi></mrow><annotation encoding="application/x-tex">r=2,\ldots,R</annotation></semantics></math>
+poniamo
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mrow><mi>r</mi><mo>,</mo><mi>R</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mi>T</mi><mi>r</mi></msub><mo>−</mo><mi>t</mi><msub><mi>T</mi><mrow><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>−</mo><msub><mi>B</mi><mi>r</mi></msub><mo>−</mo><msub><mi>c</mi><mi>R</mi></msub><msqrt><mrow><msub><mi>V</mi><mi>r</mi></msub><mo>+</mo><msup><mi>t</mi><mn>2</mn></msup><msub><mi>V</mi><mrow><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msub></mrow></msqrt><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>τ</mi><mrow><mi>r</mi><mo>,</mo><mi>R</mi></mrow></msub><mo>=</mo><mrow><mi mathvariant="normal">sup</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><mi>t</mi><mo>∈</mo><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">]</mo><mo>:</mo><msub><mi>F</mi><mrow><mi>r</mi><mo>,</mo><mi>R</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">F_{r,R}(t)=T_r-tT_{r-1}-B_r-c_R\sqrt{V_r+t^2V_{r-1}},
+ \qquad \tau_{r,R}=\sup\{t\in[0,1]:F_{r,R}(t)&gt;0\},</annotation></semantics></math>
+con sup dell’insieme vuoto uguale a zero. Allora
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><menclose notation="box"><mrow><munder><mi mathvariant="normal">inf</mi><mrow><mi>p</mi><mo>∈</mo><mi>ℱ</mi></mrow></munder><msub><mi>ℙ</mi><mi>p</mi></msub><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≥</mo><msub><mi mathvariant="normal">Λ</mi><mi>R</mi></msub><mo>:=</mo><munder><mi mathvariant="normal">max</mi><mrow><mn>2</mn><mo>≤</mo><mi>r</mi><mo>≤</mo><mi>R</mi></mrow></munder><msub><mi>τ</mi><mrow><mi>r</mi><mo>,</mo><mi>R</mi></mrow></msub><mo stretchy="true" form="postfix">}</mo></mrow><mo>≥</mo><mn>1</mn><mo>−</mo><mi>δ</mi><mi>.</mi></mrow></menclose><annotation encoding="application/x-tex">\boxed{\inf_{p\in\mathcal F}\mathbb P_p\left\{M_{\max}\ge
+ \Lambda_R:=\max_{2\le r\le R}\tau_{r,R}\right\}\ge1-\delta.}</annotation></semantics></math>
+La formula della Proposizione <a href="#prop:root" data-reference-type="ref" data-reference="prop:root">8</a>, con
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>c</mi><mo>=</mo><msub><mi>c</mi><mi>R</mi></msub></mrow><annotation encoding="application/x-tex">c=c_R</annotation></semantics></math>
+e i
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>B</mi><mo>,</mo><mi>V</mi></mrow><annotation encoding="application/x-tex">B,V</annotation></semantics></math>
+qui definiti, calcola ciascuna soglia senza ottimizzazione numerica in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>.</em></p>
+</div>
+<div class="proof">
+<p><em>Proof.</em> Il Lemma <a href="#lem:counts" data-reference-type="ref" data-reference="lem:counts">2</a> controlla
+tutti i
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><mi>R</mi></mrow><annotation encoding="application/x-tex">2R</annotation></semantics></math>
+conteggi con errore totale
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\delta/2</annotation></semantics></math>.
+Indipendentemente da questo evento, nel senso che non occorre
+condizionare, si ha
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>p</mi></msub><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>R</mi></munderover><mfrac><msubsup><mi>e</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>v</mi><mi>j</mi></msub></mfrac><mo>≤</mo><mi>R</mi><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>ℙ</mi><mi>p</mi></msub><mrow><mo stretchy="true" form="prefix">{</mo><munderover><mo>∑</mo><mrow><mi>j</mi><mo>=</mo><mn>1</mn></mrow><mi>R</mi></munderover><mfrac><msubsup><mi>e</mi><mi>j</mi><mn>2</mn></msubsup><msub><mi>v</mi><mi>j</mi></msub></mfrac><mo>&gt;</mo><mfrac><mrow><mn>2</mn><mi>R</mi></mrow><mi>δ</mi></mfrac><mo stretchy="true" form="postfix">}</mo></mrow><mo>≤</mo><mi>δ</mi><mi>/</mi><mn>2</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">\mathbb E_p\sum_{j=1}^R\frac{e_j^2}{v_j}\le R,\qquad
+ \mathbb P_p\left\{\sum_{j=1}^R\frac{e_j^2}{v_j}&gt;\frac{2R}{\delta}\right\}
+ \le\delta/2.</annotation></semantics></math> Sull’intersezione, di
+probabilità almeno
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>1</mn><mo>−</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">1-\delta</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>b</mi><mi>j</mi></msub><mo>≤</mo><msub><mi>B</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">0\le b_j\le B_j</annotation></semantics></math>
+per tutti i
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>j</mi><annotation encoding="application/x-tex">j</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mo>∑</mo><mi>j</mi></msub><msubsup><mi>e</mi><mi>j</mi><mn>2</mn></msubsup><mi>/</mi><msub><mi>V</mi><mi>j</mi></msub><mo>≤</mo><msubsup><mi>c</mi><mi>R</mi><mn>2</mn></msubsup></mrow><annotation encoding="application/x-tex">\sum_j e_j^2/V_j\le c_R^2</annotation></semantics></math>.
+Ogni somma relativa a una coppia consecutiva è limitata dalla somma
+totale. Cauchy–Schwarz dà perciò
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>r</mi></msub><mo>−</mo><mi>t</mi><msub><mi>M</mi><mrow><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>≥</mo><msub><mi>F</mi><mrow><mi>r</mi><mo>,</mo><mi>R</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">M_r-tM_{r-1}\ge F_{r,R}(t)</annotation></semantics></math>
+simultaneamente per tutti gli
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>
+e tutti i
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>t</mi><mo>≥</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">t\ge0</annotation></semantics></math>.
+Il ragionamento del Teorema <a href="#thm:pair" data-reference-type="ref" data-reference="thm:pair">7</a> vale ora su un
+solo evento e protegge anche il massimo in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>r</mi><annotation encoding="application/x-tex">r</annotation></semantics></math>. ◻</p>
+</div>
+<div class="remark">
+<p><em>Osservazione 11</em> (Che cosa è e non è adattivo). La soglia
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>t</mi><annotation encoding="application/x-tex">t</annotation></semantics></math>
+e l’ordine
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mn>2</mn><mo>,</mo><mi>…</mi><mo>,</mo><mi>R</mi><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">r\in\{2,\ldots,R\}</annotation></semantics></math>
+possono essere scelti dopo aver osservato i dati. Il massimo
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
+e il livello
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>
+sono fissati prima del campione. Un ulteriore confronto tra diversi
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
+richiederebbe un altro controllo simultaneo. Non è giustificato
+massimizzare soglie a ordine fissato senza la calibrazione comune.</p>
+</div>
+<h1 id="corrispondenza-con-limplementazione-e-lettura-dei-risultati">Corrispondenza
+con l’implementazione e lettura dei risultati</h1>
+<p>La procedura simultanea usa soltanto
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>δ</mi><annotation encoding="application/x-tex">\delta</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>R</mi><annotation encoding="application/x-tex">R</annotation></semantics></math>
+e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mn>1</mn></msub><mo>,</mo><mi>…</mi><mo>,</mo><msub><mi>K</mi><mrow><mn>2</mn><mi>R</mi></mrow></msub></mrow><annotation encoding="application/x-tex">K_1,\ldots,K_{2R}</annotation></semantics></math>.
+Per
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>R</mi><mo>=</mo><mn>6</mn></mrow><annotation encoding="application/x-tex">R=6</annotation></semantics></math>
+occorrono i primi dodici conteggi dello spettro. Se
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mi>r</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">K_r=0</annotation></semantics></math>,
+allora
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>T</mi><mi>r</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">T_r=0</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>F</mi><mrow><mi>r</mi><mo>,</mo><mi>R</mi></mrow></msub><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">F_{r,R}(0)&lt;0</annotation></semantics></math>
+e la soglia di quell’ordine è zero. Un conteggio
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mrow><mn>2</mn><mi>r</mi></mrow></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">K_{2r}=0</annotation></semantics></math>
+non rende nulla la varianza superiore:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mrow><mn>2</mn><mi>r</mi></mrow></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">C_{2r}&gt;0</annotation></semantics></math>.
+Gli estremi numerici vengono arrotondati verso il lato ammissibile della
+radice. Il vecchio bound e
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="normal">Λ</mi><mn>6</mn></msub><annotation encoding="application/x-tex">\Lambda_6</annotation></semantics></math>
+sono riportati separatamente; il loro massimo non è automaticamente
+valido allo stesso livello. La copertura Monte Carlo di un endpoint
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>L</mi><annotation encoding="application/x-tex">L</annotation></semantics></math>
+è
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">p</mi></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msubsup><munderover><mo>∑</mo><mrow><mi>b</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">p</mi></mrow></msub></munderover><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>L</mi><mi>b</mi></msub><mo>≤</mo><msub><mi>M</mi><mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo>,</mo><mi>b</mi></mrow></msub><mo stretchy="false" form="postfix">}</mo><mo>,</mo></mrow><annotation encoding="application/x-tex">B_{\mathrm{rep}}^{-1}\sum_{b=1}^{B_{\mathrm{rep}}}
+ \mathbf 1\{L_b\le M_{\max,b}\},</annotation></semantics></math> non la
+frequenza di confronto con l’oracle deterministico. Non si asserisce che
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi mathvariant="normal">Λ</mi><mn>6</mn></msub><annotation encoding="application/x-tex">\Lambda_6</annotation></semantics></math>
+domini il vecchio bound: il vantaggio geometrico può essere superato
+dalla penalità probabilistica di Markov.</p>
+<div class="thebibliography">
+<p><span>9</span> F. Ayed, M. Battiston, F. Camerlenghi, S. Favaro
+(2019). A Good–Turing estimator for feature allocation models.
+<em>Electronic Journal of Statistics</em> 13, 3775–3804.</p>
+</div>
+</body>
+</html>

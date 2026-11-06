@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>LowerBound - Theory</title>
+  <style>
+
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+</style>
+  <style type="text/css">:root { color-scheme: light; --ink: #202b36; --accent: #b85d13; }
+* { box-sizing: border-box; }
+body { max-width: 1020px; margin: 0 auto; padding: 44px 38px 72px;
+font: 17px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+color: var(--ink); background: #fff; }
+header { border-bottom: 3px solid var(--accent); padding-bottom: 18px; }
+header h1 { margin-bottom: 0; }
+h1, h2, h3 { line-height: 1.25; color: #152b40; }
+h1 { font-size: 2rem; } h2 { margin-top: 2.4rem; font-size: 1.45rem; }
+p, li { overflow-wrap: anywhere; }
+a { color: #125d9a; text-underline-offset: 3px; }
+nav { background: #f5f7fa; padding: 16px 24px; margin: 24px 0; border-radius: 8px; }
+nav ul { margin: 0; padding-left: 20px; }
+pre { overflow-x: auto; padding: 16px; background: #f5f7fa;
+border: 1px solid #dce3e9; border-radius: 6px; line-height: 1.5; }
+code { font: .88em/1.5 Consolas, "Liberation Mono", monospace; }
+p code, li code { background: #f0f3f6; padding: 2px 4px; border-radius: 3px; }
+table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+th, td { border-bottom: 1px solid #dce3e9; padding: 10px 14px; text-align: left; }
+th { background: #f5f7fa; }
+math { font-size: 1.08em; }
+math[display="block"] { display: block; overflow-x: auto; padding: 16px 4px; margin: 20px 0; }
+@media (max-width: 640px) { body { padding: 24px 18px 40px; font-size: 16px; } }
+@media print { body { max-width: none; padding: 0; font-size: 11pt; }
+nav { display: none; } pre, table, math { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">LowerBound - Theory</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#lower-bound-for-the-largest-unseen-prevalence-theory" id="toc-lower-bound-for-the-largest-unseen-prevalence-theory">Lower
+bound for the largest unseen prevalence: theory</a>
+<ul>
+<li><a href="#model-and-target" id="toc-model-and-target">Model and
+target</a></li>
+<li><a href="#why-a-missing-mass-lower-bound-alone-does-not-suffice" id="toc-why-a-missing-mass-lower-bound-alone-does-not-suffice">Why a
+missing-mass lower bound alone does not suffice</a></li>
+<li><a href="#construction-and-proof" id="toc-construction-and-proof">Construction and proof</a></li>
+<li><a href="#deterministic-oracle-lower-endpoint" id="toc-deterministic-oracle-lower-endpoint">Deterministic oracle lower
+endpoint</a></li>
+<li><a href="#interpretation-and-loss-from-the-moment-ratio" id="toc-interpretation-and-loss-from-the-moment-ratio">Interpretation
+and loss from the moment ratio</a></li>
+<li><a href="#relation-to-the-lower-bounds-in-the-submitted-manuscript" id="toc-relation-to-the-lower-bounds-in-the-submitted-manuscript">Relation
+to the lower bounds in the submitted manuscript</a></li>
+<li><a href="#two-sided-confidence-bounds-for-an-unseen-moment-of-fixed-order" id="toc-two-sided-confidence-bounds-for-an-unseen-moment-of-fixed-order">Two-sided
+confidence bounds for an unseen moment of fixed order</a></li>
+<li><a href="#monte-carlo-coverage-and-oracle-comparison" id="toc-monte-carlo-coverage-and-oracle-comparison">Monte Carlo coverage
+and oracle comparison</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="lower-bound-for-the-largest-unseen-prevalence-theory">Lower
+bound for the largest unseen prevalence: theory</h1>
+<p>The complete formal derivation is now in <a href="theory.tex">theory.tex</a>, with propositions, theorems and proofs
+for the oracle hierarchy, the fixed-order ratio, the joint pairwise
+threshold, and simultaneous control over orders. An <a href="theory.html">HTML reading version</a> is generated from that TeX
+source. The earlier derivations below are retained as background
+notes.</p>
+<p>Definitions, concentration bounds and interpretation of the lower
+endpoint. For execution and file formats, see the <a href="../README.html">implementation guide</a>.</p>
+<h2 id="model-and-target">Model and target</h2>
+<p>We observe independent counts
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>j</mi></msub><mo>∼</mo><mrow><mi mathvariant="normal">Bin</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>,</mo><msub><mi>p</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>j</mi><mo>≥</mo><mn>1</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">
+N_j\sim\operatorname{Bin}(n,p_j),\qquad j\ge1,
+</annotation></semantics></math> with fixed prevalences satisfying
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>≥</mo><mn>1</mn></mrow></munder><msub><mi>p</mi><mi>j</mi></msub><mo>&lt;</mo><mi>∞</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+S(p)=\sum_{j\ge1}p_j&lt;\infty.
+</annotation></semantics></math> Define
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>=</mo><munder><mi mathvariant="normal">max</mi><mrow><mi>j</mi><mo>:</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></munder><msub><mi>p</mi><mi>j</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>M</mi><mi>r</mi></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>:</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></munder><msubsup><mi>p</mi><mi>j</mi><mi>r</mi></msubsup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>ℳ</mi><mn>0</mn></msub><mo>=</mo><msub><mi>M</mi><mn>1</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+M_{\max}=\max_{j:N_j=0}p_j,\qquad
+M_r=\sum_{j:N_j=0}p_j^r,\qquad
+\mathcal M_0=M_1.
+</annotation></semantics></math> Use zero for the maximum of an empty
+set. For r at least one, summability ensures that the moments are
+finite. Finite-support prevalence sequences, extended by zero
+prevalences, are included in this model.</p>
+<p>For n at least four, the construction below yields a nonnegative
+lower endpoint satisfying
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mi mathvariant="normal">inf</mi><mrow><mi>p</mi><mo>:</mo><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mo>&lt;</mo><mi>∞</mi></mrow></munder><munder><mi mathvariant="normal">Pr</mi><mi>p</mi></munder><mo stretchy="false" form="prefix">{</mo><msub><mi>L</mi><mi>n</mi></msub><mo>≤</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>α</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\inf_{p:S(p)&lt;\infty}\Pr_p\{L_n\le M_{\max}\}\ge1-\alpha.
+</annotation></semantics></math> This is a fixed-sample-size confidence
+guarantee, not a simultaneous-in-time or optional-stopping
+guarantee.</p>
+<h2 id="why-a-missing-mass-lower-bound-alone-does-not-suffice">Why a
+missing-mass lower bound alone does not suffice</h2>
+<p>The deterministic inequality is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≤</mo><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">M_{\max}\le M_1</annotation></semantics></math>.
+A fixed unseen mass s can be spread over k unseen categories of
+prevalence s/k, making the maximum arbitrarily small as k grows. Thus a
+lower bound for M1 alone cannot imply a strictly positive numerical
+lower bound for Mmax under summability alone.</p>
+<p>For
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>&gt;</mo><mi>s</mi><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">r&gt;s\ge1</annotation></semantics></math>,
+however,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>r</mi></msub><mo>≤</mo><msubsup><mi>M</mi><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mrow><mi>r</mi><mo>−</mo><mi>s</mi></mrow></msubsup><msub><mi>M</mi><mi>s</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≥</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msub><mi>M</mi><mi>r</mi></msub><msub><mi>M</mi><mi>s</mi></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>r</mi><mo>−</mo><mi>s</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup></mrow><annotation encoding="application/x-tex">
+M_r\le M_{\max}^{r-s}M_s,
+\qquad
+M_{\max}\ge\left(\frac{M_r}{M_s}\right)^{1/(r-s)}
+</annotation></semantics></math> when Ms is positive. In particular,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≥</mo><msub><mi>M</mi><mn>2</mn></msub><mi>/</mi><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">M_{\max}\ge M_2/M_1</annotation></semantics></math>.
+If M1 is zero, Mmax is zero as well, and the lower endpoint is set to
+zero.</p>
+<h2 id="construction-and-proof">Construction and proof</h2>
+<p>Write
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>k</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mi>k</mi><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>K</mi><mi>n</mi></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>j</mi></msub><mo>&gt;</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>M</mi><mi>r</mi></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>:</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></munder><msubsup><mi>p</mi><mi>j</mi><mi>r</mi></msubsup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>M</mi><mn>1</mn></msub><mo>=</mo><msub><mi>ℳ</mi><mn>0</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+K_{n,k}=\sum_j\mathbf 1\{N_j=k\},\qquad
+K_n=\sum_j\mathbf 1\{N_j&gt;0\},\qquad
+M_r=\sum_{j:N_j=0}p_j^r,\qquad M_1=\mathcal M_0.
+</annotation></semantics></math> The deterministic inequality is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>2</mn></msub><mo>≤</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">M_2\le M_{\max}M_1</annotation></semantics></math>.
+The lower endpoint is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mi>n</mi></msub><mo>=</mo><msub><mi>L</mi><mn>2</mn></msub><mi>/</mi><msub><mi>U</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">L_n=L_2/U_1</annotation></semantics></math>,
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>L</mi><mn>2</mn></msub><annotation encoding="application/x-tex">L_2</annotation></semantics></math>
+a lower bound for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mn>2</mn></msub><annotation encoding="application/x-tex">M_2</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>U</mi><mn>1</mn></msub><annotation encoding="application/x-tex">U_1</annotation></semantics></math>
+an upper bound for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mn>1</mn></msub><annotation encoding="application/x-tex">M_1</annotation></semantics></math>;
+use zero when the denominator is zero.</p>
+<p>Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mn>2</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">a=\binom n2^{-1}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>k</mi></msub><mo>=</mo><msub><mi>𝔼</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">[</mo><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>k</mi></mrow></msub><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\eta_k=\mathbb E_p[K_{n,k}]</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mn>2</mn></msub><mo>=</mo><mi>a</mi><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mn>2</mn></mrow></msub><mo>−</mo><msub><mi>M</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">D_2=aK_{n,2}-M_2</annotation></semantics></math>.
+Independence across categories gives</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>E</mi><msub><mi>D</mi><mn>2</mn></msub><mo>≤</mo><mi>b</mi><mo>=</mo><mfrac><mrow><mn>2</mn><msub><mi>η</mi><mn>3</mn></msub></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mn>3</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mrow><mi mathvariant="normal">Var</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>D</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mi>v</mi><mo>=</mo><msup><mi>a</mi><mn>2</mn></msup><msub><mi>η</mi><mn>2</mn></msub><mo>+</mo><mfrac><msub><mi>η</mi><mn>4</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mn>4</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+0\le ED_2\le b=\frac{2\eta_3}{\binom n3},\qquad
+\operatorname{Var}(D_2)\le v=a^2\eta_2+\frac{\eta_4}{\binom n4}.
+</annotation></semantics></math></p>
+<p>Indeed, setting
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">q_j=1-p_j</annotation></semantics></math>,
+the coordinate mean is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>j</mi><mn>2</mn></msubsup><msubsup><mi>q</mi><mi>j</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msubsup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>q</mi><mi>j</mi><mn>2</mn></msubsup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p_j^2q_j^{n-2}(1-q_j^2)</annotation></semantics></math>,
+bounded by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><msubsup><mi>p</mi><mi>j</mi><mn>3</mn></msubsup><msubsup><mi>q</mi><mi>j</mi><mrow><mi>n</mi><mo>−</mo><mn>3</mn></mrow></msubsup></mrow><annotation encoding="application/x-tex">2p_j^3q_j^{n-3}</annotation></semantics></math>.
+The coordinate second moment is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi>a</mi><mn>2</mn></msup><msub><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>+</mo><msubsup><mi>p</mi><mi>j</mi><mn>4</mn></msubsup><msub><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">a^2\Pr_p(N_j=2)+p_j^4\Pr_p(N_j=0)</annotation></semantics></math>;
+summing and replacing
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>q</mi><mi>j</mi><mi>n</mi></msubsup><annotation encoding="application/x-tex">q_j^n</annotation></semantics></math>
+by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msubsup><mi>q</mi><mi>j</mi><mrow><mi>n</mi><mo>−</mo><mn>4</mn></mrow></msubsup><annotation encoding="application/x-tex">q_j^{n-4}</annotation></semantics></math>
+gives the variance bound. Each centered coordinate is at most
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>a</mi><annotation encoding="application/x-tex">a</annotation></semantics></math>,
+since its mean is nonnegative. A one-sided Bernstein bound therefore
+implies, for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>x</mi><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">x=\log(1/\epsilon)</annotation></semantics></math>,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><msub><mi>D</mi><mn>2</mn></msub><mo>&gt;</mo><mi>b</mi><mo>+</mo><msqrt><mrow><mn>2</mn><mi>v</mi><mi>x</mi></mrow></msqrt><mo>+</mo><mn>2</mn><mi>a</mi><mi>x</mi><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">}</mo><mo>≤</mo><mi>ϵ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Pr\{D_2&gt;b+\sqrt{2vx}+2ax/3\}\le\epsilon.
+</annotation></semantics></math></p>
+<p>These bounds apply to the countable sum:
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mo>&lt;</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">S(p)&lt;\infty</annotation></semantics></math>
+ensures finite count expectations, finite variance, and convergence of
+the sums.</p>
+<p>Use the expected-count bound from Ayed et al. (2019), Remark A.1:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msqrt><mrow><mstyle displaystyle="false"><mfrac><mn>1</mn><mn>2</mn></mfrac></mstyle><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><mo>+</mo><msqrt><mrow><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>k</mi></mrow></msub><mo>+</mo><mstyle displaystyle="false"><mfrac><mn>7</mn><mn>6</mn></mfrac></mstyle><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>,</mo><mspace width="1.0em"></mspace><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><msub><mi>η</mi><mi>k</mi></msub><mo>≤</mo><msub><mi>C</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>ϵ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+C_k(\epsilon)=
+\left(\sqrt{\tfrac12\log(1/\epsilon)}+
+\sqrt{K_{n,k}+\tfrac76\log(1/\epsilon)}\right)^2,
+\quad \Pr\{\eta_k\le C_k\}\ge1-\epsilon.
+</annotation></semantics></math></p>
+<p>Use upper bounds for the three expected counts to define
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>b</mi><mo accent="true">̂</mo></mover><mo>=</mo><mfrac><mrow><mn>2</mn><msub><mi>C</mi><mn>3</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mn>3</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mover><mi>v</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mi>a</mi><mn>2</mn></msup><msub><mi>C</mi><mn>2</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo><mo>+</mo><mfrac><mrow><msub><mi>C</mi><mn>4</mn></msub><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mn>4</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\widehat b=\frac{2C_3(\epsilon)}{\binom n3},\qquad
+\widehat v=a^2C_2(\epsilon)+\frac{C_4(\epsilon)}{\binom n4}.
+</annotation></semantics></math> Set</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mn>2</mn></msub><mo>=</mo><msub><mrow><mo stretchy="true" form="prefix">[</mo><mi>a</mi><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mn>2</mn></mrow></msub><mo>−</mo><mover><mi>b</mi><mo accent="true">̂</mo></mover><mo>−</mo><msqrt><mrow><mn>2</mn><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>x</mi></mrow></msqrt><mo>−</mo><mn>2</mn><mi>a</mi><mi>x</mi><mi>/</mi><mn>3</mn><mo stretchy="true" form="postfix">]</mo></mrow><mo>+</mo></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+L_2=\left[aK_{n,2}-\widehat b-\sqrt{2\widehat v x}-2ax/3\right]_+.
+</annotation></semantics></math></p>
+<p>For
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>U</mi><mn>1</mn></msub><annotation encoding="application/x-tex">U_1</annotation></semantics></math>,
+use the one-sided construction in Ayed et al., Proposition A.3 and
+equations (A.22)-(A.23). If its error budget is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>γ</mi><annotation encoding="application/x-tex">\gamma</annotation></semantics></math>,
+let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>y</mi><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>/</mi><mi>γ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">y=\log(2/\gamma)</annotation></semantics></math>
+and apply the same expected-count bound to
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>K</mi><mi>n</mi></msub><annotation encoding="application/x-tex">K_n</annotation></semantics></math>,
+with error
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\gamma/2</annotation></semantics></math>,
+obtaining
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>K</mi></msub><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msqrt><mrow><mi>y</mi><mi>/</mi><mn>2</mn></mrow></msqrt><mo>+</mo><msqrt><mrow><msub><mi>K</mi><mi>n</mi></msub><mo>+</mo><mn>7</mn><mi>y</mi><mi>/</mi><mn>6</mn></mrow></msqrt><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+C_K=\left(\sqrt{y/2}+\sqrt{K_n+7y/6}\right)^2.
+</annotation></semantics></math> Then</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mn>1</mn></msub><mo>=</mo><mfrac><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mn>1</mn></mrow></msub><mi>n</mi></mfrac><mo>+</mo><mfrac><mi>y</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>+</mo><msqrt><mfrac><mrow><mn>8</mn><mi>y</mi><msub><mi>C</mi><mi>K</mi></msub></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>/</mi><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></msqrt><mi>.</mi></mrow><annotation encoding="application/x-tex">
+U_1=\frac{K_{n,1}}n+\frac y{n-1}
++\sqrt{\frac{8yC_K}{(n-1)^2(1-2/n)}}.
+</annotation></semantics></math></p>
+<p>The two internal events each have error
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>γ</mi><mi>/</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">\gamma/2</annotation></semantics></math>.
+This explicit one-sided allocation differs from directly substituting
+the simultaneous interval in Theorem 3.1 and avoids ambiguity about its
+internal error allocation.</p>
+<p>Finally take
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>=</mo><mi>γ</mi><mo>=</mo><mi>α</mi><mi>/</mi><mn>5</mn></mrow><annotation encoding="application/x-tex">\epsilon=\gamma=\alpha/5</annotation></semantics></math>:
+the three count events, the Bernstein event, and the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mn>1</mn></msub><annotation encoding="application/x-tex">M_1</annotation></semantics></math>
+event have total error at most
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.
+No independence between these events is needed. On their intersection,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≥</mo><mfrac><msub><mi>M</mi><mn>2</mn></msub><msub><mi>M</mi><mn>1</mn></msub></mfrac><mo>≥</mo><mfrac><msub><mi>L</mi><mn>2</mn></msub><msub><mi>U</mi><mn>1</mn></msub></mfrac><mo>=</mo><msub><mi>L</mi><mi>n</mi></msub></mrow><annotation encoding="application/x-tex">
+M_{\max}\ge\frac{M_2}{M_1}\ge\frac{L_2}{U_1}=L_n
+</annotation></semantics></math> when
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>1</mn></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_1&gt;0</annotation></semantics></math>.
+If
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>1</mn></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_1=0</annotation></semantics></math>,
+then
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>2</mn></msub><mo>=</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_2=M_{\max}=0</annotation></semantics></math>
+and the valid lower bound also vanishes. This proves the stated coverage
+guarantee.</p>
+<p>Reference: Ayed, Battiston, Camerlenghi and Favaro (2019), <em>A
+Good-Turing estimator for feature allocation models</em>, Electronic
+Journal of Statistics 13, 3775-3804, DOI: 10.1214/19-EJS1614. The
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mn>2</mn></msub><annotation encoding="application/x-tex">M_2</annotation></semantics></math>
+construction above is the proposed extension, not a theorem quoted from
+that article.</p>
+<h2 id="deterministic-oracle-lower-endpoint">Deterministic oracle lower
+endpoint</h2>
+<p>An <strong>oracle deterministic lower endpoint</strong> is the
+largest nonrandom lower endpoint satisfying the required coverage when
+the prevalence vector is known. For a finite-support prevalence vector,
+independence gives</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mi mathvariant="normal">Pr</mi><mi>p</mi></munder><mo stretchy="false" form="prefix">(</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>&lt;</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mo>∏</mo><mrow><mi>j</mi><mo>:</mo><msub><mi>p</mi><mi>j</mi></msub><mo>≥</mo><mi>t</mi></mrow></munder><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>j</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mi>n</mi></msup><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>t</mi><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Pr_p(M_{\max}&lt;t)=\prod_{j:p_j\ge t}\{1-(1-p_j)^n\},\qquad t&gt;0.
+</annotation></semantics></math></p>
+<p>The oracle is the largest point in
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">{</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo><mo>∪</mo><mo stretchy="false" form="prefix">{</mo><msub><mi>p</mi><mi>j</mi></msub><mo>:</mo><msub><mi>p</mi><mi>j</mi></msub><mo>&gt;</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo></mrow><annotation encoding="application/x-tex">\{0\}\cup\{p_j:p_j&gt;0\}</annotation></semantics></math>
+such that this strict lower tail is at most
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>α</mi><annotation encoding="application/x-tex">\alpha</annotation></semantics></math>.
+It is thus the largest deterministic endpoint with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≥</mo><mrow><mi mathvariant="normal">o</mi><mi mathvariant="normal">r</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">c</mi><mi mathvariant="normal">l</mi><mi mathvariant="normal">e</mi></mrow><mo stretchy="false" form="postfix">)</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">\Pr_p(M_{\max}\ge\mathrm{oracle})\ge1-\alpha</annotation></semantics></math>,
+with exact handling of equality at probability atoms. This oracle is not
+the realized
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><annotation encoding="application/x-tex">M_{\max}</annotation></semantics></math>
+for each sample, which would be exactly known if both p and that sample
+were supplied, nor is it the moment ratio
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>2</mn></msub><mi>/</mi><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">M_2/M_1</annotation></semantics></math>.
+An adaptive lower-bound median can exceed this deterministic oracle
+without contradiction; coverage is a statement about its joint behavior
+with <code>Mmax</code>.</p>
+<p>The oracle lower endpoint can genuinely be zero. In particular, if
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">)</mo><mo>&gt;</mo><mi>α</mi></mrow><annotation encoding="application/x-tex">\Pr_p(M_{\max}=0)&gt;\alpha</annotation></semantics></math>,
+every strictly positive deterministic endpoint fails the required
+lower-coverage guarantee. This does not require
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_{\max}=0</annotation></semantics></math>
+in every repetition.</p>
+<h2 id="interpretation-and-loss-from-the-moment-ratio">Interpretation
+and loss from the moment ratio</h2>
+<p>The ratio
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>R</mi><mi>n</mi></msub><mo>=</mo><msub><mi>M</mi><mn>2</mn></msub><mi>/</mi><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">R_n=M_2/M_1</annotation></semantics></math>
+is a prevalence-weighted mean of the unseen prevalences, rather than
+their maximum. It equals Mmax when all positive unseen prevalences are
+equal, but can be substantially smaller otherwise. When M2 is positive,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><msub><mi>L</mi><mi>n</mi></msub><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub></mfrac><mo>=</mo><mfrac><msub><mi>L</mi><mn>2</mn></msub><msub><mi>M</mi><mn>2</mn></msub></mfrac><mfrac><msub><mi>M</mi><mn>1</mn></msub><msub><mi>U</mi><mn>1</mn></msub></mfrac><mfrac><msub><mi>M</mi><mn>2</mn></msub><mrow><msub><mi>M</mi><mn>1</mn></msub><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\frac{L_n}{M_{\max}}=
+\frac{L_2}{M_2}\frac{M_1}{U_1}\frac{M_2}{M_1M_{\max}}.
+</annotation></semantics></math> This separates the statistical losses
+in the two confidence bounds from the intrinsic loss of using the
+second-to-first moment ratio.</p>
+<p>When
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>1</mn></msub><mo>&gt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">M_1&gt;0</annotation></semantics></math>,
+the deterministic lower bounds
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mi>r</mi></msub><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac><msub><mi>M</mi><mi>r</mi></msub><msub><mi>M</mi><mn>1</mn></msub></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>r</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>,</mo><mspace width="2.0em"></mspace><mi>r</mi><mo>&gt;</mo><mn>1</mn><mo>,</mo></mrow><annotation encoding="application/x-tex">
+B_r=\left(\frac{M_r}{M_1}\right)^{1/(r-1)},\qquad r&gt;1,
+</annotation></semantics></math> are nondecreasing in r and converge to
+Mmax. Indeed, with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>w</mi><mi>j</mi></msub><mo>=</mo><msub><mi>p</mi><mi>j</mi></msub><mi>/</mi><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">w_j=p_j/M_1</annotation></semantics></math>
+on the unseen categories, they are weighted power means:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>B</mi><mi>r</mi></msub><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>:</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></munder><msub><mi>w</mi><mi>j</mi></msub><msubsup><mi>p</mi><mi>j</mi><mrow><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mi>r</mi><mo>−</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow></msup><mo>,</mo><mspace width="2.0em"></mspace><munder><mo>∑</mo><mi>j</mi></munder><msub><mi>w</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+B_r=\left(\sum_{j:N_j=0}w_jp_j^{r-1}\right)^{1/(r-1)},
+\qquad\sum_jw_j=1.
+</annotation></semantics></math> Optimizing estimated lower bounds over
+r requires simultaneous confidence control. Monotonicity of the true
+moments does not ensure that estimated endpoints improve with r.</p>
+<h2 id="relation-to-the-lower-bounds-in-the-submitted-manuscript">Relation
+to the lower bounds in the submitted manuscript</h2>
+<p>Theorems 3 and 6 in <em>Binomial_CIs_jasa_sub</em> lower-bound the
+attainable size of any uniformly valid upper confidence bound Tn along
+least-favourable sequences of prevalence vectors. They are minimax
+limitations on procedures, not lower confidence bounds for Mmax for
+every prevalence vector.</p>
+<p>The new construction instead bounds Mmax from below, for every fixed
+summable prevalence sequence and at finite n. It complements an upper
+confidence bound, rather than strengthening the minimax theorem. If an
+upper endpoint Tn has error delta/2 and the lower endpoint has error
+delta/2, the union bound gives
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mi mathvariant="normal">Pr</mi><mi>p</mi></munder><mo stretchy="false" form="prefix">{</mo><msub><mi>L</mi><mi>n</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>δ</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≤</mo><msub><mi>T</mi><mi>n</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>δ</mi><mi>/</mi><mn>2</mn><mo stretchy="false" form="postfix">)</mo><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>δ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Pr_p\{L_n(\delta/2)\le M_{\max}\le T_n(\delta/2)\}\ge1-\delta.
+</annotation></semantics></math> A lower bound on the upper endpoint Tn
+is not automatically a lower bound on the length Tn minus Ln of this
+two-sided interval. No optimality claim for the new lower endpoint or
+interval length has been established.</p>
+<h2 id="two-sided-confidence-bounds-for-an-unseen-moment-of-fixed-order">Two-sided
+confidence bounds for an unseen moment of fixed order</h2>
+<p>Fix an integer
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">r\ge2</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>2</mn><mi>r</mi></mrow><annotation encoding="application/x-tex">n\ge2r</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>δ</mi><mo>∈</mo><mo stretchy="false" form="prefix">(</mo><mn>0</mn><mo>,</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\delta\in(0,1)</annotation></semantics></math>.
+The following construction is valid for every fixed summable prevalence
+sequence; no regular variation or knowledge of S(p) is needed. It is an
+explicit conservative interval, not an optimality claim.</p>
+<p>Set
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>a</mi><mi>r</mi></msub><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mi>r</mi></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>T</mi><mi>r</mi></msub><mo>=</mo><msub><mi>a</mi><mi>r</mi></msub><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>r</mi></mrow></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>D</mi><mi>r</mi></msub><mo>=</mo><msub><mi>T</mi><mi>r</mi></msub><mo>−</mo><msub><mi>M</mi><mi>r</mi></msub><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>η</mi><mi>k</mi></msub><mo>=</mo><msub><mi>𝔼</mi><mi>p</mi></msub><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>k</mi></mrow></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+a_r=\binom nr^{-1},\qquad
+T_r=a_rK_{n,r},\qquad D_r=T_r-M_r,\qquad
+\eta_k=\mathbb E_pK_{n,k}.
+</annotation></semantics></math> Independence across categories implies
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><msub><mi>𝔼</mi><mi>p</mi></msub><msub><mi>D</mi><mi>r</mi></msub><mo>≤</mo><msub><mi>b</mi><mi>r</mi></msub><mo>:=</mo><mfrac><mrow><mi>r</mi><msub><mi>η</mi><mrow><mi>r</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mrow><mi>r</mi><mo>+</mo><mn>1</mn></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mrow><mi mathvariant="normal">Var</mi><mo>⁡</mo></mrow><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>D</mi><mi>r</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><msub><mi>v</mi><mi>r</mi></msub><mo>:=</mo><msubsup><mi>a</mi><mi>r</mi><mn>2</mn></msubsup><msub><mi>η</mi><mi>r</mi></msub><mo>+</mo><mfrac><msub><mi>η</mi><mrow><mn>2</mn><mi>r</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mrow><mn>2</mn><mi>r</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+0\le\mathbb E_pD_r\le b_r:=\frac{r\eta_{r+1}}{\binom n{r+1}},\qquad
+\operatorname{Var}_p(D_r)\le v_r:=a_r^2\eta_r+
+\frac{\eta_{2r}}{\binom n{2r}}.
+</annotation></semantics></math></p>
+<p>Indeed, writing
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">q_j=1-p_j</annotation></semantics></math>,
+the coordinate mean is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>𝔼</mi><mi>p</mi></msub><msub><mi>d</mi><mrow><mi>r</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><msubsup><mi>p</mi><mi>j</mi><mi>r</mi></msubsup><msubsup><mi>q</mi><mi>j</mi><mrow><mi>n</mi><mo>−</mo><mi>r</mi></mrow></msubsup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>q</mi><mi>j</mi><mi>r</mi></msubsup><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mi>r</mi><msubsup><mi>p</mi><mi>j</mi><mrow><mi>r</mi><mo>+</mo><mn>1</mn></mrow></msubsup><msubsup><mi>q</mi><mi>j</mi><mrow><mi>n</mi><mo>−</mo><mi>r</mi><mo>−</mo><mn>1</mn></mrow></msubsup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>d</mi><mrow><mi>r</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>=</mo><msub><mi>a</mi><mi>r</mi></msub><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mi>r</mi><mo stretchy="false" form="postfix">}</mo><mo>−</mo><msubsup><mi>p</mi><mi>j</mi><mi>r</mi></msubsup><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\mathbb E_pd_{r,j}=p_j^rq_j^{n-r}(1-q_j^r)
+\le r p_j^{r+1}q_j^{n-r-1},\qquad
+d_{r,j}=a_r\mathbf1\{N_j=r\}-p_j^r\mathbf1\{N_j=0\}.
+</annotation></semantics></math> For the variance, use disjointness of
+the two indicator events:
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Var</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>D</mi><mi>r</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><munder><mo>∑</mo><mi>j</mi></munder><mi>𝔼</mi><mo stretchy="false" form="prefix">[</mo><msubsup><mi>d</mi><mrow><mi>r</mi><mo>,</mo><mi>j</mi></mrow><mn>2</mn></msubsup><mo stretchy="false" form="postfix">]</mo><mo>=</mo><msubsup><mi>a</mi><mi>r</mi><mn>2</mn></msubsup><msub><mi>η</mi><mi>r</mi></msub><mo>+</mo><munder><mo>∑</mo><mi>j</mi></munder><msubsup><mi>p</mi><mi>j</mi><mrow><mn>2</mn><mi>r</mi></mrow></msubsup><msubsup><mi>q</mi><mi>j</mi><mi>n</mi></msubsup><mo>≤</mo><msubsup><mi>a</mi><mi>r</mi><mn>2</mn></msubsup><msub><mi>η</mi><mi>r</mi></msub><mo>+</mo><mfrac><msub><mi>η</mi><mrow><mn>2</mn><mi>r</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mrow><mn>2</mn><mi>r</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\operatorname{Var}(D_r)\le\sum_j\mathbb E[d_{r,j}^2]
+=a_r^2\eta_r+\sum_jp_j^{2r}q_j^n
+\le a_r^2\eta_r+\frac{\eta_{2r}}{\binom n{2r}}.
+</annotation></semantics></math> Since
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>d</mi><mrow><mi>r</mi><mo>,</mo><mi>j</mi></mrow></msub><mo>≤</mo><msub><mi>a</mi><mi>r</mi></msub></mrow><annotation encoding="application/x-tex">d_{r,j}\le a_r</annotation></semantics></math>
+and its mean is nonnegative, each centered coordinate is at most
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>a</mi><mi>r</mi></msub><annotation encoding="application/x-tex">a_r</annotation></semantics></math>.
+One-sided Bernstein yields
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mi mathvariant="normal">Pr</mi><mi>p</mi></munder><mo stretchy="false" form="prefix">{</mo><msub><mi>D</mi><mi>r</mi></msub><mo>&gt;</mo><msub><mi>b</mi><mi>r</mi></msub><mo>+</mo><msqrt><mrow><mn>2</mn><msub><mi>v</mi><mi>r</mi></msub><mi>x</mi></mrow></msqrt><mo>+</mo><mn>2</mn><msub><mi>a</mi><mi>r</mi></msub><mi>x</mi><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">}</mo><mo>≤</mo><msup><mi>e</mi><mrow><mi>−</mi><mi>x</mi></mrow></msup><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Pr_p\{D_r&gt;b_r+\sqrt{2v_rx}+2a_rx/3\}\le e^{-x}.
+</annotation></semantics></math> For the other tail, nonnegativity of
+the mean and Cantelli’s inequality give
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mi mathvariant="normal">Pr</mi><mi>p</mi></munder><mrow><mo stretchy="true" form="prefix">{</mo><msub><mi>D</mi><mi>r</mi></msub><mo>&lt;</mo><mi>−</mi><msqrt><mrow><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ϵ</mi></mrow><mi>ϵ</mi></mfrac><msub><mi>v</mi><mi>r</mi></msub></mrow></msqrt><mo stretchy="true" form="postfix">}</mo></mrow><mo>≤</mo><mi>ϵ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Pr_p\left\{D_r&lt;-\sqrt{\frac{1-\epsilon}{\epsilon}v_r}\right\}
+\le\epsilon.
+</annotation></semantics></math> If the variance is zero, this
+conclusion follows directly since Dr is a nonnegative constant.
+Summability ensures convergence of the countable sums and finite
+variance, so the inequalities apply to the infinite alphabet.</p>
+<p>To eliminate the unknown expected counts, let
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>ϵ</mi><mo>=</mo><mi>δ</mi><mi>/</mi><mn>5</mn><mo>,</mo><mspace width="2.0em"></mspace><mi>x</mi><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>5</mn><mi>/</mi><mi>δ</mi><mo stretchy="false" form="postfix">)</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>C</mi><mi>k</mi></msub><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msqrt><mrow><mi>x</mi><mi>/</mi><mn>2</mn></mrow></msqrt><mo>+</mo><msqrt><mrow><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>k</mi></mrow></msub><mo>+</mo><mn>7</mn><mi>x</mi><mi>/</mi><mn>6</mn></mrow></msqrt><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>,</mo><mspace width="1.0em"></mspace><mi>k</mi><mo>∈</mo><mo stretchy="false" form="prefix">{</mo><mi>r</mi><mo>,</mo><mi>r</mi><mo>+</mo><mn>1</mn><mo>,</mo><mn>2</mn><mi>r</mi><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\epsilon=\delta/5,\qquad x=\log(5/\delta),\qquad
+C_k=\left(\sqrt{x/2}+\sqrt{K_{n,k}+7x/6}\right)^2,
+\quad k\in\{r,r+1,2r\}.
+</annotation></semantics></math> Each count bound
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>k</mi></msub><mo>≤</mo><msub><mi>C</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">\eta_k\le C_k</annotation></semantics></math>
+has error at most epsilon, as in Ayed et al. (2019), Remark A.1. Define
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mover><mi>b</mi><mo accent="true">̂</mo></mover><mi>r</mi></msub><mo>=</mo><mfrac><mrow><mi>r</mi><msub><mi>C</mi><mrow><mi>r</mi><mo>+</mo><mn>1</mn></mrow></msub></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mrow><mi>r</mi><mo>+</mo><mn>1</mn></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>r</mi></msub><mo>=</mo><msubsup><mi>a</mi><mi>r</mi><mn>2</mn></msubsup><msub><mi>C</mi><mi>r</mi></msub><mo>+</mo><mfrac><msub><mi>C</mi><mrow><mn>2</mn><mi>r</mi></mrow></msub><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mrow><mn>2</mn><mi>r</mi></mrow></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\widehat b_r=\frac{rC_{r+1}}{\binom n{r+1}},\qquad
+\widehat v_r=a_r^2C_r+\frac{C_{2r}}{\binom n{2r}}.
+</annotation></semantics></math> Fully observable endpoints are
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><msub><mi>L</mi><mi>r</mi></msub><mo>=</mo><msub><mrow><mo stretchy="true" form="prefix">[</mo><msub><mi>T</mi><mi>r</mi></msub><mo>−</mo><msub><mover><mi>b</mi><mo accent="true">̂</mo></mover><mi>r</mi></msub><mo>−</mo><msqrt><mrow><mn>2</mn><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>r</mi></msub><mi>x</mi></mrow></msqrt><mo>−</mo><mfrac><mrow><mn>2</mn><msub><mi>a</mi><mi>r</mi></msub><mi>x</mi></mrow><mn>3</mn></mfrac><mo stretchy="true" form="postfix">]</mo></mrow><mo>+</mo></msub></mrow></menclose><mo>,</mo><mspace width="2.0em"></mspace><menclose notation="box"><mrow><msub><mi>U</mi><mi>r</mi></msub><mo>=</mo><msub><mi>T</mi><mi>r</mi></msub><mo>+</mo><msqrt><mrow><mfrac><mrow><mn>1</mn><mo>−</mo><mi>ϵ</mi></mrow><mi>ϵ</mi></mfrac><msub><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>r</mi></msub></mrow></msqrt></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{L_r=\left[T_r-\widehat b_r-\sqrt{2\widehat v_rx}
+-\frac{2a_rx}{3}\right]_+},\qquad
+\boxed{U_r=T_r+\sqrt{\frac{1-\epsilon}{\epsilon}\widehat v_r}}.
+</annotation></semantics></math> The three count events, the Bernstein
+event and the Cantelli event have total failure probability at most
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>5</mn><mi>ϵ</mi><mo>=</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">5\epsilon=\delta</annotation></semantics></math>.
+On their intersection,
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><menclose notation="box"><mrow><msub><mi>L</mi><mi>r</mi></msub><mo>≤</mo><msub><mi>M</mi><mi>r</mi></msub><mo>≤</mo><msub><mi>U</mi><mi>r</mi></msub></mrow></menclose><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\boxed{L_r\le M_r\le U_r}.
+</annotation></semantics></math> Hence
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mrow><mi mathvariant="normal">inf</mi><mo>⁡</mo></mrow><mrow><mi>p</mi><mo>:</mo><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mo>&lt;</mo><mi>∞</mi></mrow></msub><msub><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mi>p</mi></msub><mo stretchy="false" form="prefix">(</mo><msub><mi>L</mi><mi>r</mi></msub><mo>≤</mo><msub><mi>M</mi><mi>r</mi></msub><mo>≤</mo><msub><mi>U</mi><mi>r</mi></msub><mo stretchy="false" form="postfix">)</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>δ</mi></mrow><annotation encoding="application/x-tex">\inf_{p:S(p)&lt;\infty}\Pr_p(L_r\le M_r\le U_r)\ge1-\delta</annotation></semantics></math>.
+The argument does not require independence among those five events. The
+upper radius has a square-root inverse-error dependence because it uses
+Cantelli; it is not asserted to be the sharpest upper bound
+available.</p>
+<p>If n is smaller than 2r, a conservative fallback valid for any
+positive n is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><mn>0</mn><mo>,</mo><mover><mi>S</mi><mo accent="true">¯</mo></mover><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[0,\overline S]</annotation></semantics></math>,
+since
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mi>r</mi></msub><mo>≤</mo><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">M_r\le S(p)</annotation></semantics></math>
+for r at least one. With
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>S</mi><mo accent="true">̂</mo></mover><mo>=</mo><msup><mi>n</mi><mrow><mi>−</mi><mn>1</mn></mrow></msup><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>N</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">\widehat S=n^{-1}\sum_jN_j</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>z</mi><mo>=</mo><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>δ</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">z=\log(1/\delta)</annotation></semantics></math>,
+the left-tail concentration of this sum gives
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mover><mi>S</mi><mo accent="true">¯</mo></mover><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msqrt><mrow><mover><mi>S</mi><mo accent="true">̂</mo></mover><mo>+</mo><mi>z</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><mo>+</mo><msqrt><mrow><mi>z</mi><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>2</mn><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>,</mo><mspace width="2.0em"></mspace><munder><mi mathvariant="normal">Pr</mi><mi>p</mi></munder><mo stretchy="false" form="prefix">{</mo><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mover><mi>S</mi><mo accent="true">¯</mo></mover><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>δ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\overline S=\left(\sqrt{\widehat S+z/(2n)}+\sqrt{z/(2n)}\right)^2,
+\qquad\Pr_p\{S(p)\le\overline S\}\ge1-\delta.
+</annotation></semantics></math></p>
+<p>For noninteger
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>r</mi><mo>≥</mo><mn>2</mn></mrow><annotation encoding="application/x-tex">r\ge2</annotation></semantics></math>,
+let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>k</mi><mo>=</mo><mo stretchy="false" form="prefix">⌊</mo><mi>r</mi><mo stretchy="false" form="postfix">⌋</mo></mrow><annotation encoding="application/x-tex">k=\lfloor r\rfloor</annotation></semantics></math>.
+Since
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>≤</mo><msub><mi>M</mi><mi>r</mi></msub><mo>≤</mo><msub><mi>M</mi><mi>k</mi></msub></mrow><annotation encoding="application/x-tex">M_{k+1}\le M_r\le M_k</annotation></semantics></math>,
+construct the above intervals for k and k+1, each with error delta/2.
+Then
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">[</mo><msub><mi>L</mi><mrow><mi>k</mi><mo>+</mo><mn>1</mn></mrow></msub><mo>,</mo><msub><mi>U</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">[L_{k+1},U_k]</annotation></semantics></math>
+covers Mr with probability at least one minus delta, provided
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>n</mi><mo>≥</mo><mn>2</mn><mo stretchy="false" form="prefix">(</mo><mi>k</mi><mo>+</mo><mn>1</mn><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">n\ge2(k+1)</annotation></semantics></math>.</p>
+<p>Non-strict inequalities are necessary for a nonnegative lower
+endpoint when Mr can be zero. Strict inequalities can be obtained by
+replacing Lr by Lr minus any positive constant and Ur by Ur plus a
+positive constant, at the cost of allowing a negative lower
+endpoint.</p>
+<h2 id="monte-carlo-coverage-and-oracle-comparison">Monte Carlo coverage
+and oracle comparison</h2>
+<p>Empirical coverage of the random lower endpoint is
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mfrac><mn>1</mn><msub><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">p</mi></mrow></msub></mfrac><munderover><mo>∑</mo><mrow><mi>b</mi><mo>=</mo><mn>1</mn></mrow><msub><mi>B</mi><mrow><mi mathvariant="normal">r</mi><mi mathvariant="normal">e</mi><mi mathvariant="normal">p</mi></mrow></msub></munderover><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>L</mi><mrow><mi>n</mi><mo>,</mo><mi>b</mi></mrow></msub><mo>≤</mo><msub><mi>M</mi><mrow><mrow><mi mathvariant="normal">max</mi><mo>⁡</mo></mrow><mo>,</mo><mi>b</mi></mrow></msub><mo stretchy="false" form="postfix">}</mo><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\frac1{B_{\mathrm{rep}}}\sum_{b=1}^{B_{\mathrm{rep}}}
+\mathbf 1\{L_{n,b}\le M_{\max,b}\}.
+</annotation></semantics></math> Both quantities use the same Monte
+Carlo sample. This differs from the fraction of lower endpoints below a
+deterministic oracle, and neither comparison can be replaced by
+comparing their medians. High coverage alone does not imply a tight
+lower endpoint: an identically zero endpoint has coverage one.</p>
+</body>
+</html>

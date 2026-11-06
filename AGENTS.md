@@ -7,8 +7,13 @@ Prefer standalone HTML with embedded CSS and MathML so it works offline.
 Keep the Markdown source and HTML synchronized and link the HTML in replies.
 This requirement does not apply to internal instruction files such as AGENTS.md.
 
-For LowerBound/README.md, use LowerBound/render_readme.ps1 (Pandoc) to rebuild
-LowerBound/README.html. Do not run simulation scripts merely to rebuild docs.
+For LowerBound documentation, use LowerBound/render_readme.ps1 (Pandoc) to
+rebuild both LowerBound/README.html and LowerBound/Notes/README.html. Keep
+the root README focused on implementation, execution, configuration and
+outputs. Put definitions, proofs and other theoretical discussion in Notes/.
+Do not run simulation scripts merely to rebuild docs.
+The formal derivations are in LowerBound/Notes/theory.tex; the same builder
+also creates LowerBound/Notes/theory.html as a reading copy.
 
 # Simulation completion logs
 

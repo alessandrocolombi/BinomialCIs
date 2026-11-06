@@ -87,3 +87,73 @@ lower_bound_mmax <- function(n, counts, alpha = 0.05, details = FALSE) {
        error_budget = c(K2 = epsilon, K3 = epsilon, K4 = epsilon,
                         D2_tail = epsilon, M1_upper = epsilon))
 }
+
+# Simultaneous diagonal-ellipsoid theorem (thm:simultaneous) in Notes/theory.tex.
+# Each threshold is evaluated by a rationalized root, rounded downward.
+.lb_joint_roots <- function(T, B, V, c) {
+  r <- 2:length(T)
+  A <- T[r] - B[r]
+  D <- T[r - 1L]
+  z <- c * sqrt(V[r])
+  w <- c * sqrt(V[r - 1L])
+  result <- numeric(length(r))
+  ok <- which(A > z)
+  if (length(ok)) {
+    scale <- pmax(A[ok], D[ok], z[ok], w[ok])
+    aa <- A[ok] / scale; dd <- D[ok] / scale
+    vv <- (z[ok] / scale)^2; ww <- (w[ok] / scale)^2
+    N <- (aa - sqrt(vv)) * (aa + sqrt(vv))
+    denominator <- aa * dd + sqrt(dd^2 * vv + ww * N)
+    root <- N / denominator
+    root[denominator == 0] <- 1
+    result[ok] <- pmin(1, root) * (1 - 16 * .Machine$double.eps)
+    # Return a feasible side of the root even in unusual floating-point cases.
+    for (i in ok) {
+      score <- function(t) A[i] - t * D[i] - sqrt(z[i]^2 + (t * w[i])^2)
+      if (!is.finite(result[i]) || score(result[i]) < 0) {
+        lo <- 0; hi <- 1
+        for (step in 1:60) {
+          mid <- (lo + hi) / 2
+          if (score(mid) > 0) lo <- mid else hi <- mid
+        }
+        result[i] <- lo
+      }
+    }
+  }
+  names(result) <- paste0("r", r)
+  result
+}
+
+lower_bound_mmax_simultaneous_spectrum <- function(n, K, alpha = 0.05, R = 6L,
+                                                  details = FALSE) {
+  .lb_check_data(n, integer())
+  .lb_check_level(alpha)
+  if (!is.numeric(R) || length(R) != 1L || !is.finite(R) || R < 2 ||
+      R != floor(R) || 2 * R > n) stop("R must be an integer >= 2 with 2*R <= n.")
+  if (!is.numeric(K) || length(K) != 2 * R || any(!is.finite(K)) ||
+      any(K < 0 | K != floor(K))) stop("K must contain K_1,...,K_(2R).")
+  if (!is.logical(details) || length(details) != 1L || is.na(details)) stop("Invalid details.")
+  j <- seq_len(R)
+  a <- exp(-lchoose(n, seq_len(R + 1L)))
+  C <- ayed_expected_count_upper(K, alpha / (4 * R))
+  T <- a[j] * K[j]
+  B <- j * C[j + 1L] * a[j + 1L]
+  V <- a[j]^2 * C[j] + C[2L * j] * exp(-lchoose(n, 2L * j))
+  by_r <- .lb_joint_roots(T, B, V, sqrt(2 * R / alpha))
+  selected <- which.max(by_r)
+  lower <- unname(by_r[selected])
+  if (!details) return(lower)
+  list(lower = lower, by_r = by_r, selected_r = selected + 1L,
+       T = T, bias_upper = B, variance_upper = V, expected_counts_upper = C,
+       K = K, R = R, alpha = alpha, version = "simultaneous-ellipse-v1")
+}
+
+lower_bound_mmax_simultaneous <- function(n, counts, alpha = 0.05, R = 6L,
+                                         details = FALSE) {
+  .lb_check_data(n, counts)
+  # Validate R before using it as a vector length.
+  if (!is.numeric(R) || length(R) != 1L || !is.finite(R) || R < 2 ||
+      R != floor(R) || 2 * R > n) stop("R must be an integer >= 2 with 2*R <= n.")
+  K <- tabulate(counts[counts > 0 & counts <= 2 * R], nbins = 2 * R)
+  lower_bound_mmax_simultaneous_spectrum(n, K, alpha, R, details)
+}

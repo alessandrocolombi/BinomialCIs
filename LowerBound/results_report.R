@@ -15,8 +15,47 @@ lb_task_key <- function(tasks) {
         tasks$M, tasks$n, sep = "|")
 }
 
+# Enrich saved MC repetitions without drawing data when spectra are available.
+# Old checkpoints lacking spectra keep explicit NA entries until replayed.
+lb_add_joint_results <- function(cell, alpha, R = 6L) {
+  ready <- "lower_joint" %in% colnames(cell$runs) &&
+    identical(cell$joint_version, "simultaneous-ellipse-v1") &&
+    identical(as.integer(cell$joint_R), as.integer(R))
+  if (!ready && !is.null(cell$spectrum) && ncol(cell$spectrum) >= 2 * R) {
+    fits <- lapply(seq_len(nrow(cell$runs)), function(b) {
+      lower_bound_mmax_simultaneous_spectrum(cell$task$n,
+        cell$spectrum[b, seq_len(2 * R)], alpha, R, details = TRUE)
+    })
+    cell$runs <- cbind(cell$runs[, setdiff(colnames(cell$runs), c("lower_joint", "joint_r")), drop = FALSE],
+                       lower_joint = vapply(fits, `[[`, numeric(1), "lower"),
+                       joint_r = vapply(fits, `[[`, integer(1), "selected_r"))
+    cell$joint_by_r <- do.call(rbind, lapply(fits, `[[`, "by_r"))
+    cell$joint_R <- as.integer(R)
+    cell$joint_version <- "simultaneous-ellipse-v1"
+    ready <- TRUE
+  }
+  z <- cell$summary
+  z$joint_R <- R
+  fields <- c("lb_joint_median", "lb_joint_q025", "lb_joint_q975", "coverage_joint",
+              "positive_rate_joint", "failure_count_joint", "mean_relative_joint")
+  for (name in fields) z[[name]] <- NA_real_
+  if (ready) {
+    lower <- cell$runs[, "lower_joint"]
+    q <- quantile(lower, c(0.025, 0.5, 0.975), names = FALSE)
+    z$lb_joint_q025 <- q[1]; z$lb_joint_median <- q[2]; z$lb_joint_q975 <- q[3]
+    z$coverage_joint <- mean(lower <= cell$runs[, "Mmax"])
+    z$failure_count_joint <- sum(lower > cell$runs[, "Mmax"])
+    z$positive_rate_joint <- mean(lower > 0)
+    unseen <- cell$runs[, "Mmax"] > 0
+    z$mean_relative_joint <- if (any(unseen)) mean(lower[unseen] / cell$runs[unseen, "Mmax"]) else NA_real_
+  }
+  cell$summary <- z
+  cell
+}
+
 lb_summary_from_runs <- function(results) {
   lb_bind_rows(lapply(results, function(cell) {
+    cell <- lb_add_joint_results(cell, cell$summary$alpha[1], 6L)
     z <- cell$summary
     runs <- cell$runs
     below_oracle <- runs[, "lower"] <= z$oracle[1]
@@ -65,6 +104,9 @@ lb_upgrade_summary <- function(z) {
 }
 
 write_lb_results_report <- function(summary, filename) {
+  for (name in c("lb_joint_median", "coverage_joint")) {
+    if (!name %in% names(summary)) summary[[name]] <- NA_real_
+  }
   required <- c("distribution", "param", "arm", "M", "n", "Brep", "alpha",
                 "oracle", "lb_median", "coverage", "coverage_definition")
   if (!all(required %in% names(summary))) stop("Incomplete report summary.")
@@ -100,21 +142,26 @@ write_lb_results_report <- function(summary, filename) {
     navigation <- c(navigation, sprintf('<a href="#%s">%s %s &mdash; varia %s</a>',
                                        id, esc(group$distribution), number(group$param), varying))
     rows <- vapply(seq_len(nrow(z)), function(i) {
-      paste0('<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">',
+      paste0('<tbody><tr class="coordinate"><th colspan="5" scope="rowgroup">',
              varying, ' = ', number(z[[varying]][i]), '</th></tr><tr>',
              '<td>', probability(z$oracle[i]), '</td>',
              '<td>', probability(z$lb_median[i]), '</td>',
              '<td>', if (is.na(z$coverage[i])) probability(NA_real_) else sprintf("%.4f", z$coverage[i]),
+             '</td><td>', probability(z$lb_joint_median[i]),
+             '</td><td>', if (is.na(z$coverage_joint[i])) probability(NA_real_) else sprintf("%.4f", z$coverage_joint[i]),
              '</td></tr></tbody>')
     }, character(1))
     blocks[[g]] <- c(sprintf('<section id="%s"><table>', id),
                     paste0('<caption>', esc(caption), '</caption>'),
                     '<thead><tr><th scope="col"><strong>oracle</strong></th>',
-                    '<th scope="col"><strong>lb_median</strong></th><th scope="col">coverage</th></tr></thead>',
+                    '<th scope="col"><strong>lb_median</strong></th><th scope="col">coverage</th>',
+                    '<th scope="col"><strong>lb_joint_median (R=6)</strong></th><th scope="col">coverage_joint</th></tr></thead>',
                     rows, '</table></section>')
   }
   missing <- sum(is.na(summary$coverage))
+  missing_joint <- sum(is.na(summary$lb_joint_median))
   note <- if (missing) sprintf('<aside>Coverage non disponibile per %d righe; fornire il checkpoint con le repliche MC.</aside>', missing) else ""
+  if (missing_joint) note <- c(note, sprintf('<aside>Nuovo bound R=6 non disponibile in %d righe: il vecchio checkpoint non contiene i conteggi necessari. Eseguire resume=TRUE sulla VM per ricalcolare le stesse repliche e salvare lo spettro; non sono stati inventati nuovi risultati.</aside>', missing_joint))
   page <- c('<!DOCTYPE html><html lang="it"><head><meta charset="utf-8">',
     '<meta name="viewport" content="width=device-width,initial-scale=1">',
     '<title>Lower bound - risultati per scenario</title><style>',
@@ -128,7 +175,8 @@ write_lb_results_report <- function(summary, filename) {
     '@media print{nav{display:none}tbody{break-inside:avoid}section{break-before:page}}</style></head><body>',
     '<h1>Lower bound: risultati per scenario</h1>',
     '<p>Ogni tabella fissa distribuzione e parametro e varia solo M oppure n. ',
-    'Le tre colonne sono nella scala originale, senza il fattore 1000 dei grafici.</p>',
+    'I bound sono nella scala originale, senza il fattore 1000 dei grafici. ',
+    'lb_joint_median riporta la mediana del nuovo bound simultaneo con R=6; coverage_joint e la sua copertura rispetto a Mmax.</p>',
     '<p><strong>coverage</strong> = numero di repliche con LB<sub>b</sub> &le; M<sub>max,b</sub>, diviso Brep. ',
     'Si confrontano il LB e il vero M<sub>max</sub> della stessa replica, non le mediane. ',
     'Il confronto con l\'oracle e conservato solo nei dati diagnostici come <code>coverage_vs_oracle</code>.</p>',

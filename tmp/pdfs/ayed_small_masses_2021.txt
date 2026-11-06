@@ -1,0 +1,1677 @@
+Journal of Machine Learning Research 22 (2021) 1-28              Submitted 8/18; Revised 1/21; Published 1/21
+
+
+
+
+   Consistent estimation of small masses in feature sampling
+
+Fadhel Ayed                                                               fadhel.ayed@some.ox.ac.uk
+Department of Statistics
+University of Oxford,
+24-29 St Giles’, OX1 3LB Oxford, United Kingdom.
+Marco Battiston                                                        m.battiston@lancaster.ac.uk
+Department of Mathematics and Statistics
+Lancaster University,
+Fylde Ave, Bailrigg, LA1 4YR Lancaster, United Kingdom.
+Federico Camerlenghi                                                federico.camerlenghi@unimib.it
+Department of Economics, Management and Statistics,
+University of Milano - Bicocca,
+Piazza dell’Ateneo Nuovo 1, 20126 Milano, Italy.
+Stefano Favaro                                                                  stefano.favaro@unito.it
+Department of Economics and Statistics
+University of Torino and Collegio Carlo Alberto
+Corso Unione Sovietica 218/bis, 10134, Torino, Italy.
+
+
+Editor: David Blei
+
+
+                                                Abstract
+
+
+     Consider an (observable) random sample of size n from an infinite population of individuals,
+     each individual being endowed with a finite set of “features” from a collection of features
+     (Fj )j≥1 with unknown probabilities (pj )j≥1 , i.e., pj is the probability that an individual
+     displays feature Fj . Under this feature sampling framework, in recent years there has
+     been a growing interest in estimating the sum of the probability masses pj ’s of features
+     observed with frequency r ≥ 0 in the sample, here denoted by Mn,r . This is the natural
+     feature sampling counterpart of the classical problem of estimating small probabilities in
+     the species sampling framework, where each individual is endowed with only one feature
+     (or “species”). In this paper we study the problem of consistent estimation of the small
+     mass Mn,r . We first show that there do not exist universally consistent estimators, in the
+     multiplicative sense, of the missing mass Mn,0 . Then, we introduce an estimator of Mn,r
+     and identify sufficient conditions under which the estimator is consistent. In particular,
+     we propose a nonparametric estimator M̂n,r of Mn,r which has the same analytic form of
+     the celebrated Good–Turing estimator for small probabilities, with the sole difference that
+     the two estimators have different ranges (supports). Then, we show that M̂n,r is strongly
+     consistent, in the multiplicative sense, under the assumption that (pj )j≥1 has regularly
+     varying heavy tails.
+
+
+     Keywords:      Feature sampling; Good–Turing estimator; missing mass; multiplicative
+     consistency; nonparametric inference; regularly varying heavy-tailed distributions; species
+     sampling.
+
+c 2021 Fadhel Ayed, Marco Battiston, Federico Camerlenghi and Stefano Favaro.
+License: CC-BY 4.0, see https://creativecommons.org/licenses/by/4.0/. Attribution requirements are provided
+at http://jmlr.org/papers/v22/18-534.html.
+                        Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+1. Introduction
+The estimation of small probabilities is a classical problem in statistics, dating back to the
+work of Alan M. Turing and Irving J. Good at Bletchley Park in the 1940s (Good, 1953).
+To define small probabilities, let consider the following species sampling framework: i) an
+infinite population of individuals, with each individual belonging to one “species” from
+a collection of (possibly infinite) species labelled by (Sj )j≥1 ; ii) an unknown probability
+distribution (qj )j≥1 , with qj being the probability that an individual belongs to species
+Sj ; iii) an (observable) random sample (Z1 , . . . , Zn ) of individuals from the population. If
+Sn,r is the set of labels of species with frequency r ≥ 0 in the observable sample, with the
+convention that Sn,0 are labels not in the sample, then the small probability of order r ≥ 0
+is defined as
+                                                                X
+                     Pn,r = P(Zn+1 ∈ Sn,r | Z1 , . . . , Zn ) =   qj 11{Sj ∈Sn,r } ,          (1)
+                                                             j≥1
+
+where 11{} denotes the indicator function. That is, Pn,r is the total probability mass of
+species observed with frequency r ≥ 0 in the sample (Z1 , . . . , Zn ). In particular, Pn,0 is re-
+ferred to as the missing mass, i.e., the total probability mass of unseen species in the sample.
+The Good–Turing estimator (Good, 1953) is the most popular estimator of Pn,r . This is a
+nonparametric estimator, in the sense that it does not rely on any distributional assump-
+tion of the qj ’s, and it has been the subject of numerous studies. These studies include,
+e.g., central limit theorems and large deviation principles (Zhang and Zhang, 2009; Gao,
+2013; Grabchak and Zhang, 2017), admissibility and concentration properties (McAllester
+and Schapire, 2000; Ohannessian and Dahleh, 2012; Ben-Hamou et al., 2017), consistency
+and corresponding convergence rates (McAllester and Ortiz, 2003; Mossel and Ohannessian,
+2019; Ayed et al., 2018), optimality and minimax properties (Orlitsky et al., 2003; Ayed et
+al., 2018).
+     The importance of estimating small probabilities has been growing dramatically in recent
+years, driven by applications in the broad areas of biological and physical sciences (Kroes et
+al., 1999; Gao et al., 2007; Daley and Smith, 2013), in linguistics (Gale and Sampson, 1995;
+Ohannessian and Dahleh, 2012), in machine learning (Bubeck et al., 2013; Cai et al., 2018),
+in information theory (Orlitsky et al., 2004; Ohannessian and Dahleh, 2012; Ben-Hamou
+et al., 2018) and in forensic DNA analysis (Anevski et al., 2017; Cereda and Gill, 2020).
+At the same time, there has been a growing interest, especially in ecology and biological
+sciences, in the estimation of the missing mass within the more general framework of feature
+sampling. See, e.g., Ionita-Laza et al. (2009), Ionita-Laza et al. (2010), Chao et al. (2014),
+Gravel (2014), Zou et al. (2016), and Ayed et al. (2019). The feature sampling framework
+generalizes the species sampling framework by allowing each individual in the population
+to belong to more than one “species”, now called “feature”. Formally, the feature sampling
+framework consists of: i) an infinite population of individuals, with each individual endowed
+with a finite set of features selected from a collection of (possibly infinite) features labelled by
+(Fj )j≥1 ; ii) a collection of unknown probabilities (pj )j≥1 , with pj being the probability that
+an individual is endowed with feature Fj ; iii) an (observable) random sample (Y1 , . . . , Yn )
+of individuals from the population. In analogy to the species sampling framework, under
+the feature sampling framework the missing mass is defined as the sum of the probabilities
+pj ’s of unseen features in the observed sample (Y1 , . . . , Yn ).
+
+                                                 2
+                Consistent estimation of small masses in feature sampling
+
+
+
+
+    The Bernoulli product model is arguably the most popular model for estimating the
+missing mass under the feature sampling framework. It assumes that the ith element of the
+random sample (Y1 , . . . , Yn ) is a sequence Yi = (Yi,j )j≥1 of independent Bernoulli random
+variables with unknown feature probabilities (pj )j≥1P          , and that Yr is independent of Ys for
+any r 6= s. Therefore the random variable Xn,j := 1≤i≤n Yi,j , i.e., the number of times
+that feature Fj appears in the random sample (Y1 , . . . , Yn ), is distributed according to a
+Binomial distribution with parameter (n, pj ), for any j ≥ 1. In analogy to the species
+sampling framework, given the random sample (Y1 , . . . , Yn ) under the Bernoulli product
+model we define the small mass of order r ≥ 0 as
+                                                                                   
+                                          X                                             X
+  Mn,r (Y1 , . . . , Yn ; (pj )j≥1 ) = E   11{Xn,j =r,Yn+1,j =1} | Y1 , . . . , Yn  =   pj 11{Xn,j =r} . (2)
+                                        j≥1                                         j≥1
+
+That is, Mn,r (Y1 , . . . , Yn ; (pj )j≥1 ) is the total mass of features observed with frequency
+r ≥ 0 in the sample (Y1 , . . . , Yn ). In particular, we refer to Mn,0 (Y1 , . . . , Yn ; (pj )j≥1 ) as the
+missing mass, i.e., the total mass of unseen features in the observable sample. For ease of
+notation, in the rest of the paper we will not highlight the dependence on (Y1 , . . . , Yn ) and
+(pj )j≥1 in Mn,r (Y1 , . . . , Yn ; (pj )j≥1 ), and we simply write Mn,r . Motivated by recent works
+on consistent estimation of Pn,r (Ohannessian and Dahleh, 2012; Ben-Hamou et al., 2017;
+Grabchak and Zhang, 2017; Mossel and Ohannessian, 2019; Ayed et al., 2018) in this paper
+we investigate the problem of consistent estimation of Mn,r under the Bernoulli product
+model.
+     As an extension of the main result of Mossel and Ohannessian (2019) to the feature
+sampling framework, we first show that there do not exist universally consistent estimators,
+in the multiplicative sense, of the missing mass Mn,0 . That is, under the Bernoulli product
+model we prove that for any estimator T̂n,0 of Mn,0 there exists at least a choice of feature
+probabilities (pj )j≥1 for which T̂n,0 /Mn,0 does not converge to 1 in probability, as n → +∞.
+Our strategy of proof differs from the constructive strategy of Mossel and Ohannessian
+(2019), and it relies on non-trivial generalizations of Bayesian nonparametric ideas and
+techniques developed in Ayed et al. (2018). In particular, the use of generalized Beta process
+prior (James, 2017) is critical to our strategy, which allows us to prove non-consistency
+of T̂n,0 by exploiting the posterior distribution of Mn,0 given (Y1 , . . . , Yn ). Based on our
+inconsistency result, we then consider the problem of introducing a consistent nonparametric
+estimator for Mn,r . This problem leads us to extend most of the results of Ohannessian and
+Dahleh (2012) and Ben-Hamou et al. (2017) to the feature sampling framework. We propose
+an estimator M̂n,r of Mn,r which has the same analytic form of the Good–Turing estimator
+of Pn,r , with the difference that the two estimators have different ranges (supports): while
+the Good–Turing estimator of Pn,r takes values in the set (0, 1), our estimator for Mn,r
+takes values in R+ , indeed the pj ’s in (2) are not required to sum up to 1. Then, we show
+that M̂n,r is strongly consistent, in the multiplicative sense, under the assumption that
+(pj )j≥1 has regularly varying heavy tails (Karlin, 1967). Proofs of our results relies on novel
+concentration inequalities for Mn,r , which may be of independent interest.
+     There is a growing interest in the estimation of Mn,0 , mainly driven by applications in
+biological sciences. This is typically motivated by sampling procedures that are expensive,
+in terms of time and/or financial resources, and further draws are legitimated only by the
+
+                                                      3
+                       Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+possibility of recording unseen features. In genetics, for instance, the ambitious prospect
+of growing databases to encompass hundreds of thousands of human genomes, makes im-
+portant to quantify the power of large sequencing projects to discover new genetic variants
+(Auton et al., 2015). An accurate estimate of Mn,0 introduces a criterion for evaluating the
+effectiveness of further sampling, providing a roadmap for large-scale sequencing projects:
+one can fix a suitable threshold such that the sampling procedure takes place until the
+estimate of the total mass Mn,0 of unseen genetic variants becomes for the first time smaller
+than the threshold (Ionita-Laza et al., 2009; Gravel, 2014; Zou et al., 2016). The estimation
+of Mn,r is also relevant in genetics, where there is a concrete interest in estimating the
+total mass of relatively rare genetic variants, i.e., small values of r, since these variants are
+known to play a critical role in disease predisposition (Cirulli and Goldstein, 2010; Bomba
+et al., 2017). To the best of our knowledge, the problem of estimating Mn,r first appeared
+in Cai et al. (2018) within the context of learning augmented algorithms, with potential
+applications in computational biology (Zhang et al., 2014), password security (Schechter,
+2010), games (Harrison, 2010) and social networks (Song et al., 2009). In particular, Cai
+et al. (2018) relies on Bayesian nonparametric estimates of Mn,r to provide new insights
+on the count-min sketch, a time and memory efficient randomized data structure for esti-
+mating the number of times a symbol has been observed in a data stream (Cormode and
+Muthukrishnan, 2005).
+    The paper is structured as follows. Section 2 contains a brief review on consistent
+estimation of small probabilities. In Section 3 we prove that, under the Bernoulli product
+model, there do not exist universally consistent estimators, in the multiplicative sense, of
+the missing mass Mn,0 . Section 4 contains novel exponential tail bounds for the small mass
+Mn,r , for r ≥ 0, as well as exponential tail bounds for related statistics. In Section 5 we
+introduce a nonparametric estimator M̂n,r of Mn,r and we apply tail bounds of Section
+4 to show that M̂n,r is a consistent estimator under the assumption of regularly varying
+feature probabilities pj ’s. Section 6 contains a discussion of our results and remaining open
+challenges. Some technical lemmas used in the proofs of Theorem 1 and Theorem 12 are
+deferred to Appendix A.
+
+2. A review on consistent estimation of Pn,r
+The Multinomial model is arguably the most popular model for estimating the small prob-
+abilities Pn,r . It assumes that the (observable) random sample Zn = (Z1 , . . . , Zn ) from the
+population is a collection of independent P and identically distributed random variables from
+an unknown discrete distribution q = j≥1 qj δSj . Both species’ labels (Sj )j≥1 and proba-
+bility masses (qj )j≥1 are unknown and, without loss of generality, we assume that (Sj )j≥1
+is a sequence of distinct points in [0, 1]. We can therefore consider as parameter space the
+set                                                                        
+                         X                                         X       
+                    Q=        qj δSj : Sj ∈ [0, 1], qj ∈ [0, 1] and   qj = 1 .
+                                                                           
+                         j≥1                                     j≥1
+
+For a fixed n, an estimator R̂n,r : [0, 1]n → [0, 1] of the missing mass Pn,r is a measurable
+map whose argument is the observed sample Zn = (Z1 , . . . , Zn ). We say that the estimator
+R̂n,r is multiplicative consistent for Pn,r , under the parameter space Q, if for every ε > 0
+
+                                               4
+              Consistent estimation of small masses in feature sampling
+
+
+
+
+and for every q ∈ Q                                         !
+                                             R̂n,r
+                               lim QZn |q          −1 ≥ε        = 0,                         (3)
+                             n→+∞            Pn,r
+where QZn |q denotes the law of the observations Zn under a Multinomial model of parameter
+q. The problem of consistent estimation, in the multiplicative sense, of Pn,r has been the
+subject of recent works by Ohannessian and Dahleh (2012), Mossel and Ohannessian (2019),
+Ben-Hamou et al. (2017) and Ayed et al. (2018). Here we review the main contributions of
+these works.
+    The choice of the multiplicative loss function L(R̂n,r , Pn,r ) = |R̂n,r /Pn,r − 1| is known
+to be suitable for estimating small value parameters, such as Pn,r , since it allows to achieve
+more informative results. Besides the estimation of Pn,r , the multiplicative loss function
+has been used, for instance, in the estimation of small value probabilities using importance
+sampling (Chatterjee and Diaconis, 2018) and in the estimation of tail probabilities in
+extreme value theory (Beirlant and Devroye, 1999). Under the multiplicative loss function,
+Ohannessian and Dahleh (2012) studied the consistency of the Good–Turing estimator P̂n,r
+of Pn,r , i.e.,
+                                                     Kn,r
+                                     P̂n,r = (r + 1)
+                                                      n
+where Kn,r is the number of distinct species appearing exactly r times in Zn . They showed
+that if q ∈ Q is a geometric distribution with small enough parameter, then there exists
+ε > 0 such that                                           !
+                                             P̂n,0
+                              lim QZn |q           − 1 ≥ ε > C,                               (4)
+                             n→+∞            Pn,0
+
+for some C > 0. That is, P̂n,0 is not a universally consistent estimator, in the multiplicative
+sense, of the missing mass Pn,0 . As discussed in Ohannessian and Dahleh (2012), the intu-
+ition behind (4) is that with a light-tailed distribution like the geometric distribution, there
+are not enough samples to learn the small probabilities well enough for consistency. Similar
+arguments shows that P̂n,r is not a universally consistent estimator, in the multiplicative
+sense, of Pn,r .
+    Based on the non-consistency result (4), Ohannessian and Dahleh (2012) investigated
+conditions on Q to obtain multiplicative consistency for Pn,r . In particular, they showed
+that the assumption of regularly varying heavy-tailed distributions is sufficient to obtain
+strong multiplicativeP consistency for Pn,r . To define regularly varying heavy-tailed distri-
+butions, let ν(dx) = j≥1 δqj (dx) and let ν̄(x) = ν[x, 1]. Then, following Karlin (1967), we
+say that q ∈ Q is a regularly varying heavy-tailed distribution, with regular variation index
+α ∈ (0, 1) if
+                                  ν̄(x) ∼ x−α `(1/x)      x↓0
+where `(·) is a slowly varying function, namely `(ct)/`(t) → 1 as t → +∞ for all c > 0.
+Ohannessian and Dahleh (2012) showed that if q ∈ Q is a regularly varying heavy-tailed
+distribution with index α, then for every r ≥ 0 there exist a universal constant ar and
+distribution specific constants br > 0, nr < +∞ and εr > 0 such that for all n > nr and for
+all ε ∈ (0, εr )                                 
+                                   Pn,r                       2 α
+                         QZn |q            − 1 > ε ≤ ar e−br ε n `(n) .                 (5)
+                                  E[Pn,r ]
+
+                                               5
+                        Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+Then, by combining (5) with the Borel–Cantelli lemma it follows that P̂n,r /Pn,r → 1 almost
+surely, as n → +∞. That is, under the assumption of regularly varying heavy-tailed
+distributions, the Good–Turing estimator P̂n,r is strongly consistent, in the multiplicative
+sense, for Pn,r .
+    Mossel and Ohannessian (2019) strengthened the result of non-consistency obtained in
+Ohannessian and Dahleh (2012). Specifically, let R̂n,0 be any estimator of the missing mass
+Pn,0 . Then, Mossel and Ohannessian (2019) showed that there exist ε > 0 and q ∈ Q such
+that                                                     !
+                                         R̂n,0
+                            lim QZn |q         − 1 ≥ ε > C,                              (6)
+                          n→+∞           Pn,0
+
+for some C > 0. That is, there do not exist universally consistent estimators, in the
+multiplicative sense, of the missing mass Pn,0 . Mossel and Ohannessian (2019) proved (6)
+by carefully defining a discrete distribution q that satisfies (6), and such a construction
+relies on a coupling of two generalized (dithered) geometric distributions. An alternative,
+and remarkably shorter, proof of (6) is given in Ayed et al. (2018). While the approach of
+Mossel and Ohannessian (2019) has the merit to be constructive, the approach of Ayed et
+al. (2018) has the merit to be direct by exploiting properties of the posterior distribution
+of Pn,0 under a Dirichlet process prior for q (Ferguson, 1973). Moreover, the alternative
+approach of Ayed et al. (2018) paved the way to study the rate of consistency of the Good–
+Turing estimator under the assumption of regularly varying q. In particular, Ayed et al.
+(2018) showed that the convergence rate n−α/2 is the best rate that any estimator R̂n,0 of
+Pn,0 can achieve, up to a slowly varying function, and that that the Good–Turing estimator
+P̂n,0 achieves that rate.
+
+3. Non-existence of universally consistent estimators of Mn,0
+Consider the Bernoulli product model described in the Introduction. Without loss of gen-
+erality, we assume that each feature Fj is labeled by a value in [0, 1] and therefore (Fj )j≥1
+is a sequence of distinctPpoints in [0, 1]. Furthermore, the probabilities (pj )j≥1 are assumed
+to be summable, i.e., j≥1 pj < +∞; this condition is needed in order to guarantee that
+every
+P      observation Yi will display P  only a finite numberP     of features almost surely. Indeed,
+       p
+   j≥1 j  <  +∞P   is equivalent  to    j≥1 P(F  j ∈  Yi ) =     j≥1 E[11{Fj ∈Yi } ] < +∞, which in
+turns implies j≥1 11{Fj ∈Yi } < +∞ almost surely, by Tonelli–Fubini Theorem. The two
+unknownP sequences (Fj )j≥1 and (pj )j≥1 can be uniquely encoded in a finite measure on
+[0, 1], j≥1 pj δFj (·), with all masses at most one. We can therefore consider as parameter
+space the set
+                                                                                    
+                        X                                           X               
+               P :=          pj δFj : Fj ∈ [0, 1], pj ∈ [0, 1] and      pj < +∞ .               (7)
+                                                                                    
+                        j≥1                                      j≥1
+
+
+Recall that Xn,j denotes the number                    Pfeature Fj has been observed in the
+                                         P of times that
+sample (Y1 , . . . , Yn ), that is Xn,j = 1≤i≤n Yi,j = 1≤i≤n 11{Fj ∈Yi } is a Binomial random
+variable with parameter (n, pj ). For a fixed n ≥ 1, an estimator T̂n,0 : ({0, 1}∞ )n → R+
+of the missing mass Mn,0 is a measurable map whose argument is the observed sample
+
+                                                6
+              Consistent estimation of small masses in feature sampling
+
+
+
+
+Yn = (Y1 , . . . , Yn ). We say that the estimator T̂n,0 is multiplicative consistent for Mn,0 ,
+under the parameter space P if for every ε > 0 and every p ∈ P,
+                                                            !
+                                              T̂n,0
+                                lim PYn |p          − 1 ≥ ε = 0,                           (8)
+                               n→+∞          Mn,0
+
+where PYn |p denotes the law of the observations Yn under a Bernoulli product model
+of parameter p. Theorem 1 shows that there are no universally multiplicative consistent
+estimators of Mn,0 for the class P. This means that for any estimator T̂n,0 of the missing
+mass, there exists at least one element p ∈ P for which T̂n,0 /Mn,0 does not converge to 1
+in probability, as n → +∞.
+
+Theorem 1 Under the feature allocation model, there are no universally consistent esti-
+mators of the missing mass, i.e., there are no estimators satisfying (8). In particular, for
+every estimator T̂n,0 , and for any ε ∈ (0, 1/6) it is possible to find an element p ∈ P
+                                                            !
+                                              T̂n,0
+                            lim sup PYn |p          − 1 ≥ ε > Cε .                       (9)
+                             n→+∞            Mn,0
+
+for some strictly positive constant Cε .
+
+3.1 Proof of Theorem 1
+The proof of this theorem will build on technical lemmas which statements and proofs are
+deferred to the appendix for clarity of the exposition. In order to prove Theorem 1, it is
+enough to show that for every estimator T̂n,0 and every ε ∈ (0, 1/6),
+                                                          !
+                                             T̂n,0
+                        sup lim sup PYn |p         − 1 ≥ ε > Cε ,                    (10)
+                        p∈P n→+∞             Mn,0
+
+and therefore there exists a p ∈ P for which T̂n,0 is not consistent. Let us also notice that
+from Lemma 13 (stated in the Appendix), we know that for every ε ∈ (0, 1/6),
+                                       !                                         !
+                          T̂n,0                                   Mn,0
+    sup lim sup PYn |p          − 1 ≥ ε ≥ sup lim sup PYn |p            − 1 ≥ 2ε .       (11)
+    p∈P n→+∞             Mn,0              p∈P n→+∞               T̂n,0
+
+Hence, denoting ε̄ = 2ε ∈ (0, 1/3), it is sufficient to prove that
+                                                               !
+                                                Mn,0
+                        sup lim sup PYn |p             − 1 ≥ ε̄ > Cε̄ ,                    (12)
+                        p∈P n→+∞                 T̂n,0
+
+for some strictly positive constant Cε̄ .
+    The main idea of the proof is as follows: we lower bound the supremum over P in
+(11) by an average with respect to a (carefully chosen) prior for p; we swap the conditional
+distribution of Yn |p and the marginal of p with the conditional of p|Yn and the marginal
+of Yn ; finally we lower bound the event probability with respect to the posterior of p given
+
+                                               7
+                       Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+Yn . Let us formalize the proof.
+In the sequel, we denote by Ep the expectation with respect to the prior for p, EYn the
+expectation with respect to the marginal distribution of Yn and Pp|Yn the probability under
+the posterior of p given Yn . We concentrate on the left hand side of (12), which satisfies
+
+                                                 !         "                                         !#
+                             Mn,0                                                Mn,0
+        sup lim sup PYn |p            − 1 ≥ ε̄       ≥ Ep lim sup PYn |p                  − 1 ≥ ε̄
+       p∈P n→+∞               T̂n,0                            n→+∞               T̂n,0
+                                  "                                 !#
+                                             Mn,0
+                 ≥ lim sup EYn Pp|Yn                     − 1 ≥ ε̄         .                               (13)
+                    n→+∞                         T̂n,0
+
+
+where we have applied reverse Fatou’s lemma to exchange the lim sup with the expected
+value.
+    Our choice of the nonparametric prior for p is based on completely random measures
+(see Daley and Vere-Jones (2008)) and the generalized Indian Buffet process prior of James
+(2017). In particular,
+                  P      a prior for p ∈ P can be defined through a completely random
+measure Ñ (·) =    j sj δFj (·) on [0, 1], where ({sj , Fj })j≥1 is a Poisson point process on
+R × [0, 1], by setting p(·) = j (1 − e−sj )δFj (·) ∈ P. We select Ñ to be a completely
+  +
+                                  P
+
+random measure with Lévy intensity ν(ds, dF ) = e−s /s ds11(0,1) (F )dF . The distribution of
+Ñ is completely characterized by its Laplace functional defined as,
+
+                                             ( Z                                            )
+              h R                     i
+                −      f (F )Ñ (dF )
+             E e [0,1]                  = exp −                   (1 − e−sf (F ) )ν(ds, dF ) ,            (14)
+                                                      R+ ×[0,1]
+
+
+
+for any measurable function f : [0, 1] → R+ . See also Kingman (1993).
+    Theorem 3.1 of James (2017) provides us with a distributional equality for the posterior
+of Ñ conditionally on the observed sample Yn . Denoting by F1∗ , . . . , Fk∗n the kn distinct
+features out of Yn , the following distributional equality holds
+
+
+                                                          kn
+                                            d
+                                                          X
+                                      Ñ |Yn = Ñn +            J` δF`∗                                   (15)
+                                                          `=1
+
+
+
+where the J` ’s are non-negative random jumps (see (James, 2017, Equation (3.4)) for
+their definition) and Ñn is a completely random measure with updated Lévy intensity
+νn (ds, dF ) = e−sn ν(ds, dF ), independent of (J` , F`∗ )`=1,...,kn and of the observations Yn .
+In the sequel we will further denote by (s0j )j≥1 and (Fj0 )j≥1 the jumps and atoms of Ñn ,
+respectively.
+
+
+                                                     8
+               Consistent estimation of small masses in feature sampling
+
+
+
+
+   Defining An := {F1∗ , . . . , Fk∗n }, from (15) we have that, for any Borel set B in R+ , the
+missing mass Mn,0 satisfies
+                                                                       
+                                                   X
+                Pp|Yn (Mn,0 ∈ B) = Pp|Yn             pj δFj (Acn ) ∈ B 
+                                                   j≥1
+                                                                         
+                                               X
+                                    = PÑ |Yn  (1 − e−sj )δFj (Acn ) ∈ B                    (16)
+                                                     j≥1
+                                                                   
+                                    (15)
+                                                  (1 − e−s0j ) ∈ B 
+                                                  X
+                                     = PÑn
+                                                  j≥1
+
+showing that the posterior distribution of the missing mass Mn,0 is equal in distribution to
+                                    0
+the random variable j≥1 (1 − e−sj ), where (s0j )j≥1 are the jumps of Ñn . Unfortunately,
+                     P
+the density of Mn,0 is not available in closed form, nevertheless, thanks to Lemma 14, we
+know that                               X
+                                  Sn :=     s0j = Ñn ([0, 1])
+                                           j≥1
+
+is gamma distributed with parameters (1, n + 1). Besides, Lemma 15, which builds on the
+fact that 1 − e−x is asymptotically equivalent to x as x → 0, allows us to replace Mn,0
+with Sn in our calculations. The rest of the proof will consist of two steps: i) by Lemma
+15, we will show that any consistent estimator of Mn,0 is also a consistent estimator of Sn ;
+ii) exploiting the closed form probability distribution function of Sn and the fact that Sn
+is independent of the observations Yn , we prove that there are no consistent estimators of
+this random variable for the multiplicative loss.
+More formally, let ε̄ ∈ (0, 1/3), the inverse triangular inequality entails
+                                           !
+        Mn,0          Mn,0     Sn                     Mn,0 Sn             Mn,0
+              −1 =                  −1+1 −1 ≥                     −1 −         −1
+        T̂n,0           Sn    T̂n,0                    Sn T̂n,0             Sn
+                                                                                        (17)
+                      Mn,0 Sn             Mn,0
+                   ≥              −1 −          −1
+                       Sn T̂n,0            Sn
+
+which implies
+                                                           !                            !
+                   ε̄ Mn,0       Sn                                      Mn,0
+         Pp|Yn   1− ≤      ≤ 1,       − 1 > 3ε̄                ≤ Pp|Yn           − 1 > ε̄ .   (18)
+                   2  Sn        T̂n,0                                    T̂n,0
+Indeed, thanks to (17), the two events together
+                                  ε̄   Mn,0       Sn
+                             1−      ≤      ≤ 1,       − 1 > 3ε̄
+                                  2    Sn        T̂n,0
+imply that
+
+      Mn,0            Mn,0 Sn       Mn,0        ε̄       ε̄
+               −1 ≥            −1 −      −1 ≥ 1−      3ε̄ − = ε̄(5 − 3ε̄)/2 > ε̄
+       T̂n,0          Sn T̂n,0      Sn           2         2
+
+                                                  9
+                        Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+where the last inequality follows from the fact that ε̄ < 1. Hence, from (18), we have that
+                         !                                                              !
+           Mn,0                           ε̄   Mn,0                        Sn
+ Pp|Yn           − 1 > ε̄ ≥ Pp|Yn 1 − ≤              ≤ 1 − 1 + Pp|Yn            − 1 > 3ε̄
+           T̂n,0                          2     Sn                        T̂n,0
+
+which may be plugged into (13) to obtain
+                                                 !
+                                  T̂n,0
+             sup lim sup PYn |p         − 1 ≥ ε̄
+             p∈P n→+∞             Mn,0
+                                                                  
+                                                   ε̄   Mn,0                                 (19)
+                       ≥ lim sup EYn Pp|Yn 1 − ≤             ≤1 −1
+                          n→+∞                     2    Sn
+                                                                          
+                                                               Sn
+                                             + inf inf Pp|Yn      − 1 > 3ε̄ .
+                                                 Yn x>0        x
+
+   We are going to lower bound the r.h.s. of (19). With regard to the first term, Lemma
+15 gives                                      
+                                ε̄   Mn,0
+                     Pp|Yn 1 − ≤           ≤ 1 − 1 ≥ −e−ε̄(n+1) .                   (20)
+                                2     Sn
+Let us now consider the second term on the r.h.s. of (19). Using again the fact that Sn is
+gamma distributed and ε̄ < 1/3, we have
+                                                              Z   (1+3ε̄)x
+                            Sn
+                Pp|Yn          − 1 > 3ε̄       = 1 − (n + 1)                   e−s(n+1) ds
+                            x                                     (1−3ε̄)x
+                                                         −(1+3ε̄)x(n+1)
+                                               =1+e                 − e−(1−3ε̄)x(n+1)
+                                                    h                            i
+                                               ≥ inf 1 + e−(1+3ε̄)y − e−(1−3ε̄)y
+                                                 y>0
+
+
+it is now easy to see that the function f (y) := 1 + e−(1+3ε̄)y − e−(1−3ε̄)y is strictly positive,
+continuous and admits a global minimum on R+ at the point y ∗ = log((1+3ε̄)/(1−3ε̄))/(6ε̄),
+therefore                                      
+                                  Sn
+                         Pp|Yn       − 1 > 3ε̄ ≥ f (y ∗ ) =: Cε̄ > 0.                        (21)
+                                  x
+Replacing the two bounds (20) and (21) in (19), for any ε̄ ∈ (0, 1/3) we get
+                                          !
+                            Mn,0
+             sup      lim P       − 1 ≥ ε̄ ≥ − lim sup e−ε̄(n+1) + Cε̄ = Cε̄ > 0
+         (pj )j≥1 ∈P n→+∞   T̂n,0                 n→+∞
+
+
+which completes the proof.
+
+Remark 2 We point out that the prior used to prove inconsistency almost surely samples
+measures with an approximately exponential tail decay. Indeed, (log(1 − pj ))j≥1 is a gamma
+Process. Therefore, if we suppose that the (pj )j are ordered, Kingman (1975) equation (65)
+implies that, almost surely,
+                                       log pj ∼ −jC.
+
+                                                    10
+              Consistent estimation of small masses in feature sampling
+
+
+
+
+As a consequence, for any estimator T̂n,0 , there is a vector (pj )j≥1 with light tail for which
+the estimation of the missing mass is inconsistent for the multiplicative loss. Hence, we
+need to restrict our study to vectors of probabilities with “slow” enough tail decay in order
+to find consistent estimators of the missing mass. This will be investigated and formalized
+in Section 5.
+
+4. Concentration inequalities for feature sampling
+In this section we will establish exponential tail bounds for the small masses Mn,r and the
+statistic Kn,r defined by             X
+                               Kn,r =    11{Xn,j =r} , for r ≥ 1
+                                      j≥1
+which counts the number of features observed with frequency r in the sample Yn . The
+               is of interest in different applications of feature allocation models. We also
+statistic Kn,r P
+define Kn := r≥1 Kn,r , which represents the total number of distinct features out of the
+initial sample. The concentration inequalities, that we are going to state, will be exploited
+in Section 5 to prove the multiplicative consistency of the proposed estimator of Mn,r under
+the assumption of regularly varying heavy tails (pj )j≥1 , for any fixed r ≥ 0. We also
+emphasize that our tail bounds are valid in full generality, i.e., without imposing further
+assumptions on the probability masses (pj )j≥1 .
+    In order to derive the concentration inequalities for Kn,r (resp. Mn,r ) we will exploit
+Chernoff bounds, which require suitable inequalities on the logarithmic moment generating
+function (or log-Laplace transform) of Kn,r (resp. Mn,r ). To this end, we now remind some
+useful definitions from Boucheron et al. (2013) and Ben-Hamou et al. (2017) which serve
+to compare the tail behaviour of a generic random variable with respect to some reference
+distributions (Gaussian, gamma and Poisson).
+Definition 3 Let X be a real valued random variable defined on some probability space,
+then:
+   i. X is sub-Gaussian on the right tail (resp. on the left tail) with variance factor v if
+      for any λ ≥ 0 (resp. λ ≤ 0)
+                                                   vλ2
+                                  log E eλ(X−E[X]) ≤         ;                         (22)
+                                                         2
+  ii. X is sub-gamma on the right tail with variance factor v and scale parameter c if
+                    h          i      λ2 v
+               log E eλ(X−E[X]) ≤            , for any λ satisfying 0 ≤ λ ≤ 1/c;       (23)
+                                  2(1 − cλ)
+
+ iii. X is sub-gamma on the left tail with variance factor v and scale parameter c if −X
+      is sub-gamma on the right tail with variance factor v and scale parameter c;
+  iv. X is sub-Poisson with variance factor v if for all λ ∈ R
+                                       h            i
+                                  log E eλ(X−E[X]) ≤ φ(λ)v,                                (24)
+
+      where φ(λ) = eλ − 1 − λ.
+
+                                              11
+                       Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+Note that a sub-Gaussian random variable is also sub-gamma for any choice of the scale
+parameter c, but in general the inverse is not true. As proved in the sequel, the bounds
+on the log-Laplace transforms (22)–(23) imply exponential tails bounds by means of the
+Chernoff inequality. See Boucheron et al. (2013) for other details. In Proposition 4, we
+prove exponential tail bounds for the moment generating function of the small mass Mn,r ,
+showing that Mn,r is sub-Gaussian on the left tail and sub-gamma on the right one. These
+bounds are then applied in Corollary 6 to derive concentration inequalities for Mn,r .
+Proposition 4 Consider an integer number r such that 0 ≤ r < n − 2. On the left
+                                                                     − := (r + 1)(r +
+tail, the random variable Mn,r is sub-Gaussian with variance factor vn,r
+2)E[Kn+2,r+2 ]/((n + 1)(n + 2)), i.e., for any λ ≤ 0 it holds
+                                   h                  i λ2 v −
+                                                            n,r
+                              log E eλ[Mn,r −E[Mn,r ]] ≤        .                           (25)
+                                                           2
+On the right tail, the random variable Mn,r satisfies
+                                                                              
+                 h                 i                 1                λ(r + 1)
+           log E eλ[Mn,r −E[Mn,r ]] ≤ vn,r
+                                       +
+                                                                − 1 −            ,          (26)
+                                             (1 − λ/(n − r))r+1        n−r
+                                + is defined by
+for any 0 ≤ λ < (n − r), where vn,r
+
+                           +                    E[Kn−r ] n!
+                          vn,r :=                                     .
+                                      (1 − 2/(n − r))(n − r)!(n − r)r
+Proof We first focus on the proof of (25). Let λ ≤ 0, exploiting the independence of the
+random variables Xn,j ’s and the elementary inequality log(z) ≤ z − 1, valid for any z > 0,
+we obtain
+          h                 i X       h                         i
+                                        λ(p 11      −p P(X =r))
+    log E eλ[Mn,r −E[Mn,r ]] =   log E e j {Xn,j =r} j n,j
+                                j≥1
+                                X                                                      
+                            =          −λpj P(Xn,j = r) + log(1 + (eλpj − 1)P(Xn,j = r))
+                                j≥1
+                                X
+                            ≤         P(Xn,j = r)(eλpj − 1 − λpj ).
+                                j≥1
+
+Since λ ≤ 0 we get that
+     h                  i X                (λpj )2   λ2 X 2
+log E eλ[Mn,r −E[Mn,r ]] ≤     P(Xn,j = r)         =        pj P(Xn,j = r)
+                                             2        2
+                           j≥1                          j≥1
+                                                                                            −
+                                                                                        λ2 vn,r
+                           λ2 X n r+2                     λ2 n!(r + 2)!
+                                  
+                                                    n−r
+                         =            p (1 − pj )       =     ·          E[Kn+2,r+2 ] =
+                            2      r j                     2 r!(n + 2)!                    2
+                             j≥1
+
+then (25) now follows.
+   As for the second inequality (26), we can use the previous calculations to state that for
+any λ ∈ [0, n − r)
+       h                  i X                                X             X (λpj )k
+  log E eλ[Mn,r −E[Mn,r ]] ≤  P(Xn,j = r)(eλpj − 1 − λpj ) =   P(Xn,j = r)
+                                                                               k!
+                            j≥1                                       j≥1        k≥2
+
+
+                                                 12
+                Consistent estimation of small masses in feature sampling
+
+
+
+                                 XX                             (λpj )k   X X  n                 (λpj )k
+                             =                P(Xn,j = r)               =         prj (1 − pj )n−r
+                                                                  k!            r                    k!
+                                 k≥2 j≥1                                   k≥2 j≥1
+                                 X  n λ k X
+                             =                            pjk+r (1 − pj )n−r
+                                          r    k!
+                                 k≥2                j≥1
+
+where we have used the Taylor series expansion of the exponential function. We now observe
+that (1 − pj )n−r ≤ e−(n−r)pj and the bound is pretty accurate when n is high, then we get
+        h                    i X n λk X
+           λ[Mn,r −E[Mn,r ]]
+   log E e                    ≤                 pk+r
+                                                 j   e−(n−r)pj
+                                       r k!
+                                k≥2         j≥1
+                                    n    X  λ k (k + r)! X (pj (n − r))k+r
+                                      
+                              =     r
+                                                                             e−(n−r)pj .
+                                (n − r)r       n−r         k!    (k + r)!
+                                                k≥2                            j≥1
+
+By observing that for any k ≥ 2 the upper bound holds true
+
+             (pj (n − r))k+r −(n−r)pj
+                            e         ≤ (e(n−r)pj − 1)e−(n−r)pj = 1 − e−(n−r)pj ,
+                 (k + r)!
+
+we obtain the following inequality for the log-Laplace functional of our interest
+                                        n     X  λ k (k + r)! X
+            h                    i        
+               λ[Mn,r −E[Mn,r ]]
+       log E e                     ≤    r
+                                                                     [1 − e−(n−r)pj ].
+                                     (n − r)r    n−r        k!
+                                                      k≥2                            j≥1
+
+Fixing the useful notation                            X
+                                              Φn :=         (1 − e−npj )
+                                                      j≥1
+
+and evaluating the sum over k using the Euler gamma function, we get
+            h                       i      
+                                           n Φn−r            X  λ k Γ(k + r + 1)
+                λ[Mn,r −E[Mn,r ]]
+      log E e                           ≤
+                                           r (n − r)r             n−r           k!
+                                                             k≥2
+                                           
+                                           n Φn−r            X  λ k 1 Z ∞
+                                        =                                         e−x xk+r dx
+                                           r (n − r)r             n−r      k! 0
+                                                             k≥2
+                                           
+                                           n Φn−r
+                                                             Z ∞       X  λx k 1
+                                                                  −x r
+                                        =                        e x                     dx
+                                           r (n − r)r         0              n−r      k!
+                                                                       k≥2
+                                                           Z ∞                             
+                                           n Φn−r                 −x r   λx/(n−r)          λx
+                                        =                        e x e             −1−          dx
+                                           r (n − r)r         0                           n−r
+
+where all the previous equalities are valid whenever 0 ≤ λ < (n−r). By solving the integrals
+on the right hand side of the last term in the previous chain of equations, we get
+                                                                             
+         h
+           λ[Mn,r −E[Mn,r ]]
+                             i    r!Φn−r n             1               (r + 1)λ
+   log E e                     ≤                                 −1−
+                                 (n − r)r r   (1 − λ/(n − r))r+1         n−r
+
+                                                           13
+                        Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+                                                                                     
+                                 n!Φn−r                     1              (r + 1)λ
+                           =                                           −1−                (27)
+                             (n − r)!(n − r)r       (1 − λ/(n − r))r+1       n−r
+Proceeding along similar lines as in (Gnedin et al., 2007, Lemma 1), it is not difficult to see
+that for any n > 2
+                                                2        2
+                               |Φn − E[Kn ]| ≤ Φn,2 ≤ Φn ,                                 (28)
+                                                n        n
+which entails Φn ≤ E[Kn ]/(1 − 2/n), for any n > 2. The last inequality can be used to
+provide an upper bound for the r.h.s. of (27). To this end we can apply (28) with n replaced
+with n − r to obtain
+                                               E[Kn−r ]
+                                   Φn−r ≤
+                                           (1 − 2/(n − r))
+for any n > r + 2. We use the previous inequality to bound Φn−r which appears in (27),
+and (26) easily follows.
+We now specialize Proposition 4 when r = 0, proving that the missing mass Mn,0 is sub-
+Gaussian on the left tail and sub-gamma on the right one.
+Proposition 5 Let n > 2. On the left tail, the random variable Mn,0 is sub-Gaussian with
+variance factor vn− := 2E[Kn+2,2 ]/((n + 2) · (n + 1)), i.e., for any λ ≤ 0 it holds
+                                    h                i λ2 v −
+                             log E eλ[Mn,0 −E[Mn,0 ]] ≤        n
+                                                                 .                   (29)
+                                                             2
+On the right tail, the random variable Mn,0 is sub-gamma with variance factor vn+ :=
+2E[Kn ]/(n2 − 2n) and scale parameter 1/n, i.e., for any 0 ≤ λ < n one has
+                               h                  i     λ2 vn+
+                          log E eλ[Mn,0 −E[Mn,0 ]] ≤            .                (30)
+                                                     2(1 − λ/n)
+Proof It is sufficient to apply Proposition 4 when r = 0.
+
+
+   As already mentioned at the beginning of this section, the bounds on the log-Laplace
+obtained in Proposition 4 imply useful exponential tail bounds for Mn,r which can be
+obtained via the Cramér-Chernoff method (see Boucheron et al. (2013)). More specifically
+we can state and prove the following
+Corollary 6 For any r satisfying 1 ≤ r ≤ n − 2 and x ≥ 0, then
+                                                          x2
+                                                             
+                      P(Mn,r − E[Mn,r ] ≤ −x) ≤ exp − −
+                                                        2vn,r
+and
+      P(Mn,r − E[Mn,r ] ≥ x)
+                ( "                                     r+1                     !#)
+                                +            x(n − r) r+2         λmax (x)(r + 1)
+           ≤ exp − λmax (x)x − vn,r      1+         +         −1−
+                                            (r + 1)vn,r               n−r
+
+where                                  "                      −1/(r+2) #
+                                                 x(n − r)
+                     λmax (x) = (n − r) 1 − 1 +         +                    .            (31)
+                                                (r + 1)vn,r
+
+                                              14
+              Consistent estimation of small masses in feature sampling
+
+
+
+
+Proof The first concentration follows from the fact that Mn,r is a sub-Gaussian random
+variable on the left tail (see (Boucheron et al., 2013, Section 2.3)). In order to prove
+the second inequality we may use the general Cramér-Chernoff method as described in
+(Boucheron et al., 2013, Section 2.2). In Proposition 4 we have proved (26), bounding the
+log-Laplace of Mn,r − E[Mn,r ] for any for any 0 ≤ λ < (n − r). More precisely
+                                                                       
+         h
+           λ[Mn,r −E[Mn,r ]]
+                             i
+                                  +             1              λ(r + 1)
+    log E e                    ≤ vn,r                      −1−            =: ψn,r (λ), (32)
+                                        (1 − λ/(n − r))r+1      n−r
+
+for any 0 ≤ λ < (n−r). The Cramér-Chernoff method prescribes to determine the Legendre
+transform of ψn,r , i.e.,
+                              ∗
+                            ψn,r (x) := sup{λx − ψn,r (λ)},
+                                          λ≥0
+
+and it gives the so-called Chernoff inequality
+                                                         ∗
+                          P(Mn,r − E[Mn,r ] ≥ x) ≤ exp{−ψn,r (x)}.                       (33)
+
+We need only to prove that (33) coincides with the concentration inequality in the statement.
+By some elementary calculations, it is not difficult to see that the function λx − ψn,r (λ)
+attains its maximum over λ ∈ (0, n − r) at the point
+                                      "                               #
+                                                   x(n − r) −1/(r+2)
+                                                             
+                   λmax (x) = (n − r) 1 − 1 +             +             ,
+                                                  (r + 1)vn,r
+
+hence
+         ∗
+        ψn,r (x) = λmax (x)x − ψn,r (λmax (x))
+                                                                                    
+                                +                 1                  λmax (x)(r + 1)
+                 = λmax (x)x − vn,r                             −1−
+                                      (1 − λmax (x)/(n − r))r+1            n−r
+                                                        r+1                     !
+                                +            x(n − r) r+2         λmax (x)(r + 1)
+                 = λmax (x)x − vn,r     1+          +         −1−
+                                            (r + 1)vn,r               n−r
+
+and putting this expression in (33) the second concentration inequality is proved, as well.
+
+
+Due to the importance of the missing mass Mn,0 in several applications, we also specialize
+Corollary 6 to the case r = 0.
+
+Corollary 7 For any n > 2 and x ≥ 0, the following probability bounds hold true
+
+                                             x2
+                                               
+          P(Mn,0 − E[Mn,0 ] ≤ −x) ≤ exp − − ,
+                                           2vn
+                                                            r         
+                                             + 2       x             x
+           P(Mn,0 − E[Mn,0 ] ≥ x) ≤ exp −vn n 1 + + − 1 + +                 .
+                                                      nvn           nvn
+
+Proof The two inequalities follow by the Chernoff bound and the log-Laplace bound proved
+in Proposition 5. This is a standard argument, see Boucheron et al. (2013) for details.
+
+                                             15
+                            Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+    Proceeding along similar lines as before we show that Kn,r is a sub-Poisson random
+variable, this result is implicitly proved in the Supplementary material by Ayed et al.
+(2019), but for the sake of completeness we report it here as well.
+
+Proposition 8 For any r ≥ 1 and n ≥ 1, the random variable Kn,r is sub-Poisson with
+variance factor E[Kn,r ]. Indeed, for any λ ∈ R the following bound holds true
+
+                                     log E[eλ(Kn,r −E[Kn,r ]) ] ≤ φ(λ)E[Kn,r ],                 (34)
+
+where φ(λ) := eλ − 1 − λ.
+
+Proof Exploiting the independence of the random variables Xn,j ’s, for any λ ∈ R we can
+write:
+                                     ∞
+                                     X              n                               o
+            λ(Kn,r −E[Kn,r ])
+  log E[e                       ]=         log E exp λ(11{Xn,j =r} − E11{Xn,j =r} )
+                                     j=1
+                                     X∞ n                                                        o
+                                =           −λP(Xn,j = r) + log(eλ P(Xn,j = r) + 1 − P(Xn,j = r))
+                                     j=1
+                                     ∞
+                                     X
+                                ≤          φ(λ)P(Xn,j = r) = φ(λ)E[Kn,r ]
+                                     j=1
+
+
+where we have used the inequality log(z) ≤ z − 1, for any z > 0.
+The previous proposition and the Chernoff bounds imply an exponential tail bound for
+Kn,r , indeed one can prove that
+
+Corollary 9 For any n ≥ 1, r ≥ 1 and x ≥ 0 the following tail bound holds true
+
+                                                               x2
+                                                                                       
+                      P(|Kn,r − E[Kn,r ]| ≥ x) ≤ 2 exp −                                    .   (35)
+                                                         2(E[Kn,r ] + x/3)
+
+Corollaries 7 and 9 provide us with concentration inequalities for the small masses Mn,r
+and the statistics Kn,r , respectively, around their means, for any r ≥ 0. These results hold
+true in general, without any further assumption on the probabilities (pj )j≥1 . In the next
+Section, we will focus on the restricted class of regularly varying probabilities, and we define
+a nonparametric estimator of the small mass Mn,r , also considered by Ayed et al. (2018)
+for the special case r = 0. Thanks to the previous concentration inequalities, we are able
+to give provable guarantees in terms of consistency for that estimator of Mn,r within the
+restricted class of regularly varying probabilities.
+
+5. A consistent estimator for regularly varying feature probabilities
+We now introduce a nonparametric estimator of the small mass Mn,r in a quite natural
+way, i.e., by comparing expectations. We simply evaluate the expected value of Mn,r and
+
+                                                          16
+             Consistent estimation of small masses in feature sampling
+
+
+
+
+we obtain
+                                   
+                                                                     X
+                 X                         X                         n
+   E[Mn,r ] = E   pj 11{X  n,j   =r}
+                                      =         pj P(Xn,j   = r) =      pr+1
+                                                                          j (1 − pj )
+                                                                                     n−r
+                                                                     r
+                  j≥1                      j≥1                         j≥1                 (36)
+              r+1 X                     r+1
+            =       P(Xn+1,j = r + 1) =     E[Kn+1,r+1 ].
+              n+1                       n+1
+                     j≥1
+
+By comparing the expected values of the first and the last term in (36) we are led to define
+the following nonparametric estimator of the small mass Mn,r
+                                                  r+1
+                                     M̂n,r :=         Kn,r+1                               (37)
+                                                   n
+where n + 1 has been replaced by n so that all the quantities are computable at time n.
+It is worth to stress that M̂n,r is a nonparametric estimator of the mass of features with
+frequency r in the sample, since it does not rely on any parametric assumption on the
+pj ’s. Moreover, it is a feasible quantity form a computational standpoint, being easy to
+implement and evaluate for any value of n. The (37) has the same parametric form of the
+Good–Turing estimator (Good, 1953), however the two estimators have different ranges:
+while the estimator of the missing mass in species sampling takes values in [0, 1], the same
+estimator in the feature sampling framework takes positive values. Finally M̂n,0 has been
+already introduced by Ayed et al. (2018), who have extensively discussed its interpretations
+both as a Jackknife estimator in the sense of Quenouille (1956) and as a non-parametric
+empirical Bayes estimator in the same spirit as Efron and Morris (1973). A somewhat
+related derivation of (37) can be also found in Chao and Colwell (2017).
+     Here we want to study the consistency of (37). In Section 3 we proved that, without
+imposing further assumptions on the features’ proportions, any estimator of the missing
+mass is inconsistent for at least one choice of the proportions (Theorem 1). We then
+study the consistency of (37) under the ubiquitous assumption of heavy tailed probabilities
+(pj )j≥1 . We rely on the theory of regular variation by Karamata, J. (1930, 1933) (see also
+Karlin (1967)) to define a suitable class of heavy-tailed (pj )j≥1 , showing that, under this
+class, M̂n,r turns out to be multiplicative consistent, for any r ≥ 0.
+     We use the limiting notation f ' g to mean f /g → 1; we further write f . g if there
+exists a fixed constant C > 0 such that f ≤ Cg. As in Karlin (1967) we give the following
+definition.
+                                P
+Definition 10 Let ν(dx) := i≥1 δpi (dx) and define the measure ν(x) := ν[x, 1], which is
+the cumulative count of all features having no less than a certain probability mass. We say
+that (pj )j≥1 is regularly varying with regular variation index α ∈ (0, 1) if ν(x) ' x−α `(1/x)
+as x ↓ 0, where `(t) is a slowly varying function, that is `(ct)/`(t) → 1 as t → +∞ for all
+c > 0.
+Let us remark that if we denote (p[j] )j≥1 the sorted probabilities in decreasing order, defi-
+nition 10 is equivalent to
+                                     p[j] ' j −1/α `∗ (j),
+as j → ∞, where `∗ is another slowly varying function. For simplicity, the relation between
+`, `∗ and α is skipped here, interested readers can refer to Lemma 22 and Proposition 23
+
+                                                   17
+                              Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+                                    10 is in the same spirit as Karlin (1967), but for our
+of Gnedin et al. (2007). Definition P
+                              case j≥1 pj < +∞, while in Karlin (1967) the pj ’s satisfy
+purposes here we consider the P
+the more restrictive condition j≥1 pj = 1. The next theorem is similar to a result proved
+by Karlin (1967) and provides the first order asymptotic of EKn,r , used later to prove
+consistency of M̂n,r .
+
+Theorem 11 Let (pj )j≥1 be regularly varying with α ∈ (0, 1). If Γ(·) denotes the gamma
+function, then as n → +∞, E[Kn,r ] ' αΓ(r−α)
+                                        r!   nα `(n) and E[Kn ] ' Γ(1 − α)nα `(n).
+
+Proof We first define the quantity
+                                                X (npj )r
+                                     Φn,r :=                 e−npj ,   r ≥ 1,
+                                                       r!
+                                                j≥1
+
+which can be considered an asymptotic approximation of EKn,r . Indeed, in order to prove
+the theorem, we first show that Φn,r ' αΓ(r−α)
+                                            r!  nα `(n) as n → +∞, and then we prove that
+Φn,r ' E[Kn,r ]. In order to prove the former asymptotic equivalence it is worth noticing
+that (Gnedin et al., 2007, Proposition 13) applies also for the feature setting under regularly
+varying heavy tails, indeed the measure defined by νr (dp) := pr ν(dp) is such that
+                                                α r−α
+                               νr ([0, p]) '       p  `(1/p),           as p → 0.              (38)
+                                               r−α
+                   R1
+Since Φn,r = nr /r! 0 e−np νr (dp) is the Laplace transform of νr multiplied by a suitable
+quantity, we can apply Tauberian theorems to connect the asymptotic behaviour of the
+cumulative distribution function of νr given in (38) to that of Φn,r . In particular, from
+Tauberian theorems (see Feller (1971)), we obtain
+                          1
+                 nr                             nr                           Γ(r − α) α
+                      Z
+        Φn,r   =              e−np νr (dp) '       αΓ(r − α)n−(r−α) `(n) = α         n `(n),   (39)
+                 r!   0                         r!                              r!
+
+as n → +∞. As a byproduct of (39), we get Φn,r → +∞. Finally to show Φn,r ' E[Kn,r ],
+we can easily observe that (Gnedin et al., 2007, Lemma 1) applies in this setting as well,
+hence there exists a constant c such that
+                                                      c
+                              |E[Kn,r ] − Φn,r | ≤      max {Φn,r , Φn,r+2 } → 0,              (40)
+                                                      n
+as n → +∞. From (40), along with Φn,r → +∞, we obtain
+
+                      E[Kn,r ]      |E[Kn,r ] − Φn,r |
+                               −1 =                    → 0,               as n → +∞,
+                       Φn,r              Φn,r
+
+in other words we have shown that Φn,r ' E[Kn,r ] as n → +∞. The asymptotic for E[Kn ]
+can be proved in a similar fashion. To see this, first of all define
+                                          X
+                                    Φn :=    [1 − e−npj ]
+                                                      j≥1
+
+
+                                                        18
+             Consistent estimation of small masses in feature sampling
+
+
+
+
+which can be considered as an asymptotic approximation of E[Kn ] thanks to the inequality
+(28), indeed let us evaluate
+                             E[Kn ]      |E[Kn ] − Φn | (28) 2
+                                    −1 =                 ≤     →0
+                              Φn             Φn              n
+which implies that E[Kn ] ' Φn as n grows to ∞. It remains to determine the asymptotic
+behavior of Φn , applying the integration by parts formula and Tauberian theorems (Feller,
+1971, Theorem 4, Section 5, Chapter 13) we obtain
+                 Z 1                     Z 1
+                            −np
+          Φn =       (1 − e     )ν(dp) =     ne−np ν̄(p)dp ' n Γ(1 − α)n−(1−α) `(n).
+                    0                     0
+
+therefore the conclusion follows since E[Kn ] ' Φn ' Γ(1 − α)nα `(n).
+We are now ready to prove that M̂n,r is multiplicative consistent for any fixed r ≥ 0, when
+the feature probabilities (pj )j≥1 are regularly varying. In the proof we will employ the
+concentration inequalities of Section 4, which are tuned under the assumption of regular
+variation by means of Theorem 11. Technical details are deferred to the Appendix (see
+Lemma 16).
+Theorem 12 Let (pj )j≥1 be regularly varying with index α ∈ (0, 1). Fix r ≥ 0 and let
+M̂n,r := (r + 1)Kn,r+1 /n be the nonparametric estimator of Mn,r in a sample of size n, then
+                                                               a.s.
+M̂n,r is strongly multiplicative consistent, i.e., Mn,r /M̂n,r −→ 1.
+                                                                                        a.s.
+Proof In order to prove the multiplicative consistency we first show that Kn,r /E[Kn,r ] −→ 1
+                         a.s.
+and that Mn,r /E[Mn,r ] −→ 1. As for the former convergence, we can use the concentration
+inequality (35) given in Corollary 9, which, for any ε > 0, gives
+                                                           ε2 E[Kn,r ]
+                                                                      
+                    P(|Kn,r /E[Kn,r ] − 1| ≥ ε) ≤ 2 exp −                .                (41)
+                                                           2(1 + ε/3)
+When ε > 0 is fixed, we can exploit the asymptotic equivalence E[Kn,r ] ' (r!)−1 αΓ(r −
+α)nα `(n) in Theorem 11 to state that there exists a suitable constant C > 0
+              X                               (41)   X
+                    P(|Kn,1 /E[Kn,1 ] − 1| ≥ ε) .          2 exp {−Cnα `(n)} < +∞,
+              n≥1                                    n≥1
+
+which implies that for any ε > 0, P(lim supn (|Kn,r /E[Kn,r ] − 1| ≥ ε)) = 0 by the first
+                                             a.s.
+Borel–Cantelli lemma, hence Kn,r /E[Kn,r ] −→ 1 for any fixed r ≥ 1.
+    Analogously we may use Corollary 6 to prove the almost sure convergence to 1 of the
+ratio Mn,r /E[Mn,r ]. Indeed, for any ε > 0, we have
+     P(|Mn,r /E[Mn,r ] − 1| ≥ ε)
+          = P(Mn,r − E[Mn,r ] ≥ εE[Mn,r ]) + P(Mn,r − E[Mn,r ] ≤ −εEMn,r )
+                2
+                    ε (E[Mn,r ])2
+                                          n h
+          ≤ exp −         −         + exp   − λmax (εEMn,r )εEMn,r                       (42)
+                        2vn,r
+                                            r+1                          !
+                 +           εEMn,r (n − r) r+2       λmax (εEMn,r )(r + 1) io
+              − vn,r    1+             +          −1−                         ,
+                               (r + 1)vn,r                    n−r
+
+                                               19
+                         Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+where λmax has been defined in (31). By observing that E[Mn,r ] = (r+1)E[Kn+1,r+1 ]/(n+1)
+and using again Theorem 11, it is not difficult to determine the asymptotic behavior of the
+previous upper bound as n → ∞ to conclude that for any fixed ε > 0
+               X                                  X
+                  P(|Mn,r /E[Mn,r ] − 1| ≥ ε) .      exp {−Cnα `(n)} < +∞              (43)
+                n≥1                                     n≥1
+
+for a suitable constant C > 0. See Lemma 16 for technical details. By the first Borel–
+                                      a.s.
+Cantelli lemma, we get Mn,r /E[Mn,r ] −→ 1, as well.
+    Thanks to the previous considerations, the consistency of M̂n,r easily follows, indeed
+
+                      Mn,r         Mn,r        nE[Mn,r ]       E[Kn,r+1 ] a.s.
+                              =           ·                  ·            −→ 1,
+                      M̂n,r       E[Mn,r ] (r + 1)E[Kn,r+1 ]    Kn,r+1
+
+since all the ratios on the r.h.s. converge to 1 almost surely.
+
+
+
+6. Discussion
+The importance of estimating the small mass Mn,r has emerged in ecology and biological
+sciences (Ionita-Laza et al., 2009, 2010; Chao et al., 2014; Gravel, 2014; Zou et al., 2016;
+Ayed et al., 2019), and most recently in machine learning (Cai et al., 2018) within the
+context of learning augmented algorithms. In this paper we first studied the problem of
+consistent estimation of Mn,r , thus extending to the feature sampling framework some recent
+results on the consistent estimation of the small probability Pn,r (Ohannessian and Dahleh,
+2012; Ben-Hamou et al., 2017; Grabchak and Zhang, 2017; Mossel and Ohannessian, 2019;
+Ayed et al., 2018). In particular,
+
+   i) we showed that that there do not exist universally consistent estimators, in the multi-
+      plicative sense, of the missing mass Mn,0 ; that is, under the Bernoulli product model
+      we prove that for any estimator T̂n,0 of Mn,0 there exists at least a choice of feature
+      probabilities (pj )j≥1 for which T̂n,0 /Mn,0 does not converge to 1 in probability, as
+      n → +∞;
+
+  ii) we introduced a nonparametric estimator M̂n,r of Mn,r which has the same analytic
+      form of the Good–Turing estimator of Pn,r , and we showed that M̂n,r is strongly con-
+      sistent, in the multiplicative sense, under feature probabilities with regularly varying
+      heavy tails.
+
+These results rely on novel exponential tail bounds for the small mass Mn,r , and for related
+counting statistics, which are of independent interest. To the best of our knowledge, our
+study is the first theoretical account to the problem of estimating the small mass Mn,r , for
+r ≥ 0.
+   Our work paves the way to explore new research directions in the estimation of the
+small mass Mn,r , both theoretical and methodological. From a theoretical perspective, it
+remains an interesting open problem the study of the rate of consistency of the nonpara-
+metric estimator M̂n,r . With this regards, we retain that Bayesian nonparametric ideas and
+
+                                                   20
+             Consistent estimation of small masses in feature sampling
+
+
+
+
+techniques developed in Section 3 can be usefully exploited to show optimality of the rate
+of consistency of M̂n,r under feature probabilities with regularly varying heavy tails (Ayed
+et al., 2018, 2019). From a methodological perspective, our results allow to extend the
+realm of applicability of the estimation of Mn,r . In principle, any application involving the
+estimation of small probabilities Pn,r may be reconsidered under the more general feature
+sampling framework. For instance, exponential tail bounds introduced in Section 4 can be
+usefully exploited to extend the upper confidence bound multi-armed bandit strategy of
+Bubeck et al. (2013), based on a confidence interval for the Good–Turing estimator P̂n,0 , to
+the feature sampling framework.
+
+
+Acknowledgments
+
+The authors are grateful to two anonymous Referees for all their comments and corrections
+which improved remarkably the paper. Federico Camerlenghi and Stefano Favaro received
+funding from the European Research Council (ERC) under the European Union’s Hori-
+zon 2020 research and innovation programme under grant agreement No 817257. Federico
+Camerlenghi and Stefano Favaro gratefully acknowledge the financial support from the Ital-
+ian Ministry of Education, University and Research (MIUR), “Dipartimenti di Eccellenza”
+grant 2018-2022. Federico Camerlenghi is a member of the Gruppo Nazionale per l’Analisi
+Matematica, la Probabilità e le loro Applicazioni (GNAMPA) of the Istituto Nazionale di
+Alta Matematica (INdAM). Federico Camerlenghi is also affiliated to Collegio Carlo Al-
+berto, Piazza V. Arbarello 8, Torino, Italy, and to the Bocconi Institute for Data Science
+and Analytics (BIDSA), Bocconi University, Milano, Italy. Stefano Favaro is also affiliated
+to IMATI-CNR “Enrico Magenes” (Milan, Italy).
+
+Appendix A. Technical lemmas
+Here we state and prove the technical lemmas used in the proof of Theorem 1 and in the
+proof of Theorem 12.
+
+Lemma 13 For every ε ∈ (0, 1/6),
+
+                                T̂n,0                 Mn,0
+                          P(|         − 1| ≥ ε) ≥ P(|       − 1| ≥ 2ε)
+                                Mn,0                  T̂n,0
+
+                       T̂n,0
+Proof Suppose that     Mn,0    − 1 < ε, then multiplying by Mn,0 it comes that
+
+                                −Mn,0 ε < T̂n,0 − Mn,0 < Mn,0 ε.                                     (44)
+                                                                         Mn,0                Mn,0
+From the lower bound of (44), it comes that T̂n,0 > (1 − ε)Mn,0 >         2 ,   leading to           < 2.
+                                                                                             T̂n,0
+Therefore, dividing (44) by T̂n,0 and using previous inequality successively gives
+
+                                     Mn,0            Mn,0
+                                             −1 ≤            ε < 2ε
+                                     T̂n,0           T̂n,0
+
+                                                21
+                        Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+Considering the complements of the two events, it follows that
+
+                                  Mn,0                          T̂n,0
+                                           − 1 ≥ 2ε ⇒                 − 1 ≥ ε,
+                                  T̂n,0                         Mn,0
+
+                             T̂                               Mn,0
+and, as a consequence, P(| Mn,0 − 1| ≥ ε) ≥ P(|                       − 1| ≥ 2ε), proving (11).
+                            n,0                               T̂n,0
+
+
+      In the following two lemmas, we denote by Ñn a completely random measure with
+Lévy intensity νn (ds, dF ) = e−sn ν(ds, dF ) = e−s(n+1) /s ds11(0,1) (F )dF . We further denote
+(s0j )j≥1 the jumps of the completely random measure Ñn .
+
+Lemma 14 The random variable Sn := Ñn ([0, 1]) is gamma distributed, with parameters
+(1, n+1).
+
+Proof This result is straightforward when computing the moment generating function of
+Sn Indeed, for every x ∈ R we have
+                         "    ( Z           )#
+             E[exSn ] = E exp x                    Ñn (dF )
+                                           [0,1]
+                             Z 1 Z +∞                     
+                      (14)                    xs −sn
+                      = exp −           (1 − e )e ν(ds, dθ)
+                                0   0
+                           ( Z                         )         −1
+                                +∞           −s(n+1)
+                                         xs e                  x
+                      = exp −      (1 − e )          ds = 1 −         ,
+                              0                 s             n+1
+
+which is the characteristic function of a Gamma(1, n + 1) random variable.
+
+
+                                                                  0
+Lemma 15 Let Sn := j≥1 s0j = Ñn ([0, 1]) and Mn,0 = j≥1 (1 − e−sj ). Then for any
+                         P                               P
+ε̄ > 0 the following inequality holds
+                                              
+                                    ε̄ Mn,0
+                           P 1− ≤           ≤ 1 ≥ 1 − e−ε̄(n+1) ,
+                                    2  Sn
+
+implying in particular, using Borel–Cantelli lemma, that Mn,0 and Sn are almost surely
+equivalent.
+
+Proof Let us observe that the elementary inequality
+
+                                          x − x2 /2 ≤ 1 − e−x ≤ x,
+
+for x > 0, implies that for all j ≥ 1
+
+                                         1                 0
+                                    s0j − (s0j )2 ≤ 1 − e−sj ≤ sj .
+                                         2
+
+                                                         22
+             Consistent estimation of small masses in feature sampling
+
+
+
+
+Summing over j the previous equation and observing that Sn2 ≥                    0 2
+                                                                         P
+                                                                           j≥1 (sj ) ,   we obtain
+
+                                 1           1X 0 2
+                             Sn − Sn2 ≤ Sn −   (sj ) ≤ Mn,0 ≤ Sn ,
+                                 2           2
+                                                      j≥1
+
+and dividing by Sn , we get
+                                             1     Mn,0
+                                          1 − Sn ≤      ≤ 1.
+                                             2     Sn
+As a simple consequence of the last inequality, for any ε̄n > 0, the event {Sn ≤ ε̄} implies
+the validity of {1 − ε̄/2 ≤ Mn,0 /Sn ≤ 1} and therefore we can upper bound the first term
+in (19) as follows
+                                      
+                          ε̄  Mn,0
+                   P 1− ≤           ≤ 1 − 1 ≥ P (Sn ≤ ε̄) − 1
+                          2    Sn
+                                           Z ε̄                                        (45)
+                                                  −x(n+1)             −ε̄(n+1)
+                                 = (n + 1)      e         dx − 1 = −e          ,
+                                                  0
+
+where we have used the fact that the posterior distribution of Sn is Gamma(1, n + 1).
+
+
+   The next lemma has been used in the proof of Theorem 12.
+
+Lemma 16 The upper bound appearing on the r.h.s. of Equation (42) satisfies
+
+           ε2 (E[Mn,r ])2
+                                n h
+     exp −        −         + exp    − λmax (εEMn,r )εEMn,r
+                2vn,r
+            +
+                    εEMn,r (n − r)  r+1
+                                       r+2      λmax (εEMn,r )(r + 1) io                            (46)
+         − vn,r 1 +              +         −1−
+                         (r + 1)vn,r                    n−r
+                                                                      . exp{−Cnα `(n)},
+
+where λmax is defined in (31), and C is a suitable positive constant.
+
+Proof As for the first exponential function in (46), one can remember that E[Mn,r ] =
+                                 − = (r + 1)(r + 2)E[K
+(r + 1)E[Kn+1,r+1 ]/(n + 1) and vn,r                    n+2,r+2 ]/((n + 1)(n + 2)), thus an
+application of Theorem 11 leads us to conclude that
+                             2
+                                ε (E[Mn,r ])2
+                                              
+                        exp −          −        ' exp{−C̄1 nα `(n)}                    (47)
+                                     2vn,r
+
+as n → +∞, where C̄1 > 0 is a constant depending on r and ε.
+    We now concentrate on the second exponential function in (46). We define
+
+                  1 h
+         An :=    + λmax (εEMn,r )εEMn,r
+                 vn,r
+                                                                                                     (48)
+                       +
+                                   εEMn,r (n − r)  r+1
+                                                      r+2       λmax (εEMn,r )(r + 1) i
+                  −   vn,r        1+           +          − 1 −                          ,
+                                       (r + 1)vn,r                      n−r
+
+                                                      23
+                      Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+and we first show that An can be written as a function of the term λn := λmax (εEMn,r )).
+From the definition of λn and thanks to (31), it follows that
+                                            1
+                             εEMn,r (n − r) − r+2
+                         
+                                                        λn
+                          1+           +          =1−      ,
+                               (r + 1)vn,r            n −r
+thus one has
+                       r+1
+                                                    λn −(r+1)
+                                                     
+        εEMn,r (n − r) r+2        (r + 1)λn                       (r + 1)λn
+    1+            +         − 1 −           =  1 −            −1−           ;          (49)
+          (r + 1)vn,r               n−r            n−r              n−r
+
+analogously, exploiting (31) again, it is immediate to see that
+                                                               !
+                                                   λn −(r+2)
+                                                     
+                    εEMn,r λn   (r + 1)λn
+                       +      =                1−            −1 .                      (50)
+                      vn,r        n−r             n−r
+
+Thanks to Theorem 11, we know that, as n → +∞, the following asymptotic relations
+             + ' C nα `(n) and (n − r)EM               α
+hold true: vn,r     1                       n,r ' C2 n `(n) for suitable positive constants
+C1 , C2 > 0. As a consequence of these relations and by (31), it is easy to show that
+λn = λmax (εEMn,r )) ' C3 (n − r), with C3 ∈ (0, 1). Since An can be expressed as the sum
+of the two terms in (49) and (50), which depend only on λn ' C3 (n − r), it follows that, as
+n → +∞, An converges to
+
+           A∞ = (r + 1)C3 [(1 − C3 )−(r+2) − 1] − (1 − C3 )−(r+1) + 1 + (r + 1)C3
+               = (r + 1)C3 (1 − C3 )−(r+2) − (1 − C3 )−(r+1) + 1
+               = (r + 2)C3 − 1 + (1 − C3 )r+2 (1 − C3 )−(r+2) ,
+                                               
+
+and Bernoulli’s inequality gives that A∞ > 0. Therefore we conclude that
+                                   +
+                             exp(−vn,r An ) . exp(−C̄2 nα `(n)),                       (51)
+
+with C̄2 > 0. The thesis now follows as a consequence of (47) and (51).
+
+
+
+References
+Anevski, D., Gill, R.D. and Zohren, S. (2017). Estimating a probability mass function
+ with unknown labels. Annals of Statistics 45, 2708–2735.
+
+Auton, A. et al. (2015). A global reference for human genetic variation. Nature 526,
+ 68–74.
+
+Ayed, F., Battiston, M., Camerlenghi, F. and Favaro, S. (2018). On consistent
+ estimation of the missing mass. Annales de l’Institut Henri Poincaré - Probabilités et
+ Statistiques, to appear. Preprint arXiv:1806.09712.
+
+Ayed, F., Battiston, M., Camerlenghi, F. and Favaro, S. (2019). A Good–Turing
+ estimator for feature allocation models. Electronic Journal of Statistics 13, 3775–3804.
+
+                                             24
+             Consistent estimation of small masses in feature sampling
+
+
+
+
+Ben-Hamou, A., Boucheron, S. and Ohannessian, M.I. (2017). Concentration in-
+ equalities in the infinite urn scheme for occupancy counts and the missing mass, with
+ applications. Bernoulli 23, 249–287.
+
+Ben-Hamou, A., Boucheron, S. and Gassiat, E. (2018). Pattern coding meets cen-
+ soring: (almost) adaptive coding on countable alphabets. Preprint: arXiv:1608.08367
+
+Beirlant, J. and Devroye, L. (1999) On the impossibility of estimating densities in the
+ extreme tail. Statistics and Probability Letters 43, 57–64
+
+Bomba, L., Walter, K. and Soranzo, N. (2017). The impact of rare and low-frequency
+ genetic variants in common disease. Genome Biology 18, 77.
+
+Boucheron, S., Lugosi, G. and Massart, P. (2013). Concentration inequalities. Oxford
+ University Press.
+
+Bubeck, S., Ernst, D., and Garivier, A. (2013). Optimal discovery with probabilis-
+ tic expert advice: finite time analysis and macroscopic optimality. Journal of Machine
+ Learning Research 14, 601–623.
+
+Cai, D., Mitzenmacher, M. and Adams, R.P. (2018). A Bayesian nonparametric view
+ on count–min sketch. In Advances in Neural Information Processing Systems.
+
+Cereda, G. and Gill, D.R. (2020). A nonparametric Bayesian approach to the rare type
+ match problem. Preprint: arXiv:1908.02954.
+
+Chao, A. and Colwell, R.K. (2017). Thirty years of progeny from Chao’s inequality: es-
+ timating and comparing richness with incidence data and incomplete sampling. Statistics
+ and Operation Research Transactions 41, 3–54.
+
+Chao, A., Gotelli, N.J., Hsieh, T.C., Sander, E.L., Ma, K.H., Colwell, R.K. and
+ Ellison, A.M. (2014). Rarefaction and extrapolation with Hill numbers: a framework
+ for sampling and estimation in species diversity studies. Ecological Monographs 84, 45–67.
+
+Chatterjee, S. and Diaconis, P. (2018) The sample size required in importance sam-
+ pling. Annals of Applied Probability 28, 1099–1135
+
+Cirulli, E.T. and Goldstein, D.B. (2010). Uncovering the roles of rare variants in
+  common disease through whole-genome sequencing. Nature Reviews Genetics 11, 415.
+
+Colwell, R., Chao, A., Gotelli, N.J., Lin, S., Mao, C.X., Chazdon, R.L. and
+ Longino, J.T. (2012). Models and estimators linking individual-based and sample-based
+ rarefaction, extrapolation and comparison of assemblages. Journal of Plant Ecology 5, 3–
+ 21.
+
+Cormode, G. and Muthukrishnan, S. (2005). An improved data stream summary: the
+ count-min sketch and its applications. Journal of Algorithms 55, 58–75.
+
+Daley, T. and Smith, A.D. (2013). Predicting the molecular complexity of sequencing
+ libraries. Nature Methods 10, 325–327.
+
+                                            25
+                      Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+Daley, D.J. and Vere-Jones, D. (2008). An introduction to the theory of point processes,
+ Volume I and Volume II. Springer, New York.
+
+Efron, B. and Morris, C (1973). Stein’s estimation rule and its competitors - an em-
+ pirical Bayes approach. Journal of the American Statistical Association 68, 117–130.
+
+Feller, W. (1971). An introduction to probability theory and its applications, Volume II.
+  Wiley, NY.
+
+Ferguson, T.S. (1973). A Bayesian analysis of some nonparametric problems. Annals of
+  Statistics 1, 209–230.
+
+Gale, W.A. and Sampson, G. (1995). Good–Turing frequency estimation without tears.
+ Journal of Quantitative Linguistics 2, 217–237.
+
+Gao, F. (2013). Moderate deviations for a nonparametric estimator of sample coverage.
+ Annals of Statistics 41, 641-669.
+
+Gao, Z., Tseng, C.H., Pei, Z. an Blaser, M.J. (2007). Molecular analysis of human
+ forearm superficial skin bacterial biota. Proceedings of the National Academy of Sciences
+ of USA 104, 2927–2932.
+
+Gnedin, A., Hansen, B. and Pitman, J. (2007). Notes on the occupancy problem with
+ infinitely many boxes: general asymptotics and power laws. Probability Surveys 4, 146–
+ 171.
+
+Goldwater, S., Griffiths, T., and Johnson, M. (2006). Interpolating between types
+ and tokens by estimating power-law generators. In Advances in Neural Information Pro-
+ cessing Systems.
+
+Good, I.J.(1953). The population frequencies of species and the estimation of population
+ parameters. Biometrika 40, 237-264.
+
+Grabchak, M. and Zhang, Z. (2017). Asymptotic properties of Turing’s formula in
+ relative error. Machine Learning 106, 1771–1785.
+
+Gravel, S. Henn, B.M., Gutenkunst, R.N. Indap, A.R., Marth, G.T., Clark,
+ A.G., Yu, F., Gibbs, R.A., Bustamante, C.D. and Altshuler, D.L. (2011). De-
+ mographic history and rare allele sharing among human populations. Proceedings of the
+ National Academy of Sciences of USA 108, 11983–11988.
+
+Gravel, S. (2014). Predicting discovery rates of genomic features. Genetics 197, 601–610.
+
+Harrison, B.A. (2010). Move prediction in the game of go. PhD thesis, Citeseer, 2010.
+
+Ionita-Laza, I., Lange, C. and Laird, N.M. (2009). Estimating the number of unseen
+  variants in the human genome. Proceeding of the National Academy of Sciences of USA
+  106, 5008–5013.
+
+Ionita-Laza, I., Lange, C. and Laird, N.M. (2010). On the optimal design of genetic
+  variant discovery studies. Statistical Applications in Genetics and Molecular Biology 9.
+
+                                           26
+             Consistent estimation of small masses in feature sampling
+
+
+
+
+James, L.F. (2017). Bayesian Poisson calculus for latent feature modeling via generalized
+  Indian buffet process priors. Annals of Statistics 45, 2016–2045.
+
+Karamata, J. (1930). Sur un mode de croissance régulière des fonctions. Mathematica 4,
+ 38–53.
+
+Karamata, J. (1933). Sur un mode de croissance régulière. Théorèmes fondamentaux.
+ Bull. Soc. Math. France, 61, 55–62.
+
+Karczewski, K. J., Francioli, L.C., Tiao, G., Cummings, B.B., Alföldi, J.,
+ Wang, Q., Collins, R.L., Laricchia, K.M., Ganna, A., Birnbaum, D.P. et
+ al. (2019). Variation across 141,456 human exomes and genomes reveals the spectrum of
+ loss-of-function intolerance across human protein-coding genes. Preprint BioRxiv:531210.
+
+Karlin, S. (1967). Central limit theorems for certain infinite urn schemes. J. Math. Mech.,
+ 17, 373–401.
+
+Kingman, J.F.C.(1975). Random discrete distributions. Journal of the Royal Statistical
+  Society Series B 37, 1–15.
+
+Kingman, J.F.C. (1993). Poisson processes. Oxford University Press, Oxford.
+
+Kroes, I., Lepp, P.W. and Relman, D.A. (1999). Bacterial diversity within the human
+ subgingival crevice. Proceeding of the National Academy of Sciences of USA 96, 14547–
+ 14552.
+
+McAllester, D. and Ortiz, L. (2003). Concentration inequalities for the missing mass
+ and for histogram rule error. Journal of Machine Learning Research 4, 895–911.
+
+McAllester, D. and Schapire, R.E. (2000). On the convergence rate of Good–Turing
+ estimators. Proceedings of the Conference on Computational Learning Theory.
+
+Mitzenmacher, M. (2004). A brief history of generative models for power law and log-
+ normal distributions. Internet Mathematics 1, 226–251.
+
+Mossel, E. and Ohannessian, M.I. (2019). On the impossibility of learning the missing
+ mass. Entropy 21, 28.
+
+Navarro, D.J. and Griffiths, T.L. (2010). A nonparametric Bayesian model for infer-
+ ring features from similarity judgments. In Advances in Neural Information Processing
+ Systems.
+
+Newman, M.E.J. (2003). The Structure and Function of Complex Networks. SIAM Review,
+ 45, 167–256.
+
+Ohannessian, M.I. and Dahleh, M.A. (2012). Rare probability estimation under reg-
+ ularly varying heavy tails. In Proceedings of the 25th Annual Conference on Learning
+ Theory, 23, 1–24.
+
+Orlitsky, A., Santhanam, N.P. and Zhang, J. (2003). Always Good–Turing: asymp-
+ totically optimal probability estimation. Science 302, 427-431.
+
+                                            27
+                      Ayed, Battiston, Camerlenghi and Favaro
+
+
+
+
+Orlitsky, A., Santhanam, N.P. and Zhang, J. (2004). Universal compression of mem-
+ oryless sources over unknown alphabets. IEEE Transaction on Information Theory, 50,
+ 1469–1481.
+
+Quenouille, M.H. (1956). Notes on bias in estimation. Biometrika, 43, 353–360.
+
+Schechter, S., Herley, C. and Mitzenmacher, M. (2010). Popularity is everything:
+  A new approach to protecting passwords from statistical-guessing attacks. In Proceedings
+  of the USENIX Conference on Hot Topics in Security.
+
+Song, H.H., Cho, T.W., Dave, V., Zhang, Y. and Qiu, L. (2009). Scalable proximity
+  estimation and link prediction in online social networks. In Proceedings of the ACM
+  SIGCOMM Conference on Internet Measurement.
+
+Zhang, Q., Pell, J., Canino-Koning, R., Howe, A.C. and Brown. C.T. (2014).
+  These are not the k-mers you are looking for: efficient online k-mer counting using a
+  probabilistic data structure. PLOS ONE 9, e101271.
+
+Zhang, C.H. and Zhang, Z. (2009). Asymptotic normality of a nonparametric estimator
+  of sample coverage. Annals of Statistics 37, 2582-2595.
+
+Zou, J., Valiant, G., Valiant, P., Karczewski, K., Chan, S.O., Samocha, K.,
+  Lek, M., Sunyaev, S., Daly, M. and MacArthur, D.G. (2016). Quantifying the
+  unobserved protein-coding variants in human populations provides a roadmap for large-
+  scale sequencing projects. Nature Communications 7.
+
+
+
+
+                                           28
+

@@ -1,8 +1,6 @@
-# Lower bound for the largest unseen prevalence
+# LowerBound: implementation and execution
 
-Base-R implementation for independent \(N_j\sim\operatorname{Bin}(n,p_j)\) with fixed
-prevalences and \(S(p)=\sum_jp_j<\infty\). No knowledge of the alphabet size,
-the prevalences, or `S(p)` is supplied to the estimator.
+This guide covers the R functions, simulation settings, VM commands and generated files. Mathematical definitions, derivations and interpretation are in [Notes/README.html](Notes/README.html).
 
 ## Use
 
@@ -14,91 +12,7 @@ fit <- lower_bound_mmax(n, counts, alpha = 0.05, details = TRUE)
 
 `counts` can contain all category counts or just observed positive counts.
 An empty numeric vector is allowed. The sample size must satisfy `n >= 4`.
-The guarantee is pointwise in the fixed sampling time:
-
-\[
-\Pr_p\{M_{\max}\ge L\}\ge1-\alpha.
-\]
-
-This is not a simultaneous guarantee over sample sizes or an optional-stopping
-guarantee. Only the proposed `r = 2` bound is implemented; there is no selection
-over several moment orders. The moment-matrix extension is not implemented.
-
-## Construction and proof
-
-Write
-\[
-K_{n,k}=\sum_j\mathbf 1\{N_j=k\},\qquad
-K_n=\sum_j\mathbf 1\{N_j>0\},\qquad
-M_r=\sum_{j:N_j=0}p_j^r,\qquad M_1=\mathcal M_0.
-\]
-The deterministic inequality is \(M_2\le M_{\max}M_1\).
-The output is \(L=L_2/U_1\), with \(L_2\) a lower bound for \(M_2\)
-and \(U_1\) an upper bound for \(M_1\); use zero when the denominator is zero.
-
-Let \(a=\binom n2^{-1}\), \(\eta_k=\mathbb E_p[K_{n,k}]\), and
-\(D_2=aK_{n,2}-M_2\). Independence across categories gives
-
-\[
-0\le ED_2\le b=\frac{2\eta_3}{\binom n3},\qquad
-\operatorname{Var}(D_2)\le v=a^2\eta_2+\frac{\eta_4}{\binom n4}.
-\]
-
-Indeed, setting \(q_j=1-p_j\), the coordinate mean is
-\(p_j^2q_j^{n-2}(1-q_j^2)\), bounded by \(2p_j^3q_j^{n-3}\).
-The coordinate second moment is
-`a^2 Pr(N_j=2) + p_j^4 Pr(N_j=0)`; summing and replacing
-`q_j^n` by `q_j^(n-4)` gives the variance bound.
-Each centered coordinate is at most `a`, since its mean is nonnegative.
-A one-sided Bernstein bound therefore implies, for `x=log(1/epsilon)`,
-
-\[
-\Pr\{D_2>b+\sqrt{2vx}+2ax/3\}\le\epsilon.
-\]
-
-These bounds apply to the countable sum: `S(p)<Inf` ensures finite count
-expectations, finite variance, and convergence of the sums.
-
-Use the expected-count bound from Ayed et al. (2019), Remark A.1:
-
-\[
-C_k(\epsilon)=
-\left(\sqrt{\tfrac12\log(1/\epsilon)}+
-\sqrt{K_{n,k}+\tfrac76\log(1/\epsilon)}\right)^2,
-\quad \Pr\{\eta_k\le C_k\}\ge1-\epsilon.
-\]
-
-Replace `eta_2, eta_3, eta_4` by `C_2, C_3, C_4` in `b,v`, obtaining
-`bhat,vhat`. Set
-
-\[
-L_2=\left[aK_{n,2}-\widehat b-\sqrt{2\widehat v x}-2ax/3\right]_+.
-\]
-
-For `U_1`, the code explicitly uses the one-sided construction in Ayed et al.,
-Proposition A.3 and equations (A.22)-(A.23). If its error budget is `gamma`,
-let `y=log(2/gamma)` and apply the same expected-count bound to `K_n`,
-with error `gamma/2`, obtaining `C_K`. Then
-
-\[
-U_1=\frac{K_{n,1}}n+\frac y{n-1}
-+\sqrt{\frac{8yC_K}{(n-1)^2(1-2/n)}}.
-\]
-
-The two internal events each have error `gamma/2`. This explicit one-sided
-allocation differs from directly substituting the simultaneous interval in
-Theorem 3.1 and avoids ambiguity about its internal error allocation.
-
-Finally take `epsilon = gamma = alpha/5`: the three count events, the
-Bernstein event, and the `M_1` event have total error at most `alpha`.
-No independence between these events is needed. The implementation returns
-the formula without clipping the endpoint at one.
-
-Reference: Ayed, Battiston, Camerlenghi and Favaro (2019), *A Good-Turing
-estimator for feature allocation models*, Electronic Journal of Statistics
-13, 3775-3804, DOI: 10.1214/19-EJS1614.
-The `M_2` construction above is the proposed extension, not a theorem quoted
-from that article.
+Only the r=2 construction is implemented. Definitions, assumptions and the confidence guarantee are in the [theory notes](Notes/README.html).
 
 ## Simulation
 
@@ -131,10 +45,9 @@ parameters in `Exp1_varying_M_n_parallel_main.R`:
 - Constant: `p_j=c`, `c` in `0.001, 0.05, 0.5`.
 
 In each cell prevalences are fixed across repetitions. Sampling is directly
-binomial, without constructing an `n x M` incidence matrix. Finite-support
-benchmarks are exact members of the infinite-alphabet model after appending
-zero prevalences; this is not a simulation of infinitely many positive
-prevalences. The estimator receives only observed positive counts.
+binomial, without constructing an `n x M` incidence matrix. The estimator
+receives only observed positive counts. The model interpretation of these
+finite-support benchmarks is described in the theory notes.
 
 Defaults: 1000 repetitions per cell, 36 cells, `alpha=0.05`, seed 42.
 Outputs:
@@ -194,7 +107,7 @@ results are reproducible across worker counts and scheduling orders.
 `workers=15` means up to 15 R processes running concurrently. Each worker
 handles one simulation cell (one distribution, parameter, and pair \((M,n)\))
 at a time, running that cell's `Brep` repetitions sequentially. When a worker
-finishes, it receives the next cell. The 450 cells are distributed across these
+finishes, it receives the next cell. The simulation cells are distributed across these
 workers; this does not launch 15 copies of the entire experiment.
 
 The experiment restores the grids from the original `Exp1_varying_M_n.R`:
@@ -202,15 +115,15 @@ The experiment restores the grids from the original `Exp1_varying_M_n.R`:
 - Fixed `n=2000`: `M=2000,2250,...,10000`.
 - Fixed `M=5000`: `n=1000,1250,...,5000`.
 
-It retains the nine benchmarks above, `alpha=0.05`, seed 42, and the preceding
-lower-bound simulation's `Brep=1000`. This is 450 cells / 450,000 repetitions,
+It uses the initial nine benchmarks plus Zipf s=1.2 and s=2, `alpha=0.05`, seed 42, and the preceding
+lower-bound simulation's `Brep=1000`. The full current experiment has 550 cells / 550,000 repetitions,
 not a Cartesian product of the two grids. Parallelism is across cells; each
 worker generates one count vector per repetition, without nested clusters or
 large incidence matrices. Results are written after the parallel tasks finish.
 Concurrent launches targeting the same checkout overwrite the same result
 filenames; use separate checkouts for separate simultaneous experiments.
 
-For each distribution and parameter, two figures are saved, 18 in total:
+For each distribution and parameter, two figures are saved, 22 in total:
 
 ```text
 LowerBound/img/Zipfs/Exp_LB_nfix_Zipfs_*.pdf
@@ -224,24 +137,7 @@ and vertical axis `1000 * bound`. The darkorange curve is the median confidence
 lower endpoint over repetitions; the 2.5% and 97.5% quantiles are saved in the
 data, as in the original experiment.
 
-The black curve is an **oracle deterministic lower endpoint**, analogous to
-the deterministic upper oracle in the original study, with the direction of
-the tail reversed. Given the entire prevalence vector, independence gives
-
-\[
-\Pr_p(M_{\max}<t)=\prod_{j:p_j\ge t}\{1-(1-p_j)^n\},\qquad t>0.
-\]
-
-The oracle is the largest point in `{0} union {p_j:p_j>0}` such that this strict
-lower tail is at most `alpha`. It is thus the largest deterministic endpoint
-with `Pr_p(Mmax >= oracle) >= 1-alpha` (the discrete lower-alpha quantile,
-with exact atom-boundary handling). Products are computed on the log scale.
-No Monte Carlo oracle sample or `Bor` parameter is needed.
-This oracle is not the realized `Mmax` for each sample, which would be exactly
-known if both `p` and that sample were supplied, nor is it the moment ratio
-`M_2/M_1`. The per-repetition true `Mmax` and moment ratio are saved separately.
-An adaptive lower-bound median can exceed this deterministic oracle without
-contradiction; coverage is a statement about its joint behavior with `Mmax`.
+The black curve is the exact deterministic oracle lower endpoint. It is calculated without Monte Carlo oracle repetitions; no Bor parameter is needed. Definitions and interpretation are in the [theory notes](Notes/README.html#deterministic-oracle-lower-endpoint).
 
 Results are organized analogously to the original study:
 
@@ -264,7 +160,7 @@ the simulations; it does not depend on functions loaded only inside workers.
 After the parallel computations finish, workers are stopped and all raw cell
 results are saved in `LowerBound/save/Exp_LB_checkpoint.rds`, before generating
 figures. This checkpoint preserves the simulations if a later output step fails.
-It contains `config` and `results`; it is not an automatic resume mechanism.
+It contains `config` and `results`; use `resume=TRUE` to add missing cells, or `report_only=TRUE` to regenerate outputs from existing cells.
 
 On successful completion the log prints a brief recap: scenario and repetition
 counts, settings, elapsed time, minimum and maximum empirical coverage, total
@@ -291,27 +187,15 @@ space is left below zero, and each plot states the minimum and maximum oracle
 in the original probability scale. A note explicitly flags an entirely zero
 oracle or two coincident curves.
 
-The oracle lower endpoint can genuinely be zero. In particular, if
-\(\Pr_p(M_{\max}=0)>\alpha\), every strictly positive deterministic endpoint
-fails the required lower-coverage guarantee. This does not require
-\(M_{\max}=0\) in every repetition.
-
 The single readable report is `LowerBound/res/Exp_LB_summary.html`. It contains
-18 separate tables, one per distribution, parameter and arm, with only three
-columns: **oracle**, **lb_median**, and coverage. All metadata (distribution,
+22 separate tables after the full incremental run, one per distribution, parameter and arm, with only three
+base columns **oracle**, **lb_median**, and coverage, plus the new
+`lb_joint_median (R=6)` and `coverage_joint`. All metadata (distribution,
 parameter, arm, fixed M or n, range of the varying quantity, Brep and alpha)
 appear in the caption. Each row group is labelled with its varying M or n value.
 The HTML is self-contained and works offline.
 
-Coverage is computed on the individual Monte Carlo repetitions:
-\[
-\operatorname{coverage}=\frac1{B_{\mathrm{rep}}}
-\sum_{b=1}^{B_{\mathrm{rep}}}\mathbf 1\{LB_b\le M_{\max,b}\}.
-\]
-It uses the realized true maximum unseen prevalence in the same sample, not
-the deterministic oracle and not the median LB. `coverage_Mmax` is an explicit
-alias in diagnostic exports; `coverage_vs_oracle` is a separate comparison
-\(B_{\mathrm{rep}}^{-1}\sum_b\mathbf 1\{LB_b\le\mathrm{oracle}\}\).
+The coverage column is computed as `mean(lower <= Mmax)` over individual repetitions, using the true Mmax from the same repetition. `coverage_Mmax` is an alias in the CSV; `coverage_vs_oracle` is the separate diagnostic `mean(lower <= oracle)`. See the theory notes for their interpretation.
 
 Full numerical diagnostics remain in `res/Exp_LB_summary.csv` and the
 distribution-specific CSVs: quantiles, Monte Carlo confidence intervals,
@@ -382,3 +266,60 @@ different values, provide the same saved values on the incremental command.
 runs the full current 550-cell experiment; using `report_only=TRUE` refreshes
 only cells already present in the checkpoint and does not add new benchmarks.
 The incremental simulation has been prepared, not executed locally.
+
+## Updating the documentation
+
+From the repository root in PowerShell:
+
+```powershell
+./LowerBound/render_readme.ps1
+```
+
+This rebuilds both `LowerBound/README.html` (implementation) and
+`LowerBound/Notes/README.html` (theory), with embedded styles and offline
+formula rendering. Markdown files remain the editable sources. No simulation
+or reporting job is started by this command.
+
+## Simultaneous lower bound with R=6
+
+`Exp_LB_M_n.R` now computes both the original `lower_bound_mmax()` and
+`lower_bound_mmax_simultaneous(..., R=6)`, at the same per-method error level
+`alpha`. The new method uses `K1,...,K12`, chooses among orders 2 through 6
+inside a single calibrated event, and saves its per-order thresholds and
+selected order. It is not combined by a further maximum with the old method.
+
+The single results HTML now has the original oracle, `lb_median`, `coverage`,
+plus `lb_joint_median (R=6)` and `coverage_joint`. Each coverage compares the
+method's endpoint against the true Mmax in the same repetition. CSV exports
+also contain new-bound quantiles, positive rates, failure counts and tightness.
+The figures add the new median as a dashed darkgreen curve, keeping the old
+darkorange bound and the black oracle.
+
+After updating code on the VM, launch:
+
+```bash
+./run_job.sh LowerBound/Exp_LB_M_n.R choose_wd=2 resume=TRUE workers=15
+```
+
+Older checkpoints saved neither the new endpoint nor the first 12 spectrum
+counts. Such cells cannot be enriched from their aggregate summaries. The
+updated resume mode replays their original task-specific RNG streams, computing
+both methods on the same MC samples. It verifies that the old lower endpoint,
+Mmax, M1 and M2 match the saved repetitions exactly before replacing any
+checkpoint. A mismatch stops the run. The previous checkpoint is backed up.
+New benchmark cells, if any, are simulated as usual. Future checkpoints store
+the spectrum and can be enriched without regenerating samples.
+
+`report_only=TRUE` and `render_results.R` never draw samples. On old cells
+without spectra, they show the new result as unavailable rather than copying
+or guessing it. Once the VM replay finishes, figures, CSVs and HTML are updated
+automatically and the log ends with a recap and `FINITO`.
+
+Deterministic verification (including exact enumeration, not MC sampling):
+
+```powershell
+& 'C:/Program Files/R/R-4.4.2/bin/Rscript.exe' LowerBound/check_simultaneous.R
+```
+
+The formal TeX source is `Notes/theory.tex`; the documentation builder also
+creates its offline HTML reading version `Notes/theory.html`.

@@ -1,0 +1,6 @@
+\contentsline {section}{\numberline {1}Modello, notazione e fatti probabilistici comuni}{1}{section.1}%
+\contentsline {section}{\numberline {2}Geometria oracle e scelta dei rapporti consecutivi}{2}{section.2}%
+\contentsline {section}{\numberline {3}Prima derivazione: rapporto di estremi separati, ordine fissato}{3}{section.3}%
+\contentsline {section}{\numberline {4}Seconda derivazione: regione congiunta per una coppia fissata}{3}{section.4}%
+\contentsline {section}{\numberline {5}Terza derivazione: controllo simultaneo degli ordini da 2 a R}{4}{section.5}%
+\contentsline {section}{\numberline {6}Corrispondenza con l'implementazione e lettura dei risultati}{5}{section.6}%

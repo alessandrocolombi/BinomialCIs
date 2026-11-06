@@ -1,0 +1,336 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[margin=27mm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\newtheorem{proposition}{Proposizione}[section]
+\newtheorem{theorem}[proposition]{Teorema}
+\newtheorem{lemma}[proposition]{Lemma}
+\newtheorem{corollary}[proposition]{Corollario}
+\theoremstyle{remark}\newtheorem{remark}[proposition]{Osservazione}
+\newcommand{\E}{\mathbb E_p}
+\newcommand{\Pp}{\mathbb P_p}
+\newcommand{\ind}{\mathbf1}
+\newcommand{\Mmax}{M_{\max}}
+\newcommand{\F}{\mathcal F}
+\title{Lower confidence bounds per la massima prevalenza non osservata}
+\author{Note teoriche: rapporti di momenti e controllo simultaneo}
+\date{6 novembre 2026}
+\begin{document}
+\maketitle
+\tableofcontents
+
+\section{Modello, notazione e fatti probabilistici comuni}
+Il tempo di campionamento $n$ è fissato. Osserviamo variabili indipendenti
+$N_j\sim\mathrm{Bin}(n,p_j)$, $j\ge1$, con parametro fissato
+\[
+ p\in\F:=\{(p_j)_{j\ge1}:0\le p_j\le1,\quad
+ S(p):=\sum_{j\ge1}p_j<\infty\}.
+\]
+Definiamo, per $a\ge1$ e $1\le k\le n$,
+\[
+ \begin{gathered}
+ M_a=\sum_jp_j^a\ind\{N_j=0\},\qquad \Mmax=\max_{j:N_j=0}p_j,\\
+ K_k=K_{n,k}=\sum_j\ind\{N_j=k\},\qquad \eta_k=\E K_k.
+ \end{gathered}
+\]
+Il massimo è zero se non vi sono prevalenze positive non osservate;
+la missing mass è $\mathcal M_0=M_1$. Le statistiche $M_a$ e $\Mmax$
+sono casuali, benché $p$ sia fissato. Tutte le garanzie sono a tempo $n$
+fissato e non sono garanzie di arresto opzionale.
+Poiché $\E\sum_jN_j=nS(p)$, i conteggi osservati e gli $\eta_k$ sono finiti.
+Se $\Mmax>0$, il massimo è raggiunto e ha molteplicità finita:
+la sommabilità implica che vi siano solo finitamente molti $p_j$ sopra
+qualsiasi soglia positiva.
+
+Per interi $1\le j\le n$, poniamo
+\[
+ a_j=\binom nj^{-1},\quad T_j=a_jK_j,\quad D_j=T_j-M_j,
+ \quad b_j=\E D_j,\quad e_j=D_j-b_j.
+\]
+\begin{proposition}[Bias e varianza dell'errore]\label{prop:errors}
+Se $n\ge2j$, allora
+\[
+ 0\le b_j\le \overline b_j:=j a_{j+1}\eta_{j+1},\qquad
+ \operatorname{Var}_p(D_j)\le v_j:=a_j^2\eta_j+a_{2j}\eta_{2j}.
+\]
+Per ogni $x>0$ ed $\epsilon\in(0,1)$,
+\begin{align}
+ \Pp\{D_j>\overline b_j+\sqrt{2v_jx}+2a_jx/3\}&\le e^{-x},\label{eq:bern}\\
+ \Pp\{D_j<-\sqrt{(1-\epsilon)v_j/\epsilon}\}&\le\epsilon.\label{eq:cant}
+\end{align}
+\end{proposition}
+\begin{proof}
+Scriviamo $q=1-p$ per una singola categoria e
+$d_j=a_j\ind\{N=j\}-p^j\ind\{N=0\}$. Allora
+\[
+ \mathbb E d_j=p^jq^{n-j}(1-q^j)
+ \le j p^{j+1}q^{n-j-1},
+\]
+poiché $1-q^j\le jp$ e $q^{n-j}\le q^{n-j-1}$.
+Sommando otteniamo il controllo del bias. Per disgiunzione degli eventi,
+\[
+ \sum_\ell\mathbb E d_{j,\ell}^2
+ =a_j^2\eta_j+\sum_\ell p_\ell^{2j}(1-p_\ell)^n
+ \le a_j^2\eta_j+a_{2j}\eta_{2j}.
+\]
+L'indipendenza dà il controllo della varianza. Inoltre
+$d_{j,\ell}-\mathbb E d_{j,\ell}\le a_j$, poiché la media è non negativa.
+Bernstein unilaterale dà \eqref{eq:bern}. Per \eqref{eq:cant},
+$b_j\ge0$ e Cantelli implicano
+$\Pp(D_j<-t)\le v_j/(v_j+t^2)$.
+Se $v_j=0$, $D_j=b_j\ge0$ quasi certamente e la conclusione è diretta.
+Le somme infinite si ottengono per passaggio al limite: la somma dei valori
+attesi assoluti è finita e la somma delle varianze è finita.
+\end{proof}
+
+\begin{lemma}[Upper bound osservabile dei conteggi medi]\label{lem:counts}
+Per $k\ge1$ e $\epsilon\in(0,1)$, definiamo
+\[
+ C_k(\epsilon)=\left(\sqrt{\frac{\log(1/\epsilon)}2}
+ +\sqrt{K_k+\frac76\log(1/\epsilon)}\right)^2.
+\]
+Allora $\Pp\{\eta_k\le C_k(\epsilon)\}\ge1-\epsilon$.
+Per un insieme deterministico finito $J$ di $m$ indici,
+con probabilità almeno $1-m\epsilon$ tutti questi bound valgono insieme.
+\end{lemma}
+\begin{proof}
+$K_k$ è somma di Bernoulli indipendenti e ha varianza al più $\eta_k$.
+Bernstein implica, con $x=\log(1/\epsilon)$,
+$\Pp\{\eta_k-K_k>\sqrt{2\eta_kx}+2x/3\}\le\epsilon$.
+Risolvendo la corrispondente disuguaglianza quadratica in $\sqrt{\eta_k}$
+si ottiene $C_k$. L'ultima affermazione segue dall'unione degli eventi.
+È il controllo dei conteggi usato anche da Ayed et al. (2019, Remark A.1).
+\end{proof}
+
+\section{Geometria oracle e scelta dei rapporti consecutivi}
+In questa sezione fissiamo anche il campione e supponiamo $M_1>0$.
+\begin{proposition}[Gerarchia oracle]\label{prop:oracle}
+Per reali $1\le s<r$, poniamo
+$Q_{r,s}=(M_r/M_s)^{1/(r-s)}$. Allora $Q_{r,s}\le\Mmax$.
+La quantità $Q_{r,s}$ è non decrescente in ciascun estremo, mantenendo $s<r$.
+Per interi $r\ge2$,
+\[
+ Q_{r,1}\le Q_{r,2}\le\cdots\le Q_{r,r-1}
+ =\frac{M_r}{M_{r-1}}\le\Mmax,
+ \qquad \frac{M_r}{M_{r-1}}\uparrow\Mmax.
+\]
+Tra le coppie intere $r>s\ge1$, il minimo oracle è $M_2/M_1$.
+\end{proposition}
+\begin{proof}
+Si ha $M_r\le\Mmax^{r-s}M_s$. Per Hölder $f(t)=\log M_t$ è convessa;
+$\log Q_{r,s}$ è la pendenza della secante tra $s$ e $r$ e cresce in
+ciascun estremo. Equivalentemente, posto $A_j=M_j/M_{j-1}$,
+la log-convessità dà $A_j\le A_{j+1}$ e
+$Q_{r,s}=(\prod_{j=s+1}^r A_j)^{1/(r-s)}$.
+Per il limite, sia $m=\Mmax>0$ di molteplicità $k$. Scriviamo
+$M_j=m^j(k+\sum_{0<u_\ell<m}(u_\ell/m)^j)$, dove gli $u_\ell$
+sono le prevalenze non osservate. La somma residua tende a zero per
+convergenza dominata, essendo dominata da $\sum u_\ell/m<\infty$.
+Ne segue $A_j\to m$. Se tutte le prevalenze positive non osservate
+sono uguali, tutte le disuguaglianze sono uguaglianze.
+\end{proof}
+\begin{proposition}[Media pesata e quoziente di Rayleigh]
+Con $u_j=p_j\ind\{N_j=0\}$, per $r\ge2$,
+\[
+ \frac{M_r}{M_{r-1}}=\sum_j\frac{u_j^{r-1}}{M_{r-1}}u_j
+ =\frac{\langle v,\operatorname{diag}(u)v\rangle}{\langle v,v\rangle},
+ \qquad v_j=u_j^{(r-1)/2}.
+\]
+\end{proposition}
+\begin{proof}
+Le identità sono immediate. La sommabilità assicura $v\in\ell_2$.
+La norma di questo operatore è il massimo degli $u_j$, cioè $\Mmax$.
+\end{proof}
+La gerarchia riguarda i momenti veri. Non implica che i rapporti stimati,
+dopo correzioni di bias e concentrazione, siano ordinati nello stesso modo.
+
+\section{Prima derivazione: rapporto di estremi separati, ordine fissato}
+\begin{theorem}[Lower bound separato]\label{thm:separate}
+Fissiamo un intero $r\ge2$, $s=r-1$, $n\ge2r$ e $\delta\in(0,1)$.
+Siano
+\[
+ J=\{s,r,r+1,2s,2r\},\quad m=|J|,\quad
+ \epsilon=\frac{\delta}{m+2},\quad x=\log(1/\epsilon),\quad
+ C_k=C_k(\epsilon)\ (k\in J).
+\]
+Per $j=s,r$ definiamo
+\[
+ B_j=j a_{j+1}C_{j+1},\qquad V_j=a_j^2C_j+a_{2j}C_{2j}.
+\]
+Tutti gli indici richiesti sono in $J$. Definiamo
+\[
+ L_r=[T_r-B_r-\sqrt{2V_rx}-2a_rx/3]_+,\qquad
+ U_s=T_s+\sqrt{(1-\epsilon)V_s/\epsilon}.
+\]
+Allora $\Pp\{L_r\le M_r,\ M_s\le U_s\}\ge1-\delta$ e
+\[
+ \Pp\{\Mmax\ge L_r/U_s\}\ge1-\delta.
+\]
+Il rapporto è definito zero se $U_s=0$.
+\end{theorem}
+\begin{proof}
+Il Lemma \ref{lem:counts} controlla $m$ eventi. Aggiungiamo
+\eqref{eq:bern} per $D_r$ e \eqref{eq:cant} per $D_s$, ciascuno con
+errore $\epsilon$. Sul loro evento congiunto $b_j\le B_j$, $v_j\le V_j$,
+e le formule danno gli estremi dichiarati. Se $M_s>0$,
+$\Mmax\ge M_r/M_s\ge L_r/U_s$. Se $M_s=0$, anche $M_r=0$
+e sullo stesso evento $L_r=0$. L'errore totale è $(m+2)\epsilon$.
+\end{proof}
+\begin{remark}
+Questo teorema conserva la derivazione con Cantelli per il denominatore.
+Il benchmark già implementato $L_2/U_1$ usa invece, per $U_1$, lo
+specifico upper bound della missing mass di Ayed et al. (2019).
+Le due procedure non sono identiche e vengono tenute distinte.
+\end{remark}
+
+\section{Seconda derivazione: regione congiunta per una coppia fissata}
+\begin{theorem}[Regione congiunta e controllo uniforme in $t$]\label{thm:pair}
+Fissiamo $r\ge2$, $s=r-1$, $n\ge2r$, $\delta\in(0,1)$ e lo stesso
+insieme $J$ del Teorema \ref{thm:separate}. Ora poniamo
+\[
+ m=|J|,\quad C_k=C_k(\delta/(2m)),\quad
+ B_j=j a_{j+1}C_{j+1},\quad V_j=a_j^2C_j+a_{2j}C_{2j},
+ \quad c=2/\sqrt\delta.
+\]
+Con probabilità almeno $1-\delta$, simultaneamente
+\[
+ 0\le b_j\le B_j\ (j=s,r),\qquad
+ \frac{e_s^2}{V_s}+\frac{e_r^2}{V_r}\le c^2.
+\]
+In particolare $(M_s,M_r)$ appartiene alla regione osservabile
+\[
+ \mathcal C_r=\left\{(u,v):\begin{gathered}
+ 0\le v\le u,\quad \exists\beta_s\in[0,B_s],\ \beta_r\in[0,B_r]:\\
+ \frac{(T_s-u-\beta_s)^2}{V_s}+
+ \frac{(T_r-v-\beta_r)^2}{V_r}\le c^2
+ \end{gathered}\right\}.
+\]
+Sullo stesso evento, per ogni $t\ge0$,
+\[
+ M_r-tM_s\ge F_r(t):=T_r-tT_s-B_r-c\sqrt{V_r+t^2V_s}.
+\]
+Definito
+\[
+ \tau_r=\sup\{t\in[0,1]:F_r(t)>0\},\qquad \sup\varnothing:=0,
+\]
+si ha $\Pp\{\tau_r\le\Mmax\}\ge1-\delta$.
+\end{theorem}
+\begin{proof}
+Se $v_j=0$, poniamo $e_j^2/v_j=0$: infatti $e_j=0$ quasi certamente.
+La Proposizione \ref{prop:errors} dà
+$\E(e_s^2/v_s+e_r^2/v_r)\le2$. Markov controlla la somma con soglia
+$4/\delta$ ed errore $\delta/2$. Sull'evento dei conteggi, di errore
+al più $\delta/2$, $V_j\ge v_j$ e $B_j\ge b_j$. Per unione dei due
+eventi segue la regione. Non si è condizionato sui $V_j$ casuali.
+Per Cauchy--Schwarz, contemporaneamente per tutti i $t$,
+$e_r-te_s\le c\sqrt{V_r+t^2V_s}$. Inoltre $b_r-tb_s\le B_r$.
+Se $F_r(t)>0$, allora $M_r-tM_s>0$: ciò implica $M_s>0$ e
+$\Mmax\ge M_r/M_s>t$. Prendendo il sup si ottiene il risultato.
+Questo argomento tratta anche $M_s=0$: in quel caso nessun $t$ può
+essere certificato sul buon evento.
+\end{proof}
+
+\begin{proposition}[Soglia esplicita e confronto geometrico]\label{prop:root}
+Per $V_r,V_s>0$, poniamo $A=T_r-B_r$, $D=T_s$, $v=c^2V_r$,
+$w=c^2V_s$. Se $A\le\sqrt v$, allora $\tau_r=0$. Altrimenti,
+\[
+ N=A^2-v>0,\qquad
+ \tau_r=\min\left\{1,\frac{N}{AD+\sqrt{D^2v+wN}}\right\}.
+\]
+Inoltre $\tau_r$ è almeno il bound rettangolare ottenuto dalla stessa
+ellisse e con lo stesso $c$:
+\[
+ \tau_r\ge\min\left\{1,\frac{[T_r-B_r-c\sqrt{V_r}]_+}{T_s+c\sqrt{V_s}}\right\}.
+\]
+\end{proposition}
+\begin{proof}
+$F_r(t)=A-Dt-\sqrt{v+wt^2}$ è continua e strettamente decrescente
+su $[0,\infty)$ (salvo derivata nulla in zero quando $D=0$).
+Se $F_r(0)>0$ esiste una radice positiva unica. Elevando al quadrato
+$A-Dt=\sqrt{v+wt^2}$ e razionalizzando la radice si ottiene la formula;
+essa ha $A-Dt\ge0$ e quindi risolve anche l'equazione non quadratica.
+Il confronto segue da $\sqrt{V_r+t^2V_s}\le\sqrt{V_r}+t\sqrt{V_s}$,
+troncando entrambe le soglie a uno.
+\end{proof}
+\begin{remark}
+Più precisamente, il confronto vale con il minimo tra uno e il rapporto
+rettangolare. Nel confronto tra procedure non troncate su $[0,1]$,
+si usano le radici non troncate. La regione è diagonale: non sfrutta
+esplicitamente la covarianza. Markov introduce penalità proporzionali
+a $\delta^{-1/2}$; il risultato non garantisce un miglioramento rispetto
+al diverso benchmark Bernstein--Ayed.
+\end{remark}
+
+\section{Terza derivazione: controllo simultaneo degli ordini da 2 a R}
+\begin{theorem}[Massimo adattivo con copertura simultanea]\label{thm:simultaneous}
+Siano $R\ge2$ un intero deterministico, $n\ge2R$, $\delta\in(0,1)$.
+Per $k=1,\ldots,2R$ e $j=1,\ldots,R$ definiamo
+\[
+ C_k=C_k(\delta/(4R)),\quad
+ T_j=a_jK_j,\quad B_j=j a_{j+1}C_{j+1},\quad
+ V_j=a_j^2C_j+a_{2j}C_{2j},\quad c_R=\sqrt{2R/\delta}.
+\]
+Per ogni $r=2,\ldots,R$ poniamo
+\[
+ F_{r,R}(t)=T_r-tT_{r-1}-B_r-c_R\sqrt{V_r+t^2V_{r-1}},
+ \qquad \tau_{r,R}=\sup\{t\in[0,1]:F_{r,R}(t)>0\},
+\]
+con sup dell'insieme vuoto uguale a zero. Allora
+\[
+ \boxed{\inf_{p\in\F}\Pp\left\{\Mmax\ge
+ \Lambda_R:=\max_{2\le r\le R}\tau_{r,R}\right\}\ge1-\delta.}
+\]
+La formula della Proposizione \ref{prop:root}, con $c=c_R$ e i $B,V$
+qui definiti, calcola ciascuna soglia senza ottimizzazione numerica in $t$.
+\end{theorem}
+\begin{proof}
+Il Lemma \ref{lem:counts} controlla tutti i $2R$ conteggi con errore
+totale $\delta/2$. Indipendentemente da questo evento, nel senso che
+non occorre condizionare, si ha
+\[
+ \E\sum_{j=1}^R\frac{e_j^2}{v_j}\le R,\qquad
+ \Pp\left\{\sum_{j=1}^R\frac{e_j^2}{v_j}>\frac{2R}{\delta}\right\}
+ \le\delta/2.
+\]
+Sull'intersezione, di probabilità almeno $1-\delta$,
+$0\le b_j\le B_j$ per tutti i $j$ e
+$\sum_j e_j^2/V_j\le c_R^2$.
+Ogni somma relativa a una coppia consecutiva è limitata dalla somma totale.
+Cauchy--Schwarz dà perciò $M_r-tM_{r-1}\ge F_{r,R}(t)$ simultaneamente
+per tutti gli $r$ e tutti i $t\ge0$. Il ragionamento del Teorema
+\ref{thm:pair} vale ora su un solo evento e protegge anche il massimo in $r$.
+\end{proof}
+\begin{remark}[Che cosa è e non è adattivo]
+La soglia $t$ e l'ordine $r\in\{2,\ldots,R\}$ possono essere scelti
+dopo aver osservato i dati. Il massimo $R$ e il livello $\delta$ sono
+fissati prima del campione. Un ulteriore confronto tra diversi $R$
+richiederebbe un altro controllo simultaneo. Non è giustificato
+massimizzare soglie a ordine fissato senza la calibrazione comune.
+\end{remark}
+
+\section{Corrispondenza con l'implementazione e lettura dei risultati}
+La procedura simultanea usa soltanto $n$, $\delta$, $R$ e
+$K_1,\ldots,K_{2R}$. Per $R=6$ occorrono i primi dodici conteggi dello
+spettro. Se $K_r=0$, allora $T_r=0$, $F_{r,R}(0)<0$ e la soglia
+di quell'ordine è zero. Un conteggio $K_{2r}=0$ non rende nulla la
+varianza superiore: $C_{2r}>0$.
+Gli estremi numerici vengono arrotondati verso il lato ammissibile
+della radice. Il vecchio bound e $\Lambda_6$ sono riportati separatamente;
+il loro massimo non è automaticamente valido allo stesso livello.
+La copertura Monte Carlo di un endpoint $L$ è
+\[
+ B_{\mathrm{rep}}^{-1}\sum_{b=1}^{B_{\mathrm{rep}}}
+ \ind\{L_b\le M_{\max,b}\},
+\]
+non la frequenza di confronto con l'oracle deterministico.
+Non si asserisce che $\Lambda_6$ domini il vecchio bound: il vantaggio
+geometrico può essere superato dalla penalità probabilistica di Markov.
+
+\begin{thebibliography}{9}
+\bibitem{ayed2019} F. Ayed, M. Battiston, F. Camerlenghi, S. Favaro (2019).
+A Good--Turing estimator for feature allocation models.
+\emph{Electronic Journal of Statistics} 13, 3775--3804.
+\end{thebibliography}
+\end{document}

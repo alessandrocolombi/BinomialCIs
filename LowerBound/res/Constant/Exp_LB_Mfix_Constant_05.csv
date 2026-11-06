@@ -1,18 +1,18 @@
-"distribution","param","tag","arm","M","n","task_id","Brep","alpha","S","oracle","lb_q025","lb_median","lb_q975","coverage","failure_count","coverage_mcse","oracle_coverage","positive_rate","unseen_rate","mean_Mmax","mean_moment_ratio","mean_relative_lower","M1_coverage","M2_coverage","coverage_given_unseen","coverage_Mmax_given_unseen","positive_rate_given_unseen","prob_Mmax_zero","oracle_is_zero","oracle_equals_lb_median","coverage_definition","coverage_vs_oracle","coverage_Mmax","failure_count_Mmax","coverage_ci_low","coverage_ci_high"
-"Constant",0.5,"05","Mfix",5000,1000,306,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,1250,315,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,1500,324,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,1750,333,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,2000,342,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,2250,351,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,2500,360,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,2750,369,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,3000,378,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,3250,387,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,3500,396,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,3750,405,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,4000,414,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,4250,423,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,4500,432,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,4750,441,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
-"Constant",0.5,"05","Mfix",5000,5000,450,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,NA,NA,NA,1,TRUE,TRUE,"LB <= Mmax",1,1,0,0.996317916103134,1
+"distribution","param","tag","arm","M","n","task_id","Brep","alpha","S","oracle","lb_q025","lb_median","lb_q975","coverage","failure_count","coverage_mcse","oracle_coverage","positive_rate","unseen_rate","mean_Mmax","mean_moment_ratio","mean_relative_lower","M1_coverage","M2_coverage","joint_R","lb_joint_median","lb_joint_q025","lb_joint_q975","coverage_joint","positive_rate_joint","failure_count_joint","mean_relative_joint","coverage_definition","coverage_vs_oracle","coverage_Mmax","failure_count_Mmax","coverage_ci_low","coverage_ci_high","coverage_given_unseen","coverage_Mmax_given_unseen"
+"Constant",0.5,"05","Mfix",5000,1000,306,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,1250,315,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,1500,324,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,1750,333,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,2000,342,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,2250,351,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,2500,360,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,2750,369,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,3000,378,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,3250,387,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,3500,396,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,3750,405,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,4000,414,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,4250,423,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,4500,432,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,4750,441,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA
+"Constant",0.5,"05","Mfix",5000,5000,450,1000,0.05,2500,0,0,0,0,1,0,0,1,0,0,0,0,NA,1,1,6,NA,NA,NA,NA,NA,NA,NA,"LB <= Mmax",1,1,0,0.996317916103134,1,NA,NA

@@ -44,6 +44,7 @@ main <- function() {
   }
   setwd(wd)
   source(file.path(wd, "LowerBound", "results_report.R"), local = TRUE)
+  source(file.path(wd, "LowerBound", "lower_bound.R"), local = TRUE)
   report_only <- if (is.null(opts$report_only)) FALSE else {
     value <- tolower(opts$report_only)
     if (!value %in% c("true", "false")) stop("report_only must be TRUE or FALSE.")
@@ -164,9 +165,12 @@ main <- function() {
       stop("Invalid benchmark prevalences in task ", task$task_id)
     }
     oracle <- oracle_lower(p, n, alpha)
-    runs <- matrix(NA_real_, Brep, 12L, dimnames = list(NULL,
+    runs <- matrix(NA_real_, Brep, 14L, dimnames = list(NULL,
       c("lower", "Mmax", "M1", "M2", "moment_ratio", "M1_upper", "M2_lower",
-        "M2_hat", "M2_lower_raw", "bias_upper", "variance_upper", "tail_radius")))
+        "M2_hat", "M2_lower_raw", "bias_upper", "variance_upper", "tail_radius",
+        "lower_joint", "joint_r")))
+    spectrum <- matrix(0L, Brep, 12L, dimnames = list(NULL, paste0("K", 1:12)))
+    joint_by_r <- matrix(0, Brep, 5L, dimnames = list(NULL, paste0("r", 2:6)))
     for (b in seq_len(Brep)) {
       counts <- rbinom(M, size = n, prob = p)
       unseen <- counts == 0
@@ -174,9 +178,19 @@ main <- function() {
       M1 <- sum(p[unseen])
       M2 <- sum(p[unseen]^2)
       fit <- lower_bound_mmax(n, counts[counts > 0], alpha, details = TRUE)
+      spectrum[b, ] <- tabulate(counts[counts > 0 & counts <= 12], nbins = 12L)
+      joint <- lower_bound_mmax_simultaneous_spectrum(n, spectrum[b, ], alpha, R = 6L, details = TRUE)
+      joint_by_r[b, ] <- joint$by_r
       runs[b, ] <- c(fit$lower, Mmax, M1, M2, if (M1 > 0) M2 / M1 else 0,
                      fit$M1_upper, fit$M2_lower, fit$M2_hat, fit$M2_lower_raw,
-                     fit$bias_upper, fit$variance_upper, fit$tail_radius)
+                     fit$bias_upper, fit$variance_upper, fit$tail_radius,
+                     joint$lower, joint$selected_r)
+    }
+    if (!is.null(job$previous_runs) && !isTRUE(all.equal(
+        unname(runs[, colnames(job$previous_runs), drop = FALSE]),
+        unname(job$previous_runs), tolerance = 0))) {
+      stop("Replay differs from saved MC samples in task ", task$task_id,
+           ". Original checkpoint has not been replaced.")
     }
     q <- quantile(runs[, "lower"], c(0.025, 0.5, 0.975), names = FALSE)
     has_unseen <- runs[, "Mmax"] > 0
@@ -201,7 +215,8 @@ main <- function() {
     cat(sprintf("Task %d: %s param=%g %s M=%d n=%d coverage=%.4f positive=%.4f\n",
                 task$task_id, task$distribution, task$param, task$arm,
                 M, n, summary$coverage, summary$positive_rate))
-    list(task = task, summary = summary, runs = runs)
+    list(task = task, summary = summary, runs = runs, spectrum = spectrum,
+         joint_by_r = joint_by_r, joint_R = 6L, joint_version = "simultaneous-ellipse-v1")
   }
   # These functions use only their arguments and functions loaded on workers;
   # avoid serializing main()'s task/stream lists with every function closure.
@@ -221,7 +236,8 @@ main <- function() {
   config <- list(wd = wd, choose_wd = choose_wd, workers = workers,
                  Brep = Brep, alpha = alpha, seed = seed,
                  Mgrid = Mgrid, Ngrid = Ngrid, n_fixed = n_fixed, M_fixed = M_fixed,
-                 benchmarks = benchmarks, RNGkind = RNGkind(), session = sessionInfo())
+                 benchmarks = benchmarks, joint_R = 6L, joint_version = "simultaneous-ellipse-v1",
+                 RNGkind = RNGkind(), session = sessionInfo())
 
   if (report_only) {
     checkpoint_file <- file.path(lower_dir, "save", "Exp_LB_checkpoint.rds")
@@ -263,9 +279,21 @@ main <- function() {
       if (any(vapply(previous$results, function(x) nrow(x$runs), integer(1)) != Brep)) {
         stop("Checkpoint repetition count differs from Brep.")
       }
-      results[positions] <- previous$results
-      reused <- length(positions)
-      pending <- setdiff(pending, positions)
+      previous$results <- lapply(previous$results, lb_add_joint_results, alpha = alpha, R = 6L)
+      complete <- vapply(previous$results, function(cell) {
+        identical(cell$joint_version, "simultaneous-ellipse-v1") &&
+          identical(as.integer(cell$joint_R), 6L) && "lower_joint" %in% colnames(cell$runs)
+      }, logical(1))
+      results[positions[complete]] <- previous$results[complete]
+      reused <- sum(complete)
+      pending <- setdiff(pending, positions[complete])
+      for (i in which(!complete)) {
+        jobs[[positions[i]]]$previous_runs <- previous$results[[i]]$runs[
+          , c("lower", "Mmax", "M1", "M2"), drop = FALSE]
+      }
+      if (any(!complete)) cat(sprintf(
+        "%d vecchie celle senza spettro/nuovo bound: replay degli stessi flussi RNG per aggiungere R=6.\n",
+        sum(!complete)))
       cat(sprintf("RESUME: %d celle riutilizzate; %d nuove celle, %d nuove repliche.\n",
                   reused, length(pending), length(pending) * Brep))
       # Save an unchanged copy before the extended checkpoint is written.
@@ -291,6 +319,7 @@ main <- function() {
       cluster <- NULL
     }
   }
+  results <- lapply(results, lb_add_joint_results, alpha = alpha, R = 6L)
   summary_results <- lb_bind_rows(lapply(results, `[[`, "summary"))
   # Preserve completed simulations even if a subsequent figure cannot be saved.
   if (!report_only) {
@@ -349,7 +378,7 @@ main <- function() {
     ord <- order(x)
     x <- x[ord]
     z <- z[ord, , drop = FALSE]
-    ymax <- max(c(z$lb_q975, z$oracle), na.rm = TRUE) * 1.05
+    ymax <- max(c(z$lb_q975, z$lb_joint_q975, z$oracle), na.rm = TRUE) * 1.05
     if (ymax <= 0) ymax <- 1e-3
     pdf(filename)
     on.exit(dev.off(), add = TRUE)
@@ -365,6 +394,7 @@ main <- function() {
     lines(x, z$oracle, lwd = 3, lty = 1, col = "black")
     points(x, z$oracle, pch = 1, cex = 0.7, col = "black")
     points(x, z$lb_median, pch = 4, cex = 0.7, col = "darkorange")
+    lines(x, z$lb_joint_median, col = "darkgreen", lwd = 3, lty = 2)
     note <- if (all(z$oracle == 0) && all(z$lb_median == 0)) {
       "Oracle e mediana LB entrambi nulli"
     } else if (all(z$oracle == 0)) "Oracle nullo su tutta la griglia" else {
@@ -373,8 +403,9 @@ main <- function() {
     mtext(sprintf("Oracle: min=%.4g; max=%.4g (scala originale)",
                   min(z$oracle), max(z$oracle)), side = 3, line = 1.1, cex = 0.7)
     if (nzchar(note)) mtext(note, side = 3, line = 0.1, cex = 0.7)
-    legend("topright", c("Oracle lower", "Lower bound"),
-           lwd = 3, pch = c(1, 4), col = c("black", "darkorange"), bty = "n")
+    legend("topright", c("Oracle lower", "Lower bound", "Simultaneous R=6"),
+           lwd = 3, lty = c(1, 1, 2), pch = c(1, 4, NA),
+           col = c("black", "darkorange", "darkgreen"), bty = "n")
   }
 
   for (d in seq_len(nrow(benchmarks))) {
@@ -402,7 +433,7 @@ main <- function() {
       if (file.exists(obsolete) && unlink(obsolete) != 0) stop("Cannot remove old report: ", obsolete)
       cov_mat <- cbind(if (arm == "nfix") z$M else z$n,
                        Lower_vs_oracle = z$coverage_vs_oracle, Lower_vs_Mmax = z$coverage,
-                       Oracle_vs_Mmax = z$oracle_coverage)
+                       Joint_vs_Mmax = z$coverage_joint, Oracle_vs_Mmax = z$oracle_coverage)
       colnames(cov_mat)[1] <- if (arm == "nfix") "M" else "n"
       save(cov_mat, file = file.path(lower_dir, "save", "Coverage", name,
                                     paste0(exp_name, ".Rdat")))
@@ -427,6 +458,11 @@ main <- function() {
               sum(summary_results$failure_count)))
   cat("Medie sulle celle: coverage = frequenza LB <= Mmax; positive_rate; unseen_rate.\n")
   print(recap, row.names = FALSE, digits = 4)
+  if (all(!is.na(summary_results$coverage_joint))) {
+    cat(sprintf("Nuovo R=6: coverage min=%.4f max=%.4f | Violazioni=%d | Positivita media=%.4f\n",
+                min(summary_results$coverage_joint), max(summary_results$coverage_joint),
+                sum(summary_results$failure_count_joint), mean(summary_results$positive_rate_joint)))
+  } else cat("Nuovo R=6: risultati incompleti; usare resume=TRUE per le celle legacy senza spettro.\n")
   cat("Figure PDF salvate: ", 2L * nrow(benchmarks), "\n", sep = "")
   cat("Figure: ", file.path(lower_dir, "img"), "\n", sep = "")
   cat("Risultati: ", file.path(lower_dir, "save"), "\n", sep = "")

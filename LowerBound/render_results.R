@@ -4,6 +4,7 @@ file_arg <- grep("^--file=", commandArgs(FALSE), value = TRUE)
 if (length(file_arg) != 1L) stop("Run this script with Rscript.")
 script_dir <- dirname(normalizePath(sub("^--file=", "", file_arg), mustWork = TRUE))
 source(file.path(script_dir, "results_report.R"))
+source(file.path(script_dir, "lower_bound.R"))
 checkpoint_file <- file.path(script_dir, "save", "Exp_LB_checkpoint.rds")
 csv <- file.path(script_dir, "res", "Exp_LB_summary.csv")
 if (file.exists(checkpoint_file)) {
