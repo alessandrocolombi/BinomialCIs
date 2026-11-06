@@ -1,7 +1,7 @@
 # Lower bound for the largest unseen prevalence
 
-Base-R implementation for independent `N_j ~ Bin(n, p_j)` with fixed
-prevalences and `S(p) = sum(p_j) < Inf`. No knowledge of the alphabet size,
+Base-R implementation for independent \(N_j\sim\operatorname{Bin}(n,p_j)\) with fixed
+prevalences and \(S(p)=\sum_jp_j<\infty\). No knowledge of the alphabet size,
 the prevalences, or `S(p)` is supplied to the estimator.
 
 ## Use
@@ -26,22 +26,26 @@ over several moment orders. The moment-matrix extension is not implemented.
 
 ## Construction and proof
 
-Write `K_{n,k} = sum_j 1{N_j=k}`, `K_n = sum_j 1{N_j>0}`,
-`M_r = sum_{j:N_j=0} p_j^r`, and `M_1 = mathcal M_0`.
-The deterministic inequality is `M_2 <= Mmax * M_1`.
-The output is `L = L_2 / U_1`, with `L_2` a lower bound for `M_2`
-and `U_1` an upper bound for `M_1`; use zero when the denominator is zero.
+Write
+\[
+K_{n,k}=\sum_j\mathbf 1\{N_j=k\},\qquad
+K_n=\sum_j\mathbf 1\{N_j>0\},\qquad
+M_r=\sum_{j:N_j=0}p_j^r,\qquad M_1=\mathcal M_0.
+\]
+The deterministic inequality is \(M_2\le M_{\max}M_1\).
+The output is \(L=L_2/U_1\), with \(L_2\) a lower bound for \(M_2\)
+and \(U_1\) an upper bound for \(M_1\); use zero when the denominator is zero.
 
-Let `a = 1/choose(n,2)`, `eta_k = E_p[K_{n,k}]`, and
-`D_2 = a K_{n,2} - M_2`. Independence across categories gives
+Let \(a=\binom n2^{-1}\), \(\eta_k=\mathbb E_p[K_{n,k}]\), and
+\(D_2=aK_{n,2}-M_2\). Independence across categories gives
 
 \[
 0\le ED_2\le b=\frac{2\eta_3}{\binom n3},\qquad
 \operatorname{Var}(D_2)\le v=a^2\eta_2+\frac{\eta_4}{\binom n4}.
 \]
 
-Indeed, setting `q_j=1-p_j`, the coordinate mean is
-`p_j^2 q_j^(n-2) (1-q_j^2)`, bounded by `2 p_j^3 q_j^(n-3)`.
+Indeed, setting \(q_j=1-p_j\), the coordinate mean is
+\(p_j^2q_j^{n-2}(1-q_j^2)\), bounded by \(2p_j^3q_j^{n-3}\).
 The coordinate second moment is
 `a^2 Pr(N_j=2) + p_j^4 Pr(N_j=0)`; summing and replacing
 `q_j^n` by `q_j^(n-4)` gives the variance bound.
@@ -187,6 +191,12 @@ uses a PSOCK cluster from base `parallel`, defaulting to one fewer physical core
 with at most 15 workers. Independent L'Ecuyer streams are assigned per task, so
 results are reproducible across worker counts and scheduling orders.
 
+`workers=15` means up to 15 R processes running concurrently. Each worker
+handles one simulation cell (one distribution, parameter, and pair \((M,n)\))
+at a time, running that cell's `Brep` repetitions sequentially. When a worker
+finishes, it receives the next cell. The 450 cells are distributed across these
+workers; this does not launch 15 copies of the entire experiment.
+
 The experiment restores the grids from the original `Exp1_varying_M_n.R`:
 
 - Fixed `n=2000`: `M=2000,2250,...,10000`.
@@ -243,5 +253,30 @@ Results are organized analogously to the original study:
   lower-bound coverage and oracle coverage.
 - `LowerBound/save/Exp_LB_summary.csv` and `Exp_LB_config.rds`: aggregate
   summary and run configuration/session information.
+
+### Output names and completion log
+
+The parameter-name helper `get_first3digits()` is defined locally in
+`Exp_LB_M_n.R`, with the same formatting as the user's original function.
+The master process prepares and checks all parameter tags before starting
+the simulations; it does not depend on functions loaded only inside workers.
+
+After the parallel computations finish, workers are stopped and all raw cell
+results are saved in `LowerBound/save/Exp_LB_checkpoint.rds`, before generating
+figures. This checkpoint preserves the simulations if a later output step fails.
+It contains `config` and `results`; it is not an automatic resume mechanism.
+
+On successful completion the log prints a brief recap: scenario and repetition
+counts, settings, elapsed time, minimum and maximum empirical coverage, total
+coverage violations, mean coverage/nonzero-bound/unseen rates by benchmark,
+and output locations. Its final line is exactly:
+
+```text
+FINITO
+```
+
+`FINITO` is printed only after all outputs are saved and worker cleanup succeeds;
+it is not printed on errors. The current fixes have not been run as a simulation
+locally.
 
 The earlier four-pair script `simulate_lower_bound.R` is retained unchanged.

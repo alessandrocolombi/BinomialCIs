@@ -42,6 +42,15 @@ main <- function() {
   }
   setwd(wd)
 
+  # The master also needs get_first3digits() for output names. Previously
+  # Rfunctions.R was sourced only on workers, which do not share environments.
+  # Keep a local copy of the user's naming helper to avoid that dependency.
+  get_first3digits <- function(x, d = 3) {
+    s <- format(x, scientific = FALSE, trim = TRUE)
+    s <- gsub("\\.", "", s)
+    substr(s, 1, d)
+  }
+
   # Defaults retained from the preceding lower-bound simulation.
   Brep <- integer_option("Brep", 1000L)
   seed <- integer_option("seed", 42L, minimum = 0)
@@ -63,6 +72,11 @@ main <- function() {
     distribution = rep(c("Zipfs", "Geom", "Constant"), each = 3),
     param = c(0.25, 0.5, 1.02, 0.005, 0.1, 0.25, 0.001, 0.05, 0.5),
     stringsAsFactors = FALSE)
+  # Resolve names before starting the expensive parallel experiment.
+  benchmarks$tag <- vapply(benchmarks$param, get_first3digits, character(1), d = 4)
+  if (anyDuplicated(paste(benchmarks$distribution, benchmarks$tag))) {
+    stop("Benchmark parameters produce duplicate output names.")
+  }
   grid <- rbind(data.frame(arm = "nfix", M = Mgrid, n = n_fixed),
                 data.frame(arm = "Mfix", M = M_fixed, n = Ngrid))
   tasks <- merge(benchmarks, grid, by = NULL, sort = FALSE)
@@ -176,7 +190,7 @@ main <- function() {
                  benchmarks = benchmarks, RNGkind = RNGkind(), session = sessionInfo())
 
   cluster <- parallel::makePSOCKcluster(workers, outfile = "")
-  on.exit(parallel::stopCluster(cluster), add = TRUE)
+  on.exit(if (!is.null(cluster)) parallel::stopCluster(cluster), add = TRUE)
   parallel::clusterCall(cluster, function(root) {
     setwd(root)
     source(file.path(root, "LowerBound", "lower_bound.R"), local = .GlobalEnv)
@@ -185,7 +199,12 @@ main <- function() {
   }, wd)
   results <- parallel::parLapplyLB(cluster, jobs, simulate_cell,
                                   Brep = Brep, alpha = alpha, oracle_lower = oracle_lower)
+  parallel::stopCluster(cluster)
+  cluster <- NULL
   summary_results <- do.call(rbind, lapply(results, `[[`, "summary"))
+  # Preserve completed simulations even if a subsequent figure cannot be saved.
+  saveRDS(list(config = config, results = results),
+          file.path(lower_dir, "save", "Exp_LB_checkpoint.rds"))
 
   # Original figure style: base-R PDF, grey grid, bty='l', lwd=3,
   # 1000 * bound on the vertical axis; only the median curve is displayed.
@@ -216,8 +235,7 @@ main <- function() {
   for (d in seq_len(nrow(benchmarks))) {
     name <- benchmarks$distribution[d]
     param <- benchmarks$param[d]
-    # Same parameter-tag utility used in the original experiment.
-    tag <- get_first3digits(param, 4)
+    tag <- benchmarks$tag[d]
     for (arm in c("nfix", "Mfix")) {
       ids <- which(tasks$distribution == name & tasks$param == param & tasks$arm == arm)
       z <- summary_results[ids, , drop = FALSE]
@@ -243,8 +261,24 @@ main <- function() {
   }
   write.csv(summary_results, file.path(lower_dir, "save", "Exp_LB_summary.csv"), row.names = FALSE)
   saveRDS(config, file.path(lower_dir, "save", "Exp_LB_config.rds"))
-  cat(sprintf("Completed in %.1f seconds. Saved 18 figures and per-arm results.\n",
-              proc.time()["elapsed"] - started))
+  recap <- aggregate(cbind(coverage, positive_rate, unseen_rate) ~ distribution + param,
+                     data = summary_results, FUN = mean)
+  cat("\nRIEPILOGO RISULTATI\n")
+  cat(sprintf("Scenari: %d | Repliche per scenario: %d | Repliche totali: %d\n",
+              nrow(summary_results), Brep, sum(summary_results$Brep)))
+  cat(sprintf("alpha=%g | seed=%d | workers=%d | Tempo: %.1f secondi\n",
+              alpha, seed, workers, proc.time()["elapsed"] - started))
+  cat(sprintf("Copertura empirica: min=%.4f, max=%.4f | Violazioni totali: %d\n",
+              min(summary_results$coverage), max(summary_results$coverage),
+              sum(summary_results$failure_count)))
+  cat("Medie sulle celle di ciascun benchmark (coverage, positive_rate, unseen_rate):\n")
+  print(recap, row.names = FALSE, digits = 4)
+  cat("Figure PDF salvate: ", 2L * nrow(benchmarks), "\n", sep = "")
+  cat("Figure: ", file.path(lower_dir, "img"), "\n", sep = "")
+  cat("Risultati: ", file.path(lower_dir, "save"), "\n", sep = "")
+  cat("Summary: ", file.path(lower_dir, "save", "Exp_LB_summary.csv"), "\n", sep = "")
+  cat("FINITO\n")
+  flush.console()
 }
 
 main()

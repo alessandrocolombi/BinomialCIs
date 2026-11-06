@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="generator" content="pandoc" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes" />
+  <title>LowerBound - Documentation</title>
+  <style>
+
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+
+ul.task-list[class]{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+font-size: inherit;
+width: 0.8em;
+margin: 0 0.8em 0.2em -1.6em;
+vertical-align: middle;
+}
+
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+  <style type="text/css">:root { color-scheme: light; --ink: #202b36; --accent: #b85d13; }
+* { box-sizing: border-box; }
+body { max-width: 1020px; margin: 0 auto; padding: 44px 38px 72px;
+font: 17px/1.65 system-ui, -apple-system, "Segoe UI", sans-serif;
+color: var(--ink); background: #fff; }
+header { border-bottom: 3px solid var(--accent); padding-bottom: 18px; }
+header h1 { margin-bottom: 0; }
+h1, h2, h3 { line-height: 1.25; color: #152b40; }
+h1 { font-size: 2rem; } h2 { margin-top: 2.4rem; font-size: 1.45rem; }
+p, li { overflow-wrap: anywhere; }
+a { color: #125d9a; text-underline-offset: 3px; }
+nav { background: #f5f7fa; padding: 16px 24px; margin: 24px 0; border-radius: 8px; }
+nav ul { margin: 0; padding-left: 20px; }
+pre { overflow-x: auto; padding: 16px; background: #f5f7fa;
+border: 1px solid #dce3e9; border-radius: 6px; line-height: 1.5; }
+code { font: .88em/1.5 Consolas, "Liberation Mono", monospace; }
+p code, li code { background: #f0f3f6; padding: 2px 4px; border-radius: 3px; }
+table { width: 100%; border-collapse: collapse; margin: 24px 0; }
+th, td { border-bottom: 1px solid #dce3e9; padding: 10px 14px; text-align: left; }
+th { background: #f5f7fa; }
+math { font-size: 1.08em; }
+math[display="block"] { display: block; overflow-x: auto; padding: 16px 4px; margin: 20px 0; }
+@media (max-width: 640px) { body { padding: 24px 18px 40px; font-size: 16px; } }
+@media print { body { max-width: none; padding: 0; font-size: 11pt; }
+nav { display: none; } pre, table, math { break-inside: avoid; } }
+</style>
+</head>
+<body>
+<header id="title-block-header">
+<h1 class="title">LowerBound - Documentation</h1>
+</header>
+<nav id="TOC" role="doc-toc">
+<ul>
+<li><a href="#lower-bound-for-the-largest-unseen-prevalence" id="toc-lower-bound-for-the-largest-unseen-prevalence">Lower bound for
+the largest unseen prevalence</a>
+<ul>
+<li><a href="#use" id="toc-use">Use</a></li>
+<li><a href="#construction-and-proof" id="toc-construction-and-proof">Construction and proof</a></li>
+<li><a href="#simulation" id="toc-simulation">Simulation</a></li>
+<li><a href="#verification" id="toc-verification">Verification</a></li>
+<li><a href="#parallel-vm-experiment-curves-over-m-and-n" id="toc-parallel-vm-experiment-curves-over-m-and-n">Parallel VM
+experiment: curves over M and n</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="lower-bound-for-the-largest-unseen-prevalence">Lower bound for
+the largest unseen prevalence</h1>
+<p>Base-R implementation for independent
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>N</mi><mi>j</mi></msub><mo>∼</mo><mrow><mi mathvariant="normal">Bin</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>,</mo><msub><mi>p</mi><mi>j</mi></msub><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">N_j\sim\operatorname{Bin}(n,p_j)</annotation></semantics></math>
+with fixed prevalences and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>S</mi><mo stretchy="false" form="prefix">(</mo><mi>p</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>p</mi><mi>j</mi></msub><mo>&lt;</mo><mi>∞</mi></mrow><annotation encoding="application/x-tex">S(p)=\sum_jp_j&lt;\infty</annotation></semantics></math>.
+No knowledge of the alphabet size, the prevalences, or <code>S(p)</code>
+is supplied to the estimator.</p>
+<h2 id="use">Use</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">&quot;LowerBound/lower_bound.R&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>L <span class="ot">&lt;-</span> <span class="fu">lower_bound_mmax</span>(n, counts, <span class="at">alpha =</span> <span class="fl">0.05</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">lower_bound_mmax</span>(n, counts, <span class="at">alpha =</span> <span class="fl">0.05</span>, <span class="at">details =</span> <span class="cn">TRUE</span>)</span></code></pre></div>
+<p><code>counts</code> can contain all category counts or just observed
+positive counts. An empty numeric vector is allowed. The sample size
+must satisfy <code>n &gt;= 4</code>. The guarantee is pointwise in the
+fixed sampling time:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mi mathvariant="normal">Pr</mi><mi>p</mi></munder><mo stretchy="false" form="prefix">{</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>≥</mo><mi>L</mi><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>α</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Pr_p\{M_{\max}\ge L\}\ge1-\alpha.
+</annotation></semantics></math></p>
+<p>This is not a simultaneous guarantee over sample sizes or an
+optional-stopping guarantee. Only the proposed <code>r = 2</code> bound
+is implemented; there is no selection over several moment orders. The
+moment-matrix extension is not implemented.</p>
+<h2 id="construction-and-proof">Construction and proof</h2>
+<p>Write
+<math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>k</mi></mrow></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mi>k</mi><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>K</mi><mi>n</mi></msub><mo>=</mo><munder><mo>∑</mo><mi>j</mi></munder><mn>𝟏</mn><mo stretchy="false" form="prefix">{</mo><msub><mi>N</mi><mi>j</mi></msub><mo>&gt;</mo><mn>0</mn><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>M</mi><mi>r</mi></msub><mo>=</mo><munder><mo>∑</mo><mrow><mi>j</mi><mo>:</mo><msub><mi>N</mi><mi>j</mi></msub><mo>=</mo><mn>0</mn></mrow></munder><msubsup><mi>p</mi><mi>j</mi><mi>r</mi></msubsup><mo>,</mo><mspace width="2.0em"></mspace><msub><mi>M</mi><mn>1</mn></msub><mo>=</mo><msub><mi>ℳ</mi><mn>0</mn></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+K_{n,k}=\sum_j\mathbf 1\{N_j=k\},\qquad
+K_n=\sum_j\mathbf 1\{N_j&gt;0\},\qquad
+M_r=\sum_{j:N_j=0}p_j^r,\qquad M_1=\mathcal M_0.
+</annotation></semantics></math> The deterministic inequality is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>M</mi><mn>2</mn></msub><mo>≤</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><msub><mi>M</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">M_2\le M_{\max}M_1</annotation></semantics></math>.
+The output is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>L</mi><mo>=</mo><msub><mi>L</mi><mn>2</mn></msub><mi>/</mi><msub><mi>U</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">L=L_2/U_1</annotation></semantics></math>,
+with
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>L</mi><mn>2</mn></msub><annotation encoding="application/x-tex">L_2</annotation></semantics></math>
+a lower bound for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mn>2</mn></msub><annotation encoding="application/x-tex">M_2</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>U</mi><mn>1</mn></msub><annotation encoding="application/x-tex">U_1</annotation></semantics></math>
+an upper bound for
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>M</mi><mn>1</mn></msub><annotation encoding="application/x-tex">M_1</annotation></semantics></math>;
+use zero when the denominator is zero.</p>
+<p>Let
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>a</mi><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mn>2</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mi>−</mi><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">a=\binom n2^{-1}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>η</mi><mi>k</mi></msub><mo>=</mo><msub><mi>𝔼</mi><mi>p</mi></msub><mo stretchy="false" form="prefix">[</mo><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>k</mi></mrow></msub><mo stretchy="false" form="postfix">]</mo></mrow><annotation encoding="application/x-tex">\eta_k=\mathbb E_p[K_{n,k}]</annotation></semantics></math>,
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>D</mi><mn>2</mn></msub><mo>=</mo><mi>a</mi><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mn>2</mn></mrow></msub><mo>−</mo><msub><mi>M</mi><mn>2</mn></msub></mrow><annotation encoding="application/x-tex">D_2=aK_{n,2}-M_2</annotation></semantics></math>.
+Independence across categories gives</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>0</mn><mo>≤</mo><mi>E</mi><msub><mi>D</mi><mn>2</mn></msub><mo>≤</mo><mi>b</mi><mo>=</mo><mfrac><mrow><mn>2</mn><msub><mi>η</mi><mn>3</mn></msub></mrow><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mn>3</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mo>,</mo><mspace width="2.0em"></mspace><mrow><mi mathvariant="normal">Var</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><msub><mi>D</mi><mn>2</mn></msub><mo stretchy="false" form="postfix">)</mo><mo>≤</mo><mi>v</mi><mo>=</mo><msup><mi>a</mi><mn>2</mn></msup><msub><mi>η</mi><mn>2</mn></msub><mo>+</mo><mfrac><msub><mi>η</mi><mn>4</mn></msub><mrow><mo stretchy="true" form="prefix">(</mo><mfrac linethickness="0"><mi>n</mi><mn>4</mn></mfrac><mo stretchy="true" form="postfix">)</mo></mrow></mfrac><mi>.</mi></mrow><annotation encoding="application/x-tex">
+0\le ED_2\le b=\frac{2\eta_3}{\binom n3},\qquad
+\operatorname{Var}(D_2)\le v=a^2\eta_2+\frac{\eta_4}{\binom n4}.
+</annotation></semantics></math></p>
+<p>Indeed, setting
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>q</mi><mi>j</mi></msub><mo>=</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">q_j=1-p_j</annotation></semantics></math>,
+the coordinate mean is
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msubsup><mi>p</mi><mi>j</mi><mn>2</mn></msubsup><msubsup><mi>q</mi><mi>j</mi><mrow><mi>n</mi><mo>−</mo><mn>2</mn></mrow></msubsup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msubsup><mi>q</mi><mi>j</mi><mn>2</mn></msubsup><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">p_j^2q_j^{n-2}(1-q_j^2)</annotation></semantics></math>,
+bounded by
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>2</mn><msubsup><mi>p</mi><mi>j</mi><mn>3</mn></msubsup><msubsup><mi>q</mi><mi>j</mi><mrow><mi>n</mi><mo>−</mo><mn>3</mn></mrow></msubsup></mrow><annotation encoding="application/x-tex">2p_j^3q_j^{n-3}</annotation></semantics></math>.
+The coordinate second moment is
+<code>a^2 Pr(N_j=2) + p_j^4 Pr(N_j=0)</code>; summing and replacing
+<code>q_j^n</code> by <code>q_j^(n-4)</code> gives the variance bound.
+Each centered coordinate is at most <code>a</code>, since its mean is
+nonnegative. A one-sided Bernstein bound therefore implies, for
+<code>x=log(1/epsilon)</code>,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><msub><mi>D</mi><mn>2</mn></msub><mo>&gt;</mo><mi>b</mi><mo>+</mo><msqrt><mrow><mn>2</mn><mi>v</mi><mi>x</mi></mrow></msqrt><mo>+</mo><mn>2</mn><mi>a</mi><mi>x</mi><mi>/</mi><mn>3</mn><mo stretchy="false" form="postfix">}</mo><mo>≤</mo><mi>ϵ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Pr\{D_2&gt;b+\sqrt{2vx}+2ax/3\}\le\epsilon.
+</annotation></semantics></math></p>
+<p>These bounds apply to the countable sum: <code>S(p)&lt;Inf</code>
+ensures finite count expectations, finite variance, and convergence of
+the sums.</p>
+<p>Use the expected-count bound from Ayed et al. (2019), Remark A.1:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>C</mi><mi>k</mi></msub><mo stretchy="false" form="prefix">(</mo><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><msup><mrow><mo stretchy="true" form="prefix">(</mo><msqrt><mrow><mstyle displaystyle="false"><mfrac><mn>1</mn><mn>2</mn></mfrac></mstyle><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><mo>+</mo><msqrt><mrow><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mi>k</mi></mrow></msub><mo>+</mo><mstyle displaystyle="false"><mfrac><mn>7</mn><mn>6</mn></mfrac></mstyle><mrow><mi mathvariant="normal">log</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mi>/</mi><mi>ϵ</mi><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><mo stretchy="true" form="postfix">)</mo></mrow><mn>2</mn></msup><mo>,</mo><mspace width="1.0em"></mspace><mrow><mi mathvariant="normal">Pr</mi><mo>⁡</mo></mrow><mo stretchy="false" form="prefix">{</mo><msub><mi>η</mi><mi>k</mi></msub><mo>≤</mo><msub><mi>C</mi><mi>k</mi></msub><mo stretchy="false" form="postfix">}</mo><mo>≥</mo><mn>1</mn><mo>−</mo><mi>ϵ</mi><mi>.</mi></mrow><annotation encoding="application/x-tex">
+C_k(\epsilon)=
+\left(\sqrt{\tfrac12\log(1/\epsilon)}+
+\sqrt{K_{n,k}+\tfrac76\log(1/\epsilon)}\right)^2,
+\quad \Pr\{\eta_k\le C_k\}\ge1-\epsilon.
+</annotation></semantics></math></p>
+<p>Replace <code>eta_2, eta_3, eta_4</code> by
+<code>C_2, C_3, C_4</code> in <code>b,v</code>, obtaining
+<code>bhat,vhat</code>. Set</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>L</mi><mn>2</mn></msub><mo>=</mo><msub><mrow><mo stretchy="true" form="prefix">[</mo><mi>a</mi><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mn>2</mn></mrow></msub><mo>−</mo><mover><mi>b</mi><mo accent="true">̂</mo></mover><mo>−</mo><msqrt><mrow><mn>2</mn><mover><mi>v</mi><mo accent="true">̂</mo></mover><mi>x</mi></mrow></msqrt><mo>−</mo><mn>2</mn><mi>a</mi><mi>x</mi><mi>/</mi><mn>3</mn><mo stretchy="true" form="postfix">]</mo></mrow><mo>+</mo></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+L_2=\left[aK_{n,2}-\widehat b-\sqrt{2\widehat v x}-2ax/3\right]_+.
+</annotation></semantics></math></p>
+<p>For <code>U_1</code>, the code explicitly uses the one-sided
+construction in Ayed et al., Proposition A.3 and equations
+(A.22)-(A.23). If its error budget is <code>gamma</code>, let
+<code>y=log(2/gamma)</code> and apply the same expected-count bound to
+<code>K_n</code>, with error <code>gamma/2</code>, obtaining
+<code>C_K</code>. Then</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>U</mi><mn>1</mn></msub><mo>=</mo><mfrac><msub><mi>K</mi><mrow><mi>n</mi><mo>,</mo><mn>1</mn></mrow></msub><mi>n</mi></mfrac><mo>+</mo><mfrac><mi>y</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></mfrac><mo>+</mo><msqrt><mfrac><mrow><mn>8</mn><mi>y</mi><msub><mi>C</mi><mi>K</mi></msub></mrow><mrow><mo stretchy="false" form="prefix">(</mo><mi>n</mi><mo>−</mo><mn>1</mn><msup><mo stretchy="false" form="postfix">)</mo><mn>2</mn></msup><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mn>2</mn><mi>/</mi><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow></mfrac></msqrt><mi>.</mi></mrow><annotation encoding="application/x-tex">
+U_1=\frac{K_{n,1}}n+\frac y{n-1}
++\sqrt{\frac{8yC_K}{(n-1)^2(1-2/n)}}.
+</annotation></semantics></math></p>
+<p>The two internal events each have error <code>gamma/2</code>. This
+explicit one-sided allocation differs from directly substituting the
+simultaneous interval in Theorem 3.1 and avoids ambiguity about its
+internal error allocation.</p>
+<p>Finally take <code>epsilon = gamma = alpha/5</code>: the three count
+events, the Bernstein event, and the <code>M_1</code> event have total
+error at most <code>alpha</code>. No independence between these events
+is needed. The implementation returns the formula without clipping the
+endpoint at one.</p>
+<p>Reference: Ayed, Battiston, Camerlenghi and Favaro (2019), <em>A
+Good-Turing estimator for feature allocation models</em>, Electronic
+Journal of Statistics 13, 3775-3804, DOI: 10.1214/19-EJS1614. The
+<code>M_2</code> construction above is the proposed extension, not a
+theorem quoted from that article.</p>
+<h2 id="simulation">Simulation</h2>
+<div class="sourceCode" id="cb2"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span> <span class="st">&#39;C:/Program Files/R/R-4.4.2/bin/Rscript.exe&#39;</span> LowerBound<span class="op">/</span>simulate_lower_bound<span class="op">.</span><span class="fu">R</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Optional: repetitions, output directory, seed</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span> <span class="st">&#39;C:/Program Files/R/R-4.4.2/bin/Rscript.exe&#39;</span> LowerBound<span class="op">/</span>simulate_lower_bound<span class="op">.</span><span class="fu">R</span> <span class="dv">1000</span> LowerBound<span class="op">/</span>results <span class="dv">42</span></span></code></pre></div>
+<p>The script also works with
+<code>source(&quot;LowerBound/simulate_lower_bound.R&quot;)</code>. It resolves
+source paths without changing the working directory and uses no packages
+beyond base R. Relative output paths are relative to the caller’s
+working directory; the default output directory is next to the
+script.</p>
+<p>Four <code>(M,n)</code> pairs are selected from actual arms of
+<code>Rscripts/SimulationStudy_firstSub/Exp1_varying_M_n.R</code>:</p>
+<table>
+<thead>
+<tr>
+<th style="text-align: right;">M</th>
+<th style="text-align: right;">n</th>
+<th>Original arm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: right;">2000</td>
+<td style="text-align: right;">2000</td>
+<td>n fixed</td>
+</tr>
+<tr>
+<td style="text-align: right;">10000</td>
+<td style="text-align: right;">2000</td>
+<td>n fixed</td>
+</tr>
+<tr>
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">1000</td>
+<td>M fixed</td>
+</tr>
+<tr>
+<td style="text-align: right;">5000</td>
+<td style="text-align: right;">5000</td>
+<td>M fixed</td>
+</tr>
+</tbody>
+</table>
+<p>The nine benchmarks use the existing <code>sim_generic()</code>
+generators and the parameters in
+<code>Exp1_varying_M_n_parallel_main.R</code>:</p>
+<ul>
+<li>Zipf: <code>p_j=(j+1)^(-s)</code>, <code>s</code> in
+<code>0.25, 0.5, 1.02</code>.</li>
+<li>Geometric: <code>p_j=(1-a)^j</code>, <code>a</code> in
+<code>0.005, 0.1, 0.25</code>.</li>
+<li>Constant: <code>p_j=c</code>, <code>c</code> in
+<code>0.001, 0.05, 0.5</code>.</li>
+</ul>
+<p>In each cell prevalences are fixed across repetitions. Sampling is
+directly binomial, without constructing an <code>n x M</code> incidence
+matrix. Finite-support benchmarks are exact members of the
+infinite-alphabet model after appending zero prevalences; this is not a
+simulation of infinitely many positive prevalences. The estimator
+receives only observed positive counts.</p>
+<p>Defaults: 1000 repetitions per cell, 36 cells,
+<code>alpha=0.05</code>, seed 42. Outputs:</p>
+<ul>
+<li><code>summary.csv</code>: empirical coverage, exact 95% binomial
+Monte Carlo intervals, failure counts, positive-bound rate, frequency of
+<code>Mmax&gt;0</code>, conditional coverage and positive-bound rate,
+bound quantiles, tightness, and component coverage for <code>M_2</code>
+and <code>M_1</code>.</li>
+<li><code>simulation.rds</code>: configuration, RNG/session information,
+summary, and per-repetition results including counts and
+bias/variance/tail diagnostics.</li>
+<li><code>diagnostics.png</code>: coverage, nonzero-bound frequency, and
+conditional tightness, with the true <code>M_2/M_1</code> as a
+deterministic comparison.</li>
+</ul>
+<p>Conditional tightness is averaged only over samples with
+<code>Mmax&gt;0</code> and is <code>NA</code> when none occur. High
+empirical coverage alone does not establish a useful bound: some
+benchmarks have no unseen categories, and others yield zero endpoints
+despite positive <code>Mmax</code>. The formal coverage guarantee is
+unconditional; conditional coverage is reported only as a
+diagnostic.</p>
+<h2 id="verification">Verification</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode powershell"><code class="sourceCode powershell"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="op">&amp;</span> <span class="st">&#39;C:/Program Files/R/R-4.4.2/bin/Rscript.exe&#39;</span> LowerBound<span class="op">/</span>check_lower_bound<span class="op">.</span><span class="fu">R</span></span></code></pre></div>
+<p>Checks include a positive-endpoint formula fixture, invariance to
+unobserved zero entries, empty observations, invalid inputs, and exact
+enumeration of 9261 samples from a heterogeneous model to check the
+bias, variance, deterministic moment inequality, and Bernstein tail.</p>
+<h2 id="parallel-vm-experiment-curves-over-m-and-n">Parallel VM
+experiment: curves over M and n</h2>
+<p>Prepared in <code>Exp_LB_M_n.R</code>; this experiment has not been
+executed locally. From the repository root on the VM:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./run_job.sh</span> LowerBound/Exp_LB_M_n.R choose_wd=2</span></code></pre></div>
+<p><code>run_job.sh</code> now forwards all arguments after the R script
+name, preserving argument boundaries. The VM profile
+(<code>choose_wd=2</code>) sets the working directory to the root of the
+checkout containing the launched script. It does not assume a particular
+VM username or home directory. <code>choose_wd=1</code> selects the
+local <code>C:/Users/colom/BinomialCIs</code> profile. An explicit
+repository root is also allowed:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./run_job.sh</span> LowerBound/Exp_LB_M_n.R choose_wd=2 wd=/home/colombi/BinomialCIs workers=15 Brep=1000</span></code></pre></div>
+<p>For paths containing spaces, quote the entire <code>wd=...</code>
+argument. Other optional arguments are <code>seed=42</code> and
+<code>alpha=0.05</code>. The launcher retains detached execution,
+logging in <code>logs/</code>, PID recording, and numeric-library thread
+limits. The script uses a PSOCK cluster from base <code>parallel</code>,
+defaulting to one fewer physical core with at most 15 workers.
+Independent L’Ecuyer streams are assigned per task, so results are
+reproducible across worker counts and scheduling orders.</p>
+<p><code>workers=15</code> means up to 15 R processes running
+concurrently. Each worker handles one simulation cell (one distribution,
+parameter, and pair
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="false" form="prefix">(</mo><mi>M</mi><mo>,</mo><mi>n</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(M,n)</annotation></semantics></math>)
+at a time, running that cell’s <code>Brep</code> repetitions
+sequentially. When a worker finishes, it receives the next cell. The 450
+cells are distributed across these workers; this does not launch 15
+copies of the entire experiment.</p>
+<p>The experiment restores the grids from the original
+<code>Exp1_varying_M_n.R</code>:</p>
+<ul>
+<li>Fixed <code>n=2000</code>: <code>M=2000,2250,...,10000</code>.</li>
+<li>Fixed <code>M=5000</code>: <code>n=1000,1250,...,5000</code>.</li>
+</ul>
+<p>It retains the nine benchmarks above, <code>alpha=0.05</code>, seed
+42, and the preceding lower-bound simulation’s <code>Brep=1000</code>.
+This is 450 cells / 450,000 repetitions, not a Cartesian product of the
+two grids. Parallelism is across cells; each worker generates one count
+vector per repetition, without nested clusters or large incidence
+matrices. Results are written after the parallel tasks finish.
+Concurrent launches targeting the same checkout overwrite the same
+result filenames; use separate checkouts for separate simultaneous
+experiments.</p>
+<p>For each distribution and parameter, two figures are saved, 18 in
+total:</p>
+<pre class="text"><code>LowerBound/img/Zipfs/Exp_LB_nfix_Zipfs_*.pdf
+LowerBound/img/Zipfs/Exp_LB_Mfix_Zipfs_*.pdf
+LowerBound/img/Geom/...
+LowerBound/img/Constant/...</code></pre>
+<p>They use the original base-R figure style: grey grid,
+<code>bty=&quot;l&quot;</code>, line width 3, and vertical axis
+<code>1000 * bound</code>. The darkorange curve is the median confidence
+lower endpoint over repetitions; the 2.5% and 97.5% quantiles are saved
+in the data, as in the original experiment.</p>
+<p>The black curve is an <strong>oracle deterministic lower
+endpoint</strong>, analogous to the deterministic upper oracle in the
+original study, with the direction of the tail reversed. Given the
+entire prevalence vector, independence gives</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><munder><mi mathvariant="normal">Pr</mi><mi>p</mi></munder><mo stretchy="false" form="prefix">(</mo><msub><mi>M</mi><mi mathvariant="normal">max</mi></msub><mo>&lt;</mo><mi>t</mi><mo stretchy="false" form="postfix">)</mo><mo>=</mo><munder><mo>∏</mo><mrow><mi>j</mi><mo>:</mo><msub><mi>p</mi><mi>j</mi></msub><mo>≥</mo><mi>t</mi></mrow></munder><mo stretchy="false" form="prefix">{</mo><mn>1</mn><mo>−</mo><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mi>j</mi></msub><msup><mo stretchy="false" form="postfix">)</mo><mi>n</mi></msup><mo stretchy="false" form="postfix">}</mo><mo>,</mo><mspace width="2.0em"></mspace><mi>t</mi><mo>&gt;</mo><mn>0</mn><mi>.</mi></mrow><annotation encoding="application/x-tex">
+\Pr_p(M_{\max}&lt;t)=\prod_{j:p_j\ge t}\{1-(1-p_j)^n\},\qquad t&gt;0.
+</annotation></semantics></math></p>
+<p>The oracle is the largest point in
+<code>{0} union {p_j:p_j&gt;0}</code> such that this strict lower tail
+is at most <code>alpha</code>. It is thus the largest deterministic
+endpoint with <code>Pr_p(Mmax &gt;= oracle) &gt;= 1-alpha</code> (the
+discrete lower-alpha quantile, with exact atom-boundary handling).
+Products are computed on the log scale. No Monte Carlo oracle sample or
+<code>Bor</code> parameter is needed. This oracle is not the realized
+<code>Mmax</code> for each sample, which would be exactly known if both
+<code>p</code> and that sample were supplied, nor is it the moment ratio
+<code>M_2/M_1</code>. The per-repetition true <code>Mmax</code> and
+moment ratio are saved separately. An adaptive lower-bound median can
+exceed this deterministic oracle without contradiction; coverage is a
+statement about its joint behavior with <code>Mmax</code>.</p>
+<p>Results are organized analogously to the original study:</p>
+<ul>
+<li><code>LowerBound/save/&lt;distribution&gt;/Exp_LB_&lt;arm&gt;_&lt;distribution&gt;_&lt;tag&gt;.Rdat</code>:
+<code>save_res</code> containing the summary, lower-bound matrix, exact
+oracle vector, realized-<code>Mmax</code> matrix
+(<code>oracle_mat</code>), and all per-cell diagnostics.</li>
+<li>Matching CSV files in the same directory.</li>
+<li><code>LowerBound/save/Coverage/&lt;distribution&gt;/...Rdat</code>:
+<code>cov_mat</code> with empirical lower-bound coverage and oracle
+coverage.</li>
+<li><code>LowerBound/save/Exp_LB_summary.csv</code> and
+<code>Exp_LB_config.rds</code>: aggregate summary and run
+configuration/session information.</li>
+</ul>
+<h3 id="output-names-and-completion-log">Output names and completion
+log</h3>
+<p>The parameter-name helper <code>get_first3digits()</code> is defined
+locally in <code>Exp_LB_M_n.R</code>, with the same formatting as the
+user’s original function. The master process prepares and checks all
+parameter tags before starting the simulations; it does not depend on
+functions loaded only inside workers.</p>
+<p>After the parallel computations finish, workers are stopped and all
+raw cell results are saved in
+<code>LowerBound/save/Exp_LB_checkpoint.rds</code>, before generating
+figures. This checkpoint preserves the simulations if a later output
+step fails. It contains <code>config</code> and <code>results</code>; it
+is not an automatic resume mechanism.</p>
+<p>On successful completion the log prints a brief recap: scenario and
+repetition counts, settings, elapsed time, minimum and maximum empirical
+coverage, total coverage violations, mean coverage/nonzero-bound/unseen
+rates by benchmark, and output locations. Its final line is exactly:</p>
+<pre class="text"><code>FINITO</code></pre>
+<p><code>FINITO</code> is printed only after all outputs are saved and
+worker cleanup succeeds; it is not printed on errors. The current fixes
+have not been run as a simulation locally.</p>
+<p>The earlier four-pair script <code>simulate_lower_bound.R</code> is
+retained unchanged.</p>
+</body>
+</html>
