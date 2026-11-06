@@ -1,0 +1,627 @@
+Aust. N. Z. J. Stat. 50(2), 2008, 125–134                                    doi: 10.1111/j.1467-842X.2008.00503.x
+
+
+
+            LOWER BOUNDS TO THE POPULATION SIZE WHEN CAPTURE
+                   PROBABILITIES VARY OVER INDIVIDUALS
+
+                                               CHANG XUAN MAO
+                                              University of California
+
+                                                       Summary
+       The problem of estimating population sizes has a wide range of applications. Although the
+       size is non-identifiable when a population is heterogeneous, it is often useful to estimate
+       the lower bounds and to construct lower confidence limits. A sequence of lower bounds,
+       including the well-known Chao lower bound, is proposed. The bounds have closed-form
+       expressions and are estimated by the method of moments or by maximum likelihood. Real
+       examples from epidemiology, wildlife management and ecology are investigated. Simulation
+       studies are used to assess the proposed estimators.
+       Key words : capture–recapture; one-sided inference.
+
+                                                   1. Introduction
+        Consider a population consisting of N individuals. There are t capture periods. Let n x
+be the number of individuals captured x times, x = 0, 1, . . . , t. The number of observed
+                              
+individuals is n = tx=1 n x = N − n 0 . We wish to estimate the population size N based on
+n 1 , n 2 , . . . , n t . This problem has a wide range of applications (Chao, 2001), three of which are
+shown in Table 1. The first (hav ) concerns college students infected by the hepatitis A virus
+and identified from three sources (Chao et al., 2001); the second (vole ) concerns meadow
+voles captured over five days (Pollock et al., 1990; Lee & Chao, 1994); and the third (ant )
+concerns ant species found at 41 sites (Mao, Colwell & Chang, 2005).
+        The problem has been thoroughly investigated in the literature. A binomial mixture
+model is usually adopted (e.g. Burnham & Overton, 1978; Chao, 1989; Norris & Pollock,
+1996; Pledger, 2000; Mao & Lindsay, 2002; Dorazio & Royle, 2003; Mao et al., 2005). There
+are, however, alternative models (e.g. Lee & Chao, 1994).
+        Link (2003) discussed the non-identifiability of the population size N . Dorazio & Royle
+(2003) observed that two models can give competing fits to the observed counts yet yield
+dramatically different estimates for N . Mao & Lindsay (2004) concluded that a confidence
+interval for N must have a certain probability of having infinite upper limit. Although it is
+impossible to estimate a non-identifiable parameter, it is often useful to estimate its bounds,
+if such bounds exist. Chao (1989) considered estimating a lower bound of the population
+size N . Chao, Shen & Hwang (2006) found that, by focusing on individuals whose capture
+probabilities are bounded from below, lower bounds can be constructed in several different
+settings. We will generalize the result in Chao (1989) by constructing a sequence of lower
+bounds of N . These lower bounds can be estimated by the method of moments or by maximum
+
+Department of Statistics, University of California, Riverside, CA 92507, USA.
+e-mail: cmao@stat.ucr.edu
+Acknowledgments : The author thanks the editor, the associate editor and the referees for their useful
+comments, and the technical editor for his great effort.
+
+
+C   2008 Australian Statistical Publishing Association Inc. Published by Blackwell Publishing Asia Pty Ltd.
+                                                                                                                    1467842x, 2008, 2, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.1467-842X.2008.00503.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [06/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+126                                                   CHANG XUAN MAO
+
+                                                           TABLE 1
+Three examples: t = 3 and n = 271 for hav ; t = 5 and n = 102 for vole ; t = 41 and n =
+197 for ant; Note that n x is the number of individuals captured x times . For example, n 1 = 187 in hav ,
+    n 2 = 15 in vole, n 13 = 6 and n 24 = 1 in ant. In addition , n x = 1 for x = 34, 35 and 37 for ant
+
+                x             1          2            3        4        5          6        7         8   9   10
+hav            0+          187          56           28
+vole           0+           29          15           15       16       27
+ant            0+           50          29           24       13        6          9        3         4   1    7
+              10+            6           2            6        5        1          2        2         2   3    5
+              20+            1           1            3        1        1          4        1         1   1    0
+
+
+
+
+likelihood. A lower confidence limit for N can be calculated by a two-stage parametric
+bootstrap procedure (Mao et al., 2005).
+      The proposed methods are detailed in Section 2. Real examples are investigated and
+a simulation study is reported in Section 3. The proofs involve much matrix algebra and
+are provided in the Appendix rather than in the Methods section in order to make the main
+argument easier to follow.
+
+                                                          2. Methods
+
+      It is assumed that the captures of an individual are independent with constant capture
+probability, and that all individuals behave independently given their capture probabilities.
+The capture probability p, or, equivalently, its odds p/(1 − p), or its logit log [ p/(1 − p)],
+                                                             ρ(Q) degenerate at λ = p/(1 −
+follows a discrete mixing distribution. Let δ(λ) be a distribution
+p). A discrete mixing distribution for λ is denoted by Q = i=1 πi δ(λi ), where ρ(Q) is the
+number of support points of Q, and the π i are mixing proportions. As only those catchable
+individuals are of interest, the λi are in the range (0, ∞].
+      The marginal density of the number of captures of an individual is a binomial mixture
+ f Q (e.g. Chao 1989), where
+                                         ρ(Q)
+                                                     
+                                                      t    λix
+                             f Q (x) =          πi                 ,        x = 0, 1, . . . , t.
+                                          i=1
+                                                      x (1 + λi )t
+
+It is clear that (n 0 , n 1 , . . . , n t ) follows a multinomial density with size N and cell probabilities
+ f Q (x). This implies that the expected counts are
+
+                                  ηx = E(n x ) = N f Q (x),          x = 0, 1, . . . , t.
+
+      To obtain the lower bound in Chao (1989), consider a distribution derived from the
+                                                   ρ(Q)
+mixing distribution Q by re-weighting; that is,  = i=1 i δ(λi ), with  i = f −1
+                                                                                 Q (0)(1 +
+                       ρ(Q)
+λi )−t π i . Let μx = i=1 i λix be the xth moment of  for x ≥ 0. The first t + 1 moments
+μx are related to the expected counts η x by
+                          
+                          t       f Q (x)   N f Q (x)  ηx
+                             μx =         =           = ,                      x = 0, 1, . . . , t.           (1)
+                          x       f Q (0)   N f Q (0)  η0
+
+
+C   2008 Australian Statistical Publishing Association Inc.
+                                                                                                                      1467842x, 2008, 2, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.1467-842X.2008.00503.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [06/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+                                         POPULATION SIZE ESTIMATION                                             127
+
+Chao (1989) developed a lower bound by means of the Cauchy–Schwartz inequality:
+                                   2  
+                             t −1 η1        t −1 η2       (t − 1)η12
+            μ1 ≤ μ2 =⇒
+              2
+                                        ≤             =⇒             ≤ η0 .                                     (2)
+                             1     η0       2      η0        2tη2
+
+        There are advanced results concerning μx (Lindsay 1995, p. 39); for example,
+                                                      
+                             μ0    μ1     ···    μk 
+                            
+                                                      
+                             μ1    μ2     · · · μk+1 
+                            
+                       0 ≤  .      ..
+                                                       
+                                                   ..  , k = 1, 2, . . . .                                     (3)
+                             ..           ..          
+                                     .        .    .  
+                                                      
+                             μk μk+1 · · ·       μ2k 
+
+With μ0 = 1, the Cauchy–Schwartz inequality μ21 ≤ μ2 becomes
+
+                                                  0 ≤ μ0 − μ1 μ−1
+                                                               2 μ1 .                                           (4)
+
+The following is a generalization of the Cauchy–Schwartz inequality in (4):
+                                                    ⎛                                         ⎞−1 ⎛ ⎞
+                                                         μ2         μ3     ···           μk+1       μ1
+                                                ⎜        μ3         μ4     ···           μk+2 ⎟   ⎜ μ2 ⎟
+                                                ⎜                                             ⎟ ⎜ ⎟
+               0 ≤ μ0 − (μ1 , μ2 , . . . , μk ) ⎜         ..         ..    ..              .. ⎟ ⎜ .. ⎟ ,        (5)
+                                                ⎝          .          .       .             . ⎠ ⎝ . ⎠
+                                                        μk+1       μk+2    ···           μ2k           μk
+
+if the k × k moment matrix on the right-hand side of (5) is non-singular (Mao & Lindsay,
+2007). Note that (5) is derived from (3) by some matrix algebra. For each k with 2k ≤ t, using
+(1) and (5), we obtain a lower bound of η0 ; that is,
+
+                                                         ϕk ≤ η0 ,                                              (6)
+
+where ϕ k depends on η1 , η2 , . . . , η2k and is given by
+                                              ⎛ η2                 η3                     ηk+1 ⎞−1 ⎛ η1 ⎞
+                                                 t               t      ···           t 
+                                              ⎜ 2                                                  ⎜ 1t ⎟
+                                                                                           k+1 ⎟
+                                              ⎜                      3
+                                                                                               ⎟ ⎜ ⎜ η2 ⎟
+                                                                                                          ⎟
+                                              ⎜ η                  η4                     ηk+2 ⎟   ⎜
+                                            ⎜  3               t      ...           t ⎟      t  ⎟
+                η1 η2                   ηk ⎜      t                                            ⎟ ⎜ ⎜   2 ⎟
+                                                                                                          ⎟
+                                              ⎜                                            k+2 ⎟
+          ϕk =  t  ,  t  , · · · ,  t  ⎜ 3                     4
+                                                                                               ⎟ ⎜ ⎜ . ⎟.
+                                                                                                          ⎟     (7)
+                                              ⎜ .                                           .. ⎟
+                                              ⎜ .                    ..     ..                 ⎟ ⎜     .. ⎟
+                                                                                             . ⎟ ⎜        ⎟
+                 1       2               k
+                                              ⎜ .                     .          .
+                                              ⎜                                                ⎟ ⎜        ⎟
+                                              ⎝ ηk+1                ηk+2                           ⎜
+                                                                                           η2k ⎠ ⎝  k ⎟
+                                                                                                      η
+                                                                                                          ⎠
+                                                 t                t     ...           t          t
+                                                        k+1         k+2                       2k            k
+
+
+In particular, ϕ 1 is exactly given by (2), and ϕ 2 is given by
+                                         
+                                        2 −1
+                                                                                        
+                          η2 η4     η32           η12 η4        2η1 η2 η3          η23
+               ϕ2 =  t   t  −  t          t 2  t  −  t   t   t  +  t 3 .                      (8)
+                               2     4        3                1    4      1         2    3        2
+
+
+
+
+C   2008 Australian Statistical Publishing Association Inc.
+                                                                                                                              1467842x, 2008, 2, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.1467-842X.2008.00503.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [06/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+128                                                 CHANG XUAN MAO
+
+      Let υ = min (t/2 , ρ(Q) − 1) and ζ = (t + 1)/2 if Q has a support point at ∞, and
+υ = min (t/2 , ρ(Q)) and ζ = t/2 otherwise, where · stands for the integer part of a
+real number. The following theorem summarizes some theoretical results concerning ϕ k .
+Theorem 1. The ϕ k are strictly monotonic in k, i.e. ϕ 1 < ϕ 2 < · · · < ϕ υ , with ϕ υ = η0 if
+ρ(Q) ≤ ζ , and ϕ υ < η0 otherwise.
+        For each k = υ + 1, υ + 2, . . . , t/2 , define ϕ k = ϕ υ . This implies that
+                                           ϕ1 ≤ ϕ2 ≤ · · · ≤ ϕt/2 ≤ η0 .                                               (9)
+
+When Q is degenerate, the Cauchy–Schwartz inequality in (4) becomes an equality and
+ϕ 1 = η0 . From Theorem 1, when Q has one support point in (0, ∞) and another one infinity,
+ϕ 1 = η0 still holds. When the number of support points of Q increases, there are higher-order
+lower bounds with ϕ k = η0 . When Q has many support points, all ϕ k are less than η0 .
+     With η x estimated by η̃x = n x for x = 1, 2, . . . , t, the method of moments estimator ϕ̃k
+for ϕ k is obtained by replacing η x in (7) with η̃x . In particular,
+                                                              (t − 1)n 21
+                                                    ϕ̃1 =                 .                                            (10)
+                                                                 2tn 2
+Note that ϕ k is positive for each k, and that the ϕ k are monotonic in k. These observations
+depend on the fact that the ηx /( xt ) are moments. Because the η̃x /( xt ) may not be moments,
+ϕ̃k is not necessarily positive, and the ϕ̃k are not necessarily monotonic in k; however, as n
+goes to infinity, the probability that ϕ̃k is negative approaches zero, and the ϕ̃k tend to be
+monotonic in k.
+       The lower bounds ϕ k can also be estimated by the maximum likelihood method (Norris
+& Pollock, 1996; Mao et al., 2005). Consider that the conditional likelihood of (n 1 , n 2 , . . . ,
+n t ) given n is
+                                                              n!         
+                                                                         t
+                                      L(G | n) = t                            {h G (x)}n x ,                          (11)
+                                                          x=1 n x !      x=1
+                 ρ(G)
+where G =            i=1   ωi δ(λi ) is derived from Q with ρ(G) = ρ(Q), and
+                          1 − (1 + λi )−t
+                     ωi =                   πi , i = 1, 2, . . . , ρ(G),
+                             1 − f Q (0)
+                           t 
+                          ρ(G)
+                                                λix            f Q (x)
+                h G (x) =      ωi                         =                ,                    x = 1, 2, . . . , t.
+                          i=1
+                                    x    (1 +   λi ) t −1   1 −    f Q (0)
+
+Note that η x = E(n) · h G (x), x = 1, 2, . . . , t, and η0 = E(n) · θ , where θ = f Q (0)/[1 −
+f Q (0)] is the odds that an individual is unseen, and
+                                                         ρ(G)
+                                                                             1
+                                        θ = θ (G) =                ωi                  .
+                                                          i=1
+                                                                        (1 + λi )t − 1
+
+      Use of the mixing distribution G allows us to utilize the well-known mixture model
+theory (Lindsay, 1995). If the support points of G are only allowed to be in (0, ∞], then
+L(G|n) does not necessarily admit a maximum. Let G     be the non-parametric maximum
+likelihood estimator (NPMLE) that maximizes L(G | n) in (11) with support points in [0, ∞]
+
+
+C   2008 Australian Statistical Publishing Association Inc.
+                                                                                                        1467842x, 2008, 2, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.1467-842X.2008.00503.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [06/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+                                        POPULATION SIZE ESTIMATION                               129
+
+(Mao et al., 2005). The NPMLE G       is not necessarily unique. A sufficient condition under
+which G is unique is that n x /n cannot be represented by a mixture h G .
+      Although one may consider estimating η0 by nθ (G),          is not necessarily unique.
+                                                            θ (G)
+The mixture h G is unique, so η x can be estimated by η̂x = nh G (x), x = 1, 2, . . . , t. The
+likelihood-based estimator ϕ̂k for ϕ k is obtained by replacing η x in (7) by η̂x .
+      Because the population size N is non-identifiable, each estimator estimates a parameter
+as a surrogate of N . From N = E(n) + η0 , the lower bound ϕ k of η0 certainly leads to a
+surrogate denoted by N k = E(n) + ϕ k and estimated by either N  k = n + ϕ̃k or N  k = n + ϕ̂k .
+From (9), one has
+                                  N1 ≤ N2 ≤ · · · ≤ Nt/2 ≤ N .
+
+Although the N  k are monotonically increasing in k, in order to make the N     k monotonically
+increasing in k, for k = 2, 3, . . . , t/2 , we will define ϕ̃k = ϕ̃k−1 when ϕ̃k calculated from
+the n x using (7) is less than ϕ̃k−1 .
+      The two-stage parametric bootstrap procedure in Mao et al. (2005) is recommended
+for the construction of lower confidence limits for N : given N                 sample n ∗ from
+                                                                         and G,
+                                  ∗    ∗           ∗                                  | n ∗ ) in
+Binom ( N , n/ N ) and sample (n 1 , n 2 , . . . , n t ) from the multinomial density L(G
+(11). Note that lower confidence limits will not vary much when different, but sufficiently
+large, estimates N are used. The most conservative approach is to sample n ∗ from a Poisson
+distribution with mean parameter n, corresponding to using N        = ∞.
+
+                                                3. Numerical studies
+
+      The first two jackknife estimators (Burnham & Overton, 1978) and the two coverage-
+based estimators (Eq. 3.2 and Eq. 3.18 in Lee & Chao, 1994) are also considered. Their
+surrogates are denoted by N j1 , N j2 , N c1 and N c2 , respectively. Each such surrogate has a
+method of moments estimator (e.g. N  j1 = n + n 1 (t − 1)/t) and a likelihood-based estimator
+      j1 = n + η̂1 (t − 1)/t). These estimators are identical when η̂x = n x for all x. In addi-
+(e.g. N
+tion, for numerical convenience, p = λ/(1
+                 ρ(Q)                   −   λ) is used to parameterize binomial distributions.
+                                            ρ(G)
+We write Q = i=1 πi δ( pi ) and G = i=1 ωi δ( pi ).
+
+3.1. The hav data
+       The NPMLE G     is not unique. Two possible estimates are G0 = 0.552δ(0) + 0.448δ(0.6)
+and G 1 = 0.917δ(0.23) + 0.083δ(1). The method of moments estimates and likelihood-based
+estimates are the same: N    j1 = 396, Nj2 = 449, Nc1 = 530 and N   1 = 479. Note that N    1 =
+                                                                              
+n + nθ (G 1 ) is the sharpest lower bound estimate. With N = 479 and G = G 1 in the bootstrap
+procedure, the 5% quantiles from 200 resamples are 369 ( N                 j2 ), 468 ( N
+                                                              j1 ), 419 ( N            c1 ) and 421
+  
+( N1 ), and those of likelihood-based estimators are similar.
+
+3.2. The vole data
+     The NPMLE G        is not unique. Two possible estimates are G         0 = 0.204δ(0) +
+                                       
+0.429δ(0.475) + 0.367δ(0.929) and G 1 = 0.380δ(0.143) + 0.428δ(0.702) + 0.191δ(1). The
+method of moments estimates and the likelihood-based estimates are the same: N              j1 =
+                                                       
+125, N j2 = 136, Nc1 = 113, Nc2 = 123, N1 = 124 and N2 = 135. Note that N2 = n +        
+                                                     = 135 and G
+    1 ) is the sharpest lower bound estimate. With N
+nθ (G                                                            =G   1 in the bootstrap pro-
+                                                                    j2 ), 103 ( N
+                                                       j1 ), 121 ( N
+cedure, the 5% quantiles from 200 resamples are: 114 ( N                                      c2 ),
+                                                                                 c1 ), 110 ( N
+
+
+C   2008 Australian Statistical Publishing Association Inc.
+                                                                                                               1467842x, 2008, 2, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.1467-842X.2008.00503.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [06/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+130                                                 CHANG XUAN MAO
+
+                     2 ), and those of the likelihood-based estimates are similar. Although all
+      1 ) and 112 ( N
+110 ( N
+5% quantiles are larger than n = 102, that of N   c1 is close to n.
+
+
+3.3. The ant data
+      The NPMLE G      is unique. It has seven support points, namely 0, 0.045, 0.107, 0.280,
+0.473, 0.602 and 0.860, with corresponding mixing weights 0.103, 0.409, 0.165, 0.171, 0.077,
+0.060 and 0.015 (Mao et al., 2005). Because one of the support points is 0, θ (G)            = ∞. The
+                                                                  
+method of moments estimates are N j1 = 246, N j2 = 266, Nc1 = 204, Nc2 = 269, N                 1 = 239
+                                    
+and N2 = 239. Note that N1 = N2 because η̃2 , if calculated from the n x using (7), is −77.
+The likelihood-based estimates are N        j1 = 246, N   j2 = 266, N   c1 = 204, N  c2 = 269, N   1 =
+238 and N  2 = 285. With N      = 285 and G    being the NPMLE in the bootstrap procedure,
+the 5% quantiles from 200 resamples are 227 ( N             j1 ), 236 ( N
+                                                      j1 , N                  j2 ), 189 ( N
+                                                                         j2 , N                  c1 ), 239
+                                                                                            c1 , N
+       c2 ), 213 ( N
+ c2 , N
+(N                              1 ) and 218 ( N
+                    1 ), 214 ( N              2 ). The 5% quantile of N  c1 is smaller than n = 197,
+and those of the other likelihood-based estimators are larger than n.
+      There are other likelihood-based lower bound estimates, such as N            3 = 463. Because n
+               
+is not large, N3 is unreliable and potentially has a large estimation bias and variance. The 5%
+quantile of N 3 is 218 after rounding, which is identical to that of N     2 .
+
+
+3.4. Simulation
+    We fix t = 6 and consider 12 trials from three values of N , namely N = 200, 500 and
+2000, and four mixing distributions Q, namely
+                ⎧
+                ⎪
+                ⎪ Q 1 = 0.95δ(0.25) + 0.05δ(1),
+                ⎪
+                ⎪
+                ⎪
+                ⎨ Q 2 = 0.85δ(0.2) + 0.15δ(0.7),
+                        ⎪
+                        ⎪ Q 3 = 0.6δ(0.1) + 0.3δ(0.5) + 0.1δ(1),
+                        ⎪
+                        ⎪
+                        ⎪
+                        ⎩
+                          Q 4 = 0.5δ(0.05) + 0.1δ(0.1) + 0.1δ(0.2) + 0.3δ(0.25).
+
+     Because t = 6, N 3 is the sharpest lower bound of N . A surrogate, for example N 1 ,
+divided by N or N 3 , depends on the mixing distribution Q only. Table 2 presents such
+
+                                                        TABLE 2
+The ratios of the surrogates (for example, the lower bound N 1 ) of the population size N to
+either N or the sharpest lower bound N 3 . See the beginning of Section 3 for an introduction to symbols
+
+                                surrogate/N                                 surrogate/N 3
+
+                Q1             Q2             Q3              Q4   Q1       Q2           Q3          Q4
+E (n)           0.831          0.777          0.676      0.500     0.831   0.777         0.676        0.503
+N1              1              0.993          0.863      0.766     1       0.993         0.863        0.771
+N2              1              1              1          0.968     1       1             1            0.974
+N3              1              1              1          0.994     1       1             1            1
+N j1            1.113          1.057          0.877      0.748     1.113   1.057         0.877        0.752
+N j2            1.188          1.165          0.969      0.872     1.188   1.165         0.969        0.878
+N c1            1.034          0.976          0.777      0.808     1.034   0.976         0.777        0.813
+N c2            1.188          1.139          0.905      0.902     1.188   1.139         0.905        0.908
+
+
+
+C   2008 Australian Statistical Publishing Association Inc.
+                                                                                                             1467842x, 2008, 2, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.1467-842X.2008.00503.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [06/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+                                        POPULATION SIZE ESTIMATION                                     131
+
+                                                         TABLE 3
+The 5% and 50% quantiles of various estimators for the population size N in simulation set-
+tings. See the beginning of Section 3 for an introduction to estimators and the beginning of Section 3.4
+                               for an introduction to simulation settings
+
+    Q                 Q1                            Q2                        Q3                Q4
+
+    N      200      500       2000       200      500         2000    200    500   2000   200   500   2000
+                                                               5% quantile
+ 1
+ N         185      471       1944       178      465         1921    153    396   1652   128   328   1420
+ 1
+ N         189      481       1961       180      472         1935    153    397   1656   129   328   1416
+ 2
+ N         189      473       1950       179      467         1925    156    409   1774   129   333   1435
+ 2
+ N         190      481       1961       182      474         1947    161    422   1856   130   343   1481
+
+N j1       210      532       2178       195      504         2069    159    414   1707   131   337   1427
+j1
+N          212      538       2182       196      505         2070    159    414   1708   131   337   1427
+j2
+N          218      554       2306       209      547         2264    173    451   1863   151   387   1653
+j2
+N          224      568       2323       211      554         2273    173    452   1864   152   388   1654
+c1
+N          194      490       2021       179      464         1907   141     367   1512   137   353   1531
+c1
+N          195      496       2026       180      465         1908   141     367   1512   138   352   1528
+c2
+N          216      548       2298       199      530         2197   160     420   1740   147   384   1654
+c2
+N          220      563       2311       201      535         2203   160     420   1741   149   387   1656
+                                                              50% quantile
+ 1
+ N         201      502       2003       200      498         1985   173     432   1730   154   376   1538
+ 1
+ N         204      506       2005       203      503         1990   173     433   1733   153   376   1530
+ 2
+ N         205      509       2015       203      502         1999   187     492   1983   159   382   1615
+ 2
+ N         204      507       2008       207      511         2009   226     553   2154   178   417   1692
+j1
+N          223      557       2224       212      529         2114   174     439   1754   149   371   1501
+j1
+N          225      560       2226       213      529         2116   174     439   1755   149   371   1500
+j2
+N          239      596       2376       233      583         2326    193    485   1940   173   431   1753
+j2
+N          242      600       2383       236      586         2332    193    485   1941   174   431   1749
+c1
+N          207      518       2065       196      489         1951    155    390   1554   162   400   1626
+c1
+N          208      521       2066       197      489         1952    155    390   1555   162   401   1625
+c2
+N          238      597       2372       228      569         2277    180    450   1812   178   443   1812
+c2
+N          242      601       2382       231      572         2283    180    451   1813   182   445   1810
+
+
+
+
+ratios. None of the surrogates N j1 , N j2 , N c1 and N c2 is a lower bound of either N or
+even N 3 . Although N c1 is developed under the assumption that Q is degenerate, it may still
+happen that N c1 > N . Note that N 2 /N 3 is identical to or close to one. For each trial, 200
+samples are generated from the multinomial density of (n 0 , n 1 , . . . , n t ) . For each sample,
+an estimate is calculated. The 5% and 50% quantiles are shown in Table 3. Although N 1
+and N 2 are lower bounds, the median estimation bias of N       2 , N
+                                                           1 , N      1 or N   2 can be positive,
+so the total median bias can sometimes be positive. For most of the trials, the proposed
+estimators are better than the existing estimators although for those trials with Q = Q 4 , the
+estimators for N j2 and N c2 seem less biased. As N 1 and N 2 are lower bounds of N , the
+5% quantiles of their estimators are less than N whereas, for all existing surrogates, it may
+be that the 5% quantiles of their estimators are much larger than N . This indicates that, if
+one wishes to construct lower confidence limits for N , the existing estimators may not be so
+helpful.
+
+
+C   2008 Australian Statistical Publishing Association Inc.
+                                                                                                          1467842x, 2008, 2, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.1467-842X.2008.00503.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [06/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+132                                                   CHANG XUAN MAO
+
+                                                      4. Discussion
+
+      Discrete mixing distributions are appropriate for most applications. Sometimes con-
+tinuous ones are used for modelling convenience. Although we have considered discrete
+distributions, our results can be applied to continuous ones.
+      For a heterogeneous population, it is possible to develop similar lower bounds in the
+cases for which there are behavioural responses or for which there are time effects. In both
+cases, there are mixtures of univariate discrete densities that admit moment structures (Norris
+& Pollock, 1996; Mao, 2007).
+      The lower bound of the population size N in Chao (1989) was shown to be the first one
+in a sequence of lower bounds. These lower bounds retain the simplicity of the lower bound
+in Chao (1989) and can be estimated easily. They can be useful if one wishes to construct
+lower confidence limits for N .
+      The distribution of a lower bound estimator often has a heavy right tail. The sample mean
+can be huge. One may wish to reduce its estimation bias. In particular, an adjusted version of
+1 is given by
+N
+
+                                           1a = n + (t − 1)n 1 (n 1 − 1) .
+                                           N                                                       (12)
+                                                         2t(n 2 + 1)
+                 1a is less biased than N
+It is clear that N                                     1 ) = ∞ and E( N
+                                         1 because E( N               1a ) ≈ N1 . However, such
+a simple scheme is not available for higher-order lower bound estimators. The bias adjustment
+will be investigated in the future.
+       A higher-order lower bound seems desirable, but it may have a larger estimation bias and
+variance. It is possible to estimate a lower-order lower bound with high quality, but it may
+underestimate the true value severely. It is a difficult problem to select one estimator from the
+                                                                   1a is recommended when the
+sequence ϕ̃k (or ϕ̂k ). To be conservative, the adjusted estimator N
+observed number of individuals, n, is small (for example for small-size animal populations).
+A high-order lower bound becomes useful when n is large (for example for large-size human
+disease populations).
+
+                                         Appendix: Proof of Theorem 1
+
+        Define a weighted moment sequence of Q with weight (1 + λ)−t by
+                                               ρ(Q)
+                                               
+                           νx = νx (Q) =              πi λix · (1 + λi )−t ,   x = 0, 1, . . . .
+                                                i=1
+
+Let ν x (δ(∞)) = lim λ→∞ ν x (δ(λ)); that is, ν x (δ(∞)) = 0 for x < t, ν t (δ(∞)) = 1 and
+ν x (δ(∞)) = ∞ for x > t. Let ak = ak (Q) = (ν j )kj=1 , B k = B k (Q) = (ν i+ j )i,k j=1 and H k =
+                                                       −1
+H k (Q) = (ν i+ j−1 )i,k j=1 . Let γ k = γ k (Q) =a
+                                                   k B k a k if |B k | = 0. With γ k = ϕ k /N and ν 0
+= η0 /N , Theorem 1 can be easily established when γ 1 < γ 2 < · · · < γ ρ(Q) = ν 0 if Q has no
+support point at ∞, and otherwise,
+                  
+                     γ1 < γ2 < · · · < γρ(Q)−1 = ν0       (ρ(Q) ≤ (t + 1)/2 ),
+                          γ1 < γ2 < · · · < γt/2 < ν0                 (ρ(Q) > (t + 1)/2 ).
+
+
+
+C   2008 Australian Statistical Publishing Association Inc.
+                                                                                                              1467842x, 2008, 2, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.1467-842X.2008.00503.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [06/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+                                        POPULATION SIZE ESTIMATION                                     133
+
+    If Q has no support point at ∞, then the results are derived from the following three
+known facts (see Lindsay, 1995, p. 39, and Mao & Lindsay, 2007).
+
+  (i) If {ν x }∞
+               x=0 is a weighted moment sequence of Q whose support points are in (0, ∞),
+      then B k > 0 and H k > 0 for k = 1, 2, . . . ,ρ(Q), r (B k ) = r (H k ) = ρ(Q) for k > ρ(Q),
+                                                ρ(Q)                       ρ(Q)
+      and for k > ρ(Q) and h ≥ 0, r ((ν i+ j+h )i, j=1 ) = r ((ν i+ j−1+h )i, j=1 ) = ρ(Q), where r (M)
+      is the rank of a matrix M and M > 0 means that M is positive-definite.
+ (ii) If both γ k and γ k+1 exist, then γ k+1 = γ k + |H k+1 |2 |B k |−1 |B k+1 |−1 .
+(iii) For Q with support points in (0, ∞) with ρ(Q) < ∞, γ ρ(Q) = ν 0 .
+       If Q has a support point at ∞, then write Q = αϒ + βδ(∞), where ϒ has support
+points in (0, ∞) and α + β = 1 with α ∈ (0, 1). It is clear that ν 0 (Q) = αν 0 (ϒ) and B k (Q) =
+α[B k (ϒ) +W k ], with W k = βα −1 B k (δ(∞)). If W k = 0, then B k (Q) = α B k (ϒ) and γ k (Q)
+= αγ k (ϒ) when γ k (ϒ) exists.
+       If t = 2m + 1, then (t + 1)/2 = m + 1 and t/2 = m. If ρ(Q) ≤ m + 1, then
+γ ρ(Q)−1 (Q) = αγ ρ(ϒ) (ϒ) = αν 0 (ϒ) = ν 0 (Q). If ρ(Q) > m + 1, then γ m (Q) = αγ m (ϒ) <
+αγ ρ(ϒ) (ϒ) = αν 0 (ϒ) = ν 0 (Q). For either case, with υ = min(ρ(Q) − 1, m), γ 1 (Q) < γ 2 (Q)
+< · · · < γ υ (Q) as W k = 0 for k ≤ υ.
+       If t = 2m, then (t + 1)/2 =  t/2 = m. If ρ(Q) ≤ m, then γ ρ(Q)−1 (Q) = αγ ρ(ϒ) (ϒ)
+= αν 0 (ϒ) = ν 0 (Q), and γ 1 (Q) < γ 2 (Q) < · · · < γ ρ(Q)−1 (Q) as W k = 0 for k ≤ ρ(Q) −
+1. If ρ(Q) ≥ m + 1, then B m (ϒ) = U V U  , where U is orthogonal and V > 0 is diagonal.
+Because wi j = βα −1 > 0 if i = j = m and wi j = 0 otherwise, write, with x =am (ϒ),
+
+                 α −1 γm (Q) = x  (U V U  + W m )−1 x
+                                = (U x) (V + W m )−1 (U x) < (U x) V −1 (U x) = ν0 (ϒ),
+
+from which we conclude that γ m (Q) < ν 0 (Q).
+     Finally, γ 1 (Q) < γ 2 (Q) < · · · < γ m−1 (Q) as W k = 0 for k ≤ m − 1, and γ m−1 (Q) <
+γ m (Q) as H m (Q) = α H m (ϒ) > 0, B m−1 (Q) > 0 and B m (Q) > 0.
+
+
+                                                              References
+BURNHAM, K.P. & OVERTON, W.S. (1978). Estimation of the size of a closed population when capture
+    probabilities vary among animals. Biometrika 65, 625–634.
+CHAO, A. (1989). Estimating population size for sparse data in capture–recapture experiments. Biometrics
+        45, 427–438.
+CHAO, A. (2001). An overview of closed capture–recapture models. J. Agric. Biol. Environ. Stat. 6, 138–155.
+CHAO, A., SHEN, T.-J. & HWANG, W.-H. (2006). Application of Laplace’s boundary-mode approximations
+     to estimate species and shared species richness. Aust. N. Z. J. Stat. 48, 117–128.
+CHAO, A., TSAY, P.K., LIN, S.-H., SHAU, W.-Y. & CHAO, D.-Y. (2001). The applications of capture–
+     recapture models to epidemiological data. Stat. Med. 20, 3123–3157.
+DORAZIO, R.M. & ROYLE, J.A. (2003). Mixture models for estimating the size of a closed population when
+     capture rates vary among individuals. Biometrics 59, 351–364.
+LEE, S.M. & CHAO, A. (1994). Estimating population size via sample coverage for closed capture–recapture
+     models. Biometrics 50, 88–97.
+LINDSAY, B.G. (1995). Mixture Models: Theory, Geometry and Applications . Hayward, California: Institute
+        of Mathematical Statistics.
+LINK, W.A. (2003). Nonidentifiability of population size from capture–recapture data with heterogeneous
+     detection probabilities. Biometrics 59, 1123–1130.
+
+
+C   2008 Australian Statistical Publishing Association Inc.
+                                                                                                               1467842x, 2008, 2, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.1467-842X.2008.00503.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [06/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+134                                                 CHANG XUAN MAO
+
+MAO, C.X. (2007). Testing list effects and diagnosing individual catchabilities in the Rasch model. Statist.
+    Methodol. 4, 416–422.
+MAO, C.X., COLWELL, R.K. & CHANG, J. (2005). Estimating the species accumulation curve using mixtures.
+    Biometrics 61, 433–441.
+MAO, C.X. & LINDSAY, B.G. (2002). Diagnostics for the homogeneity of capture probabilities in a Bernoulli
+    census. Sankhyā 64, 626–639.
+MAO, C.X. & LINDSAY, B.G. (2004). Estimating the number of classes in multiple populations: a geometric
+    analysis. Canad. J. Statist. 32, 303–314.
+MAO, C.X. & LINDSAY, B.G. (2007). Estimating the number of classes. Ann. Statist. 35, 917–930.
+NORRIS, J.L.I. & POLLOCK, K.H. (1996). Nonparametric MLE under two closed capture–recapture models
+    with heterogeneity. Biometrics 52, 639–649.
+PLEDGER, S. (2000). Unified maximum likelihood estimates for closed capture–recapture models using
+    mixtures. Biometrics 56, 434–442.
+POLLOCK, K.H., NICHOLS, J.D., BROWNIE, C. & HINES, J.E. (1990). Statistical inference for capture–
+    recapture experiments. Wildlife Monogr. 107, 1–97.
+
+
+
+
+
+C   2008 Australian Statistical Publishing Association Inc.
+

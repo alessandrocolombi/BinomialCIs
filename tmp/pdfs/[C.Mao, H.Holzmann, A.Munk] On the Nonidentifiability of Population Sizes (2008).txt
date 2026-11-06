@@ -1,0 +1,432 @@
+On the Nonidentifiability of Population Sizes
+Author(s): Chang Xuan Mao, Hajo Holzmann and Axel Munk
+Source: Biometrics, Vol. 64, No. 3 (Sep., 2008), pp. 977-981
+Published by: The International Biometric Society
+Stable URL: https://www.jstor.org/stable/25502157
+Accessed: 05-11-2026 15:01 UTC
+
+
+REFERENCES
+Linked references are available on JSTOR for this article:
+https://www.jstor.org/stable/25502157?seq=1&cid=pdf-reference#references_tab_contents
+You may need to log in to JSTOR to access the linked references.
+
+
+JSTOR is a not-for-profit service that helps scholars, researchers, and students discover, use, and build upon a wide
+range of content in a trusted digital archive. We use information technology and tools to increase productivity and
+facilitate new forms of scholarship. For more information about JSTOR, please contact support@jstor.org.
+
+
+Your use of the JSTOR archive indicates your acceptance of the Terms & Conditions of Use, available at
+https://about.jstor.org/terms
+
+
+
+
+                 The International Biometric Society is collaborating with JSTOR to digitize, preserve and
+                 extend access to Biometrics
+
+
+
+
+                                This content downloaded from 193.205.28.94 on Thu, 05 Nov 2026 15:01:57 UTC
+                                                 All use subject to https://about.jstor.org/terms
+                                                                          Biometrics 64, 977-981 DOI: 10.1111/j.l541-0420.2008.01078.x
+September 2008
+
+
+
+
+READER REACTION
+
+
+                                On the Nonidentifiability of Population Sizes
+
+                                                                   Chang Xuan Mao
+                            Department of Statistics, University of California, Riverside, CA 92521, U.S.A.
+                                                                email: cmao@stat.ucr.edu
+
+
+             SUMMARY. When a nonparametric mixture model is adopted to deal with the heterogeneity among indi
+             vidual capture probabilities, the population size is nonidentifiable (Link, 2003, Biometrics 59, 1123-1130).
+             Holzmann, Munk, and Zucchini (2006, Biometrics 62, 934-936) discussed the conditions under which a
+             subfamily of mixing distributions is identifiable. Link (2006, Biometrics 92, 936-939) found that the non
+             identifiability occurs across identifiable subfamilies. It is shown that there is a subfamily in which each
+             mixing distribution is determined by its mixture, and the population size admits estimable lower bounds
+             that can be used to construct lower confidence limits.
+             Key WORDS: Binomial mixtures; Lower bounds; Species richness.
+
+
+
+ 1. Introduction                                                                  is when the odds 6 are identifiable. The odds are nonidentifi
+                                                        able nonparametrically
+There is a huge literature on estimating population sizes     be                   (Mao, 2007). There is a subfamily o
+                                                        among distributions in which the odds are determined by the
+cause of its enormous applications. The heterogeneity mixing
+ individual capture probabilities usually should nottruncated
+                                                          be ig     mixture.
+nored so that mixture models are necessary. The population Link (2006) concluded that "without strong assumptions, f\,
+                                                        f'2,---, fr tell us essentially nothing about /0," which is over
+size can be nonidentifiable in a mixture model (Link, 2003).
+Holzmann, Munk, and Zucchini (2006; hereafter HMZ)      pessimistic.
+                                                             and     In fact, E(fQ) or equivalently 6 admits estimable
+                                                          As a bounds. A lower bound to 6 leads to a lower bound to
+Link (2006) investigated the issue of nonidentifiability.lower
+follow-up to these important studies, we will provide the
+                                                       a deeppopulation size N. Lower confidence limits for these lower
+                                                         state can be constructed and also serve as lower confidence
+investigation on the nonidentifiability, determine whatbounds
+                                                            infor N.
+                                                       limits
+ments are over-optimistic or over-pessimistic, and define
+ferential tasks useful for the practical purpose.
+  Suppose that a population has TV individuals. Let 2.   Results
+                                                       f x de
+                                                      Let X of
+note the number of individuals captured x times in a study  denote the number of captures of an individual in a
+ T captures. These counts are modeled by binomial mixtures
+                                                     study of T captures, which is binomial given the capture prob
+                                                      follow
+when individual capture probabilities are assumed toability p. If p is assumed to follow a mixing distribution G,
+a mixing distribution. Although the binomial mixture then
+                                                        model
+is our focus, similar investigation can be done for some other
+mixture models.
+   It is over-optimistic if one tries to estimate the population                   X ~ ttg(x) = j Q p*(l - p)T~x dG(p), x = 0,1,..., T.
+size N nonparametrically, which unfortunately, is a common
+                                                        Conditioning on n, (/l5 f2,.. , fr)' is multinomial with prob
+                                                           analttcg(x) = irG(x)/{l - 7TG(0)}, x = 1, 2,..., T (Link,
+practice in the literature. An exception is Link's (2003)abilities
+                                                           HMZ
+ysis, which established the issue of nonidentifiability.2003).  Reformulate ttg as a mixture /iq by reparameterizing
+provided the conditions under which a subfamily of mixing
+                                                        G (Mao and Lindsay, 2002), where
+distributions is identifiable. Link (2006) raised the issue of
+nonidentifiability across subfamilies. There is a subfamily in
+which each mixing distribution satisfies a condition slightly
+ stronger than that in HMZ and is determined by the trun
+                                                                                    Mi) = /Qmt$*i = 1-2.T'
+ cated mixture.                                                                       dQip) = {i-q-PrwP)
+  Let n = Ylx=i $x denote the number of observed individu
+                                                      Becausebe
+als. The problem of estimating the population size N can      (1) is invertible for p (0, 1] and Q and G have the
+ reduced to estimating the odds 0 = E(f0)/E(n) thatsamean  in points, relevant statements in HMZ and Link
+                                                        support
+                                                        issue
+dividual is unseen (Mao, 2007, 2008). A more pertinent (2003, 2006) in terms of G will be cited here in terms of Q.
+? 2008, The International Biometrie Society 977
+
+
+                                           This content downloaded from 193.205.28.94 on Thu, 05 Nov 2026 15:01:57 UTC
+                                                            All use subject to https://about.jstor.org/terms
+                                                978 Biometrics, September 2008
+
+
+   Let A be the family of all mixing distributions Q over (0,           mixing distributions. For example, Q (A ? U) for Q in (2)
+1]. The family A is nonidentifiable in the sense that there are         as index (Q) = 2 and T = 4 but (T - l)/2 = 1.5.
+Qi and Q2 in A with hQl = hQ2 but Qx / Q2 (Mao, 2007).                        From HMZ, the subfamily V is identifiable, where
+For example, if G = 3/4(5(1/4) + 1/46(3/4) in (1), then
+                                                                           V = {Q e A : the number of support points of Q ^ T/2}.
+               Q = 35/526(1/4) + 17/52(5(3/4), (2)
+                                                                                                                                          (5)
+              hQ -(28,18,12,7)765, (3)
+                                                                              Proposition 2: If T is odd, then U ? V.IfT is even, then
+where S(p) is a distribution degenerate at p. If G = Beta(l/2,
+1/3) in (1), then a mixture identical to /iq in (3) can be                                V-U = {QeA: index(Q) = T/2}. (6)
+produced (Link, 2006).                                                        For an even T, HMZ's condition is necessary for V to be
+  A subfamily 5 C A is said to be identifiable if, given Qi               identifiable but not sufficient for Q to be determined by hQ.
+and Q2 in S, Hqx = hQ2 implies that Qi = Q2. HMZ considered For example, Q e(V-U) for Q in (2).
+conditions under which a subfamily is identifiable. Link (2006)
+found that there are two identifiable subfamilies Si and S2
+                                                                  Next we turn to the odds 0 ? E(f0)/E(n). It depends on
+and two mixing distributions Qi G S\ and Q2 ? S2 such that      Q as follows:
+Qi 7^ Qi hut h,Ql ? Hq2. The observation in Link (2006) in
+vites us to address whether there is a subfamily in which Q is
+uniquely determined by its mixture hQ.
+   Let index (Q) represent the number of support points of Q
+                                                                                            e = e(Q) = J ^~xP}Tp)TdQ{p). (7)
+with a support point p = 1 counted as 1/2 (Lindsay, 1995, p.   The odds 6(Q) is nonparametrically nonidentifiable in the
+48). For example, index (Qi) = 1.5 and index (Q2) = 2, where sense that there are Qi and Q2 in A with hQx ? Hq2 but
+Qi = 0.2(5(0.5) + 0.8<5(1) and Q2 = 0.2<5(0.5) + 0.86(0.9).     0(Qi) ^ 0(Q2) (Mao, 2007).
+                                                                   The nonidentifiability of 9(Q) implies that it is impossi
+  Proposition 1: For Q eU,hq determines Q in the sense          ble to estimate 0(Q) unbiasedly and precisely. For example,
+                                                                given a real application with fi = 187, f2 = 56, and /3 =
+that there is no other mixing distribution P such that hp = hQ,
+where                                                           28 (Chao et al., 2001), Figure 1 presents /o,/i,/2, and /3,
+                                                                         where
+            U = {QeA: index(Q) < (T - l)/2}. (4)
+                                                                                 /o = n9(Q), fx = nh~(x),x = 1,2,3,
+  Proposition 1 is an application of Proposition 6 in Lind
+say (1995, p. 48). For Q e (A ? U),hQ is produced by many                        Q = a8(p) + (1 - a)8(n), a G (0,1), 0 < p ^ n < 1.
+
+
+
+
+                                                          o J ' " ~~?^^__^ ' '
+                                                              cvi ! ,' "~~"-__^^ ! \
+
+
+                          8 J : ! ! ^^^^??
+                          CM                    i       i         i           i        A
+                                                                                            -?-?-?-9 f1
+
+                            O                          '                  '                  '                 '
+                            in                    H                   i              i              i          i
+
+
+
+                            o                        '                 '                   '                   '
+                           OH'                                                   '            '                |
+
+
+
+
+                          O
+                          lOJ                       -?-
+                                                    | , -
+                                                        , -,*                                                 ,   2
+                                                                                      -t-t-1-t *3
+                          OH1                                                     '              '              '
+                             -1-'-1-'-1-'-1-'
+                                                 0.16 0.18 0.20 0.22
+                                                                          P
+
+
+Figure 1. Given p,Q = aS(p) + (1 ? a)S(n) satisfies fx = fx for x = 1, 2, 3 with /0 varying over p. For example, gi
+p = 0.17, 0.19, 0.21, and 0.23 (dashed lines), fx = 187, f2 = 56,/3 = 28,/0 = 297, 263, 234, and 209, respectively (solid dots).
+
+
+
+
+                                This content downloaded from 193.205.28.94 on Thu, 05 Nov 2026 15:01:57 UTC
+                                                 All use subject to https://about.jstor.org/terms
+                                                   On the Nonidentifiability of Population Sizes 979
+
+
+For each fixed p, both rj and a are found by solving the equa                 Holzmann, H., Munk, A., and Zucchini, W. (2006). On iden
+tion system,                                                                         tifiability in capture-recapture models. Biometrics 62,
+                                                                                     934-936.
+          ^(1) = fi/n ) ^ ^ = f/n-hs^jl)                                      Lindsay, B. G. (1995). Mixture Models: Theory, Geometry and
+                                                                                    Applications. Hay ward, California: Institute of Mathe
+           h~{2) = f2/n J ? /i6(P)(l) - fr?(?)(l)                                   matical Statistics.
+                                          = h/n-h6{r]){2)                      Link, W. A. (2003). Nonidentifiability of population size
+                                              ^6(p)(2) - /l?(r;)(2)                  from capture-recapture data with heterogeneous detec
+                                                                                     tion probabilities. Biometrics 59, 1123-1130.
+It is clear that /x = /x for x = 1, 2, 3, and /0 varies over p.
+                                                                               Link, W. A. (2006). Reply to "On identifiability in capture
+   There is no upper bound to the odds 6(Q) in a neigh
+                                                                                     recapture models." Biometrics 92, 936-939.
+borhood of fiQ (Mao and Lindsay, 2007). It makes sense to
+                                                                              Mao, C. X. (2007). Estimating population sizes for capture
+consider lower bounds to 0(Q). There exist lower bounds to
+                                                                                   recapture sampling with binomial mixtures. Computa
+9{Q). For example, from the estimator n + (T ? l)fl/(2Tf2)
+                                                                                    tional Statistics and Data Analysis 51, 5211-5219.
+ (Chao, 1989), (T - l)h2Q(l){2ThQ(2)} is a lower bound to                     Mao, C. X. (2008). Lower bounds to the population size when
+0(Q) provided that Q ^ S(l). Among various lower bounds,
+                                                                                    capture probabilities vary over individuals. Australian
+the sharpest one is
+                                                                                    and New Zealand Journal of Statistics 50, 1-10.
+  <t>(hQ) = inf{0(P) :hQ(x) = hP(x),x = 1,2,... ,T,VP e A}.                   Mao, C. X. and Lindsay, B. G. (2002). Diagnostics for the het
+                                                                                    erogeneity of inclusion probabilities in a Bernoulli cen
+                                                                        (8)
+                                                                                    sus. Indian Journal of Statistics 64, 626-634.
+A linear program can be used to calculate 4>{hq) numerically                  Mao, C. X. and Lindsay, B. G. (2007). Estimating the number
+ (Mao, 2007).                                                                       of classes. Annals of Statistics 35, 917-930.
+   To determine when 0(/iq) is achieved theoretically, define
+
+                   K = {Q ? A : index(Q) ^ T/2}. (9)                                    Received October 2006. Revised February 2007.
+                                                                                                   Accepted December 2007.
+   Proposition 3: // Q e /C, then 0(/iq) ? 9(Q) and
+(j>{ho) < 0(Q) otherwise.                                                                                    Appendix
+   Proposition 3 is an application of Theorem 1 in Mao (2008).                   Proof of Proposition 2. Let k( Q) denote the number of sup
+If Q G (A ? /C), then 0(Q) consists of an identifiable compo                   port points of Q. When T is odd with T = 2ra + 1, conclude
+nent 0(/iq) and a nonidentifiable component 9(Q) ? 0(/iq)                      that V ? hi because, with index (Q) ^ ?(Q) ^ index (Q) +
+by writing                                                                    V2,
+                   9(Q) = 4>{hQ) + {0(Q) - 4>(hQ)}. (10)                               index(Q) ^ ra => k(Q) ^ ra + 1/2
+The mixture Hq tells nothing about 9{Q) ? 0(^q) for                                                      <=> ?(Q) ^ ^ =^ index(Q) ^ m.
+Qe(A-K). For example, <f>(hQ) = 61/195 and 9{Q) =
+                                                                              When T is even with T = 2m, Z^ C ?> because index (Q) ^ (T -
+61/195 = <t>{ho) for Q in (2), and for Q obtained from G =
+Beta(l/2,3/2),Q e (A-JC) and 9(Q) = 189/195 > <?(/iQ).                         l)/2 = ra - 1/2 implies that ?(Q) ^ index(Q) + 1/2 ^ m.
+   A lower bound to 9(Q) yields a lower bound to the popu                     For any Q with /c(Q) ^ ra ? 1, index(Q) < k(Q) ^ ra ? 1 <
+ lation size JV, e.g.,                                                        ra ? 1/2 so that Q eU. For any Q with ?((?) = ra, either
+                                                                               index(Q) = ra ? 1/2 so that Q e U or index(<2) = ra so that
+                 ^ = Ar{n-0(fto)}/{n-fl(Q)},                                  Q e (V ? U). Conclude that V ? U contains all Q with k(Q) =
+                                                                               index (Q) = ra.
+which can be estimated by n + n<j)(h<>). Lower confidence lim
+ its for a lower bound to N can be constructed. They are also
+                                                                               The authors replied as follows:
+ lower confidence limits for N and useful in practice. For ex
+ample, say, n = 20,000 injection drug users (IDUs) in Los                        The problem of nonidentifiability of the mixing distribu
+Angeles were observed from a capture-recapture study. The                      tion and hence of the population size in closed-population
+true size N of the IDU population is between 20,000 and the                    capture-recapture experiments with heterogeneous individual
+size of the whole population of Los Angeles. It is helpful to                  capture probabilities was observed and discussed in a semi
+public health decision making if one concludes that there are                 nal paper by Link (2003). In Holzmann, Munk, and Zucchini
+at least, say, 30,000 IDUs at the 95% confidence level.                        (2006; hereafter HMZ), we put this into the general context
+                                                                              of identifiability of finite mixtures and gave conditions under
+                                  References
+                                                                              which a parametric subfamily of mixing distributions is iden
+Chao, A. (1989). Estimating population size for sparse data in                 tifiable. In his response, Link (2006) gave examples to illus
+     capture-recapture experiments. Biometrics 45, 427-438.                   trate that identifiability does not extend across (identifiable)
+Chao, A., Tsay, P. K., Lin, S.-H., Shau, W.-Y., and Chao,                     parametric subfamilies. Thus, if one is not willing to assume
+      D.-Y. (2001). The applications of capture-recapture                     some specific parametric model for the mixing distribution
+      models to epidemiological data. Statistics in Medicine 20,               (perhaps based on some additional information), the results
+       3123-3157.                                                              in HMZ are not helpful any more. In the present article, Mao
+
+
+
+
+                                       This content downloaded from 193.205.28.94 on Thu, 05 Nov 2026 15:01:57 UTC
+                                                        All use subject to https://about.jstor.org/terms
+                                                                   980 Biometrics, September 2008
+
+
+ (2008b) gives conditions under which mixing distributions can (2008b) describes the family U of strongly identifiable mix
+ be identified within the family of all mixing distributions. For ing distributions as follows. For G G A let #Gbe the number
+ such mixing distributions, the problems raised by Link (2003, of support points, and let index G be the number of support
+ 2006) cannot occur.                                                                     points, where a support point at 1 is only counted as 1/2.
+    In Section 1 we clarify the distinction between the differ Then U is the set of all G with index G < (T - l)/2. Evidently,
+ent notions of identifiability (as defined in HMZ and in Mao, the family U is identifiable, but more is true, the problem with
+2008b). In Section 2 this is linked to the notion of estimable other subfamilies with elements giving rise to the same mixing
+ lower bounds to the population size, which has been pop distributions cannot occur. For odd T,U is simply the family
+ularized by Mao (2007, 2008a, 2008b) and Mao and Lindsay iSfin of identifiable mixtures with at most T/2 support points,
+ (2007). In particular, we point out that under some additional  for even T the family U does not contain all finite mixtures
+restrictions, these may also be estimated in certain parametric with #67 < T/2, and is thus smaller then <Sfin.
+models by (conditional) parametric maximum likelihood.
+
+                                                                                         2. Identifiability and Estimable Lower Bounds
+ 1. Notions of Identifiability
+                                                                                         In a series of papers, Mao (2007, 2008a) and Mao and Lind
+We briefly recall the statistical model considered in HMZ and                            say (2007) discussed the construction and estimation of lower
+  in Mao (2008b). Let X denote the number of captures of an bounds to the odds and hence to the population size. Due
+  individual in T captures. Then                               to the rather obvious problem of possible subjects that may
+                                                              be very hard to capture, this seems to be a very appeal
+                                                               ing and practically relevant approach. In the present arti
+   X ~ 7zG(x) = J (Tx) p*(l - p)T~x dG(x), x = 0,...,T,       cle, Mao (2008b) introduces a parametric family JC for which
+where G is a mixing distribution on (0, 1]. Let fx be the      these lower bounds are achieved. Here we show that (a)
+number of individuals observed at exactly x times, and let     JC is identifiable, (b) it generates all possible conditional
+n = ^2x fx be the total number of observed individuals. Con   mixtures ttg.
+ditional on n, the observations (/i,..., fT) are multinomial       To start, for the population size N one has N = Egn/
+with probabilities Kq(x) = tvg(x)/(1 ? 7Tg(0)), x = 1,... ,T.   (1 - ttg(0)) = En(l + ttg(0)/(1 - ttg(0))), thus, in order to
+     Let A denote the family of all mixing distributions on   obtain lower bounds for N one needs to find lower bounds for
+ (0, 1]. In HMZ, we introduced the notion of identifiability   the odds 6(G) = ttg(0)/(1 - ttg(0)). Following Mao (2007),
+ of a subfamily S C A from the observations fx as follows. If  define
+ tvq = ttch for G,H G S, then G = H. This notion of identifiabil
+ ity corresponds to the classical notion introduced by Teicher                                            0(ttg) = inf {0(H) :7rG = 7TcH,He A}. (1)
+  (1963) for ordinary (nontruncated) binomial mixtures. It is
+what is needed to make, together with additional regular                                    As in Mao (2008b) consider K = {G G A : index G < T/2).
+ ity conditions such as compactness of the parameter space,                              Mao (2008b) shows that JC is the set of mixing distributions
+the standard maximum likelihood estimation theory work (cf.                               for which the inf in (1) is obtained: ()>(7rG) = 0(G) if and
+e.g., Leroux, 1992). This means that if the true Go G S, it can                          only if G G JC. Further, from Mao (2007) the infimum in (1)
+be consistently estimated by maximum likelihood, and hence                               is always obtained.
+also 7rGo(0). An important example is the family of finite mix                             Together with the results on strong identifiability in Sec
+tures <Sfin with at most T/2 support points.                                             tion 1, one has for every G G A: Either index G < (T ? l)/2,
+    However, as already indicated in HMZ and explicitly                                   in which case irG is unique and 0(ttg) = 0(G), or index G >
+pointed out by Link (2006), identifiability in this notion does                           (T ? l)/2, in which case there is a (unique, see below) H G JC
+not extend across families. Indeed, Link constructs examples                             with indexH= T/2, for which ttcg = ncH and <?(*g) = 0(H).
+of identifiable families Si and S2, for which there are G G Si                           Thus, JC satisfies b.
+and H S2 with ncG = ttch . Thus, based on the data one can                                   To show (a), let us further describe the set JC. For even
+not distinguish between the mixing distributions G and H.                                T, JC ? <Sfin are simply the finite mixtures with at most T/2
+This problem is serious because the quantity of interest, the                             support points. For odd T, these are all G with #67 < (T ?
+proportion of unobserved individuals, ttg(0) and 7r#(0), can                              l)/2 support points as well as those with #67 = (T + l)/2
+differ significantly. Therefore, if there are no proper reasons                          and for which one of the support points is 1. Therefore, for
+ (based on additional information and not on the observations                            even T, identifiability of JC follows from the results in HMZ,
+fx) to choose a specific family of mixing distributions S, this                          and for odd T we give the proof in the Appendix.
+direct parametric approach may be unsatisfactory.                                           It is now tempting to use JC as a "universal" parametric
+    Of course, a similar problem in principle also occurs for                            model. Under a small additional regularity condition (com
+ordinary binomial mixtures. In order to overcome it, Lindsay                             pactness of the parameter space, i.e. a lower bound 8 > 0
+ and Roeder (1993) and Lindsay (1995) gave a stronger condi                              on the possible capture probabilities), the (conditional) MLE
+ tion than identifiability in a subfamily, and in the present                             67 G JC converges to the unique 67 G JC which gives ttg = ttGq ,
+ article, Mao (2008b) (see also Mao, Colwell, and Chang,                                 where 670 G A is the true mixing distribution, and 0(67) con
+ 2005) extends it to the truncated binomial mixtures arising in                           verges to the lower bound 0(G) = </>(7rGo). Thus, one di
+ capture-recapture studies. Call a mixing distribution G G A                              rectly obtains an estimate of the lower bound in (1) and
+ strongly identifiable if 7Tq cannot be reproduced by any other                           of a corresponding mixing distribution. Further, it offers a
+mixing distribution H G A: If 7Tq = ircH for any H G A, then                              direct way to construct confidence intervals to the lower
+G = H. Using results by Lindsay and Roeder (1993), Mao                                    bound.
+
+
+                                                   This content downloaded from 193.205.28.94 on Thu, 05 Nov 2026 15:01:57 UTC
+                                                                    All use subject to https://about.jstor.org/terms
+                                              On the Nonidentifiability of Population Sizes 981
+
+
+                                References                                 it follows that the coefficients si = = st ? 0, all van
+Holzmann, H., Munk, A., and Zucchini, W. (2006). On iden                   ish. Introducing matrix notation P = (Pk,x) ? (pjt(l ~
+      tifiability in capture-recapture models. Biometrics 62,              Pk)T~x)k.x=i,....T-i and s = (s1,...,5T-i)/, this is just
+      934-936.                                                                                        p.s = 0=>s = 0. (A.l)
+Leroux, B. G. (1992). Consistent estimation of a mixing dis
+      tribution. Annals of Statistics 20, 1350-1360.                       Relation (A.l) implies that P has full rank, hence so doe
+Lindsay, B. (1995). Mixture Models: Theory, Geometry, and                   transpose P', and we get
+      Applications. Hay ward, California: Institute for Mathe
+    matical Statistics.
+                                                                                              P'.t = 0=>t = 0 forteRT-\ (A.
+                                                                           which is the claim of the lemma.
+Lindsay, B. G. and Roeder, K. (1993). Uniqueness of estima
+      tion and identifiability in mixture models. The Canadian
+                                                                              Suppose that G, H G K with tcq ? ttch. Due to strong
+      Journal of Statistics 21, 139-147.
+                                                                            tifiability of mixing distributions with (T ? l)/2 su
+Link, W. A. (2003). Nonidentifiability of population size
+                                                                           points, we can assume that index G = index H = T/2, so
+      from capture-recapture data with heterogeneous detec
+      tion probabilities. Biometrics 59, 1123-1130.                        there are (T + l)/2 support points for both G and H, on
+                                                                           which is 1 (we assume that after relabeling this is th
+Link, W. A. (2006). Reply to on identifiability in capture
+      recapture models. Biometrics 62, 936-939.
+                                                                           l)/2 support point).
+                                                                             From Lemma 1 in HMZ, there exists an A > 0 with
+Mao, C. X. (2007). Estimating population sizes for capture
+     recapture sampling with binomial mixtures. Computa                        (T-l)/2
+          tional Statistics and Data Analysis 51, 5211-5219.
+                                                                               X]k=lXk,GPk,G(1~Pk,G)T~X
+Mao, C. X. (2008a). Lower bounds to the population size
+      when capture probabilities vary over individuals. Aus                              (T-l)/2
+          tralian and New Zealand Journal of Statistics 50, 1-10.
+Mao, C. X. (2008b). On the nonidentifiability of population                       = A ]? Vn^a-^r1, x = l,...,T-l,
+     sizes. Biometrics 64, 977-981.                                                                                                    (A.3)
+Mao, C. X. and Lindsay, B. G. (2007). Estimating the number                and
+      of classes. Annals of Statistics 35, 917-930.                                         (T-l)/2
+Mao, C. X., Colwell, R. K., and Chang, J. (2005). Estimating
+      the species accumulation curve using mixtures. Biomet                                  / J ^k,G Pk,G + \T+l)/2,G
+                                                                                             k=\
+      rics 61, 433-441.
+Teicher, H. (1963). Identifiability of finite mixtures. The An
+      nals of Mathematical Statistics 34, 1265-1269.
+                                                                                              = A ( S A*'H P^ + V+D/2,H ) , (A.4)
+                               Appendix                                    where A^g, ^k,H > 0 and
+
+  Proof of Identifiability of/C. We only have to give the proof                                    $^Afc,G
+                                                                                                      k k
+                                                                                                           = ]TAfc,tf = 1. (A'5)
+for odd T, and start with the following lemma.
+                                                                              Subtracting the r.h
+   Lemma 1: //                                                                argument in HMZ
+             T-l                                                              labeling,                                      pkjG              =
+             J2tkp^1 - p^T~x = ?' x = x' 'T - x>                                            Xk,G                              =        A\k
+                                               Inserting this into
+for some tfc M and distinct p^ G (0, 1), then it
+                                               offollows that
+                                                       the    proposition
+ tx = = tT = 0.
+
+   Proof. The polynomials Px(p) = Px(l ? p)T~x, % ?
+1,... ,T ? 1, are linearly independent because, except for the
+normalization, these are the Bernstein polynomials, which are          Hajo H
+known to be linearly independent. Therefore any nontrivial           Institut
+linear combination, which thus is a nonzero polynomial of de         Universit
+gree at most T, has at most T roots. Because, evidently, two    Englerstr. 2,
+of these always equal 0 and 1, there are at most T ? 2 roots               and
+within the interval (0, 1). Hence, for different p\,... ,pT G (0,       Axel
+ i), if
+                                                                                             Institut fur
+                                                                                              Georg-Augus
+           Y/sxPxk(i-Pk)T-x=0, k=l,...,T-l,                                              Maschmuhlenweg
+                                                                                             Email: munk
+
+
+
+
+                                    This content downloaded from 193.205.28.94 on Thu, 05 Nov 2026 15:01:57 UTC
+                                                     All use subject to https://about.jstor.org/terms
+

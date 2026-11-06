@@ -165,8 +165,9 @@ for(idx in 1:d){
   TabNj = c(length(which(Nj == 0)), tabulate(Nj, nbins = n) )
   S<-Shat<- sum( Nj )/n
   library(VGAM)
-  z <- S*n - log(20)
-  W <- ifelse(z < 700, VGAM::lambertW(exp(z)), z - log(z))
+  z <- 20*S*n 
+  Wz = VGAM::lambertW(z)
+  W <- 0.05*exp(Wz)
   cat("...",W,"\n")
   Mstar[idx] = W
 }

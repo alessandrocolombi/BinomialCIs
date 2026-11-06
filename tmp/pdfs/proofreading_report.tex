@@ -1,0 +1,258 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb,bm}
+\usepackage[a4paper,margin=2.15cm,headheight=14pt]{geometry}
+\usepackage{xcolor}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{fancyhdr}
+\usepackage{hyperref}
+\definecolor{navy}{HTML}{17365D}
+\definecolor{accent}{HTML}{B4432E}
+\definecolor{muted}{HTML}{5B6673}
+\hypersetup{colorlinks=true,linkcolor=navy,urlcolor=navy}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{4pt plus 1pt}
+\setlength{\emergencystretch}{2em}
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{JASA draft - proofreading report}
+\rhead{Technical and language review}
+\cfoot{\thepage}
+\renewcommand{\headrulewidth}{0.3pt}
+\usepackage{titlesec}
+\titleformat{\section}{\Large\bfseries\color{navy}}{}{0pt}{}
+\titleformat{\subsection}{\large\bfseries\color{accent}}{}{0pt}{}
+\begin{document}
+\begin{center}\LARGE\bfseries Proofreading report - JASA draft\end{center}
+
+Source reviewed: \texttt{pasted-text.txt} (2,536 lines of active LaTeX plus comments).
+
+The line numbers below refer to the pasted source. I have separated mathematical issues from language/style corrections. Items marked \textbf{critical} can affect the validity or meaning of a stated result; they are not merely editorial.
+
+\section*{1. Mathematical and logical issues}
+
+\subsection*{Definition and global notation}
+
+\par\medskip\noindent\textbf{1.} \textbf{Undefined maximum over the empty set (lines 324-327).} If every category has been observed, the set \(\{j:N_j=0\}\) is empty. Explicitly define
+\[
+   M_{\max}(N)=\max_{j:N_j=0}p_j,\qquad \max\varnothing:=0.
+\]
+This convention is used implicitly later, especially in the lower-bound proofs.
+
+\par\medskip\noindent\textbf{2.} \textbf{Inconsistent notation for the target.} The draft alternates among \texttt{M\_\allowbreak{}\{\allowbreak{}\textbackslash{}\allowbreak{}max\}\allowbreak{}}, \texttt{M\_\allowbreak{}\{\allowbreak{}max\}\allowbreak{}}, and \texttt{M\_\allowbreak{}\{\allowbreak{}\textbackslash{}\allowbreak{}text\{\allowbreak{}max\}\allowbreak{}\}\allowbreak{}}, and sometimes writes \(M_{\max}(N,p)\). Standardize throughout, preferably with the existing \texttt{\textbackslash{}\allowbreak{}Mmax} macro and an explicit definition of any dependence on \(p\).
+
+\par\medskip\noindent\textbf{3.} \textbf{"Confidence interval" versus "upper confidence bound."} Most displayed results produce \([0,T_n(N)]\), so "upper confidence bound" is generally more precise. Reserve "confidence interval length" for the endpoint only after stating that the lower endpoint is zero.
+
+\subsection*{Bounded-alphabet results}
+
+\par\medskip\noindent\textbf{4.} \textbf{Theorem 1 needs \(r^\star\ge1\) (lines 395-405).} The proof requires \(r\ge1\), but \(r^\star=\log(M/\alpha)\) can be below 1 (e.g. \(M=1\) and \(\alpha>e^{-1}\)). Either restrict the parameters or set \(r^\star=\max\{1,\log(M/\alpha)\}\).
+
+\par\medskip\noindent\textbf{5.} \textbf{The interpretation after Theorem 1 is stronger than the calculation (lines 412-424).} \(T_{\mathrm{hom}}(r)\) is the exact homogeneous/worst-coordinate expression, whereas \(T_{\mathrm{wc}}\) uses the exponential relaxation
+\((n/(n+r))^{n/r}\le \exp\{-n/(n+r)\}\). Therefore it does not "yield precisely" the same bound, and the worst-case bound does not exactly "correspond to constant \(p_i\)." Say that the two are asymptotically equivalent under \(r=o(n)\).
+
+\par\medskip\noindent\textbf{6.} \textbf{The remainder \(O(n^{-2})\) is not justified when \(M=M_n\) grows (lines 427-435 and 1207-1211).} The remainder depends on \(r^\star=\log(M/\alpha)\). A fixed \(O(n^{-2})\) statement is appropriate only when \(M,\alpha\) are fixed. With growing \(M\), give the remainder explicitly in terms of \(\log(M/\alpha)\), or state only \(T_{\mathrm{wc}}\sim\log(M/\alpha)/n\).
+
+\par\medskip\noindent\textbf{7.} \textbf{Typo inside the maximization (line 444).} \texttt{\textbackslash{}\allowbreak{}max\_\allowbreak{}\{\allowbreak{}p\textbackslash{}\allowbreak{}in[0,1]\}\allowbreak{} p\_\allowbreak{}j\textasciicircum{}\allowbreak{}r(1-p\_\allowbreak{}j)\textasciicircum{}\allowbreak{}n} should use the maximization variable: \texttt{\textbackslash{}\allowbreak{}max\_\allowbreak{}\{\allowbreak{}x\textbackslash{}\allowbreak{}in[0,1]\}\allowbreak{}x\textasciicircum{}\allowbreak{}r(1-x)\textasciicircum{}\allowbreak{}n}.
+
+\par\medskip\noindent\textbf{8.} \textbf{Theorem 2 is presented as nonasymptotic but its endpoint contains an unspecified \(O(n^{-2})\) term (lines 461-484).} An unspecified remainder cannot define an implementable finite-sample confidence bound and does not indicate its sign. State the exact endpoint obtained from line 1219 (with the data-dependent upper bound substituted), then give the logarithmic expression as a corollary/asymptotic expansion.
+
+\par\medskip\noindent\textbf{9.} \textbf{Theorem 2 requires additional domain conditions.} At minimum, \(n>b_n\). Also the optimizing value \(r^\star=\log\{m_b(p)/\alpha\}\) used in the proof need not be at least 1. If the log argument is at most \(e\), the claimed optimizer is outside the allowed domain. Use the constrained optimizer or state sufficient conditions. A negative logarithmic endpoint is impossible for a nonnegative target unless it is truncated/handled separately.
+
+\par\medskip\noindent\textbf{10.} \textbf{Inconsistent \(\epsilon\) in the special case (lines 468-483).} The general definition contains \(\log(1/\delta)\), whereas the \(b_n=\log n\) version suddenly contains \(\log(2/\delta)\). One of these is wrong; no factor 2 is introduced in the displayed proof.
+
+\par\medskip\noindent\textbf{11.} \textbf{Corollary 1 loses \(\delta\) without explanation (lines 499-512, 1241-1250).} Theorem 2 gives coverage \(1-\alpha-\delta\), but the corollary claims \(1-\alpha\). The proof does not reallocate the error budget or take a valid limit. Specify a sequence \(\delta_n\), invoke Theorem 2 with appropriately split levels, and retain the resulting finite-sample coverage statement.
+
+\par\medskip\noindent\textbf{12.} \textbf{Corollary 1 is missing growth conditions involving \(M\) (lines 500-511).} The condition \(b_n=o(\sqrt n)\) alone does not make
+\(b_n\sqrt{M/n\,\log(1/\delta)}\) negligible if \(M=M_n\) grows. Either declare \(M\) fixed or state the needed joint condition.
+
+\par\medskip\noindent\textbf{13.} \textbf{Incorrect parentheses in the proof of Corollary 1 (line 1248).}
+\texttt{\textbackslash{}\allowbreak{}log(m\_\allowbreak{}b(\textbackslash{}\allowbreak{}hat p))/\textbackslash{}\allowbreak{}alpha} must be \texttt{\textbackslash{}\allowbreak{}log(m\_\allowbreak{}b(\textbackslash{}\allowbreak{}hat p)/\textbackslash{}\allowbreak{}alpha)}.
+
+\par\medskip\noindent\textbf{14.} \textbf{Finite lower-bound parameter notation (line 644).} Write \(p_{n,j}^\dagger=q_n^\dagger\), \(j=1,\dots,M_n\), not \(p_j^\dagger\), because the vector is an \(n\)-indexed sequence.
+
+\par\medskip\noindent\textbf{15.} \textbf{Set inclusion is reversed in the proof of Theorem 3 (line 1441).} The correct implication is
+\[
+    \{T_n\ge q_n^\dagger\}\cap\{q_n^\dagger\ge L_n\}\subseteq\{T_n\ge L_n\}.
+\]
+The displayed probability argument below uses this corrected direction.
+
+\par\medskip\noindent\textbf{16.} \textbf{The threshold is multiplied twice by \(1-\eta\) (lines 1439-1458).} Since \(L_n=(1-\eta)\log((K_n\vee1)/\alpha)/n\), line 1444 should be \texttt{T\_\allowbreak{}n(N)\textbackslash{}\allowbreak{}ge L\_\allowbreak{}n}, not \texttt{(1-\textbackslash{}\allowbreak{}eta)L\_\allowbreak{}n}. The later passage to \(\eta_n\to0\) should redefine \(L_n\) using \(\eta_n\); with fixed \(\eta\), \(L_n/q_n^\dagger\to1-\eta\), not 1.
+
+\subsection*{Unbounded-alphabet results}
+
+\par\medskip\noindent\textbf{17.} \textbf{Theorem 4 is false as stated (critical; lines 698-706).} The deterministic bound \(U_n(\alpha)=1\) is always valid, so it is not true that every candidate fails. The result must concern a \emph{nontrivial} bound, e.g. \(0\le U_n(\alpha)<1\), and failure of coverage is the event \(M_{\max}>U_n\), not \(M_{\max}\ge U_n\). Equality does not violate \(M_{\max}\le U_n\).
+
+\par\medskip\noindent\textbf{18.} \textbf{The proof of Theorem 4 contains a reversed equivalence (lines 1618-1620).} For \(x=1-(1-c\alpha)^{1/n}\), the condition \(c<1/\alpha\) ensures \(x<1\), not \(x>1\). In addition, choose \(x>U_n(\alpha)\), not merely \(x\ge U_n(\alpha)\), if the failure event is correctly written with \texttt{>}.
+
+\par\medskip\noindent\textbf{19.} \textbf{Malformed theorem statement (line 699).} \texttt{U\_\allowbreak{}n(\textbackslash{}\allowbreak{}alpha\textbackslash{}\allowbreak{}in(0,1)} should be \texttt{U\_\allowbreak{}n(\textbackslash{}\allowbreak{}alpha)} (with the closing parenthesis), followed by a statement of its range.
+
+\par\medskip\noindent\textbf{20.} \textbf{Lemma 1 needs special treatment at \(r=1\) (lines 714-720).} The formula contains \(0^0\). Either state \(r>1\), handle \(r=1\) separately, or explicitly adopt the continuous convention.
+
+\par\medskip\noindent\textbf{21.} \textbf{Lemma 2's asymptotic expansion is not valid under its stated assumptions (critical; lines 726-740 and 1678-1715).} In line 1693, replacing \((r-1)/r\) by 1 discards
+\[-\frac1r\log\delta=\frac1r\log\frac\{n\}\{r-1\},\]
+which is not \(o(1)\) for the proposed choice \(r\asymp\log n\); it converges to approximately 1. A suitable first-order expression is
+\[
+    U_n(r,S;\alpha)
+    =\frac{r}{en}\left(\frac{Sn}{\alpha r}\right)^{1/r}\{1+o(1)\},
+\]
+under conditions that control the remainder. This missing factor explains why line 738 has \((\log n-\log\log n)/n\), rather than that quantity divided by \(e\). The lemma, its proof, and the optimization discussion must be revised together.
+
+\par\medskip\noindent\textbf{22.} \textbf{Confidence-level mismatch in Theorem 5's proof (lines 744-756, 1725-1759).} Equation (for \texttt{r\_\allowbreak{}star}) defines \(r^\star\) with \(\alpha\), but the proof needs
+\[
+    r_\beta^\star=\log\{S/(\alpha-\beta)\}+\log n-\log\log n
+\]
+to compare it with \(R^\star\). Define this oracle value explicitly in the theorem and impose the monotonicity condition on that same value.
+
+\par\medskip\noindent\textbf{23.} \textbf{Incorrect monotonicity sentence (line 1757).} For a base greater than 1, \((S/\gamma)^{1/r}\) decreases as \(r\) increases. The intended proof can instead compare the coupled expressions directly: because the prescribed relation gives \(U=eF(r)\), show \(F(R^\star)\ge F(r_\beta^\star)\). Do not claim that both individual factors are nondecreasing.
+
+\par\medskip\noindent\textbf{24.} \textbf{Notation for \(U\) is reversed in the proof (lines 1727-1777).} The lemma defines \texttt{U\_\allowbreak{}n(r,S;alpha)}, but the proof repeatedly writes \texttt{U\_\allowbreak{}r(n,S;alpha)}. Standardize to \texttt{U\_\allowbreak{}n}.
+
+\par\medskip\noindent\textbf{25.} \textbf{LaTeX/math typo in the infinite lower bound (line 1868).} \texttt{= \textbackslash{}\allowbreak{}le} should be just \texttt{\textbackslash{}\allowbreak{}le}.
+
+\subsection*{Stopping rules}
+
+\par\medskip\noindent\textbf{26.} \textbf{Undefined and inconsistent quantities in the theorem statement (critical; lines 895-948).} In the bounded rule, \texttt{delta} is not introduced; it should apparently be \texttt{beta}. The sum must run from \(j=1\) to \(M\), not \(j\ge1\) (which diverges because nonexistent coordinates have \(\hat p_j=0\)). Define \(b=b_n\), \(\hat p_{n,j}\), and \(\hat S_n\) explicitly. Also state the convention \texttt{inf emptyset = infinity}.
+
+\par\medskip\noindent\textbf{27.} \textbf{The final assertion uses an undefined generic \(\tau\) (line 947).} State the inequality separately for \(\tau_{\mathrm{bd}}\) and \(\tau_{\mathrm{ub}}\).
+
+\par\medskip\noindent\textbf{28.} \textbf{The bounded stopping-rule proof drops the unseen indicators (critical; lines 2115-2125).} The event should be bounded through
+\(M_r(N)=\sum_jp_j^r\mathbf1\{N_j=0\}\). As written, \(\sum_jp_j^r\) is deterministic, and the Markov step is invalid. In the last factor, the numerator should be \(r\), not \(n\):
+\[
+    \left(\frac{r}{n+r-b}\right)^r
+    \left(\frac{n-b}{n+r-b}\right)^{n-b}.
+\]
+
+\par\medskip\noindent\textbf{29.} \textbf{The oracle quantity varies with \(n\) (lines 2133-2150).} With \(b_n=\log n\), write \(m_{b_n}(p)\), not a fixed \(m(p)\), throughout the oracle rule and event \(\Sigma\). Also, \(b_1=0\) violates \(b\ge1\); start after an admissible minimum sample size or use a modified sequence.
+
+\par\medskip\noindent\textbf{30.} \textbf{Undefined \(n^\star\) (lines 2207-2214).} These occurrences should be \(\tau^\star\), and the exponent/bound must be evaluated at the same stopping index.
+
+\par\medskip\noindent\textbf{31.} \textbf{Multiple copy/paste errors in the unbounded stopping proof (lines 2264-2289).} The union-bound sum should be over \texttt{n=1,...,n\_\allowbreak{}max}, not \texttt{m=1,...,m\_\allowbreak{}max}; the per-time confidence level is \(\beta/n_{\max}\), not \(n_{\max}/\beta\); choose either \(\Sigma\) or \(\Sigma_S\); and every \texttt{tau\_\allowbreak{}bd} in this part should be \texttt{tau\_\allowbreak{}ub}.
+
+\par\medskip\noindent\textbf{32.} \textbf{Theorem number hard-coded (line 2217).} Replace "Theorem 5" with \texttt{Theorem\textasciitilde{}\allowbreak{}\textbackslash{}\allowbreak{}ref\{\allowbreak{}thm:rnorm\_\allowbreak{}unbounded\}\allowbreak{}} so numbering remains correct.
+
+\subsection*{Numerical sections}
+
+\par\medskip\noindent\textbf{33.} \textbf{Incorrect inversion using Lambert \(W\) (critical; lines 1053-1056).} From
+\[
+    S<c\frac Mn\log(M/\alpha),\qquad c=\frac{-\log(1-\alpha)}{\alpha},
+\]
+set \(x=M/\alpha\). The boundary solves
+\(x\log x=Sn/[-\log(1-\alpha)]\), hence
+\[
+    M_{\rm crit}
+    =\alpha\exp\!\left[W\!\left(\frac{Sn}{-\log(1-\alpha)}\right)\right]
+    =\frac{\alpha Sn/[-\log(1-\alpha)]}{W(Sn/[-\log(1-\alpha)])}.
+\]
+The unbounded rule is favored for sufficiently \textbf{large} \(M\), not for \(M<5000\). Lines 1055 and 1056 currently contradict one another.
+
+\par\medskip\noindent\textbf{34.} \textbf{Numerical threshold mismatch (line 976).} With \(n=1000\), \(M=1500\), and \(\alpha=0.05\), the displayed formula gives approximately \textbf{15.8634}, not 15.46. Check whether the reported value or one of the inputs differs in the code.
+
+\par\medskip\noindent\textbf{35.} \textbf{Inconsistent geometric model (lines 1012 and 2296).} The main text uses \(p_j=(1-a)^{j-1}\) (currently with index \texttt{i}), while the supplement uses \(p_j=a^j\). These are radically different, especially for \(a=0.005\). Confirm the implementation and use one definition everywhere.
+
+\par\medskip\noindent\textbf{36.} \textbf{Potentially reversed tail terminology (lines 995 and 2326).} For a standard Zipf/power-law sequence \((j+1)^{-\gamma}\), smaller \(\gamma\) means slower decay/heavier tail. The draft calls smaller \(\gamma\) "light-tailed" and larger \(\gamma\) "heavy-tailed." If you mean "more extremely rare categories" rather than a heavier mathematical tail, say that explicitly.
+
+\par\medskip\noindent\textbf{37.} \textbf{BBS interpretation overstates the guarantee (line 1089).} Controlling \(M_{\max}\le\varepsilon\) guarantees that every unseen species has prevalence at most \(\varepsilon\); it does \textbf{not} guarantee that the aggregate probability of encountering \emph{any} unseen species is below \(\varepsilon\). Rewrite this sentence in terms of the maximum unseen prevalence.
+
+\par\medskip\noindent\textbf{38.} \textbf{Table header has two errors (line 2511).} The contamination grid in line 1014 is \(0,10^{-4},5\times10^{-4},10^{-3},2.5\times10^{-3},5\times10^{-3}\). Thus the third header should be \texttt{q=0.0005}, not \texttt{q=0.005}, and the last should be \texttt{q=0.005}, not \texttt{q0.005}.
+
+\section*{2. Language, grammar, and typographical corrections}
+
+\subsection*{Front matter and introduction}
+
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 263: \texttt{Depertment} $\to$ \texttt{Department}; \texttt{Isreal} $\to$ \texttt{Israel}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Lines 253-281: the comment describing \texttt{\textbackslash{}\allowbreak{}blind} is reversed. \texttt{\textbackslash{}\allowbreak{}blind=1} currently prints authors; \texttt{\textbackslash{}\allowbreak{}blind=0} produces the anonymous title page.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Title: "with application to" $\to$ preferably "with \textbf{an} application to" (one application) or "with applications to" (several).
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 293: there are 8 keyword phrases. The current JASA instruction is 3-5; reduce the list. The abstract is 161 words and is within the 200-word limit.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 335: "the smallest sample size that guarantees that the probability of the maximum unseen probability ... is smaller" is not meaningful. Prefer the older commented formulation: "the first sample size \(n\) at which the upper confidence bound satisfies \(U_n(\alpha)\le\varepsilon\)."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 372: \texttt{approximaetly} $\to$ \texttt{approximately}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 382: "It might be then tempting" $\to$ "It might then be tempting."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 385: "data independent" $\to$ "data-independent."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 424: \texttt{p\_\allowbreak{}i} $\to$ \texttt{p\_\allowbreak{}j}, to match the rest of the section.
+
+\subsection*{Unbounded regime and stopping section}
+
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 708: \texttt{Propostion} $\to$ \texttt{Proposition}; "a shift from worst-case, data-independent approach" $\to$ "a shift from \textbf{a} worst-case, data-independent approach."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 723: "turn ... into" is acceptable but "convert ... into" is more formal.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 725: lowercase "lemma" in running prose.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 893: \texttt{lifter} $\to$ \texttt{lifted}; "namely there is" $\to$ "namely, there is."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 947: "both ... are stopping times satisfying" $\to$ "both ... are stopping times and each satisfies ...".
+
+\subsection*{Numerical illustrations and applications}
+
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 955: replace "where we compare" with "in which we compare"; replace "either the bounds" with "the bounds."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 956: "shorter or equal than" $\to$ "shorter than or equal to"; "can either yield ... but" $\to$ "can yield ...; however,"; "as we experienced that" $\to$ "because it performs."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 964: use either American \texttt{favor} consistently or British \texttt{favour}; ASA requests American spelling.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1020: \texttt{propotion} $\to$ \texttt{proportion}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1024: hyphenate \texttt{M\_\allowbreak{}max-based}; remove the comma after "rules"; "differ for the type of employed estimator, either using using..." $\to$ "differ in the estimator used: one uses the estimator of ... and the other that of ...".
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1025: Suggested rewrite: "Unlike our proposal, the competing stopping rules are heuristic: they do not account for the randomness of the stopping time and do not guarantee that the estimated coverage exceeds 0.99 with arbitrarily high probability." Check whether "arbitrarily high probability" is actually the intended claim.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1031: \texttt{Tables ... reports} $\to$ \texttt{Table ... reports}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1033: use plural "coverage-based rules" if both competitors are being discussed.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1045: "analyze each cancer type separated" $\to$ "analyze each cancer type separately"; "the different symbols ... corresponds" $\to$ "the symbols ... correspond."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1046: remove the space before the period; "Even if" $\to$ "Although"; remove the double space after the comma.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1050: consider deleting the question mark and making this an indirect question: "we ask how likely it is ...".
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1062: "datasets, that are" $\to$ "datasets-Breast ..., Lung ..., Skin ..., and Esophageal ...-"; \texttt{smaller that} $\to$ \texttt{smaller than}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1063: \texttt{neglibile} $\to$ \texttt{negligible}; the opening "While looking at" clause is awkward. Prefer "Although the accumulation curves ... suggest that new variants will continue to appear ..., the bounds ... indicate that each unseen variant has relatively low prevalence ...".
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1075: remove the double space before \texttt{TCGA}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1083: "Application to BBS dataset" $\to$ "Application to \textbf{the} BBS dataset."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1089: "Theorem ..., Section ..." $\to$ "Theorem ... \textbf{in} Section ...".
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1090: "which in turn substantially outperforms" $\to$ "which, in turn, substantially outperform"; hyphenate \texttt{M\_\allowbreak{}max-based}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1097: "discovered birds species" $\to$ "discovered bird species"; "in BBS dataset, data refer to 2019 only" $\to$ "in the BBS dataset; data are from 2019 only."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1119: \texttt{It includes} $\to$ \texttt{They include} (or list the supplement explicitly).
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1127: \texttt{Fundings} $\to$ \texttt{Funding}.
+
+\subsection*{Supplementary proofs}
+
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1169: "The \(r\)-norm ... follows" $\to$ "The corresponding \(r\)-norm is". Also the displayed object should be checked: an \(r\)-norm of the vector \(p_i\mathbf1\{N_i=0\}\) is \((\sum_i p_i^r\mathbf1\{N_i=0\})^{1/r}\), not the norm of the already powered entries as currently written.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1193: capitalize "Where" only if starting a new sentence; better attach it to the preceding display: "where".
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1195: \texttt{N\_\allowbreak{}u(X\textasciicircum{}\allowbreak{}n)} is an unexplained leftover and should be \texttt{N\_\allowbreak{}i}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1206: use \(M\), not \texttt{m}, for the alphabet size.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1211: \texttt{last in equality} $\to$ \texttt{last inequality}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1215: finite-alphabet sum should be over \texttt{i=1,...,M}, not \texttt{i in N}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1243: the domain is \(u\ge0\), not merely \(u\ge-1\), for the way it is used here (the standard inequality is valid for \(u>-1\), with care at \(-1\)).
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1444 onward: alternate use of \texttt{T(N)} and \texttt{T\_\allowbreak{}n(N)}; standardize to \texttt{T\_\allowbreak{}n(N)}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1491: add punctuation after the display.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1553: delete duplicated \texttt{any any}.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Lines 1555-1610: the index \texttt{m} and the first \texttt{m-1} coordinates equal to one are unnecessary for the construction; a one-active-coordinate example is clearer.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1580: "\(U(\alpha,n)\) implies that" $\to$ "There are two cases."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Lines 1585-1591: \texttt{T} is undefined; use \texttt{U\_\allowbreak{}n(\textbackslash{}\allowbreak{}alpha)} consistently.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 1719: \texttt{\textbackslash{}\allowbreak{}hat S} is unbiased, but cite the concentration inequality-not unbiasedness-as the reason for the displayed bound.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 2111: \texttt{Firstly} $\to$ \texttt{First}; "probability of events" $\to$ "probabilities of the events."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 2138: \texttt{can not} $\to$ \texttt{cannot}; "requires the oracle knowledge" $\to$ "requires knowledge."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 2158: "arbitrary close" $\to$ "arbitrarily close."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 2194: "yields to" $\to$ "yields."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Lines 2228-2229: delete duplicated "yielding / This yields."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 2262: "arbitrary large" $\to$ "arbitrarily large."
+
+\subsection*{Supplementary simulations}
+
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 2326: add commas around "i.e."; remove the extra space before "the"; use closed-up em dashes in LaTeX (\texttt{---}) consistently.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 2343: lowercase "geometric" unless it is a proper distribution name.
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 2371: \texttt{upper-bouding} $\to$ \texttt{upper-bounding}; use sentence case: "Bounded versus unbounded intervals when upper-bounding \(M\)."
+\par\smallskip\noindent\hangindent=1.2em\hangafter=1 $\bullet$ Line 2391: "\(x\)-axis is in \(\log_{10}\) scale" $\to$ "The \(x\)-axis is on a \(\log_{10}\) scale."
+
+\section*{3. LaTeX and submission cleanup}
+
+\par\medskip\noindent\textbf{1.} \texttt{amsmath} and \texttt{graphicx} are each loaded twice. Remove duplicates.
+\par\medskip\noindent\textbf{2.} The source still contains visible author macros (\texttt{\textbackslash{}\allowbreak{}ACtext}, \texttt{\textbackslash{}\allowbreak{}ACnote}) and TODOs in the main text. Remove colored revision markup before submission.
+\par\medskip\noindent\textbf{3.} Labels such as \texttt{r-norm lim}, \texttt{CI r-norm}, and \texttt{E(p) explicit} contain spaces/punctuation. They compile in many setups but are fragile; use labels such as \texttt{eq:rnorm-limit}.
+\par\medskip\noindent\textbf{4.} Prefer \texttt{\textbackslash{}\allowbreak{}mathbb P} and \texttt{\textbackslash{}\allowbreak{}mathbb E} consistently instead of alternating with bare \texttt{P} and \texttt{E}.
+\par\medskip\noindent\textbf{5.} Use \texttt{\textbackslash{}\allowbreak{}operatorname\{\allowbreak{}Bin\}\allowbreak{}} or \texttt{\textbackslash{}\allowbreak{}mathrm\{\allowbreak{}Bin\}\allowbreak{}} consistently; the draft alternates with \texttt{\textbackslash{}\allowbreak{}operatorname\{\allowbreak{}Bin\}\allowbreak{}} in proofs.
+\par\medskip\noindent\textbf{6.} Replace hard-coded Appendix references with \texttt{Supplementary Material} if the supplement will be uploaded as a separate file.
+\par\medskip\noindent\textbf{7.} The source currently places the supplement after the bibliography in the same document. JASA asks that appendices, proofs, and supporting material be uploaded as a separate anonymized supplement; split the source before submission.
+\par\medskip\noindent\textbf{8.} The manuscript uses \texttt{\textbackslash{}\allowbreak{}spacingset\{\allowbreak{}1.8\}\allowbreak{}} after initially setting 1. JASA asks for fully double-spaced text. Confirm the output has 26 lines of text per page; \texttt{1.8} is not automatically equivalent to the requested layout.
+\par\medskip\noindent\textbf{9.} The custom margins are asymmetric (\texttt{oddsidemargin} and \texttt{evensidemargin} are changed by different amounts). For a one-sided submission file, use a standard, explicit geometry rather than incremental adjustments.
+\par\medskip\noindent\textbf{10.} JASA requests 3-5 keywords, but the draft has 8.
+
+\section*{4. Suggested order of revision}
+
+\par\medskip\noindent\textbf{1.} Repair Lemma 2 and the resulting unbounded-bound derivation.
+\par\medskip\noindent\textbf{2.} Restate and reprove the deterministic impossibility theorem with the correct nontrivial range and strict failure event.
+\par\medskip\noindent\textbf{3.} Repair Theorem 2/Corollary 1 so the advertised endpoint is an exact, computable finite-sample bound.
+\par\medskip\noindent\textbf{4.} Rewrite the stopping-rule theorem and proof with indexed quantities \(b_n,m_{b_n},\hat p_n,\bar S_n\), then recheck the simulation code against those formulas.
+\par\medskip\noindent\textbf{5.} Correct the Lambert-\(W\) inversion and numeric threshold.
+\par\medskip\noindent\textbf{6.} Resolve the geometric-model definition and table headers against the code used to generate the figures.
+\par\medskip\noindent\textbf{7.} Apply the language edits and clean the LaTeX for submission.
+\end{document}

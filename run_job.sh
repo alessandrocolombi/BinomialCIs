@@ -5,6 +5,9 @@ SCRIPT_DEFAULT="./Rscripts/SecondSub/SR_rev.R"   # default script if none given
 TAIL_LINES="${TAIL_LINES:-200}"           # lines to show before follow
 
 SCRIPT="${1:-$SCRIPT_DEFAULT}"            # allow: ./run_job.sh path/to/script.R
+if (( $# > 0 )); then
+  shift                                  # remaining arguments are passed to R
+fi
 LOGDIR="logs"
 mkdir -p "$LOGDIR"                        # ensure logs folder exists
 
@@ -35,7 +38,7 @@ export MKL_DYNAMIC="${MKL_DYNAMIC:-FALSE}"
 
 
 # Run R in a NEW SESSION so Ctrl+C in this terminal won't kill the job
-setsid bash -lc "Rscript '$SCRIPT' > '$log' 2>&1" </dev/null &  # detached job
+setsid bash -c 'exec Rscript "$@"' run-job "$SCRIPT" "$@" > "$log" 2>&1 </dev/null &
 pid=$!                                    # PID of the detached session leader
 echo "$pid" > "$pidfile"                  # save PID for status/kill
 

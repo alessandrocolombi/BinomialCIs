@@ -1,0 +1,560 @@
+                                    Computational Statistics & Data Analysis 51 (2007) 5211 – 5219
+                                                                                                                 www.elsevier.com/locate/csda
+
+
+
+
+   Estimating population sizes for capture–recapture sampling with
+                         binomial mixtures
+                                                         Chang Xuan Mao∗
+                                  Department of Statistics, University of California, Riverside, CA 92521, USA
+
+                                                        Available online 13 October 2006
+
+
+
+Abstract
+   A binomial mixture model has been used to account for heterogeneous individual capture probabilities in capture–recapture
+studies. The problem of estimating the population size is reduced to estimating the odds that an individual is not captured. The odds
+is nonidentiﬁable. There is no upper bound to the odds. The odds admits lower bounds that can yield estimable lower bounds to the
+population size. An example is studied. A simulation experiment is used to evaluate the proposed and existing estimators.
+© 2006 Elsevier B.V. All rights reserved.
+
+Keywords: Capture–recapture; Nonidentiﬁability; Species richness
+
+
+
+
+1. Introduction
+
+   The problem of estimating the population size has enormous important applications in wildlife management, epi-
+demiology, quality control and many other ﬁelds (e.g., Chao, 2001). A variety of estimators have been proposed.
+Because a population is usually heterogeneous in the sense that the capture probabilities can vary over several factors,
+extreme difﬁculties have been recognized (e.g., Link, 2003).
+   There is one important setting: capture–recapture sampling with heterogeneous individual capture probabilities (e.g.,
+Burnham and Overton, 1978; Norris and Pollock, 1996; Mao and Lindsay, 2002). A binomial mixture model arises
+when the capture probabilities are treated as a random sample from a mixing distribution. In Section 2, the problem
+of estimating the population size is reduced to estimating the odds that an individual is not captured. The odds is
+nonidentiﬁable so that identiﬁable bounds are of interest. While the odds does not admit upper bounds, lower bounds
+are available. A sequence of lower bounds, including the sharpest one, are proposed, which can be calculated by linear
+programming. In Section 3, an example is studied. In Section 4, simulation is used to evaluate the proposed and existing
+estimators. Technical points are discussed in the Appendix.
+
+2. Methods
+
+   Consider a population of size c and a capture–recapture study with t capture occasions. Let Xi denote the number
+of captures of individual i with Xi ∼ Bin(t, pi ) given the capture probability pi ∈ (0, 1], where Bin(t, p) denotes the
+
+  ∗ Tel.: +1 951 8272561; fax: +1 951 8273286.
+   E-mail address: cmao@stat.ucr.edu.
+
+0167-9473/$ - see front matter © 2006 Elsevier B.V. All rights reserved.
+doi:10.1016/j.csda.2006.09.025
+5212                          C. Xuan Mao / Computational Statistics & Data Analysis 51 (2007) 5211 – 5219
+
+
+binomial distribution with density ( xt )p x (1 − p)t−x . It is assumed that the Xi are independent given the pi and that
+the pi arise from a mixing distribution P . Note that P puts no probability on zero. The Xi constitute a random sample
+from
+                   
+                      t
+       mP (x) =          x (1 − )t−x dP (), x = 0, 1, . . . , t.
+                     x
+                                                           
+   An individual is not captured if Xi = 0. Let n = ci=1 I (Xi > 0) with n ∼ Bin(c, 1 − mP (0)). Given P , the
+maximum likelihood estimator for c is n + n (Lindsay and Roeder, 1987), where · is the ﬂoor function and
+ = mP (0)/{1 − mP (0)} is the odds that an individual is not captured.
+   Conditioning on n, those Xi > 0 follow a truncated mixture mP (x)/{1 − mP (0)}, which is reformulated as a mixture
+of zero-truncated binomial densities
+                   x             t−x
+                     t  (1 − )
+       fQ (x) =                          dQ(), x = 1, 2, . . . , t,
+                     x 1 − (1 − )t
+where Q is a mixing distribution derived from P (Mao and Lindsay, 2002) with
+                   {1 − (1 − )t } dP ()
+       dQ() =                           .
+                   {1 − (1 − )t } dP ()
+                                                                 c                                                                           
+Note that Q puts no probability on zero either. Let nx =               i=1 I (Xi = x). The likelihood of Q based on (n1 , n2 , . . . , nt )
+conditioning on n is
+                              t
+                              
+                    n!
+       L(Q) = t                    fQnx (x).                                                                                           (1)
+                   x=1 nx !   x=1
+
+Let Q maximize L(Q), called a nonparametric maximum likelihood estimator (NPMLE) (Lindsay, 1983). In order to
+guarantee the existence of Q, one must consider that Q is over a compact interval such as [0, 1] (Mao et al., 2005).
+  The odds  depends linearly on Q by writing
+                   
+                        (1 − )t
+       = (Q) =                   dQ().                                                                          (2)
+                      1 − (1 − )t
+
+One may consider estimating (Q) by (Q). While Q may not be unique, an estimator for certain parameters such as
+fQ (x) can be unique. However, this is not the case for (Q), because, as shown in the Appendix, (Q) is nonidentiﬁable
+in the sense that there are mixing distributions Q and G such that
+
+       (Q) = (G), fQ (x) = fG (x),           x = 1, 2, . . . , t.
+
+Example 1. Given Q=.7(.1)+.3(.688) and t =3, (Q)=1.894 and fQ =(187, 56, 28)/271. With G=.917(.231)+
+.083(1), (G) = .768 and fQ = fG .
+
+  Link (2003) ﬁtted certain examples using P from different parametric families and found that the values of mP (0)
+can be dramatically different while no goodness-of-ﬁt test favors a particular P . The examples in Link (2003) are
+convincing. If the empirical approach in Link (2003) leaves room for doubts on its generality, then our theoretical
+approach will clear the last cloud on this issue.
+  While it is usually impossible to pin down the true value of (Q) from fQ , specifying the range of (Q) is an
+appropriate alternative goal. This means that lower or upper bounds to (Q) are of much interest. However, there is no
+upper bound to (Q) in any neighborhood of fQ (Mao and Lindsay, 2006), because
+
+       lim  · (()) = 1/t,                                                                                                           (3)
+       →0
+
+where () is a distribution degenerate at . This observation is not surprising because of the possible existence of
+individuals extremely difﬁcult to capture.
+                               C. Xuan Mao / Computational Statistics & Data Analysis 51 (2007) 5211 – 5219          5213
+
+
+  If Q = (1), then (Q) = 0. For any Q  = (1), (Q) admits positive identiﬁable lower bounds, because, by the
+Cauchy–Schwartz inequality (Chao, 1989),
+      (t − 1)fQ2 (1)
+                        (Q) ∀Q = (1).                                                                             (4)
+         2tf Q (2)
+The lower bound in (4) is not necessarily sharp. The sharpest lower bound is
+      t = t (fQ ) = inf{(G) : fQ (x) = fG (x), x = 1, 2, . . . , t, ∀G}.                                           (5)
+There is a set of mixing distributions that can produce the same mixture and a set of values of the odds. There is a
+mixing distribution, denoted by Qt , that produces the smallest value of the odds, i.e., t (fQ ) = (Qt ) and fQt = fQ .
+  There are other lower bounds. For k = 1, 2, . . . , t − 1, deﬁne
+     k = k (fQ ) = inf{(G) : fQ (x) = fG (x), x = 1, 2, . . . , k, ∀G}.                                            (6)
+       
+Because tx=1 fQ (x) = 1, t−1 (fQ ) = t (fQ ). It is clear that
+      1 (fQ )2 (fQ )  · · · t−1 (fQ ) = t (fQ ) (Q).                                                         (7)
+The lower bound 2k (fQ ) has a closed-form, as indicated in the Appendix, when Q has sufﬁciently many support
+points. In particular, 2 (fQ ) is given in (4).
+
+Example 2. Consider Q in Example 1. The sharpest lower bound is 2 (fQ ) = .768 and the ﬁrst order lower bound is
+1 (fQ ) = .580.
+
+  The lower bound k (fQ ) can be calculated by linear programming. To avoid numerical difﬁculties caused by
+((0)) = ∞, choose a tiny positive constant  (e.g.,  = 10−6 ) and deﬁne a grid of support points {j }Jj=0 with
+j =  + j (1 − )/J . From (6), a linear program is given by
+                J
+      min             j · ((j ))
+               j =0
+                 J
+        s.t.          j · f(j ) (x) − fQ (x)      J,       x = 1, 2, . . . , k,
+               j =0
+                J
+                      j = 1, j 0,     j = 0, 1, . . . , J ,
+               j =0
+
+where J is another tiny positive constant with limJ →∞ J = 0. In order to guarantee the existence of a feasible
+solution, J rather than zero is used. The minimum of the linear program approaches k (fQ ) when J becomes large
+(e.g., J = 103 ).
+   We are ready to turn to inference on the population size c. The lower bound k (fQ ) leads to a lower bound ck to c,
+where
+      ck = c(k ) = Ec,Q (n){1 + k (fQ )} = c · {1 + k (fQ )}/{1 + (Q)}.                                           (8)
+As a consequence of (7), one has
+      c1 c2  · · · ct−1 = ct c.                                                                                   (9)
+From the observed data, any value in [ct , ∞) is extremely difﬁcult to be ruled out as the population size. It is easily
+shown that
+                                                           t
+      |Ect ,Qt (n) − Ec,Q (n)| < 1/(1 + t ),                |fQt (x) − fQ (x)| = 0.                               (10)
+                                                        x=1
+5214                             C. Xuan Mao / Computational Statistics & Data Analysis 51 (2007) 5211 – 5219
+
+                                                                           1.5
+               1.2
+               1.0
+                                                                           1.0
+               0.8
+               0.6
+               0.4                                                         0.5
+
+               0.2
+               0.0                                                         0.0
+                            2          4           6           8                       2           4           6           8
+                                              t                                                          t
+
+               0.6
+                                                                           1.5
+               0.5
+               0.4
+                                                                           1.0
+               0.3
+               0.2                                                         0.5
+               0.1
+               0.0                                                         0.0
+                            2          4           6           8                       2           4           6           8
+                                              t                                                          t
+
+Fig. 1. The odds  (empty circles) and its sharpest lower bound t (solid circles) for P1 (left-top panel), P2 (right-top), P3 (left-bottom) and P4
+(right-bottom).
+
+
+
+By (3), for c∗ ct  and  > 0, there exists a mixing distribution Q∗ such that
+                                                   t
+       |Ect ,Qt (n) − Ec∗ ,Q∗ (n)| < ,               |fQt (x) − fQ∗ (x)| < .                                                             (11)
+                                                  x=1
+
+From (10) and (11), based on the single observation n, there is little information for one to test whether it is drawn
+given (c∗ , Q∗ ) or (c, Q), and the probabilities of the multinomial distribution of (n1 , n2 , . . . , nt ) given Q∗ are almost
+identical to those given Q. This means that the observed data can be generated from two similar stochastic mechanisms
+that correspond to two population sizes c and c∗ .
+
+Example 3. Consider Q in Example 1. Note that Q3 = G. If c = 400, then c3 = 244.4, c3  = 244, Ec3 ,G (n) = 138.0,
+Ec,Q (n) = 138.2 and fG = fQ .
+
+   The lower bound ck is a surrogate of c. In the literature, various surrogates c()=Ec,Q (n)(1+) of c were estimated
+by c̃() = n + n(f˜), where  = (fQ ) is a surrogate of (Q) and f˜(x) = nx /n. For example, the surrogate of (Q)
+from the ﬁrst-jackknife estimator (Burnham and Overton, 1978) is
+         jk
+       1 (fQ ) = (1 − 1/t)fQ (1).
+
+One can estimate ck by c̃k = n + nk (f˜). In particular, Chao (1989) found
+
+                     (t − 1)n21
+       c̃2 = n +                ,                                                                                                            (12)
+                        2tn2
+see also Chao et al. (2006) for an alternative derivation. A surrogate c() can also be estimated by ĉ() = n + n(fQ ).
+Note that fQ is often more useful than f˜ in particular for small n (Böhning and Patilea, 2005). If f˜ = fQ , then
+ĉ() = c̃(), which happens if the NPMLE Q is not unique.
+                                 C. Xuan Mao / Computational Statistics & Data Analysis 51 (2007) 5211 – 5219                         5215
+
+Table 1
+The ratio c()/c(t ) = (1 + )/(1 + t )
+
+            t             2             3             4            5             6            7             8           9            10
+
+P1          2            1             1                 .94       .95           .94          .95              .95      .95           .95
+             jk
+            1             .86          1             1            1.03          1.03         1.03          1.03        1.04         1.03
+                jk
+            2             .86          1.11          1.10         1.12          1.10         1.09          1.08        1.07         1.06
+
+            sc
+             1            1.62          1.21          1.02          .98           .94          .93              .92      .92           .92
+
+            sc
+             2            2.37          1.44          1.15         1.07          1.02         1                 .99      .98           .98
+
+P2          2            1             1                 .93       .94           .93          .93              .93      .93           .93
+             jk
+            1             .84          1              .99         1.02          1.01         1.02          1.01        1.01         1.01
+                jk
+            2             .84          1.11          1.09         1.11          1.08         1.07          1.05        1.05         1.04
+
+            sc
+             1            1.63          1.22          1.02          .98           .93          .92              .91      .91           .90
+
+            sc
+             2            2.42          1.45          1.14         1.06          1             .98              .96      .96           .95
+
+P3          1            1             1                 .98       .93           .97          .99          1           1            1
+             jk
+            1            1.12          1.06          1.02          .94           .98         1.01          1.03        1.05         1.06
+             jk
+            2            1.12          1.12          1.09         1.01          1.06         1.09          1.10        1.10         1.10
+
+            sc
+             1            1.26          1.03              .94       .85           .87          .89              .91      .92           .94
+
+            sc
+             2            1.40          1.10          1.01          .91           .94          .97              .99     1            1.01
+
+P4          2            1             1                 .85       .90           .80          .83              .84      .87           .89
+                jk
+            1            1             1.04              .86       .90           .79          .83              .84      .87           .89
+             jk
+            2            1             1.13              .96      1.01           .88          .93              .93      .97           .99
+
+            sc
+             1            1.50          1.13              .84       .83           .71          .72              .72      .75           .76
+
+            sc
+             2            2.01          1.32              .96       .96           .82          .85              .85      .88           .90
+
+
+
+
+   For a surrogate c() of c, a lower conﬁdence limit (LCL) is calculated by the bootstrap method. Given an estimate
+for (c, fQ ), e.g., (c̃t , f˜), one takes n∗ from Bin(c̃t , n/c̃t ) and (n∗1 , n∗2 , . . . , n∗t ) from (1) when (n, fQ ) is replaced with
+(n∗ , f˜) (Mao et al., 2005). An LCL is the lower quantile of the bootstrap estimators c̃∗ () or ĉ∗ (). While an LCL for
+a lower bound ck is also an LCL for c as ck c, an LCL for an existing surrogate c() in the literature may not achieve
+the advertised conﬁdence level when used as an LCL for c as it possibly c() > c.
+
+3. Example
+
+   Consider n = 102 meadow voles captured in t = 5 days (e.g., Lee and Chao, 1994), where n1 = 29, n2 = 15, n3 = 15,
+n4 = 16 and n5 = 27. The NPMLE Q is not unique, and two of them are .202(0) + .427(.470) + .371(.927) and
+.380(.143)+.429(.702)+.191(1), with (Q)=∞ and (Q)=.326, respectively. Four free parameters are required
+to obtain each of these two Q as there are three mixing weights with a sum-to-one constraint, two unknown support
+points in (0, 1) and a known boundary support point (zero or one). No method can be used to select one from these
+two Q because both ﬁt the nx perfectly. Because the same number of free parameters is required, neither the Akaike
+nor Bayesian information criteria can help to select one from them.
+   As f˜ =fQ , (f˜)=(fQ ) for a surrogate . The lower bound estimates for c are 111 (1 ), 124 (2 ), 130 (3 ) and 135
+(4 ). They provide only a little improvement over n=102. There is a mixing distribution Qk such that (Qk )=k (f˜) and
+5216                             C. Xuan Mao / Computational Statistics & Data Analysis 51 (2007) 5211 – 5219
+
+Table 2
+The median of several estimators for the population size c
+
+                      t                        2                    4                     6                     8        10
+
+P1                     n                       220                  315                   367                   398      419
+                       2                      354                  412                   439                   454      464
+                           jk
+                       1                      304                  434                   478                   495      504
+                        jk
+                       2                      304                  481                   511                   516      516
+                       sc
+                        1                      571                  446                   438                   443      450
+                       sc
+                        2                      836                  502                   475                   474      477
+
+P2                     n                       204                  292                   341                   370      389
+                       2                      337                  381                   405                   422      434
+                        jk
+                       1                      282                  404                   443                   460      469
+                        jk
+                       2                      282                  447                   472                   478      482
+                       sc
+                        1                      549                  418                   407                   412      419
+                       sc
+                        2                      811                  467                   439                   438      443
+
+P3                     n                       306                  369                   406                   431      451
+                       2                      350                  468                   500                   499      500
+                        jk
+                       1                      305                  460                   530                   553      557
+                        jk
+                       2                      305                  522                   585                   578      557
+                       sc
+                        1                      564                  484                   490                   492      495
+                       sc
+                        2                      825                  583                   573                   557      546
+
+P4                     n                       181                  246                   289                   319      343
+                       2                      328                  432                   484                   499      500
+                        jk
+                       1                      369                  447                   490                   516      528
+                        jk
+                       2                      369                  477                   528                   549      549
+                       sc
+                        1                      414                  413                   437                   454      467
+                       sc
+                        2                      460                  443                   471                   494      505
+
+
+
+
+fQk (x) = f˜(x) for x = 1, 2, . . . , k, where Q1 = (.398), Q2 = .475(.205) + .525(1), Q3 = .421(.170) + .579(793),
+and Q4 is identical to the NPMLE having a support point one.
+                                      jk  jk                                          jk
+   The existing surrogates of , 1 , 2 , sc 1 and 2 , are also considered, where 2 is derived from the second-jackknife
+                                                      sc
+
+estimator (Burnham and Overton, 1978), and sc      1 and 2 from two sample coverage estimators with 2 having a minor
+                                                             sc                                             sc
+
+modiﬁcation (Lee and Chao, 1994), and
+
+          jk       2t − 3            (t − 2)2
+        2 (fQ ) =         fQ (1) −            fQ (2),
+                      t              t (t − 1)
+                        fQ (1)
+        sc
+         1 (fQ ) = t              ,
+                      x=2 xf Q (x)
+                                          t
+                                                          {sc       2 t
+                                                            1 (fQ )}    x=1 x(x − 1)fQ (x)
+        sc
+         2 (fQ ) = 1 (fQ )
+                    sc
+                                   1−          xf Q (x) +                                  .
+                                                                  (1 − 1/t)fQ (1)
+                                         x=1
+
+                                                             jk         jk
+The estimates for the surrogates of c are 125 (1 ), 136 (2 ), 113 (sc              sc
+                                                                          1 ), 123 (2 ). The 95% LCL from 400 resamples
+given (c, fQ ) estimated by (c̃4 , f˜) are 102.2 (1 ), 110.3 (2 ), 111.9 (3 ), 113.5 (4 ), 114.8 (1 ), 121.2 (2 ), 104.2
+                                                                                                       jk           jk
+                                 C. Xuan Mao / Computational Statistics & Data Analysis 51 (2007) 5211 – 5219                5217
+
+                                                                                                                jk
+  1 ), and 111.1 (2 ). The LCL from 2 , 3 and 4 are similar. While the estimate from 2 is close to that from 4 ,
+(sc               sc
+                jk
+the LCL from 2 is much larger than that from 4 .
+
+4. Simulation
+
+     We consider four mixing distributions P = P1 , P2 , P3 and P4 , where
+         P1 = Beta(1.5, 4), P2 = .5Beta(.8, 4.5) + .5Beta(3.5, 6.5),
+         P3 = .5(.15) + .3(.7) + .2(1), P4 = .4(.05) + .2(.1) + .2(.3) + .2(.7),
+
+and Beta(a, b) denotes the beta distribution with density B −1 (a, b)a−1 (1 − )b−1 .
+Table 3
+The 5% quantile and coverage probability (in parenthesis) of several estimators for the population size c
+
+                      t                      2                       4                       6                       8       10
+
+P1                    2                     308                     379                     412                     429     444
+                                             (1)                     (1)                     (1)                     (1)     (1)
+                          jk
+                      1                     278                     407                     455                     471     482
+                                             (1)                     (1)                     (1)                     (.96)   (.88)
+                          jk
+                      2                     278                     446                     479                     482     486
+                                             (1)                     (1)                     (.87)                   (.77)   (.77)
+                      sc
+                       1                     484                     412                     417                     424     434
+                                             (.59)                   (1)                     (1)                     (1)     (1)
+                      sc
+                       2                     674                     453                     444                     447     456
+                                             (.01)                   (.94)                   (.99)                   (1)     (1)
+
+P2                    2                     291                     347                     378                     399     410
+                                             (1)                     (1)                     (1)                     (1)     (1)
+                          jk
+                      1                     257                     377                     416                     436     445
+                                             (1)                     (1)                     (1)                     (1)     (1)
+                          jk
+                      2                     257                     411                     439                     448     450
+                                             (1)                     (1)                     (.99)                   (.99)   (.99)
+                      sc
+                       1                     459                     382                     383                     391     401
+                                             (.76)                   (1)                     (1)                     (1)     (1)
+                      sc
+                       2                     652                     416                     406                     411     420
+                                             (.03)                   (.99)                   (1)                     (1)     (1)
+
+P3                    2                     308                     406                     456                     473     478
+                                             (1)                     (1)                     (.99)                   (.95)   (.96)
+                          jk
+                      1                     346                     425                     470                     496     511
+                                             (1)                     (1)                     (.99)                   (.63)   (.17)
+                          jk
+                      2                     346                     448                     501                     521     517
+                                             (1)                     (1)                     (.51)                   (.12)   (.17)
+                      sc
+                       1                     381                     393                     420                     440     455
+                                             (1)                     (1)                     (1)                     (1)     (1)
+                      sc
+                       2                     415                     417                     448                     472     487
+                                             (1)                     (1)                     (1)                     (.99)   (.92)
+
+P4                    2                     210                     291                     347                     380     408
+                                             (1)                     (1)                     (1)                     (1)     (1)
+                          jk
+                      1                     216                     306                     354                     390     423
+                                             (1)                     (1)                     (1)                     (1)     (1)
+                          jk
+                      2                     216                     335                     394                     429     461
+                                             (1)                     (1)                     (1)                     (1)     (.96)
+                      sc
+                       1                     303                     294                     316                     339     361
+                                             (1)                     (1)                     (1)                     (1)     (1)
+                      sc
+                       2                     386                     333                     362                     387     417
+                                             (.95)                   (1)                     (1)                     (1)     (1)
+5218                             C. Xuan Mao / Computational Statistics & Data Analysis 51 (2007) 5211 – 5219
+
+
+   Fig. 1 presents  and t for various pairs of (P , t). As expected, the odds  decreases when t increases given P . The
+nonidentiﬁable component  − t also decreases when t increases given P . For a small t (e.g., t = 2),  can be much
+larger than its sharpest lower bound t .
+   The ratio c()/c = (1 + )/(1 + ), which does not depend on c but on Q, measures how much close a surrogate
+c() and the true population size c are. Because  is nonidentiﬁable, c()/c can change with fQ kept unchanged. The
+ratio c()/c(t ) = (1 + )/(1 + t ), shown in Table 1, which does not depend on c but on fQ , measures how much
+                                                       jk  jk
+close c() and c(t ) are. From Table 1, neither 1 , 2 , sc  1 nor 2 is a lower bound as c()/c(t ) > 1 for certain
+                                                                         sc
+
+settings.
+                                                                                                                        jk
+   Finally, we take 400 samples given (c, P , t) with c = 500. Table 2 presents the median of n(1 + )˜ with  = 2 , 1 ,
+  jk
+2 , sc
+       1 and 2 . Table 3 presents the 5% quantile and the coverage probability of the 95% LCL ( i.e., the 5% quantile
+                sc
+
+of estimates from resamples). To calculate the coverage probability, for each sample, 200 resamples are taken given
+(c, fQ ) estimated by (c̃2 , f˜). The coverage probabilities of the estimators from 1 , 2 , sc
+                                                                                      jk  jk
+                                                                                               1 or 2 vary dramatically
+                                                                                                      sc
+
+over (P , t). On the contrary, the coverage probabilities of the estimator for c from 2 are always no smaller than the
+advertised conﬁdence level, which is a conﬁrmation of the established popularity of c̃2 in the literature.
+
+5. Discussion
+
+   The issue of nonidentiﬁability does not arise given a parametric mixture model from a family of continuous mixing
+distributions such as beta distributions or discrete ones such as those have at most two support points. However, it
+is often difﬁcult to justify why a particular family of mixing distribution is chosen. Without prior information on
+mixing distributions, the nonparametric mixture model is the most appropriate choice, in which the population size is
+nonidentiﬁable.
+   Link (2003) concluded that “the examples strongly call into question the usefulness of nonparametric methods; they
+simply cannot be reliable in all cases”. It is not necessary to be so pessimistic. The proposed lower bounds to the
+population size are useful in the sense that they provide sensible partial information and their estimators yield lower
+conﬁdence limits for the population size when genuine upper conﬁdence limits do not exist (Mao and Lindsay, 2006).
+   Although the appropriate choice of the order of the proposed lower bounds depends on particular applications, there
+are some recommendations. When t is small, there are only a few lower bounds and the sharpest one is recommended.
+When t gets larger, although more lower bounds are available, as it is often difﬁcult to precisely and accurately estimate
+higher order lower bounds, including the sharpest one, the second and third order ones are recommended.
+   Finally, note that there is an adjusted version of c̃2 in (12) given by
+          adj        (t − 1)n1 (n1 − 1)
+       c̃2 = n +                        .                                                                             (13)
+                         2t (n2 + 1)
+                                 adj
+It is easily shown that E(c̃2 ) ≈ c2 while E(c̃2 ) = ∞. Further investigation is required to improve the ﬁnite sample
+properties of other lower bound estimators.
+
+Appendix. Two technical points
+
+  The nonidentiﬁability of (Q) can be shown using the techniques in Mao (2006a). Let k () = ( 0 (), 1 (), . . . ,
+     
+ k ())with k < t, where 0 () = (()) and x () = f() (x) for x 1. For k + 1 distinct 0 , 1 , . . . , k in (0, 1),
+                                                               k
+                                                                                k  
+                                                                                   t
+       | i (j ))ki,j =0 | = |({i /(1 − i )}j )ki,j =0 | ·         0 (i ) ·              = 0,
+                                                                                       x
+                                                               i=0               x=1
+
+as a Vandermonde determinant is non-zero. This means that {k (i )}ki=0 are linearly independent and the set of functions
+{ 0 (), 1 (), . . . , k ()} is a Tchebysheff system. The nonidentiﬁability of (Q) can be established from the fact that
+{ 0 (), 1 (), . . . , t−1 ()} is a Tchebysheff system (Mao, 2006a).                                         x
+   The closed-form expression of 2k (fQ ) is based on the facts that (Q) = d ( ) and fQ (x)/( xt ) =              d ( ),
+where is a measure given by d ( ) = 0 ( /(1 + )) dQ( /(1 + )), which allows the use of the truncated Stieltjes
+moment problem (Curto and Fialkow, 1991; Mao and Lindsay, 2006; Mao (2006b)).
+                                C. Xuan Mao / Computational Statistics & Data Analysis 51 (2007) 5211 – 5219                              5219
+
+
+References
+
+Böhning, D., Patilea, V., 2005. Asymptotic normality in mixtures of power series distributions. Scand. J. Statist. 32, 115–131.
+Burnham, K.P., Overton, W.S., 1978. Estimation of the size of a closed population when capture probabilities vary among animals. Biometrika 65,
+   625–634.
+Chao, A., 1989. Estimating population size for sparse data in capture–recapture experiments. Biometrics 45, 427–438.
+Chao, A., 2001. An overview of closed capture–recapture models. J. Agricultural Biological Environmental Statist. 6, 138–155.
+Chao, A., Shen, T.J., Hwang, W.H., 2006. Application of Laplace’s boundary-mode approximations to estimate species and shared species richness.
+   Austral. New Zealand J. Statist. 48, 117–128.
+Curto, R.E., Fialkow, L.A., 1991. Recursiveness, positivity, and truncated moment problems. Houston J. Math. 17, 603–635.
+Lee, S.M., Chao, A., 1994. Estimating population size via sample coverage for closed capture–recapture models. Biometrics 50, 88–97.
+Lindsay, B.G., 1983. The geometry of mixture likelihoods: a general theory. Ann. Statist. 11, 86–94.
+Lindsay, B.G., Roeder, K., 1987. A uniﬁed treatment of integer parameter models. J. Amer. Statist. Assoc. 82, 758–764.
+Link, W.A., 2003. Nonidentiﬁability of population size from capture–recapture data with heterogeneous detection probabilities. Biometrics 59,
+   1123–1130.
+Mao, C.X., 2006a. Estimating the population size with binned exponential mixtures, submitted for publication.
+Mao, C.X., 2006b. Lower bounds to the population size when capture probabilities vary over individuals, submitted for publication.
+Mao, C.X., Lindsay, B.G., 2002. Diagnostics for the homogeneity of capture probabilities in a Bernoulli census. Indian J. Statist. 64, 626–639.
+Mao, C.X., Lindsay, B.G., 2006. Estimating the number of classes. Ann. Statist., in press.
+Mao, C.X., Colwell, R.K., Chang, J., 2005. Estimating species accumulation curves using mixtures. Biometrics 61, 433–441.
+Norris, J.L.I., PollocK, K.H., 1996. Nonparametric MLE under two closed capture–recapture models with heterogeneity. Biometrics 52, 639–649.
+

@@ -1,0 +1,546 @@
+Biometrics 59, 1123–1130
+December 2003
+
+
+
+
+                                           CONSULTANT’S FORUM
+
+
+      Nonidentiﬁability of Population Size from Capture-Recapture
+           Data with Heterogeneous Detection Probabilities
+
+                                                     William A. Link
+                      USGS Patuxent Wildlife Research Center, Laurel, Maryland 20708, U.S.A.
+                                          email: william link@usgs.gov
+
+
+         Summary. Heterogeneity in detection probabilities has long been recognized as problematic in mark-
+         recapture studies, and numerous models developed to accommodate its eﬀects. Individual heterogeneity is
+         especially problematic, in that reasonable alternative models may predict essentially identical observations
+         from populations of substantially diﬀerent sizes. Thus even with very large samples, the analyst will not
+         be able to distinguish among reasonable models of heterogeneity, even though these yield quite distinct
+         inferences about population size. The problem is illustrated with models for closed and open populations.
+         Key words:      Capture-recapture; Detection probability; Heterogeneity; Population estimation; Wildlife
+         statistics.
+
+
+
+1. Introduction                                                   tion of random variable X given random variable Y by [X | Y ],
+The problem of making inference about unknown popula-             and the binomial distribution with index M and success rate
+tion sizes is of enormous importance in wildlife statistics,      π by B(M , π). With these conventions, the mathematical
+with applications in quality control and many other ﬁelds.        model for this simple capture-recapture experiment is that
+Capture-recapture methods commonly used in wildlife stud-         m2 and u2 are independent random variables, [m2 ] = B(m1 , p)
+ies consist of combining information about observed animals       and [u2 ] = B(N − m1 , p). The speciﬁcation that there are m1
+with plausible models of the observation process, to reach        marked animals at the time of the second sample is usually
+conclusions about the number of animals that have not been        justiﬁed through assumptions that the population is closed
+observed.                                                         (i.e., has not changed because of births, deaths, immigration,
+   The Lincoln-Petersen method of estimating a population         or emigration), and that individuals do not lose their marks.
+size is one of the oldest and simplest examples: a sample of m1      These assumptions can be relaxed, or tested under alter-
+individuals from a population is marked and released; later,      native sampling schemes and using more complex models.
+a second sample is obtained, consisting of u2 unmarked and        A vast literature has developed for estimation of survival
+m2 marked individuals. The goal is to estimate N, the pop-        rates, recruitment rates, and movement rates using capture-
+ulation size at the time of the second sample. Treating the       recapture data; of special note is the Jolly-Seber model and
+ratio of marked to unmarked individuals in the second sam-        its many extensions (see Schwarz and Seber, 1999, for a recent
+ple as an estimate of the corresponding population ratio, and     review).
+assuming that the number of marked animals has not changed           One violation of assumptions that was early identiﬁed as
+between sampling periods, a simple estimator of N is obtained     especially problematic is the existence of heterogeneity in de-
+by solving                                                        tection probabilities. The consequences of unmodeled hetero-
+                                                                  geneity in this nuisance parameter for estimation of other
+                       m2     m1
+                          =        .                              model parameters are not restricted to overstatements of pre-
+                       u2   N − m1
+                                                                  cision, but may also include substantial biases. Burnham and
+The method can be mathematically formalized, and the pre-         Overton (1978) suggested a jackknife estimator for closed pop-
+cision of the estimated population size assessed, under the       ulation estimation in the presence of heterogeneous detection
+further assumption that captures at the second sampling occa-     rates. Recent wildlife applications have used ﬁnite mixture
+sion are independent Bernoulli trials with detection probabil-    models for the distribution of p (Norris and Pollock, 1996;
+ity p for all animals, whether previously marked or not. Here     Pledger, 2000); Coull and Agresti (1999) describe the use of
+and throughout, it will be convenient to represent the distri-    a logit normal model for p; Dorazio and Royle (2003) focus
+bution of random variable X by [X], the conditional distribu-     on beta models.
+
+
+                                                             1123
+                                                                                                                                                       15410420, 2003, 4, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.0006-341X.2003.00129.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [05/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+1124                                                              Biometrics, December 2003
+
+   The purpose of this note is to draw attention to a prob-                       2.1 When Is N an Identiﬁable Parameter?
+lem inherent to all attempts to model heterogeneity in detec-                     Huggins (2001) describes the parameter N as not identiﬁable
+tion probability. The problem has not gone entirely unnoticed                     “if diﬀerent sized populations can give rise to approximately
+previously, but its extreme consequences appear not to have                       the same [observable] capture histories” and investigates con-
+been fully recognized. The problem is this: that while it may                     ditions which rule out this possibility. Let G be a set of dis-
+be possible to discern heterogeneity in detection probability,                    tribution functions for detection probabilities, and let H be
+it is likely that an analyst will be unable to distinguish be-                    the mapping from G to the set of observable frequency dis-
+tween reasonable descriptions of the heterogeneity, even when                     tributions πgC . Huggins (2001) states as a necessary condition
+these alternative descriptions lead to vastly diﬀerent infer-                     for identiﬁability of N that the inverse of H be continuous, so
+ences about population sizes.                                                     that
+
+                                                                                                  g close to π h ⇒ g is close to h.
+                                                                                                 πC            C
+2. Example 1: Closed Population
+Suppose that a closed population of size N is sampled on T                        Assessing “closeness” of distributions requires the choice of a
+occasions, that the number of times individual i is observed                      metric; Huggins uses the Hellinger metric. I note two things
+is Xi , that X1 , X 2 , . . . , XN are independent random variables               about Huggins’ necessary condition: ﬁrst, that it is slightly
+with [Xi | pi ] = B(T , pi ), and that the pi ’s are identically                  stronger than necessary; what is needed is that
+distributed according to distribution g(p). The only available
+                                                                                             g close to π h ⇒ πg (0) is close to πh (0).
+                                                                                            πC            C
+data are the frequencies fx = #(Xi = x), x = 1, 2, . . . , T , for
+the n ≤ N animals having Xi > 0; the problem is to estimate                       Second, and more important, I note that Huggins’ necessary
+N.                                                                                condition includes an implicit assumption that the inverse
+   The marginal probability that a randomly selected animal                       of mapping H exists. This is in eﬀect an assumption about
+will be sighted x times is                                                        the set G of distributions considered; it is necessary to limit
+                      1
+                                                                                  attention to a set G, and to refer to identiﬁability of N over
+             T                                                                    G. In particular, N is not identiﬁable over G if there exist
+πg (x) =                     px (1 − p)(T −x) g(p) dp, x = 0, 1, . . . , T. (1)
+             x       0                                                            distributions g and h ∈ G such that
+
+Letting f0 = N − n, the marginal distribution of vector                                            πC     C
+                                                                                                    g = π h , but πg (0) = πh (0);
+
+f = (f0 , f1 , f2 . . . , fT ) is a (T + 1)-cell multinomial with in-            these two conditions contradict the invertibility of mapping
+dex N, and cell probabilities π g = (πg (0), πg (1), . . . , πg (T )) ;          H.
+I denote this distribution as [f ] = M T +1 (N , π g ). It follows                   A moment’s reﬂection makes plain that some restrictions
+that conditional on n, the vector of observed frequencies f c =                   on G are necessary: we cannot hope to have N identiﬁable
+(f1 , f2 , . . . , fT ) has a T-cell multinomial distribution with in-           over the set of all distributions on [0,1]. Given g, one can eas-
+dex n, and cell probabilities πgC = {πgC (1), πgC (2), . . . , πgC (T)} ,        ily construct a distribution h with πgC = πh C
+                                                                                                                                 and with any value
+where                                                                             πh (0) ∈ [π g (0),1]. This is accomplished by specifying that h is
+                                                                                  a γ:(1 − γ) mixture of a point mass on zero and the distribu-
+                                  πg (x)
+                 πgC (x) =                 ,    x = 1, 2, . . . , T.       (2)    tion g, ﬁxing π h (0), and solving γ + (1 − γ)πg (0) = π h (0) for
+                                1 − πg (0)
+                                                                                  γ. It won’t do to dismiss this example on the grounds, some-
+                                                                                  times expressed, that “we’re only able to make inference for
+We may write [f ] = [f c | n][n], where [f c | n] = MT (n, πgC )
+                                                                                  the observable portion of the population” . . . move the point
+and [n] = B{N , 1 − πg (0)}. I refer to πgC as the “observable
+                                                                                  mass on zero to mass on a small value pε , and the entire pop-
+frequency distribution” (OFD), and to π g as the “complete
+                                                                                  ulation becomes observable, but N is not identiﬁable.
+frequency distribution.”
+                                                                                     The foregoing discussion shows that identiﬁability of N re-
+   Assuming that the distribution g is governed by parame-
+                                                                                  quires restrictions on the class of distributions considered. The
+ter vector θ, estimation of N can be conducted using the full
+                                                                                  example is based on diﬃculties associated with low-detection
+likelihood L(θ, N ;f ) ∝ [f ]. Alternatively, one might ﬁrst es-
+                                                                                  probabilities. It is natural to ask whether the problem of iden-
+timate θ using the conditional likelihood Lc (θ;f c ) ∝ [f c | n],
+                                                                                  tiﬁability can be resolved by restricting the class of candidate
+obtain an estimate πĝ (0), and deﬁne an estimator
+                                                                                  distributions G, so as to rule out the problem of low-detection
+                                             n                                    probabilities. Are low-detection probabilities the only cause
+                                  N̂ =               .
+                                         1 − πĝ (0)                              of nonidentiﬁability? I answer this question in the negative in
+                                                                                  the following example.
+The two approaches are asymptotically equivalent                                  2.2 Low Detection Probabilities Are Not the Only Problem
+(Sanathanan, 1972). The latter highlights the fact that                           Let 0 < γ < 1 be ﬁxed, and let Gγ be the set of probability
+the problem of estimating N is essentially the same as the                        distributions with support on a subset of [1 − (1 − γ)1/T , 1].
+problem of estimating πg (0), on the basis of information                         By restricting attention to g ∈ Gγ , we rule out the existence
+regarding πgC . Thus, if g and h are alternative distributions                    of non-detectable individuals (as in Norris and Pollock, 1996);
+for p, one would hope that πgC close to πh  C
+                                              would imply that                    every individual has probability of at least γ of being detected
+πg (0) is close to π h (0). Unfortunately, this is not the case,                  on one or more sampling occasions.
+as I shall demonstrate. The consequence is that inference                            Let g and h denote two distributions for p, and let g c and
+                                                                                   c
+regarding N is highly model dependent.                                            h denote the corresponding conditional distributions among
+                                                                                                                                               15410420, 2003, 4, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.0006-341X.2003.00129.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [05/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+                                Nonidentiﬁability of Population Size from Capture-Recapture Data                                       1125
+
+
+                            Table 1                                       and consequently, that the resulting OFDs πgC and πh        C
+                                                                                                                                         are
+Distinct distributions of p yielding equal conditional marginal           identical.
+distributions. Uniform distribution has parameters a = 0.026,                 Thus, to construct the foregoing example, I began by cal-
+    b = 0.80. Two-point mixture places masses {0.576421,                  culating the ﬁrst T = 4 moments of the uniform distribution
+              0.423579} on {0.286245, 0.676474}.                          g on [0.026, 0.800], m(i), i = 1, 2, 3, 4. I sought an alternative
+                                                                          distribution of detection probabilities, with moments scaled
+                                0        1       2        3        4      by a factor c. Two-point mixture distributions have 3 param-
+Uniform(a,b)        πg (x)    0.227   0.255    0.243     0.190   0.085    eters, placing masses {ψ, 1 − ψ} on {p1 , p2 }. Equating the ﬁrst
+                    πgC (x)     –     0.329    0.315     0.246   0.110    4 moments of the 2-point mixture with c times the moments
+2 pt. mixture       πh (x)    0.154   0.279    0.266     0.208   0.093    of g , one obtains a system of 4 equations in 4 unknowns (ψ,
+                    πhC (x)     –     0.329    0.315     0.246   0.110    p1 , p2 , and c),
+
+                                                                                    ψpk1 + (1 − ψ)pk2 = cm(k),     k = 1, 2, 3, 4.      (3)
+
+
+captured individuals. Huggins (2001), Theorem 2, states that              The parameters of the 3-point mixture in Table 1 are solu-
+for g, h ∈ Gγ ,                                                           tions, to ﬁve decimal place accuracy, of equation (3); the value
+                                                                          of c was 1.412547.
+                    g c close to hc ⇒ g close to h.                          The point of this example is that the parameter N is not
+                                                                          identiﬁable, even if low-detection probabilities are ruled out.
+Huggins (2001), Theorem 3, states that
+                                                                          Some further restrictions on the set G of distributions for the
+                  g c close to hc ⇒ π C            C                      detection probabilities must be considered.
+                                      g close to π h .
+                                                                             This construction uses a mixture distribution governed by
+If the converse of his Theorem 3 could be demonstrated                    a large number of parameters relative to the sample size. As
+(Huggins describes this as “diﬃcult to establish” and “an                 a practical matter, data analysts may wish to rule out mod-
+open question”), then the restriction of attention to Gγ could            els with large numbers of parameters relative to T. Ruling
+be taken as suﬃcient to ensure that the observed frequency                models out of consideration and ruling them out of the realm
+distributions characterize the heterogeneity in detection prob-           of possibility are, of course, diﬀerent matters. Supposing that
+ability: the parameter N would be identiﬁable over Gγ .                   a data set with T = 4 and a large value of n were analyzed
+   The restriction is not suﬃcient; in this section, I construct          assuming that p’s were uniformly distributed on[a, b], and the
+distributions g, h ∈ Gγ with πgC = πh    C
+                                            and πg (0) = πh (0):          ﬁt found to be extraordinarily good for {â = 0.026, b̂ = 0.80},
+the observable data are identically distributed under the                 there would be no way of knowing which of the two models in
+two models, but the inferences about population size are                  Table 1 were correct, even though there is a 20% discrepancy
+distinct.                                                                 in the proportions used to scale n to an estimate of population
+   Table 1 gives the actual and observable frequency distribu-            size.
+tions for two models of heterogeneity in detection rates, for                Still, it is natural to ask whether the diﬃculty identiﬁed
+the case T = 4. Distribution g is uniform on [0.026, 0.800]; dis-         here is merely a pathology associated with highly parameter-
+tribution h represents a two-point distribution, placing masses           ized models. The next examples show that distinct models
+{0.576421, 0.423579} on {0.286245, 0.676474}. These distri-               governed by only a few parameters can produce practically
+butions are both in Gγ , where γ = 1 − (1 − 0.026)4 = 0.100 is            identical OFDs π C  g ≈ π h , while producing substantially dif-
+                                                                                                    C
+
+the minimum probability of being detected at least once. The              ferent inferences for N, because πg (0) = πh (0). Restricting at-
+observable frequency distributions are identical, even though             tention to models described by relatively fewer parameters
+the complete frequency distributions are substantially diﬀer-             does not solve the identiﬁability problem.
+ent. The two models are indistinguishable based on data for
+T = 4 sampling occasions, yet πg (0) = 0.227 and π h (0) =                2.3 Restricting Attention to Models Governed by Fewer
+0.154.                                                                         Parameters is Not the Answer
+   The construction of this example may be helpful in illus-              Suppose that T = 5, and that the logit(pi )’s are normally dis-
+trating the diﬃculties associated with relating observed fre-             tributed with mean µ = −2 and standard deviation σ = 1.
+quency distributions to distributions of detection probabili-             The complete and observable frequency distributions, π 1 and
+ties. Expanding (1 − p)T −x in equation (1) by the binomial               πC1 , are given in Table 2 (calculated by simulation to 3-
+theorem, straightforward calculations yield the relation                  decimal-place accuracy). In particular, note that π 1 (0) =
+                                                                          0.507; roughly half of the population will be observed at least
+           
+           T
+                         T!                                               once.
+πg (x) =                            (−1)k−x mg (k), x = 0, 1 . . . , T,
+                 x!(k − x)!(T − k)!                                          An analyst would likely begin by ﬁtting a model without
+           k=x
+                                                                          heterogeneity in detection rates, that is, with constant p = p0 .
+where mg (k) is the kth moment of g. Thus, for x ≥ 1,                     We may calculate a best approximating model under this, or
+the marginal probabilities πg (x) are linear combinations of              any other, parametric misspeciﬁcation gM of the distribution
+the ﬁrst T moments of the distribution of p. Suppose that the             of p, by supposing that data fx = nπ C1 (x), x = 1, 2, . . . , T
+moments of g and h are related by mh (k) = cmg (k), for k =               correspond exactly to the expected cell frequencies of the true
+1, 2, . . . , T, for some ﬁxed c = 1. Then for x ≥ 1, π h (x) =           model, then maximizing the expected log likelihood as a func-
+cπg (x), from which it follows that {1 − πh (0)} = c{1 − πg (0)},         tion of the parameters governing gM . This is equivalent to
+                                                                                                                                                          15410420, 2003, 4, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.0006-341X.2003.00129.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [05/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+1126                                                                Biometrics, December 2003
+
+                                                            Table 2
+ Marginal distributions π i (x) = Pr(x = x) and conditional marginal distributions πiC (x) = Pr(X = x |X > 0) for four diﬀerent
+                                         models of heterogeneity in mixed binomial data.
+
+                                                                       0             1           2            3           4           5         λM /n
+1) Logit-Normal µ = −2, σ = 1                    π 1 (x)              0.507         0.296      0.129       0.049        0.015       0.003          –
+                                                 π C1 (x)               –           0.602      0.262       0.099        0.301       0.006
+2) Homogeneous p0 = 0.230                        π 2 (x)              0.270         0.404      0.242       0.072        0.011       0.001        0.046
+                                                 π C2 (x)               –           0.554      0.331       0.099        0.015       0.001
+3) Beta a = 0.751, b = 5.105                     π 3 (x)              0.594         0.245      0.106       0.041        0.013       0.002       6.6e-5
+                                                 π C3 (x)               –           0.602      0.260       0.101        0.031       0.006
+4) 2-point mixture p1 = 0.147,                   π 4 (x)              0.399         0.361      0.158       0.059        0.019       0.003       1.8e-5
+   p2 = 0.480, ψ = 0.871                         π C4 (x)               –           0.601      0.263       0.097        0.032       0.006
+  λM is the Kullback-Leibler discrepancy of π C            C
+                                              i (x) from π 1 (x).
+
+
+minimizing 2n times the Kullback-Leibler (KL) distance from                           again, unless n is enormous, there will be no power to distin-
+πC      C
+ 1 to π M ,                                                                           guish the ﬁtted model from the logit-normal.
+                                                                                       The results of Table 1 show that while it may be possible
+                          
+                          T
+                                                 π1C (x)                              to obtain evidence that heterogeneity exists, it may be im-
+               λM = 2n          π1C (x) ln        C
+                                                                ;             (4)     possible to choose among plausible models of its form. This
+                                                 πM  (x)
+                          x=1
+                                                                                      would be a matter of little consequence, except that the ﬁtted
+λM is the noncentrality parameter of the likelihood ratio                             values of π(0), and consequently inferences about N, are quite
+goodness of ﬁt statistic (Agresti, 1990, p. 241).                                     inconsistent among models.
+   For the logit-normal model already described, the best ap-                            A referee suggested that the discrepancies among values of
+proximating homogeneity model is found to have p0 = 0.230;                            π(0) might not matter so much, because for moderate sample
+the corresponding OFD is given in Table 2 as π2C (x); the                             sizes, interval estimates obtained under any of the models con-
+noncentrality is 0.046 n. Using tables of the non central chi-                        sidered are long and have similar lower limits. Indeed, bias is
+squared distribution, we ﬁnd that for n = 130, the power of                           not a very great concern, if it is small relative to mean squared
+an α = 0.05 test will only be about 1/2, and that for n <                             error. However, the acceptability of biased estimators usually
+200, the power is less than 0.67. An analyst that does not                            requires some assumption that the bias disappears at a rate
+want to be concerned with heterogeneity and has n less than                           proportional to that of the variance as sample size increases.
+200, will have a fairly good chance of concluding that the                            If it does not, conﬁdence interval coverage will approach zero
+homogeneous model is acceptable, and to conclude that all                             as sample size increases. For the models described in Table 1,
+but roughly a quarter of the population has been observed                             the bias does not disappear as sample size increases; for large
+(π 2 [0] = 0.27), leading to a negative bias of 32.5% in estima-                      enough n, contradictory inferences are inevitable. The only
+tion of N . I wholly concur with a referee’s comment that “it                         question is whether with such large n, we will be perhaps be
+is a very poor analyst who will use the lack of power from                            able to reject the ﬁt of one model or the other.
+a small data set to conclude that the homogeneous model is                               My ﬁnal example is a data set that ﬁts several distinct mod-
+acceptable . . . [because] there is likely to be underestimation                      els remarkably well, models that produce contradictory infer-
+of N.” Whether detected or not, how will the analyst choose                           ences, with nonoverlapping conﬁdence intervals. The example
+to model the heterogeneity?                                                           shows that these problems persist, even with large values of
+   The beta distribution is appealing, since the integral (1)                         T and n, and that data insuﬃcient to distinguish between
+can be evaluated in terms of the gamma function. Parameter                            models can lead to contradictory inferences about N.
+estimation cannot be conducted in closed form, but numer-
+ical minimization of λM over the beta family of densities is                          2.4 Problems Remain for Larger Values of T
+straightforward. The best ﬁtting OFD is tabulated in Table 2                          Consider the data set: f = (679, 531, 379, 272, 198, 143, 99,
+as π3C (x). The ﬁt is not perfect, but close enough so that λM                        67, 46, 32, 22, 14, 9, 5, 3, 1, 0, 0, 0, 0) , with n = 2500 and
+is roughly 6.6n/100,000; there is virtually no power to dis-                          T = 20. Table 3 reports analyses of the data under 7 distinct
+tinguish the beta and logit-normal models, except with very                           models for detection probabilities A: homogeneous detection
+large samples.                                                                        rates; B, C, and D: 2, 3, and 4-point mixture models; E: a
+   Alternatively, an analyst might suppose that the distribu-                         logit normal model, F: a log-gamma model, and G: a beta
+tion g in (1) is a 2-point mixture distribution, one of a class of                    model.
+mixture models suggested by Norris and Pollock (1996). This                              While the homogeneous model and a 2-point mixture model
+model posits that the detection probability either is p1 with                         are clearly unacceptable in terms of their ﬁt, the remaining 5
+probability ψ, or is p2 , with probability (1 − ψ). The model                         all ﬁt well. Models E, F, and G ﬁt extraordinarily well, are de-
+is appealing, not because a two (or 3, or 4, . . .) point mix-                        scribed by only two parameters, and are favored by Akaike’s
+ture is likely to be exact, but because there is a step-function,                     information criterion, AIC = −2(max log likelihood −
+nonparametric ﬂavor to it; the mixture might be thought of                            #parameters). These models nevertheless provide contradic-
+as approximating a continuous g. The best approximating                               tory inferences about N; the 95% proﬁle likelihood intervals
+2-point mixture model is given in Table 1, as π4C (x). Once                           obtained under models E and G do not overlap. Thus, while
+                                                                                                                                         15410420, 2003, 4, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.0006-341X.2003.00129.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [05/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+                             Nonidentiﬁability of Population Size from Capture-Recapture Data                                    1127
+
+
+                                                          Table 3
+          Six analyses of data f = (679, 531, 379, 272, 198, 143, 99, 67, 46, 32, 22, 14, 9, 5, 3, 1, 0, 0, 0, 0) , with
+                                                     n = 2500, T = 20.
+
+                       N̂                95% PLI                 ∆ AIC                χ2              df           p-value
+          A           2571            (2554, 2589)              1661.4               2.5e5            13           <0.0001
+          B           2776            (2730, 2827)               121.04            205.6              11           <0.0001
+          C           2930            (2840, 3025)                 7.56              4.36              9            0.8762
+          D           2992           (2867, >10000)                7.42              0.21              7           >0.9999
+          E           3111            (3018, 3218)                 1.72              2.40             12            0.9985
+          F           3111            (3174, 3477)                 0                 0.94             12           >0.9999
+          G           3494            (3308, 3730)                 1.28              2.71             12            0.9973
+            A: Homogeneous detection probability, p = 0.164
+            B: 2-point mixture, placing masses {0.775, 0.225} on {0.098, 0.339}
+            C: 3-point mixture, placing masses {0.623, 0.322, 0.055} on {0.071, 0.229, 0.480}
+            D: 4-point mixture, placing masses {0.523, 0.328, 0.123, 0.026} on {0.058, 0.172, 0.326, 0.538}
+            E: logit(p) ∼ Normal, mean = −2.172, standard deviation = 0.986
+            F: log(1/p) ∼ Gamma, mean = 2.514, standard deviation = 1.087
+            G: p ∼ Beta (a = 0.888, b = 6.458)
+             N̂ is the maximum likelihood estimator of N, 95% PLI is a 95% proﬁle likelihood interval, ∆AIC is the diﬀerence
+          between the model’s maximum likelihood and that of model F. χ2 , df, and p-value summarize a Pearson’s chi-squared
+          goodness-of-ﬁt test. Pearson chi-squared values computed after pooling cells 14-20.
+
+
+
+the parameter N might be identiﬁable, subject to the restric-          Taken together, these examples conﬁrm an empirical ob-
+tion to two parameter models, it is for all practical purposes      servation of Cormack (1979) that “many diﬀerent forms can
+not identiﬁable, even with this restriction.                        be found to ﬁt the truncated distribution, while giving rise
+   The sample size in the example of Table 3 being fairly large,    to vastly diﬀerent estimates for the zero-frequency class.” In-
+I conducted a simulation study to evaluate the eﬀect of model       deed, the parameter N is not identiﬁable, without recourse to
+misspeciﬁcation for smaller values of n. I used a logit normal      untestable model assumptions.
+model with µ = −2.185 and σ = 1 for the detection proba-
+bilities. For each sample size n = 250, 500, 750, 1000, 1500,
+and 2000, I generated 1000 data sets, and estimated conﬁ-           3. Example 2: Open Population
+dence interval coverage rates for estimates of 1/{1 − π(0)}         The Cormack-Jolly-Seber (CJS) model produces estimates of
+obtained under the beta model. As might be anticipated from         survival rates for open populations based on the frequencies of
+the results of Table 3, the beta model estimates were typi-         distinct recapture histories in cohorts of marked individuals.
+cally too large (exceeding the true value 82% of the time for       The CJS model posits that all marked individuals have the
+n = 250, and nearly 94% of the time for n = 2000). Nominal          same probability of capture, pt , at sampling occasion t. Jolly
+95% conﬁdence intervals had coverage of 98% for n = 250,            and Seber extended the model by supposing that the capture
+but coverage rates dropped to 71%, 55%, 46%, 32%, and 26%           probabilities apply to all individuals, marked or unmarked.
+as n increased to 500, 750, 1000, 1500, and 2000.                   Then, the number of captures nt is related to the population
+   The results in Table 3 suggest that, given heterogeneity         size Nt by E(nt ) = Nt pt . Given an estimate p̂t , the population
+exists, analyses allowing for it are likely to produce better       size is estimated by N̂t = nt /p̂t .
+estimates of N than analyses that do not, even if the form of          I now consider a similar extension of the CJS model, with
+the heterogeneity is misspeciﬁed. Nevertheless, undetectable        individual heterogeneity in detection probabilities; my goal is
+model misspeciﬁcation leads to biased estimation and less-          to illustrate the existence of problems similar to those docu-
+than-nominal conﬁdence interval coverage.                           mented for the closed-population analyses. For ease of presen-
+                                                                    tation, my description of the problem and methods is based
+                                                                    on a single cohort of n individuals captured, marked, and
+2.5 Summary of Example 1                                            released at time t = 0. I will suppose that the probability
+The examples of Section 2.2 show that even if we rule out the       of surviving from one sampling occasion to the next is a con-
+existence of non observable individuals, the parameter N is         stant, ϕ, varying neither among individuals nor through time,
+not identiﬁable. The examples of Sections 2.3 and 2.4 show          and that detection probabilities are constant through time,
+that even if identiﬁability of N could be attained by restricting   but vary among individuals. The heterogeneity in detection
+attention to heterogeneity models governed by two or three          probability will be modeled by supposing that the individual
+parameters, for practical purposes, the problem remains; it is      values pi , = 1, 2, . . . , N are sampled from distribution g(p);
+very diﬃcult to distinguish between models yielding substan-        this distribution describes the entire population of size N at
+tially diﬀerent inferences, even with large values of T. The        time t = 0, and not simply the individuals captured.
+simulation study in Section 2.4 illustrates that model mis-            The population size N can be estimated in a manner similar
+speciﬁcation leads to biased estimation and less-than-nominal       to that proposed by Jolly and Seber, on the basis of the rela-
+conﬁdence interval coverage.                                        tion E(n) = N E(p). Care is required to model the distribution
+                                                                                                                                                                          15410420, 2003, 4, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.0006-341X.2003.00129.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [05/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+1128                                                                        Biometrics, December 2003
+
+of detection rates, since under heterogeneity, the distribution                              Similarly, if the population distribution of p puts point mass
+of p given capture at time t = 0, gc (p), cannot be the same                              of ψ k on pk , k = 1, 2, . . . , K, the distribution for captured an-
+as the population distribution g(p). Letting ω 0i , denote the                            imals is concentrated on the same values pk , but with masses
+event that individual i is captured at time t = 0, the relation                           ψc k ,
+between these distributions is established by noting that                                                                    ψk pk
+                                                                                                                      ψkc =         .
+     gc (p)dp = Pr(pi ∈ [p, p + dp) | ω0i = 1)                                                                                 ψj pj
+                                                                                                                                  j
+                     p                             p
+              =           Pr{pi ∈ [p, p + dp)} =        g(p) dp,
+                   E(pi )                        E(pi )                                   It follows that
+                                                                                                                                           
+                                                                                                                                  ψkc /pk
+so that                                                                                                              ψk =                     ,
+                                                                                                                                    ψjc /pj
+                                           1         1                                                                        j
+                              Ec                =        ,                          (5)
+                                           p        E(p)
+                                                                                          so that
+                                                                                                                                   
+where the expectations are with respect to gc (p) and g(p),                                               1          1       1                 
+                                                                                                    Ec         =         =        =    ψjc /pj .
+respectively. Thus, the population of size N can be estimated                                             p         E(p)     ψk pk   j
+by specifying a parametric form for gc (p), estimating its pa-                                                                    k
+rameters, calculating the corresponding estimate of Ec (1/p),
+and deﬁning                                                                                 Another family of distributions exhibiting conjugacy to a
+                                                                                          successful Bernoulli trial is deﬁned by supposing that the pop-
+                              N̂ = nÊc (1/p).                                            ulation distribution of −log(p) is in the gamma family. Then,
+                                                                                                          λβ
+                                                                                               g(p) =         {−log(p)}β−1 pλ−1 , β, λ > 0,                  0 < p < 1,
+   The future history of an individual captured at t = 0 is                                              Γ(β)
+a multinomial random variable with index 1: its history will                              and the relation between parameters of g(p) and gc (p) is that
+be one of the 2T distinct vectors ω = (ω 1 , ω 2 , . . . , ω T ) where                   β c = β, and λc = λ + 1. Thus,
+ω t ∈ {0, 1}, for t = 1, 2, . . . , T . Under the assumptions stated                                                                     β               β
+above, the probability of history ω for individual i, is                                                   1         1                λ+1              λc
+                                                                                                    Ec          =        =                                         .
+                                                                                                           p        E(p)               λ             λc − 1
+                                                  T −f −k       T −f
+                 πω (pi ) =   pki (1       − pi )           ϕ          χf,i ,
+                                                                                             In light of Example 1, it is relevant to ask how sensitive
+where k = k(ω) = #(1’s in history ω), f = f (ω) = #(ﬁnal                                  the estimation of N is to modeling assumptions regarding the
+0’s in history ω); the parameters χf ,i are deﬁned recursively                            distribution of p. Table 4 presents multinomial cell frequencies
+as                                                                                        under logit normal, log gamma, beta, two-point mixture, and
+                                                                                          homogeneous models of detection probabilities for a study
+                  χf,i = (1 − ϕ) + ϕ(1 − pi ) χf −1,i ,                                   based on T = 4 recapture occasions. Model parameters were
+                                                                                          chosen to minimize the discrepancy
+with χ0,i ≡ 1. Thus, the conditional frequency distribution                                                                                             
+for the 2T distinct vectors ω = (ω 1 , ω 2 . . . , ω T ) among n                                                       
+                                                                                                                        t
+                                                                                                                                                 π(ω)
+individuals captured at time t = 0 is multinomial with cell                                                   λM = 2n         π(ω) ln
+                                                                                                                                                πM (ω)
+                                                                                                                        j=1
+probabilities
+                                      1
+                                                                                          between each model and the logit normal model. For the prob-
+                                                                                          lem presented here, values λM = 1, 10, and 25 correspond
+                       πω =                πω (pi )gc (pi ) dpi .
+                                   0
+                                                                                          roughly to power of 0.08, 0.50, and 0.95 for the likelihood
+                                                                                          ratio goodness of ﬁt test with signiﬁcance level α = 0.05. A
+                                                                                          sample size of several hundred would be required to reject the
+   Relation (5) shows that the choice of a parametric form
+                                                                                          homogeneous model. However, n = 86,000 would only suﬃce
+for gc (p) is constrained by the requirement that Ec (1/p) must
+                                                                                          to yield power of 0.50 for distinguishing the logit normal and
+be ﬁnite. The choice must also be constrained by its implica-
+                                                                                          beta models.
+tions for the population distribution g(p). These constraints
+                                                                                             The four heterogeneity models are virtually indistinguish-
+are nicely dealt with by supposing that g(p) is a member of
+                                                                                          able. Given that any of the four heterogeneity models is the
+a parametric family conjugate to a successful Bernoulli trial.
+                                                                                          truth, the other three will produce acceptable estimates of
+Thus, for instance, if the population distribution of p is β(a, b),
+                                                                                          survival but use of the homogeneity model would results in a
+the distribution of p to be modeled among the captured an-
+                                                                                          substantial negative bias. However, the factors Ec (1/p) vary
+imals is also in the beta family, but with parameters ac =
+                                                                                          widely among the heterogeneity models; if the logit normal
+a + 1, and bc = b, so that
+                                                                                          were truth, biases in estimation of N are 28.7%, 15.7%, and
+                                                                                        −20.0%, for the beta, log gamma, and two-point distributions,
+                   1           1     a+b   a c + bc − 1
+            Ec          =          =     =              .                                 respectively. Expressed as a proportion of N − n, these biases
+                   p          E(p)    a        ac − 1
+                                                                                          are 35.1%, 19.2%, and −24.5%.
+                                                                                                                                              15410420, 2003, 4, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.0006-341X.2003.00129.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [05/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+                            Nonidentiﬁability of Population Size from Capture-Recapture Data                                          1129
+
+
+                                                              Table 4
+         Cell probabilities π ω for single-cohort, four sampling occasion capture-recapture data as described in example
+                                               2, under alternative models for gc (p).
+
+         History (ω)            Logit normal             Beta           Log gamma             Two-point            Homogeneous
+         0000                       0.4467              0.4480             0.4476               0.4453                 0.4070
+         1000                       0.1025              0.1013             0.1016               0.1039                 0.1389
+         0100                       0.0752              0.0743             0.0746               0.0761                 0.0847
+         0010                       0.0608              0.0600             0.0603               0.0615                 0.0568
+         0001                       0.0524              0.0517             0.0519               0.0529                 0.0424
+         1100                       0.0380              0.0382             0.0381               0.0374                 0.0508
+         1010                       0.0278              0.0282             0.0281               0.0271                 0.0340
+         1001                       0.0233              0.0236             0.0235               0.0224                 0.0254
+         0110                       0.0278              0.0282             0.0281               0.0271                 0.0340
+         0101                       0.0233              0.0236             0.0235               0.0224                 0.0254
+         0011                       0.0233              0.0236             0.0235               0.0224                 0.0254
+         1110                       0.0224              0.0225             0.0225               0.0234                 0.0204
+         1101                       0.0178              0.0181             0.0180               0.0188                 0.0152
+         1011                       0.0178              0.0181             0.0180               0.0188                 0.0152
+         0111                       0.0178              0.0181             0.0180               0.0188                 0.0152
+         1111                       0.0232              0.0224             0.0227               0.0216                 0.0091
+         (105 /n)λM                    –                11.6                5.13                51.4                   4095.7
+         Ec (1/p)                    5.49                 7.09              6.35                  4.39                  2.67
+            Parameters for the logit normal model: µ −1, σ = 1, ϕ = 0.90; for the beta model: ac = 1.6138, bc = 3.7228, ϕ =
+         0.9009; for the log gamma model: λc = 2.4028, β c = 3.4356, ϕ = 0.9007; for the two-point model: p1 = 0.1744, p2 = 0.5563,
+         ψ c = 0.6597, ϕ = 0.8984; for the homogeneous model: p0 = 0.3747 and ϕ = 0.8247. Asymptotic noncentralities λM measure
+         discrepancies of models from the logit normal; Ec (1/p) is the scaling factor for estimating N from n.
+
+
+
+  The close agreement of the ﬁtted densities is illustrated in         ble to distinguish between alternative models of the hetero-
+Figure 1.                                                              geneity, even with very large data sets, despite the fact that
+                                                                       the diﬀerent models produce substantially diﬀerent inferences
+4. Discussion                                                          about population sizes.
+The examples presented here illustrate that there are ex-                 Analysts should be aware of this phenomenon; at the very
+treme diﬃculties associated with estimating population size,           least, the eﬀect of choosing alternative parametric models for
+whether in closed or open-population models, in the presence           heterogeneity in detection should be considered. The exam-
+of heterogeneous detection probabilities. It may be impossi-           ples strongly call into question the usefulness of nonparamet-
+                                                                       ric methods; they simply cannot be reliable in all cases.
+                                                                          Even given samples of the actual detection probabilities, it
+                                                                       would be diﬃcult to distinguish among the three continuous
+                                                                       densities in Figure 1. The primary diﬀerences among them are
+                                                                       in the amount of mass near zero, which plays an important
+                                                                       role in the estimation of the number of animals not detected.
+                                                                       This observation suggests that similar diﬃculties are to be
+                                                                       anticipated in the use of distance sampling models (Buckland
+                                                                       et al., 2001), in which inference is based on a density value at
+                                                                       zero.
+
+                                                                                            Acknowledgements
+                                                                       I thank Shirley Pledger and an anonymous referee for their
+                                                                       careful reviews. I am grateful for helpful conversations and
+                                                                       encouragement from James D. Nichols, Robert M. Dorazio,
+                                                                       and J. Andrew Royle.
+
+                                                                                                     Résumé
+                                                                       L’hétérogénéité des probabilités de capture constitue une dif-
+Figure 1. Logit normal (narrow line), beta (thick, solid               ﬁculté connue des études de capture-recapture, et de nom-
+line), log gamma (thick, dashed line), and point mass distribu-        breux modèles ont été développés pour permettre d’en tenir
+tion (bars, approximately scaled to the continuous densities)          compte. Nous montrons par des simulations de données
+corresponding to Example 2.                                            sous diﬀérents scénarios que l’hétérogénéité individuelle est
+                                                                                                                                            15410420, 2003, 4, Downloaded from https://onlinelibrary.wiley.com/doi/10.1111/j.0006-341X.2003.00129.x by Universita Commerciale Luigi Bocconi Di Milano, Wiley Online Library on [05/11/2026]. See the Terms and Conditions (https://onlinelibrary.wiley.com/terms-and-conditions) on Wiley Online Library for rules of use; OA articles are governed by the applicable Creative Commons License
+1130                                                    Biometrics, December 2003
+
+particulièrement problématique. En eﬀet, sous divers modèles            Coull, B. A. and Agresti, A. (1999). The use of mixed
+raisonnables d’hétérogénéité individuelle, les données générées       logit models to reﬂect heterogeneity in capture-recapture
+peuvent ﬁnalement être très semblables, alors même que                      studies. Biometrics 55, 294–301.
+les eﬀectifs de population sont très diﬀérents. Ainsi, même             Dorazio, R. M. and Royle, J. A. (2003). Mixture models for
+avec de très grands échantillons, l’analyse des données de                  estimating the size of a closed population when capture
+capture-recapture ne permet pas de distinguer entre diﬀérents
+                                                                               rates vary among individuals. Biometrics 59, 351–364.
+modèles d’hétérogénéité, même si les eﬀectifs des popu-
+lations concernées sont très diﬀérents. Nous illustrons ce              Huggins, R. (2001). A note on the diﬃculties associated with
+problème avec des modèles pour populations ouvertes ou                       the analysis of capture-recapture experiments with het-
+fermées.                                                                      erogeneous capture probabilities. Statistics and Probabil-
+                                                                               ity Letters 54, 147–152.
+                                                                           Norris, J. L. and Pollock, K. H. (1996). Nonparametric MLE
+                           References                                          under two closed-capture models with heterogeneity.
+Agresti, A. (1990). Categorical Data Analysis. New York:                       Biometrics 52, 639–649.
+    Wiley.                                                                 Pledger, S. (2000). Uniﬁed maximum likelihood estimates for
+Buckland, S. T., Anderson, D. R., Burnham, K. P., Laake,                       closed capture-recapture models using mixtures Biomet-
+    J. L., Borchers, D. L., and Thomas, L. (2001). Introduc-                   rics 56, 434–442.
+    tion to Distance Sampling. New York: Oxford University                 Sanathanan, L. (1972). Estimating the size of a multinomial
+    Press.                                                                     population. Annals of Mathematical Statistics 43, 142–
+Burnham, K. P. and Overton, W. S. (1978). Estimation of the                    152.
+    size of a closed population when capture probabilities                 Schwarz, C. J. and Seber, G. A. F. (1999). A review of es-
+    vary among animals. Biometrika 65, 625–633.                                timating animal abundance III. Statistical Science 14,
+Cormack, R. M. (1979). Models for capture-recapture. In                        427–456.
+    Sampling Biological Populations, R. M. Cormack, G.
+    P. Patil, and D. S. Robson (eds), 217–249. Fairland,                            Received February 2002. Revised May 2003.
+    Maryland: International Co-operative Publishing House.                                     Accepted June 2003.
+

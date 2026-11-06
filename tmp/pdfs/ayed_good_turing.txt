@@ -1,0 +1,1695 @@
+Electronic Journal of Statistics
+Vol. 13 (2019) 3775–3804
+ISSN: 1935-7524
+https://doi.org/10.1214/19-EJS1614
+
+
+   A Good-Turing estimator for feature
+           allocation models
+                      Fadhel Ayed1 , Marco Battiston2 ,
+                Federico Camerlenghi3,∗ and Stefano Favaro4,†
+                                   1 Department of Statistics,
+                                     University of Oxford,
+                                  24-29 St Giles’, OX1 3LB,
+                                   Oxford, United Kingdom
+                                e-mail: fadhel.ayed@gmail.com
+                          2 Department of Mathematics and Statistics,
+                                     Lancaster University,
+                               Fylde Ave, Bailrigg, LA1 4YR,
+                                  Lancaster, United Kingdom
+                           e-mail: marco.battiston@stats.ox.ac.uk
+                   3 Department  of Economics, Management and Statistics,
+                                University of Milano - Bicocca,
+                              Piazza dell’Ateneo Nuovo 1, 20126,
+                                          Milano, Italy
+                           e-mail: federico.camerlenghi@unimib.it
+                           4 Department of Economics and Statistics,
+                       University of Torino and Collegio Carlo Alberto,
+                           Corso Unione Sovietica 218/bis, 10134,
+                                         Torino, Italy
+                              e-mail: stefano.favaro@unito.it
+           Abstract: Feature allocation models generalize classical species sampling
+           models by allowing every observation to belong to more than one species,
+           now called features. Under the popular Bernoulli product model for feature
+           allocation, we assume n observable samples and we consider the problem
+           of estimating the expected number Mn of hitherto unseen features that
+           would be observed if one additional individual was sampled. The interest
+           in estimating Mn is motivated by numerous applied problems where the
+           sampling procedure is expensive, in terms of time and/or ﬁnancial resources
+           allocated, and further samples can be only motivated by the possibility of
+           recording new unobserved features. We consider a nonparametric estimator
+           M̂n of Mn which has the same analytic form of the popular Good-Turing
+           estimator of the missing mass in the context of species sampling models. We
+           show that M̂n admits a natural interpretation both as a jackknife estimator
+           and as a nonparametric empirical Bayes estimator. Furthermore, we give
+           provable guarantees for the performance of M̂n in terms of minimax rate
+           optimality, and we provide with an interesting connection between M̂n and
+           the Good-Turing estimator for species sampling. Finally, we derive non-
+           asymptotic conﬁdence intervals for M̂n , which are easily computable and
+           do not rely on any asymptotic approximation. Our approach is illustrated
+           with synthetic data and SNP data from the ENCODE sequencing genome
+           project.
+  ∗ Also   aﬃliated to Collegio Carlo Alberto, Torino and BIDSA, Bocconi University, Milano.
+  † Also   aﬃliated to IMATI-CNR “Enrico Magenes” (Milan, Italy).
+                                              3775
+3776                                 F. Ayed et al.
+
+        MSC 2010 subject classiﬁcations: 62G05, 62C20.
+        Keywords and phrases: Bernoulli product model, feature allocation
+        model, Good-Turing estimator, minimax rate optimality, missing mass,
+        non-asymptotic uncertainty quantiﬁcation, nonparametric empirical Bayes,
+        SNP data.
+
+        Received December 2018.
+
+
+1. Introduction
+
+Feature allocation models generalize classical species sampling models by allow-
+ing every observation to belong to more than one species, now called features.
+In particular, every observation is endowed with a (unknown) ﬁnite set of fea-
+tures selected from a (possibly inﬁnite) collection of features (Fj )j≥1 . We conve-
+niently represent each observation as a binary sequence, with entries indicating
+the presence (1) or absence (0) of each feature. Every feature Fj is associated
+to an unknown probability pj , and each observation displays feature Fj with
+probability pj , for j ≥ 1. The Bernoulli product model, or binary independence
+model, is arguably the most popular feature allocation model. It models the
+i-th observation as a sequence Yi = (Yi,j )j≥1 of independent Bernoulli random
+variables with unknown success probabilities (pj )j≥1 , with the assumption that
+Yr is independent of Ys for any r = s. Bernoulli product models have found ap-
+plications in several scientiﬁc disciplines. They have been applied extensively in
+ecology when animals are captured using traps and each observation is an inci-
+dence vector collecting the presence or absence of each species in the traps (e.g.,
+Colwell et al. [6], Chao et al. [5] and Chao and Colwell [4]). Besides ecology,
+Bernoulli product models found applications in the broad area of biosciences
+(e.g., Ionita-Laza et al. [15], Gravel [13] and Zou et al. [28]); in the analysis
+of choice behaviour arising from psychology and marketing (Görür et al. [11]);
+in binary matrix factorization for dyadic data (Meeds et al. [18]); in graphical
+models (e.g., Wood et al. [27] and Wood and Griﬃths [26]); in the analysis
+of similarity judgement matrices (Navarro and Griﬃths [20]); in network data
+analysis (Miller et al. [19]).
+   Let Yn = (Y1 , . . . , Yn ) denote a collection of n random samples collected
+under the Bernoulli product   model with unknown feature probabilities (pj )j≥1 .
+Furthermore, let Xn,j = 1≤i≤n Yi,j be the number of times that feature Fj
+has been observed in Yn . That is, Xn,j is a Binomial random variable with
+parameters (n, pj ) for any j ≥ 1. In this paper we consider the problem of
+estimating the conditional expected number, given the random sample Yn , of
+hitherto unseen features that would be observed if one additional sample Yn+1
+was collected, i.e.
+                                    ⎛                                  ⎞
+                                      
+            Mn (Yn , (pj )j≥1 ) = E ⎝    I{Xn,j = 0, Yn+1,j = 1} | Yn ⎠
+                                         j≥1                                       (1.1)
+                                   
+                               =         pj I{Xn,j = 0},
+                                   j≥1
+                 A Good-Turing estimator for feature allocation models          3777
+
+where I is the indicator function. For easiness of notation, in the rest of the paper
+we will not highlight the dependence on Yn and (pj )j≥1 , and simply write Mn
+instead of Mn (Yn , (pj )j≥1 ). The statistic Mn is referred to as the missing mass,
+namely the sum of the probability masses of unobserved features in the ﬁrst n
+samples.
+    Interest in estimating the missing mass is motivated by numerous applied
+problems where the sampling procedure is expensive, in terms of time and/or
+ﬁnancial resources, and further draws can be only motivated by the possibility
+of recording new unobserved features. In genetics, for instance, the ambitious
+prospect of growing databases to encompass hundreds of thousands of human
+genomes, makes important to quantify the power of large sequencing projects to
+discover new genetic variants (Auton et al. [1]). An accurate estimate of Mn will
+enable better study design and quantitative evaluation of the potential and lim-
+itations of these datasets. Indeed one can ﬁx a suitable threshold such that the
+sequencing procedure takes place until the estimate of Mn becomes for the ﬁrst
+time smaller than the threshold. This introduces a criterion for evaluating the
+eﬀectiveness of further sampling, providing a roadmap for large-scale sequenc-
+ing projects. A Bayesian parametric estimator of (1.1) has been introduced in
+Ionita-Laza et al. [15], and it relies on a Beta prior distribution for the unknown
+probabilities pj ’s. A limitation of this approach is that it requires parametric
+forms for the distribution of variant frequencies, which requires some model of
+demography and selection. For instance, the Beta prior distribution is a reason-
+able assumption for neutrally evolving variants but may not be appropriate for
+deleterious mutations. To overcome this drawback, a nonparametric approach
+to estimate Mn has been proposed in the recent work of Zou et al. [28]. This is
+a purely algorithmic type approach, whose core is a linear programming based
+algorithm.
+    In this paper, we consider an estimator M̂n of Mn which has the same an-
+alytic form of the popular Good-Turing estimator of the missing mass under
+the multinomial model for species sampling (e.g., Good [10] and Robbins [23]),
+with the diﬀerence that the two estimators have diﬀerent ranges (supports). We
+refer to M̂n as the Good-Turing estimator for feature allocation models. As in
+Zou et al. [28], our approach is nonparametric in the sense that it does not rely
+on any distributional assumption on the unknown pj ’s. The use of the Good-
+Turing estimator for estimating Mn was ﬁrst considered in Chao and Colwell
+[4], where also a bootstrap procedure is presented to approximate the variance
+of the estimator. Our work delves into the Good-Turing estimator for feature
+allocation models, thus providing theoretical guarantees for its use. We show
+that M̂n admits a natural interpretation both as a jackknife (resampling) esti-
+mator (Quenouille [21] and Tukey [25]) and as a nonparametric empirical Bayes
+estimator in the sense of Efron and Morris [9]. Theoretical properties of the
+estimator M̂n are investigated. Speciﬁcally, we ﬁrst provide a lower bound for
+the minimax risk under a squared loss function and then we show that the mean
+squared error of the proposed estimator achieves the optimal minimax rate for
+the estimation of Mn . This asymptotic analysis provides with an interesting
+connection between the Good-Turing estimators for species sampling models
+3778                                F. Ayed et al.
+
+and for feature allocation models in terms of the limiting Poisson regime of the
+Binomial distribution. Finally, we derive a non-asymptotic conﬁdence interval
+for M̂n by means of novel Bernstein type concentration inequalities which are of
+separate interest; the conﬁdence interval is easy to compute and it does not rely
+on any asymptotic assumption or any parametric constraint on the unknown
+pj ’s. We illustrate the proposed methodology by the analysis of various syn-
+thetic data and SNP datasets from the ENCODE (http://www.hapmap.org/
+downloads/encode1.html.en) sequencing genome project.
+    The paper is structured as follows. In Section 2 we introduce the Good-
+Turing estimator M̂n for the missing mass Mn , we present its interpretation
+as a jackknife estimator and a nonparametric empirical Bayes estimator, and
+we give provable guarantees for its performance. In Section 3 we derive a non-
+asymptotic conﬁdence interval for M̂n , in Section 4 we discuss the use of M̂n for
+designing cost-eﬀective feature inventories, and in Section 5 we present a numer-
+ical illustration of M̂n with synthetic and real data. Some concluding remarks
+on future works are discussed in Section 6. Proofs are deferred to Appendix A.
+
+2. A Good-Turing estimator for Mn
+
+Let Yn = (Y1 , . . . , Yn ) be a collection of n random samples under theBernoulli
+product model with unknown feature probabilities (pj )j≥1 such that j≥1 pj <
++∞. That is, Yi = (Yi,j )j≥1 is a sequence of independent Bernoulli random
+variables, with pj being the success probability of Yi,j for any i = 1, . . . , n, and
+Yr is independent of Ys for any r = s. Note that the assumption j≥1 pj < +∞
+implies that each Yi displays ﬁnitely   many features almost surely;  indeed, by
+monotone convergence, we have  j≥1 pj < +∞ if and only if E( j≥1 Yi,j ) <
++∞, which in turns implies that j≥1 Yi,j < +∞ almost surely. If Xn,j denotes
+the number of times that feature Fj has been observed in the random sample
+Yn , then                                 
+                                 Kn,r =      I{Xn,j = r}
+                                        j≥1
+
+is the number of features with  frequency r in Yn . Let Kn be the total number
+of features in Yn , i.e. Kn = r≥1 Kn,r . For any two sequences (an )n≥1 and
+(bn )n≥1 , write an  bn to mean that an /bn → 1 as n → +∞. An intuitive
+estimator of Mn can be deduced from a comparison between expectations of Mn
+and Kn,1 . Speciﬁcally, since Xn,j is a Binomial random variable with parameter
+(n, pj ),
+                                
+ E(Mn ) =       pj P(Xn,j = 0) =     pj (1 − pj )n
+            j≥1                   j≥1
+
+              1     n+1                        1              1
+          = n+1         pj (1 − pj )(n+1)−1 =     E(Kn+1,1 )  E(Kn,1 )
+              1
+                      1                        n+1             n
+                   j≥1
+
+and set
+                                              Kn,1
+                                     M̂n =
+                                               n
+                 A Good-Turing estimator for feature allocation models          3779
+
+as an estimator of Mn , for any n ≥ 1. The estimator M̂n is nonparametric, in
+the sense that it does not rely on any distributional assumptions on the feature
+probabilities (pj )j≥1 . See Chao and Colwell [4] for a somehow related derivation
+of M̂n .
+   The estimator M̂n turns out to have the same analytic form of the popu-
+lar Good-Turing estimator of the missing mass for species sampling models.
+The Good-Turing estimator ﬁrst appeared in Good [10] as a nonparametric em-
+pirical Bayes estimator under the classical multinomial model for species sam-
+pling, i.e., (Y1 , . . . , Yn ) are n random samples from a population of individuals
+belonging to a (possibly inﬁnite)       collection of species (Sj )j≥1 with unknown
+proportions (pj )j≥1 such that j≥1 pj = 1. Under the multinomial model ev-
+ery observation is endowed with one species selected from (Sj )j≥1 , and hence
+Kn,1 ∈ {0, 1, . . . , n}. Therefore, although the estimator M̂n has the same ana-
+lytic form of the Good-Turing estimator, the two estimators have diﬀerent ranges
+(supports): while the Good-Turing estimator for species sampling models takes
+values in [0, 1], the Good-Turing estimator for feature allocation models takes
+positive (ﬁnite) values.
+   Hereafter we show that: i) the estimator M̂n admits natural interpretations
+both as a jackknife (resampling) estimator and as a nonparametric empirical
+Bayes estimator in the sense of Efron and Morris [9]; ii) the mean squared error
+of M̂n converges to zero at the best possible rate for the estimation of the missing
+mass Mn ; iii) the estimator M̂n is linked to the Good-Turing estimator for
+species sampling models in terms of the limiting Poisson regime of the Binomial
+distribution.
+
+
+2.1. Interpretations of M̂n
+
+We ﬁrst show that the estimator M̂n admits a natural interpretation as a jack-
+knife estimator in the sense of Quenouille [21] and Tukey [25]. See also the
+monograph by Efron [8] and references therein for a comprehensive account
+on jackknife (resampling) estimators. Let Kn (j) denote the number of dis-
+tinct features observed in the sample Yn after the removal of the j-th sam-
+ple Yj . It is easy to show that the missing mass Mn−1 equals the posterior
+expected value of Kn − Kn−1 (j), given all the samples but Yj , i.e., Mn−1 =
+E[Kn − Kn−1 (j)| {Y1 , . . . , Yn } \ Yj ]. Accordingly, the diﬀerence Kn − Kn−1 (j)
+provides with an unbiased estimator of Mn−1 . The jackknife estimator is then
+
+   1≤j≤n (Kn − Kn−1 (j))/n which equals M̂n−1 = Kn,1 /n; indeed, for any ﬁxed
+j, Kn − Kn−1 (j) coincides with the number of features displayed only by the
+j-th sample Yj .
+   The estimator M̂n also admits a natural interpretation as a nonparametric
+empirical Bayes estimator in the sense of Efron and Morris [9]. A Bayesian
+nonparametric approach to estimate Mn relies on the speciﬁcation of a prior
+distribution for the unknown feature probabilities (pj )j≥1 . Here we consider the
+three parameters Beta process prior (e.g., Teh and Görür [24] and James [16]).
+This is a well-known generalization of the celebrated Beta process prior of Hjort
+3780                                 F. Ayed et al.
+
+[14], and it is deﬁned as the distribution of a completely random measure (Daley
+and Vere-Jones [7]) with intensity measure ν(ds, df ) = ρ(s)dsI(0, 1)(f )df where
+ρ(s) = ϑs−1−α (1 − s)β+α−1 /Γ(1 − α), for α ∈ (0, 1), β > −α and ϑ > 0, with
+Γ(·) being the Gamma function. In particular, under the three parameters Beta
+process prior, the Bayesian point estimator of Mn under squared loss function
+is
+                                           ϑΓ(α + β + n)
+                           M̃n (ϑ, α, β) =               .                   (2.1)
+                                            Γ(β + n + 1)
+We refer to the Appendix A.1 for further details on the three parameters Beta
+process prior, and on the derivation of (2.1). In particular, it is shown in Ap-
+pendix A.1 that
+                                  Kn,1 Γ(β + n + 1)
+                           ϑ̂n =
+                                   Γ(β + α + n)n
+is a consistent estimator of ϑ for any α ∈ (0, 1) and β > −α, and plugging ϑ̂n
+into (2.1) we obtain
+                                             Kn,1
+                          M̃n (ϑ̂n , α, β) =      = M̂n .
+                                              n
+In other terms, the proposed estimator M̂n coincides with the nonparametric
+empirical Bayes estimator M̃n (ϑ̂n , α, β) of the missing mass. M̃n (ϑ̂n , α, β) is
+obtained by assigning the three parameters Beta process prior to (pj )j≥1 and
+then estimating its mass parameter ϑ with an appropriately chosen consistent
+estimator.
+
+2.2. Optimality of M̂n
+
+We start by showing that the mean squared error (L2 -risk) of the estimator
+M̂n goes to zero at the best possible rate. This result legitimates the use of M̂n
+                              mass Mn . For any 0 < W < +∞ let PW =
+as an estimator of the missing
+{(pj )j≥1 : pj ∈ (0, 1) and     j≥1 pj ≤ W } be a class of features probabilities.
+Also, let T̂n denote a whichever estimator of the missing mass Mn based on the
+random sample Yn , that is a map on the n-fold product space of observations
+{0, 1}∞ × · · · × {0, 1}∞ and taking values in R+ . For a speciﬁc collection of
+feature probabilities (pj )j≥1 in the class PW , the L2 -risk of the estimator T̂n is
+deﬁned as follows
+
+        Rn (T̂n ; (pj )j≥1 ) = E[(Mn − T̂n )2 ] = Bias(T̂n )2 + Var(T̂n − Mn ),
+
+and the minimax risk is
+
+                      Rn∗ = inf      sup         Rn (T̂n ; (pj )j≥1 ),            (2.2)
+                              T̂n (pj )j≥1 ∈PW
+
+
+i.e. the inﬁmum, with respect to the set of possible estimators T̂n of the missing
+mass Mn , of the worst-case risk over the class of feature probabilities PW . The
+next theorem provides with an upper bound for Rn (M̂n ; (pj )j≥1 ) and a lower
+bound for Rn∗ .
+                  A Good-Turing estimator for feature allocation models                3781
+
+Theorem 2.1. Let (pj )j≥1 be feature probabilities in the class PW . Then,
+
+   i) for any n ≥ 1
+
+                                                           1 2     2n + 1
+                       sup        Rn (M̂n ; (pj )j≥1 ) ≤      W +          W;         (2.3)
+                   (pj )j≥1 ∈PW                            n2     n(n + 1)
+
+  ii) for any n ≥ 2
+                                                2W      14
+                                     Rn∗ ≥            −    .                          (2.4)
+                                             9(3n + 1) n2
+
+   See Appendix A.2 for the proof of Theorem 2.1. For any two sequences
+(an )n≥1 and (bn )n≥1 , write an  bn to mean that there exists a constant C > 0
+such that an ≤ Cbn for all n and an bn to mean that we have both an  bn and
+bn  an . Part i) of Theorem 2.1 shows that sup(pj )j≥1 ∈PW Rn (M̂n ; (pj )j≥1 ) 
+W/n, namely as n goes to inﬁnity the mean squared error of M̂n goes to zero at
+rate W/n. Part ii) of Theorem 2.1 provides with a lower bound for the minimax
+risk, showing that R∗  W/n. In other terms, this shows that the mean squared
+error of M̂n goes to zero at the best possible rate. Theorem 2.1 then shows that
+the estimator M̂n is essentially rate optimal due to the matching minimax lower
+bound in the class PW of admissible probabilities’ masses up to a constant
+factor.
+   In Theorem 2.1 we considered the class PW of feature probabilities hav-
+ing total mass bounded by W . We highlight the crucial role or this assump-
+tion in order to provide asymptotic results. First, notice from Theorem 2.1
+that, for a ﬁxed value of the sample size n, the minimax rate increases linearly
+in W . This implies that, for a ﬁxed n, the estimation problem can be made
+as hard as desired if no bounds are imposed on the sum of the possible vec-
+tors of probabilities (pj )j≥1 . Since at ﬁrst glance this result can seem slightly
+counter intuitive, let us consider an illustrative example which should clarify
+why the estimation diﬃculty of the problem is proportional to W . To simplify
+the argument, suppose that W is a strictly positive integer and consider W fre-
+                      (0)           (W −1)                             (r)
+quency vectors (pj )j≥1 , . . . , (pj      )j≥1 ∈ P1 , i.e. such that j pj ≤ 1 for
+all r ∈ {0, . . . , W − 1}. Now, let us construct another vector of frequencies P =
+                                                   (r)
+(pj )j≥1 ∈ PW obtained by setting pqW +r = pq for q ≥ 0 and 0 ≤ r ≤ W − 1.
+                                                       (0)           (W −1)
+The resulting vector P is the concatenation of (pj )j≥1 , . . . , (pj       )j≥1 , such
+                                                                          (0)      (W −1)
+that in the ﬁrst W entries of P we put the ﬁrst elements (p1 , . . . , p1                ),
+                                  (0)      (W −1)                     (0)           (W −1)
+followed by the second ones (p2 , . . . , p2      ), the third ones (p3 , . . . , p3       )
+and so on. Furthermore, any observation (Yi,j )j≥1 sampled from the Bernoulli
+product model with frequencies given by this P can be rewritten, following a
+                                                                      (r)          (r)
+similar construction, as the concatenation of W observations Yi = (Yi,j )j≥1 ,
+r ∈ {0, . . . , W − 1}, each of them sampled from a binomial product model with
+                                      (r)
+the corresponding frequencies (pj )j≥1 . Hence, the missing mass for a random
+sample from P can be related to the missing masses of each of its W subcom-
+3782                                 F. Ayed et al.
+
+ponents, by
+                                     
+                                     W −1
+                                                            (r)
+                    Mn (Yn ; P ) =          Mn(r) (Yn(r) ; (pj )j≥1 ),
+                                     r=0
+
+        (r)      (r)         (r)
+where Y =     (Y1 , . . . , Yn ).From this construction, we can see that by trying
+to estimate the missing mass on the left hand side, we are basically trying to
+estimate a sum of W unrelated quantities, which explains why the error is linear
+in W .
+   In order to apply Theorem 2.1 and evaluate the performances of the Good-
+Turing estimator compared to the minimax rate, we would need to know an
+upper bound W , i.e. an upper bound on the total mass of the unknown vector
+of probabilities (pj )j≥1 . In real life applications, W is unlikely to be known.
+However, we can easily estimate it. Speciﬁcally, since the total mass W is the
+expected number of features displayed per observation,
+                                                          we can use as a consis-
+tent estimator for W the estimator Ŵn := j≥1 Xn,j /n. Besides the following
+concentration inequality for Ŵn around its mean W may be useful to measure
+the probability that Wn deviates from W . In particular it can be proved that
+for any δ ∈ (0, 1)
+                                                             
+                                    4W              1
+                P Ŵn − W >              log(1/δ) + log(1/δ) ≤ δ             (2.5)
+                                     n              n
+
+and                                                           
+                                               2W
+                    P −(Ŵn − W ) >               log(1/δ)        ≤ δ.       (2.6)
+                                                n
+The proofs of these exponential tail bounds rely on suitable bounds on the
+corresponding log-Laplace transform of Ŵn − EŴn . See Section A.3 for details.
+Equation (2.6) leads to an upper bound on W , indeed with probability 1 − δ
+one has                                                 2
+                                  log(1/δ)     log(1/δ)
+                  W ≤      Ŵn +           +               .              (2.7)
+                                     2n            2n
+
+Analogously, one may directly apply Equation (2.5) in order to ﬁnd a lower
+bound for W . More precisely, it is straightforward to see the validity of the
+following inequality
+                        √       
+                                            log(1/δ)
+                          W ≥ Ŵn −                                      (2.8)
+                                               n
+with probability bigger than 1 − δ. Therefore (2.7)–(2.8) result in a conﬁdence
+intervals for W .
+   Finally, we conclude this subsection by remarking that the proposed estima-
+tor displays some bias. The formula of the theoretical bias can be found in the
+proof of Theorem 2.1. However, the eﬀect of this bias becomes negligible for
+any reasonable sample size. As a simple illustration, in Table 1, we display the
+theoretical bias of the estimator for diﬀerent sample sizes, when the frequencies
+                  A Good-Turing estimator for feature allocation models                  3783
+
+                                          Table 1
+   Bias of M̂n : pj = 1/j s for j ≤ 105 and pj = 0 for j > 105 , and diﬀerent values of s.
+                       s     n = 10    n = 50    n = 100    n = 1000
+                      0.6     1.310     0.459     0.241       0.001
+                      0.8     0.268     0.075     0.042       0.003
+                      1.0     0.100     0.020     0.010       0.001
+                      1.2     0.052     0.008     0.004       0.000
+                      1.4     0.033     0.004     0.002       0.000
+                      1.6     0.023     0.002     0.001       0.000
+
+                                          Table 2
+ Bias(M̂n )2 /Rn *100: pj = 1/j s for j ≤ 105 and pj = 0 for j > 105 , and diﬀerent values
+                                            of s.
+                       s     n = 10    n = 50    n = 100    n = 1000
+                      0.6     16.06     13.05      9.57       0.89
+                      0.8     2.99       1.44      1.08       0.19
+                      1.0     1.35       0.34      0.19       0.03
+                      1.2     0.94       0.16      0.07       0.01
+                      1.4     0.76       0.10      0.04       0.00
+                      1.6     0.64       0.07      0.03       0.00
+
+
+(pj )j≥1 are chosen according to the Zipf’s Law for diﬀerent values of the param-
+eter s (the same simulation setting will be reconsidered and better described
+in Section 5). In Table 2, we report for each combination of sample size n and
+parameter s the percentage of the risk that is due to the bias. As can be seen
+from Table 1 and 2, expect for very small sample size and Zipf parameter, under
+which most of the frequencies are high, the bias is always almost negligible and
+does not contribute much to the risk of estimator, which is mainly due to its
+variance.
+
+2.3. Connection to the Good-Turing estimator for species sampling
+     models
+
+We relate the Good-Turing estimator for feature allocation models with the
+classical Good-Turing estimator for species sampling. This link relies on the well-
+known limiting Poisson approximation of Binomial random variables. Theorem
+2.1 states that, in the feature allocation models, the Good-Turing estimator
+                                 W
+achieves a risk of order Rn      n , while it is known from Rajaraman et al. [22]
+that the risk R̃n of the Good-Turing estimator in the species sampling case
+asymptotically behaves as R̃n 1/n. In order to compare the two models, we
+will consider the limiting scenario when  W → 0. Let us consider a vector of
+feature frequencies (pj )j≥1 , such that j pj = W = nλ for some positive value
+                          p
+λ and denote p̃j =  j pj the normalized probability vector. Applying the
+                         j≥1
+large n Poisson approximation of the binomial distribution, it follows that each
+Xn,j is now approximately distributed according to a Poisson distribution with
+mean λp̃j . Therefore, the approximated
+                                          model for large n boils down to sample
+ﬁrst an eﬀective size ñ = j≥1 Xn,j , distributed according to a Poisson with
+parameter λ, and, conditionally on it, sample ñ independent and identically
+3784                                  F. Ayed et al.
+
+distributed observations (Ỹ1 , . . . , Ỹñ ) from probability vector (p̃j )j≥1 . Hence it
+is equivalent to a species sampling model where the sample size ñ is assumed to
+be random. Denote M̃ñ the missing mass in the corresponding species sampling
+                                                                                  2
+model. Now, by noticing that Mn = nλ M̃ñ , it follows that Rn ≈ nλ2 Eñ (R̃ñ ).
+                                           2
+Therefore, we expect the quantity nλ2 Rn to have the same asymptotic behaviour
+      1                                                                            2
+of Eñ ñ I{ñ > 0} . Indeed, from Theorem 2.1 and W = nλ , we get that nλ2 Rn
+ 1     1
+λ = E(ñ) .
+    We conclude by remarking that the above construction also provides a justi-
+ﬁcation for the Good-Turing estimator in the feature allocation models. Indeed,
+in the context of feature allocation models, we want to estimate Mn = W M̃ñ ,
+where both W and M̃ñ are unknown and need to be estimated. In order to
+estimate M̃ñ , we can use the Good-Turing estimator for species models, which
+here turns to be
+                                         Kn,1         Kn,1
+                           M̃ñGT =              =           .
+                                            ñ       j≥1 Xn,j
+                                                   
+However, we also need to estimate W = j pj in order to make use of M̃ñGT
+as an estimator of Mn . As pointed out       at the end of the previous subsection, a
+                                                Xn,j
+consistent estimator of W is Ŵ = j n . Then, by combining the estimator
+Ŵ for W with the estimator M̃ñGT for M̃ñ , we obtain the following estimato of
+Mn ,                                   
+                                           j≥1 Xn,j     K          Kn,1
+                 M̂n = Ŵ M̃ñGT =                    n,1       =       ,
+                                               n           X
+                                                       j≥1 n,j       n
+which turns out to be exactly the Good-Turing estimator for feature allocation
+models.
+
+
+3. A conﬁdence interval for M̂n
+
+In this section, we consider the problem of uncertainty quantiﬁcation of the
+proposed estimator of the missing mass. In particular, we exploit tools from
+concentration inequalities for sum of independent random variables (Boucheron
+et al. [3]) to introduce a non-asymptotic level-δ conﬁdence interval for M̂n , for
+any δ ∈ (0, 1).
+Theorem 3.1. Let (pj )j≥1 be        any sequence  of feature probabilities s.t.
+
+     p
+  j≥1 j <  +∞,   and set c δ (x) = (   log(1/δ)/2 +   7 log(1/δ)/6 + x)2 for any
+nonnegative integer x and δ ∈ (0, 1). Then, with probability at least 1 − δ
+
+                   M̂n − Lδ (Kn,1 , Kn,2 ) ≤ Mn ≤ M̂n + Uδ (Kn ),
+
+where
+                                              
+                    2cδ (Kn,2 ) log(6/δ)                  6   4cδ (Kn,1 ) 2cδ (Kn,2 )
+Lδ (Kn,1 , Kn,2 ) =            +         +        2 log                  +
+                    n(n − 1)       n                      δ   n(n − 1)        n2
+                 A Good-Turing estimator for feature allocation models          3785
+
+and                                   
+                        log(6/δ)                  6       4cδ (Kn )
+             Uδ (Kn ) =          +        2 log                          .
+                          n−1                     δ   (n − 1)2 (1 − 2/n)
+   This theorem can be proven in two steps. We ﬁrst derive bounds on the log-
+Laplace transform of Dn = M̂n − Mn , from which we can obtain a conﬁdence
+interval for Dn as a function of EKn,1 , EKn,2 and EKn . Then, by deriving
+bounds on the log-Laplace of Kn,1 , Kn,2 and Kn , we are able to bound with high
+probability the deviation of these random variables from their mean. Theorem
+3.1 then follows by plugging-in the results of step 2 in the bounds of step 1.
+The details are left in Appendix A.4. For any δ ∈ (0, 1), Theorem 3.1 provides
+with a level 1 − δ conﬁdence interval for M̂n that holds for every sample size n
+and for every possible values of the feature probabilities (pj )j≥1 . Indeed, this is
+derived by applying ﬁnite sample concentration inequalities, without using any
+asymptotic approximation, and it does not rely on any distributional assumption
+on the feature probabilities (pj )j≥1 . Note that the proposed conﬁdence interval
+can be easily evaluated without resorting to any simulation based strategy. It
+is enough to count the total number of features and number of features with
+frequency one and two in the observable sample, i.e. Kn , Kn,1 and Kn,2 , and plug
+these quantities into Uδ (Kn ) and Lδ (Kn,1 , Kn,2 ) to be added and subtracted to
+M̂n .
+
+4. A stopping rule for the discovery process
+
+As we recalled in the Introduction, interest in estimating missing mass Mn is
+motivated by the design of feature inventories that are cost-eﬀective in terms of
+the number of features discovered and the amount of resources allocated in the
+discovery process. This is a fundamental issue in numerous scientiﬁc disciplines
+where the sampling procedure is expensive, in terms of time and/or ﬁnancial
+resources. Feature inventories must then be designed in such a way to redirect
+the search of new features to more productive sites, methods or time periods
+whenever the sampling eﬀort becomes unproﬁtable. In such a context, the esti-
+mator M̂n is the key ingredient for deﬁning an adaptive sequential approach in
+terms a stopping rule for the discovery process. Speciﬁcally, let h be an utility
+function, deﬁned on the integers, such that h(k) is the gain of observing k fea-
+tures; assume that h in non-decreasing and concave. If c is the cost associated
+with each sampling step, and Kn is the number of features in the sample Yn ,
+then the stopping rule may be deﬁned as
+
+                 n∗ = inf{n ≥ 0 : [h(Kn + M̂n ) − h(Kn )] ≤ c}.
+
+This brief discussion highlights how to exploit the estimator M̂n within the
+context of designing cost-eﬀective feature inventories. In particular, it gives rises
+to the challenging problem of ﬁnding the time n∗ at which it is optimal to
+conclude the discovery process, i.e. the time that maximizes the expected payoﬀ
+E(h(Kn ) − cn).
+3786                                   F. Ayed et al.
+
+                                         Table 3
+Synthetic data: missing mass estimation with pj = 1/j s for j ≤ 105 and pj = 0 for j > 105 ,
+                                 and diﬀerent values of s.
+        s                  n = 50                                    n = 250
+               Mn       M̂n          95% CI            Mn         M̂n          95% CI
+       0.6   183.81   184.66     (174.35, 198.12)    105.38     105.61    (101.74, 110.53)
+       0.8    33.79    33.67      (29.45, 39.51)      26.40      26.05     (24.40, 28.30)
+       1.0     7.02     7.02       (4.88, 9.91)        5.41       5.43       (4.66, 6.49)
+       1.2     1.92     1.87       (0.54, 3.60)        1.35       1.35       (0.92, 1.93)
+       1.4     0.71     0.72         (0, 1.98)         0.44       0.44       (0.15, 0.81)
+       1.6     0.34     0.36         (0, 1.39)         0.18       0.18        (0, 0.46)
+                              s                 n = 1000
+                                    Mn        M̂n        95% CI
+                             0.6 27.84       27.89    (26.66, 29.65)
+                             0.8 17.18       17.17    (16.47, 18.13)
+                             1.0    4.04      4.03     (3.70, 4.48)
+                             1.2    0.97      0.97     (0.80, 1.20)
+                             1.4    0.29      0.29     (0.19, 0.43)
+                             1.6    0.12      0.11     (0.04, 0.21)
+
+
+
+5. Numerical illustration
+
+In this section we illustrate the experimental performance of the estimator M̂n
+by the analysis of various synthetic data, and by the analysis SNP datasets
+from a genome project. In particular, let N denote the total number of possible
+features in the whole population of individuals. With regards to synthetic data,
+we present a numerical illustration by setting pj = 1/j s for j ≤ N and pj =
+0 for j > N , with s being a nonnegative parameter. Note that the feature
+probability masses pj ’s correspond to the unnormalized masses of the ubiquitous
+Zipf distribution. Recall that the parameter s controls how the total mass is
+spread among the features: the lager s, the smaller is the number of features
+with high probability. In other terms the larger s, the larger is the number of
+features with small frequencies (rare features). Hereafter we set N = 105 , and
+we consider the following values for the discount parameter s: 0.6, 0.8, 1.0, 1.2,
+1.4, 1.6. For each of these values of the parameter s, we take 100 samples of
+size n = 50, 250, 1000 from the population (pj )1≤j≤N . Table 1 displays the true
+value of the missing mass Mn , the estimated value M̂n and the corresponding
+95% conﬁdence interval (CI). All the experiments are averaged over the 100
+samples. Results in Table 1 show that M̂n provides good estimates of true value
+of Mn in all the scenarios that we considered. In addition, conﬁdence intervals
+are quite narrow around the estimator and contain always the true value of the
+missing mass.
+   We conclude with an application to SNP data. In this context, each sample
+represents a genome sequence and we are interested in variations with respect
+to the reference genome. Single nucleotide polymorphisms (SNPs) are the most
+common type of genetic variation among people. Each SNP represents a diﬀer-
+ence in a single DNA building block, which is called a nucleotide. For example,
+at a speciﬁc position in the human genome, the C (Cytosine) nucleotide may
+                A Good-Turing estimator for feature allocation models              3787
+
+                                        Table 4
+    Real data: missing mass estimation for the ENCODE sequencing genome project.
+                Population          n = 20                  n = 40
+                             M̂n        95% CI       M̂n       95% CI
+                  CEPH       55.6     (38.7, 88.9)   22.3    (15.6, 38.9)
+                  CHB        50.0     (37.3, 81.3)   17.6    (12.6, 32.8)
+                   JPT       61.7     (46.9, 93.4)   26.7    (20.9, 42.2)
+                   YRI       88.3    (65.2, 125.2)   26.6    (18.9, 44.7)
+
+
+
+appear in most individuals, but the position can be replaced by an A (Adenine)
+in a small group of people. This means that there is a SNP at that position
+of the DNA. SNPs are important biological markers, helping scientists locate
+genes that are associated with diseases. We use the SNP datasets from the
+ENCODE sequencing genome project (http://www.hapmap.org/downloads/
+encode1.html.en). The same project was analyzed in Ionita-Laza et al. [15].
+Ten 500-kb regions of the genome were sequenced in 209 unrelated DNA sam-
+ples: 60 Yoruba (YRI), 60 CEPH European (CEPH), 45 Han Chinese (CHB),
+and 44 Japanese (JPT). These regions were chosen to be representative of the
+genome in general, including various chromosomes, recombination rates, gene
+density, and values of nontranscribed conservation with mouse. To make results
+comparable across the 4 populations (YRI, CEPH, CHB, and JPT), we consider
+only n = 20 of the sequenced individuals for each dataset. Table 2 displays the
+estimated values and 95% conﬁdence interval (CI). For samples of 20 individu-
+als, the YRI population displays the highest estimate of the missing mass. This
+agrees with results in Ionita-Laza et al. [15], showing that the African popula-
+tion is the most diverse. We also consider increasing the sample size to n = 40
+of the sequenced individuals for each dataset. Table 2 shows how the missing
+mass decreases with respect to the case n = 20. This highlights the saturation
+eﬀect in discovering new variants. The discovery process is very eﬃcient in the
+beginning, but after many individuals are sequenced, each additional individual
+contributes less and less to the pool of the newly discovered variants.
+
+
+6. Concluding remarks
+
+In this paper we delved into the Good-Turing estimator for feature allocation
+models, thus providing theoretical guarantees for its use. In particular, we proved
+that the mean squared error of M̂n goes to zero at the best possible rate as the
+sample size n goes to inﬁnity. Our results are simple, intuitive and easily im-
+plementable from practitioners. It distinguishes from the approaches of Ionita-
+Laza et al. [15] and Zou et al. [28] for being the ﬁrst nonparametric statistical
+approach for estimating the missing mass in feature allocation models. In par-
+ticular, diﬀerently from Ionita-Laza et al. [15] and Zou et al. [28], we associated
+to the proposed estimator an exact (non-asymptotic) quantiﬁcation of its un-
+certainty. Results and techniques presente in this paper paves the way to new
+research directions in the context of feature allocation problems. In particular,
+three promising directions are: i) estimating the conditional expected number,
+3788                                 F. Ayed et al.
+
+given an observable sample Yn = (Y1 , . . . , Yn ), of features with frequency r > 0
+in Yn that would be observed in one additional sample (Chao and Colwell [4]);
+ii) solving the optimal stopping problem discussed in Section 4; iii) estimat-
+ing the conditional expected number, given an observable sample Yn , of new
+features that would be observed in m > 1 additional (unobservable) samples
+(Colwell et al. [6]).
+
+
+Appendix A: Proofs
+
+A.1. Nonparametric empirical Bayes
+
+In the present section we derive M̂n as a nonparametric empirical Bayes esti-
+mator in the sense of Efron and Morris [9]. Recall that Fj denotes the label of
+feature j, in the sequel assumed to be Fj ∈ (0, 1). Yi = (Yi,j )j≥1 denotes the
+observation of i-th individual. Each entry Yi,j in this sequence is distributed
+according to a Bernoulli distribution with parameter pj and is independent
+of the others. Yi,j = 1 (resp. Yi,j = 0) indicates the presence (resp. absence)
+of feature j in the i-th individual. The Bayesian nonparametric approach to
+estimate the missing mass Mn requires a prior speciﬁcation for the pj ’s: we
+resort to the three-parameter Beta process introduced by [24]. Such a prior
+distribution is deﬁned as the distribution of a Completely Random Measure
+(CRM) μ̃ (see e.g. [7]), with Lévy intensity ν(ds, df ) = ρ(s)dsI(0, 1)(f )df ,
+where ρ(s) = ϑ/Γ(1 − α)s−1−α (1 − s)β+α−1 , being α, β ∈ (0, 1) and ϑ > 0.
+   Let Yn be a random sample of size n and F1∗ , . . . , FK  ∗
+                                                               n
+                                                                  be the Kn distinct fea-
+tures observed in it, the posterior estimate of Mn , under a square loss function,
+equals                                                          
+                                                             ∗
+                M̃n (ϑ, α, β) = E[μ̃((0, 1) \ F1∗ , . . . , FK n
+                                                                   )|Yn ].         (A.1)
+We can characterize the posterior distribution of μ̃ in (A.1) resorting to [16,
+Theorem 3.1 (ii)], which gives
+
+                                      d
+                                               
+                                               Kn
+                               μ̃|Yn = μ̃n +         J δF∗
+                                               =1
+
+where the J ’s are jumps having a density on the positive real line and μ̃n is a
+CRM having updated Lévy intensity given by νn (ds df ) = (1−s)n ρ(s)dsI(0,1)(f )
+df . Hence the Bayesian estimator in (A.1) boils down to
+                                                                                 
+                             ∗              c   
+                                                  Kn
+                                                               ∗              c
+                                           ∗                                 ∗
+     M̃n (ϑ, α, β) = E μ̃n ( F1 , . . . , FKn ) +    J δF∗ ( F1 , . . . , FKn )
+                                                  =1
+                                                          
+                                        d                        Γ(α + β + n)
+                  = E[μ̃n ((0, 1))] = − E[e−uμ̃n ((0,1)) ]    =ϑ
+                                       du                  u=0    Γ(β + n + 1)
+
+where the second equality follows from the fact that the base measure of μ̃n
+is diﬀuse and the last equality follows from the availability of the Laplace
+                  A Good-Turing estimator for feature allocation models               3789
+
+functional and from standard calculations. We are now going to show that
+ϑ̂n = (Kn,1 Γ(β + n + 1))/(Γ(β + α + n)n) is a consistent estimator of ϑ, then
+we will conclude that the empirical Bayes estimator M̃n (ϑ̂n , α, β) coincides with
+M̂n . The consistency of ϑ̂n can be established resorting to the regular variation
+theory by [17, 12]. More speciﬁcally we are able to show that the tail integral
+of ρ(s) is a regularly varying function, having regular variation index α, indeed
+                      1                     1
+                                      ϑ
+             ρ(s) :=     ρ(s)ds =               s−1−α (1 − s)β+α−1 ds
+                      x           Γ(1 − α) x
+fulﬁlls
+              ρ(s)      ϑ         x−1−α (1 − x)β+α−1       ϑ
+          lim  −α
+                   =          lim         −α−1
+                                                     =           .
+          x→0 x      Γ(1 − α) x→0      αx              Γ(1 − α)α
+
+Hence we just proved that ρ(x)  x−α ϑ/(Γ(1 − α)α) as n → +∞, and therefore
+                                                                   K
+an application of [12, Corollary 21] gives the asymptotic relation nn,1
+                                                                     α   → ϑ.
+                                           Γ(α+β+n)
+Moreover, from Stirling’s approximation, Γ(n+1+β)  n   α−1
+                                                            . Therefore, ϑ̂n =
+Kn,1 Γ(β+n+1)
+ Γ(β+α+n)n      → ϑ and ϑ̂n is a consistent estimator for ϑ. Plugging ϑ̂n into the
+                                                                 Kn,1
+posterior estimate M̃n (ϑ, α, β), we obtain M̃n (ϑ̂n , α, β) =    n       = M̂n .
+
+A.2. Proof of Theorem 2.1
+
+We prove part i) (upper bound) and ii) (lower bound) of Theorem 2.1 separately.
+   We ﬁrst focus on the upper bound for the L2 -risk of M̂n . In the sequel we
+denote by Mn,1 the total mass of features with frequency 1 in a sample of size n,
+formally Mn,1 = j≥1 pj I{Xn,j = 1}, we observe that the expectation of Mn,1
+equals
+                                              n
+            E(Mn,1 ) =     pj P(Xn,j = 1) =           p2 (1 − pj )n−1
+                                                    1 j
+                            j≥1                    j≥1
+
+and obviously E[Mn,1 ] ≤ W , for any sequence (pj )j≥1 belonging to the class
+PW .
+   In order to bound the L2 -risk of the estimator M̂n from above for any
+(pj )j≥1 ∈ PW , we remind that Rn (M̂n ; (pj )j≥1 ) = E(M̂n − Mn )2 may be seen
+as the sum of the squared bias and the variance. The upper bound for the bias
+can be easily proved as follows
+                     1 n 1                       
+    E(M̂n − Mn ) =              pj (1 − pj )n−1 −     pj (1 − pj )n
+                     n       1
+                       j≥1                        j≥1
+                                                            
+                   =    pj (1 − pj ) n−1
+                                         −    pj (1 − pj )n =      p2j (1 − pj )n−1
+                      j≥1                    j≥1                 j≥1
+
+                      1  n 2                1          1
+                   = n     pj (1 − pj )n−1 = E(Mn,1 ) ≤ W.
+                      1
+                          1                  n          n
+                            j≥1
+3790                                            F. Ayed et al.
+
+As for the variance bound, we note that
+                                                     1
+           Var(M̂n − Mn ) =                 Var         I{Xn,j = 1} − pj I{Xn,j = 0}
+                                                      n
+                                    j≥1
+                                                   1
+                                                                                            2
+                            ≤               E         I{Xn,j = 1} − pj I{Xn,j = 0}              ,
+                                                    n
+                                    j≥1
+
+
+where we have exploited the independence of the random variables Xn,j . We
+now observe that the events {Xn,j = 1} and {Xn,j = 0} are incompatible,
+hence we get
+
+                                       1
+                                                                                   2
+       Var(M̂n − Mn ) ≤         E         I{Xn,j = 1} − pj I{Xn,j = 0}
+                                        n
+                          j≥1
+                                                                                        
+                                       1
+                                                2
+                     =                              P(Xn,j = 1) +   p2j P(Xn,j   = 0)
+                                        n
+                          j≥1
+
+                           1
+                                    2                           
+                     =                        P(Xn,j = 1) +            p2j P(Xn,j = 0)
+                           n
+                                        j≥1                      j≥1
+
+                       1  n                   
+                     = 2     pj (1 − pj )n−1 +   p2j (1 − pj )n
+                      n    1
+                                j≥1                                  j≥1
+
+                       1                     1  n+1 2
+                     =    pj (1 − pj )n−1 + n+1      pj (1 − pj )n
+                       n                      1
+                                                   1
+                            j≥1                                        j≥1
+                      1            1                2n + 1
+                     = E(Mn−1 ) +     E(Mn+1,1 ) ≤          W.
+                      n           n+1              n(n + 1)
+
+Putting together the bound on the bias and the variance we immediately obtain
+(2.3).
+    We now focus on the proof of the lower bound of the minimax risk Rn∗ , which
+has been deﬁned in (2.2). Let us ﬁrst notice that, since (pj )j≥1 belongs to PW ,
+then Mn ≤ W almost surely, and hence (Mn − T̂n )2 ≥ (Mn − min(T̂n , W ))2 .
+Therefore, we can restrict the minimum in (2.2) over all the possible estima-
+tors less than W , hence the problem boils down to determine an estimate from
+below for inf T̂n ≤W sup(pj )j ∈PW E[(Mn − T̂n )2 ]. The proof of this estimate re-
+lies on a Bayesian parametric approach based on the randomization of the
+probability masses pj ’s. More speciﬁcally we consider the randomized vector
+P = (p1 , · · · , pm , 0, 0, . . .) where m is a Poisson random variable with mean
+λ = nW and pj are independent beta           random variables with parameters a = 1
+                                               m
+and b = 2n − 1. We denote by PF := j=1 pj the total mass of the random se-
+quence (pj )j≥1 ; we further deﬁne X := (Xn,j )j≥1 and it is worth noticing that,
+conditionally on P, the Xn,j ’s are independent, having a Binomial distribution
+with parameters (n, pj ). For generic random variables U, V we will write EV
+(resp. EV |U ) to mean that the expectation is made with respect to V (resp. to
+                  A Good-Turing estimator for feature allocation models            3791
+
+V given U ). It is easily shown that
+
+      inf      sup       E[(Mn − T̂n )2 ]
+     T̂n ≤W (pj )j ∈PW
+                                                        
+               ≥ inf EP I{P ∈ PW }EX|P [(Mn − T̂n )2 |P]
+                T̂n ≤W
+                       
+               ≥ inf     EP EX|P [(Mn − T̂n )2 |P]
+                  T̂n ≤W
+                                                                  
+                      −EP (1 − I{P ∈ PW })EX|P [(Mn − T̂n )2 |P]
+                                                                         
+               ≥ inf   EP EX|P [(Mn − T̂n )2 |P] − EP (1 − I{P ∈ PW })P2F
+                  T̂n ≤W
+
+               ≥ inf EP EX|P [(Mn − T̂n )2 |P] − E(P2F I{PF > W })                (A.2)
+                  T̂n ≤W
+
+We bound separately the two terms on the r.h.s. of (A.2). We start by deriving
+an upper bound for the term on the right. Using Fubini’s Theorem, it comes
+that
+
+E(P2F I{PF > W })
+                                     
+          = s2 I{s > W }PPF (ds) = 2     tI{t < s}dtI{s > W }PPF (ds)
+                                               
+          = 2 t I{t < s}I{s > W }PPF (ds)dt = 2 tP(PF > max(t, W ))dt
+
+which leads to the more convenient form
+                                                             ∞
+        E(P2F I{PF > W }) = W 2 P(PF > W ) + 2                    tP(PF > t)dt.   (A.3)
+                                                           W
+
+In order to provide an upper bound for the probability of the event {PF > t},
+we use a Markov inequality with third centralized moment. We ﬁrst evaluate
+the mean of the total mass,
+                                  
+                                  m
+                                                        ma    m    W
+                 EPF = E[ E(            pj |m) ] = E       =E    =   .
+                                  j=1
+                                                       a+b    2n   2
+
+Now, denoting μ3 (Y ) the centralized third moment of the r.v. Y , the law of
+total cumulant implies that
+
+ E(PF − EPF )3 = μ3 (PF )
+               = E[μ3 (PF |m)] + μ3 (E[PF |m]) + 3Cov(E[PF |m], Var[PF |m])
+                                     m           m          mab          
+               = E[μ3 (PF |m)] + μ3 ( ) + 3Cov       ,
+                                     2n           2n (a + b)2 (a + b + 1)
+                                  1               2n − 1
+               = E[μ3 (PF |m)] + 3 μ3 (m) + 3 3             Var(m)
+                                 8n             8n (2n + 1)
+3792                                F. Ayed et al.
+
+m is Poisson distributed, so its variance and third centralized moment are equal
+to its mean λ = nW . Further noticing that 2n−1    2n+1 < 1, we upper bound the
+third centralized moment by E[μ3 (PF |m)] + 2n2 . Conditioning on m, the total
+                                                  W
+
+mass PF is a sum of independent and identically distributed random variables
+so μ3 (PF |m) = mμ3 (p1 ). Since p1 is Beta distributed with parameters a, and b,
+its third centralized moment is given by
+                                      √
+                          3/2 2(b − a) a + b + 1             2ab(b − a)
+    μ3 (p1 ) = [Var(p1 )]                  √     =        3
+                                (a + b + 2) ab     (a + b) (a + b + 1)(a + b + 2)
+                4(2n − 1)(n − 1)      (2n − 1)(n − 1)
+          =       3
+                                    = 3                 .
+              (2n) (2n + 1)2(n + 1)  4n (2n + 1)(n + 1)
+
+Using the fact that (2n−1)(n−1)
+                     (2n+1)(n+1) ≤ 1 ≤ 2, we successively ﬁnd that E[μ3 (PF |m)] ≤
+                      F ) ≤ n2 , obtaining the inequality we need to bound P(PF >
+ W                          W
+2n2  and ﬁnally μ3 (P
+t). Indeed, Markov’s inequality implies that
+                                                                           
+    P(PF > t) = P PF − EPF > t − W/2 = P (PF − EPF )3 > (t − W/2)3
+                     μ3 (PF )       W
+               ≤              ≤ 2
+                   (t − W/2)3  n (t − W/2)3
+
+Now we can use the last inequality in (A.3) and ﬁnd
+                                             ∞
+  E(P2F I{PF > W }) = W 2 P(PF > W ) + 2        tP(PF > t)dt
+                                            W
+                            8W       2W ∞           t
+                    ≤ W2 2 3 + 2                           dt
+                                           W (t − W/2)
+                           n W        n                  3
+                                                         ∞
+                        8    2W  ∞           1                  W/2        
+                    = 2+ 2                          dt +                 dt
+                                    W (t − W/2)            W (t − W/2)
+                       n      n                   2                    3
+
+                        8    2W 2       1     14
+                    = 2+ 2             +      = 2
+                       n      n W        W      n
+  We now provide a lower bound for the ﬁrst term on the r.h.s. of (A.2)
+
+                   inf EP EX|P [(Mn − T̂n )2 |P]
+               T̂n ≤W
+                                                              
+                      = inf Em EP|m EX|P [(Mn − T̂n )2 |P] | m
+                        T̂n ≤W
+                                                              
+                      ≥ Em inf EP|m EX|P [(Mn − T̂n )2 |P] | m .            (A.4)
+                           T̂n ≤W
+
+   Let m ∈ N, with the convention that the risk is 0 when m = 0. We will now
+lower bound inside the ﬁrst expectation in the previous expression, using the
+fact that given X and m, we know the posterior of PF .
+
+  inf EP|m EX|P [(Mn − T̂n )2 |P]
+T̂n ≤W
+                        A Good-Turing estimator for feature allocation models                       3793
+
+     = inf EX|m EP|X,m [(Mn − T̂n )2 |X, m]
+           T̂n ≤W
+
+     ≥ EX|m inf EP|X,m [(Mn − T̂n )2 |X, m]
+                    T̂n
+                                                                       ⎛                              ⎞
+                                                                           
+                                                                           m                     
+                                                                                                 
+     ≥ EX|m VarP|X,m (Mn |X, m) = EX|m VarP|X,m ⎝                                pj I{Xn,j   = 0}X, m⎠
+                                                                           j=1
+                    ⎡                                                     ⎤
+                        
+                        m
+                                                      a(n + b)
+     = EX|m ⎣                 I{Xn,j    = 0}                              ⎦
+                        j=1
+                                             (a + n + b)2 (a + n + b + 1)
+
+where we used the fact that pj |Xn,j = x is a beta random variable Beta(x +
+a, n − x + b). Then,
+           inf EP|m EX|P [(Mn − T̂n )2 |P]
+          T̂n ≤W
+                              
+                              m
+                                                            a(n + b)
+                          ≥         P(Xn,j = 0)
+                              j=1
+                                                   (a + n + b)2 (a + n + b + 1)
+                              
+                              m
+                                                                 a(n + b)
+                          =         Epj [(1 − pj )n ]
+                              j=1
+                                                        (a + n + b)2 (a + n + b + 1)
+                              
+                              m
+                                Γ(b + n)Γ(a + b)              a(n + b)
+                          =                                                                        (A.5)
+                              j=1
+                                    Γ(b)Γ(a + b + n) (a + n + b)2 (a + n + b + 1)
+
+where we observed that (1 − pj ) ∼ Beta(b, a) to obtain (A.5). Therefore we can
+derive the bound
+                                                     Γ(b + n)Γ(1 + b)          n+b
+  inf EP|m EX|P [(Mn − T̂n )2 |P] ≥ m
+ T̂n ≤W                                              Γ(b)Γ(1 + b + n) (n + b + 1)2 (n + b + 2)
+                                                             mb
+                                                 =
+                                                   (n + b + 1)2 (n + b + 2)
+                                                      2mn              2m
+                                                 = 2             =
+                                                   9n (3n + 1)     9n(3n + 1)
+Together with (A.4), the previous inequality implies that
+                                                                         2W
+                               inf EP EX|P [(Mn − T̂n )2 |P] ≥                  .
+                              T̂n ≤W                                  9(3n + 1)
+  Plugging in (A.2) the previous results, we obtain
+                                                                        2W      14
+                   Rn∗ = inf           sup      E[(Mn − T̂n )2 ] ≥            −    ,
+                               T̂n (pj )j ∈PW                        9(3n + 1) n2
+which concludes the proof. Notice that here we are only interested in showing
+that the minimax rate is or order W
+                                  n . We could have obtained sharper bounds
+(with a better constant) by for instance taking b = (1 + )n − 1 instead of
+b = 2n − 1.
+3794                              F. Ayed et al.
+
+A.3. Details for the determiantion of (2.5) and (2.6)
+
+The concentration inequalities (2.5)–(2.6) can be proved my means of suitable
+bounds on the log-Laplace transform of Ŵn − W , using the techniques of [3].
+To this end we recall that a random variable Z is sub-Gaussian on the right tail
+(resp. left tail) with variance factor v if for all λ ≥ 0 (resp. λ ≤ 0) one has
+
+                                                   vλ2
+                             log Eeλ(Z−EZ) ≤           .                    (A.6)
+                                                    2
+We will also say that a random variable Z is sub-Gamma on the right tail with
+variance factor v and scale parameter c if
+
+                             λ2 v
+        log Eeλ(Z−EZ) ≤             ,   for any λ such that 0 ≤ λ ≤ 1/c.
+                          2(1 − cλ)
+
+Furthermore Z is said to be sub-Gamma on the left tail with variance factor v
+and scale parameter c, if −Z is sub-Gamma on the right tail with variance factor
+v and scale parameter c. These types of bounds on the log-Laplace transform
+                                                              √ for example if
+imply exponential tail bounds, useful to ﬁnd conﬁdence intervals,
+Z is sub-Gamma on the right tail as above then P(Z > EZ + 2vs + cs) ≤ e−s
+for any s ≥ 0. Analogously if Z is sub-Gaussian
+                                        √       on the left tail (i.e. (A.6) holds
+true for all λ ≤ 0), then P(Z < EZ − 2vs) ≤ e−s for any s ≥ 0. See [3] for
+additional details on this subject. In the next proposition we prove that Ŵn
+is sub-Gamma on the right tail and sub-Gaussian on the left tail, providing
+suitable bounds on the log-Laplace transform. As just explained these bounds
+on the log-Laplace immediately implies the exponential tail bounds (2.5) and
+(2.6).
+                                                   
+Proposition A.1. The random variable Ŵn := j≥1 Xn,j /n is an unbiased
+estimator of W . In addition Ŵn is sub-Gamma on the right tail with variance
+factor wn+ := 2W/n and scale factor 1/n, i.e. for any 0 < λ < n
+                                              wn+ λ2
+                        log E eλ(Ŵn −W ) ≤              ;                  (A.7)
+                                              2(1 − λ/n)
+
+on the left tail, Ŵn is sub-Gaussian with variance factor wn− = W/n, namely
+for all λ ≥ 0 we have
+                                            λ2 w −
+                          log E e−λ(Ŵn −W ) ≤    n
+                                                     .                      (A.8)
+                                                2
+
+Proof. One can immediately show that E(Ŵn ) = W . We ﬁrst prove (A.7), that
+is to say Ŵn − W is sub-Gamma on the right tail, indeed, by the independence
+of the Xn,j ’s, we get
+                                                      
+            log E eλ(Ŵn −W ) =  log E eλ/n(Xn,j −EXn,j )
+                                 j≥1
+                A Good-Turing estimator for feature allocation models                      3795
+                                                                    
+                               =         −λpj + log Eeλ/nXn,j
+                                   j≥1
+                                                                                 
+                               =         −λpj + n log(1 − pj + pj eλ/n )
+                                   j≥1
+
+having observed that Xn,j is a Binomial random variable with parameters n
+and pj . An application of the inequality log(z) ≤ z − 1, for z > 0, yields
+                            
+      log E eλ(Ŵn −W ) ≤ n       pj (eλ/n − 1 − λ/n) = nφ(λ/n)EŴn         (A.9)
+                              j≥1
+
+
+where φ(t) = et − 1 − t. By a series expansion of the exponential function, we
+obtain
+                              1           λ
+                                                 k                       λ
+                                                                              k
+         log E eλ(Ŵn −W ) ≤ n                       EŴn ≤ n                     EŴn
+                                 k!          n                            n
+                                   k≥2                          k≥2
+
+                                    λ2    1               wn+ λ2
+                            =n·        ·       E Ŵ n =
+                                    n2 1 − λ/n          2(1 − λ/n)
+
+and then (A.7) follows for any λ ∈ (0, n). The proof of (A.8) goes along similar
+lines, indeed proceeding as before one can prove that for any λ ≥ 0
+                                      
+                     log E e−λ(Ŵn −W ) ≤ nφ(−λ/n)EŴn
+
+and then (A.8) follows by observing that φ(−λ/n) ≤ λ2 /(2n2 ).
+
+A.4. Proof of Theorem 3.1 and related results
+
+In this section we focus on Theorem 3.1. First of all we introduce some prelim-
+inary results which are useful to prove the theorem and are interesting in their
+own right. In the next proposition we derive concentration inequalities for both
+Kn,r and Kn .
+Proposition A.2. For any n ≥ 1, r ≥ 1 and δ ∈ (0, 1) we have
+                                                       
+                       2     2                       2
+  P |Kn,r − E(Kn,r )| ≤ log      + 2E(Kn,r ) log          ≥1−δ                           (A.10)
+                       3     δ                       δ
+
+and
+                                                                 
+                       2            2                       2
+      P |Kn − E(Kn )| ≤ log              +   2E(Kn ) log                  ≥ 1 − δ.       (A.11)
+                       3            δ                       δ
+
+Proof. Let us focus on the derivation of (A.10). First of all we will determine a
+variance bound for the random variable Kn,r , which will be employed to derive
+3796                                        F. Ayed et al.
+
+a corresponding bound on the log-Laplace transform of (Kn,r − E(Kn,r )). Then
+the result will follow by a suitable application of the Bernstein inequality.
+   Thanks to the independence of the random variables Xn,j ’s, the variance of
+Kn,r may be bounded as follows
+                                                   
+  Var(Kn,r ) =           Var (I{Xn,j = r}) ≤              E (I{Xn,j = r}) = E(Kn,r ). (A.12)
+                   j≥1                              j≥1
+
+
+We now establish the bound on the log-Laplace. Since Kn,r is the sum of inde-
+pendent random variables, for any t ∈ R we can write:
+                                      ∞
+                                      
+       log E(et(Kn,r −E(Kn,r )) ) =         log E exp {(I{Xn,j = r} − EI{Xn,j = r})}
+                                      j=1
+                                              ∞
+                                              
+                                ≤ φ(|t|)            Var(I{Xn,j = r}) = φ(|t|)Var(Kn,r )
+                                              j=1
+                                (A.12)
+                                  ≤         φ(|t|)E(Kn,r )
+
+where we have implicitly deﬁned the function φ(t) = et − 1 − t and we have
+applied the Bennett inequality. The validity of the previous bound on the log-
+Laplace implies that for any x ≥ 0
+                                               "                                    #
+                                                                      x2
+               P(|Kn,r − E(Kn,r )| ≥ x) ≤ 2 exp −
+                                                                2(E(Kn,r ) + x/3)
+
+thanks to the Bernstein inequality. If one deﬁnes s := x2 /(2(E(Kn,r ) + x/3))
+the previous inequality boils down to the following one
+                                                          
+                                                 2
+                  P |Kn,r − E(Kn,r )| ≥            s+         2sE(Kn,r )   ≤ 2e−s
+                                                 3
+
+which in turn implies the validity of (A.10), as a consequence
+                                                      √               √ change
+                                                                √of the
+of variable 2e−s = δ and the elementary inequality a + b ≤ a + b, valid
+for any positive real numbers a, b. The proof of (A.11) goes along similar lines,
+having observed that Var(Kn ) ≤ E(Kn ).
+
+   The next Remark is a simple consequence of Proposition A.2 and will be
+used in the derivation of the conﬁdence interval for M̂n to upper bound the
+expected values E(Kn,r ) and E(Kn ) in terms of the two statistics Kn,r and Kn
+respectively.
+Remark A.1. The concentration inequality for Kn,r (A.10) implies that with
+probability bigger than 1 − δ
+                                                           
+                                       2
+                Kn,r ≥ E(Kn,r ) −        log (1/δ) −        2 log (1/δ) E(Kn,r ).
+                                       3
+                 A Good-Turing estimator for feature allocation models                      3797
+                                                                 
+Solving the previous inequality with respect to                   E(Kn,r ), we can conclude that
+with probability at least 1 − δ
+
+               
+                                        1                        7
+                   E(Kn,r ) ≤             log (1/δ) +              log (1/δ) + Kn,r .
+                                        2                        6
+
+Analogously we can employ the concentration inequality for Kn (see (A.11)) to
+state that the event
+
+                                       1                        7
+                     E(Kn ) ≤             log (1/δ) +              log (1/δ) + Kn
+                                        2                        6
+
+has probability at least 1 − δ.
+
+   The conﬁdence interval we suggest is mainly based on a concentration in-
+equality for M̂n − Mn . Such concentration result is proved my means of suitable
+bounds on the log-Laplace transform of M̂n − Mn , as in Section A.3, more
+precisely in Proposition A.3 we will prove that M̂n − Mn is a sub-Gamma ran-
+dom variable on the right and the left tails (see [3]). In order to provide the
+bounds on the log-Laplace transform of M̂n − Mn , the following lemma is re-
+quired.
+
+Lemma A.1. For any n ≥ 1, we have
+
+                                                          2
+                         E(M̂n − Mn ) ≤                         E(Kn,2 ),                (A.13)
+                                                       n(n − 1)
+
+and
+                                           1                2
+               Var(M̂n − Mn ) ≤               E(Kn,1 ) +          E(Kn,2 ).              (A.14)
+                                           n2            n(n − 1)
+
+Proof. First of all, we focus on the proof of (A.13), straightforward calculations
+lead to
+
+                       1 n                          
+      E(M̂n − Mn ) =              pj (1 − pj )n−1 −      pj (1 − pj )n
+                       n       1
+                         j≥1                         j≥1
+                                            
+                     =    pj (1 − pj )n−1 −      pj (1 − pj )n
+                         j≥1                               j≥1
+                                                          
+                     =         p2j (1   − pj )   n−1
+                                                       ≤         p2j (1 − pj )n−2
+                         j≥1                               j≥1
+
+                          2      n                       2
+                     =              p2j (1 − pj )n−2 =          E(Kn,2 )
+                       n(n − 1)   2                    n(n − 1)
+                                         j≥1
+
+
+where we have observed that (1 − pj )n+1−2 ≤ (1 − pj )n−2 , which is legitimated
+by the fact that n is a sample size and can be assumed suﬃciently large.
+3798                                          F. Ayed et al.
+
+   Second, we focus on the proof of the variance bound (A.14). Exploiting the
+independence of the random variables Xn,j ’s, we get
+                                                 1
+         Var(M̂n − Mn ) =                 Var       I{Xn,j = 1} − pj I{Xn,j = 0}
+                                                  n
+                                    j≥1
+                                               1
+                                                                                            2
+                                ≤         E       I{Xn,j = 1} − pj I{Xn,j = 0}                  .
+                                                n
+                                    j≥1
+
+We now observe that the events {Xn,j = 1} and {Xn,j = 0} are incompatible,
+hence
+                               1
+                                                                              2
+Var(M̂n − Mn ) ≤          E       I{Xn,j = 1} − pj I{Xn,j = 0}
+                                n
+                    j≥1
+                                                                                  
+                               1
+                                     2
+                =                        P(Xn,j = 1) +      p2j P(Xn,j   = 0)
+                                n
+                    j≥1
+                    1                 
+                =       P(X n,j = 1) +   p2j P(Xn,j = 0)
+                    n2
+                          j≥1                        j≥1
+                  1                             1           
+                = 2 E(Kn,1 )+   p2j (1 − pj )n ≤ 2 E(Kn,1 )+   p2j (1 − pj )n−2
+                 n                              n
+                                          j≥1                                         j≥1
+                    1                2
+                =      E(Kn,1 ) +          E(Kn,2 )
+                    n2            n(n − 1)
+and the bound on the variance now follows.
+  To ﬁx the notation, it is worth to deﬁne the quantities
+                                                                                    (npj )k
+           E[K(n)] =            (1 − e−npj ),        E[Kk (n)] =           e−npj
+                                                                                        k!
+                          j≥1                                        j≥1
+
+for any k ≥ 1. It can be easily seen that E[Kk (n)] ≤ E[K(n)], and in addition
+E[K(n)] is an increasing function of n. We are now ready to prove that M̂n −Mn
+is sub-Gamma on its tails.
+Proposition A.3. The variable Dn = M̂n − Mn is sub–gamma on the right tail
+with variance factor vn+ = 2{E(Kn,1 ) + 2n2 E(Kn,2 )/[n · (n − 1)]}/n2 and scale
+factor 1/n, i.e. for any 0 < λ < n
+                                                                vn+ λ2
+                          log E eλ[Dn −E(Dn )] ≤                          .                         (A.15)
+                                                               2(1 − λ/n)
+On the left tail, Dn is again sub–gamma with variance factor vn− = 4E[K(n)]/
+(n − 1)2 and scale parameter 1/(n − 1), i.e. for any 0 < λ < (n − 1)
+                                                              vn− λ2
+                    log E e−λ[Dn −E(Dn )] ≤                                 .                       (A.16)
+                                                           2[1 − λ/(n − 1)]
+                A Good-Turing estimator for feature allocation models                    3799
+
+Proof. First we prove (A.15), observe that when λ > 0
+                                 
+             log E eλ[Dn −E(Dn )]
+                               λ
+                =     log E exp     I{Xn,j = 1} − npj I{Xn,j = 0}
+                                  n
+                  j≥1
+                                                    
+                  − E I{Xn,j = 1} − npj I{Xn,j = 0}      .
+
+For the sake of simplifying notation, deﬁne Hj := I{Xn,j = 1} − npj I{Xn,j = 0} ≤
+1, hence we have
+                                                "               #
+                    λ[Dn −E(Dn )]                    λ
+            log E e                =     log E exp     (Hj − EHj )
+                                                     n
+                                                 j≥1
+                                                                           λ
+                                             =         log E[e(λ/n)Hj ] −     EHj
+                                                                            n
+                                                 j≥1
+                                                                           λ
+                                             ≤         E[e(λ/n)Hj − 1] −      EHj
+                                                                            n
+                                                 j≥1
+
+
+where we used the inequality log(z) ≤ z − 1 for any positive z. Now, observing
+that the function f (z) := e −1−z
+                            z
+
+                              z2  is increasing and that Hj ≤ 1, we get
+                                  $                       λ
+                                                               %
+                   λ[Dn −E(Dn )]
+           log E e                 ≤     E e (λ/n)Hj
+                                                     − 1 − Hj
+                                                             n
+                                     j≥1
+                         &                                   '
+                          e(λ/n)Hj − 1 − nλ Hj
+                =     E                         [(λ/n)Hj ] 2
+                                 [(λ/n)Hj ]2
+                  j≥1
+                  
+                ≤     E(Hj2 )(eλ/n − 1 − λ/n)
+                    j≥1
+                                                                               2
+                = φ(λ/n)                E (I{Xn,j = 1} − npj I{Xn,j = 0})
+                                  j≥1
+                             λ
+                                   k                                               2
+                ≤                            E (I{Xn,j = 1} − npj I{Xn,j = 0})
+                              n
+                    k≥2                j≥1
+
+                       λ  2                   1
+                                                                                    2
+                =                        E       I{Xn,j = 1} − pj I{Xn,j = 0}
+                    1 − λ/n                    n
+                                   j≥1
+
+
+now one can proceed along similar arguments as in the proof of (A.14) to obtain
+                                         λ2          1                2
+      log E eλ[Dn −E(Dn )] ≤                              E(Kn,1 ) +          E(Kn,2 )
+                                        1 − λ/n        n2            n(n − 1)
+
+hence (A.15) now follows.
+3800                                             F. Ayed et al.
+
+  Finally we prove (A.16), analogous calculations as before show that
+                                   
+              log E e−λ[Dn −E(Dn )] =  log E exp {λpj (Wj − EWj )}
+                                                    j≥1
+
+
+having deﬁned Wj := I{Xn,j = 0} − np1 j I{Xn,j = 1} ≤ 1. Thanks to the in-
+equality log(z) ≤ z − 1, which is valid for any positive z, and applying similar
+considerations as those used in the ﬁrst part of the proof, we have
+                                                        
+  log E e−λ[Dn −E(Dn )] =        log[E(eλpj Wj )] − λpj EWj
+                                           j≥1
+
+                                                              $                                  %
+                                                                 eλpj Wj − 1 − λpj Wj
+        ≤          E[e     λpj Wj
+                                      − 1 − λpj Wj ] =         E                      (λpj Wj )2
+                                                                       (λpj Wj )2
+             j≥1                                         j≥1
+
+                      $                                   % 
+                           e   λpj
+                                      − 1 − λpj
+        ≤          E                            (λp W
+                                                   j j ) 2
+                                                            =  EWj2 φ(λpj )
+                                     (λpj )2
+             j≥1                                                 j≥1
+
+                                                         1
+                                                                            2
+        =          φ(λpj )E I{Xn,j = 0} −                    I{Xn,j = 1}
+                                                         npj
+             j≥1
+                                                                
+                                              1
+        ≤     φ(λpj )E I{Xn,j = 0} + 2 2 I{Xn,j = 1}
+                                             n pj
+          j≥1
+                     $                                 %
+                                         1
+        =     φ(λpj ) (1 − pj )n +         (1 − pj )n−1
+                                      npj
+          j≥1
+            (λpj )k      $                                  %
+                                             1
+        =                    (1 − pj ) +
+                                      n
+                                                (1 − pj ) n−1
+                     k!                    npj
+          j≥1 k≥2
+                                                      
+            pkj                     pjk−1 −(n−1)pj
+                             −npj
+        ≤     λ k
+                           e      +         e             ,
+                        k!             nk!
+             k≥2       j≥1
+
+
+where we have observed that (1 − p)n ≤ e−np . Recalling the deﬁnition of Kk (n)
+and that E[Kk (n)] ≤ E[K(n)], we get
+                     
+log E e−λ[Dn −E(Dn )]
+             &                                                                '
+              1   (npj )k                1        [(n − 1)pj ]k−1
+   ≤     λk                  e−npj +                                 e−(n−1)pj
+               nk       k!            kn(n − 1)k−1       (k − 1)!
+     k≥2          j≥1                              j≥1
+      " 1                          1
+                                                           #
+   =     λ k
+                  E[Kk (n)] +              E[Kk−1 (n − 1)]
+               nk             kn(n − 1)k−1
+     k≥2
+                  k"                               #
+              λ                    1
+   ≤                  E[Kk (n)] + E[Kk−1 (n − 1)]
+            n−1                    k
+       k≥2
+                A Good-Turing estimator for feature allocation models              3801
+
+                                       λ
+                                               k
+                                                       2E[K(n)]     λ2
+   ≤ {E[K(n)] + E[K(n − 1)]}                       ≤                         ,
+                                       n−1             (n − 1) 1 − λ/(n − 1)
+                                                              2
+                                k≥2
+
+hence (A.16) has been now established.
+  Finally we prove Theorem 3.1.
+Proof of Theorem 3.1. The result is a consequence of the two bounds that we
+are now going to prove separately:
+                                                    
+      P Mn ≥ M̂n − m̂n − 2v̂n+ log(1/δ) − log(1/δ)/n ≥ 1 − 4δ        (A.17)
+                                                    
+      P Mn ≤ M̂n + 2v̂n− log(1/δ) + log(1/δ)/(n − 1) ≥ 1 − 2δ,       (A.18)
+
+where m̂n , v̂n− and v̂n+ are suitable quantities that will be deﬁned in the proof.
+First we discuss how to determine (A.17), we remind that Dn = M̂n − Mn is a
+sub–Gamma random variable, as shown in Proposition A.3, hence the following
+holds (see [2])                          
+                       P(Dn > E(Dn ) + 2vn+ s + s/n) ≤ e−s
+for any s ≥ 0. Putting e−s = δ, we obtain
+                          
+         P(Dn ≤ E(Dn ) + 2vn+ log(1/δ) + log(1/δ)/n) ≥ 1 − δ.                    (A.19)
+
+On the basis of (A.13), we can upper bound E(Dn ) in (A.19) as
+                                         2
+                           E(Dn ) ≤            E(Kn,2 ),
+                                      n(n − 1)
+and, as a consequence of Remark A.3.2, the following inequality is true with
+probability bigger than 1 − δ
+                                                         2
+                 2        1            7
+   E(Dn ) ≤                 log(1/δ) +   log(1/δ) + Kn,2    =: m̂n . (A.20)
+             (n − 1)n     2            6
+
+Remark A.3.2 also applies to upper bound the expected values in vn+ with the
+corresponding empirical values, indeed the following bound holds true
+                                                  2
+         2     1                7
+  vn ≤ 2
+    +
+                 log(1/δ) +       log(1/δ) + Kn,1
+        n      2                6
+                                                              2        (A.21)
+                  4         1               7                         +
+           +                  log(1/δ) +      log(1/δ) + Kn,2    =: v̂n
+              n(n − 1)      2               6
+
+with probability bigger than 1 − 2δ. Using the inequalities (A.20)–(A.21) in
+(A.19) we can conclude
+                          
+            P(Dn ≤ m̂n + 2v̂n+ log(1/δ) + log(1/δ)/n) ≥ 1 − 4δ,
+3802                                  F. Ayed et al.
+
+which gives (A.17).
+  Now we focus on the derivation of (A.18), ﬁrst of all recall that by Proposition
+A.3, −Dn is a sub–Gamma random variable, hence
+                                         
+                 P(−Dn > −E[Dn ] +        2vn− s + s/(n − 1)) ≤ e−s
+
+for any s ≥ 0. Deﬁne e−s = δ, then the previous bound implies that
+                             
+           P(Dn ≥ E[Dn ] −       2vn− log(1/δ) − log(1/δ)/(n − 1)) ≥ 1 − δ
+
+since E[Dn ] ≥ 0, we get
+                   
+           P(Dn ≥ − 2vn− log(1/δ) − log(1/δ)/(n − 1)) ≥ 1 − δ.                    (A.22)
+
+One can now apply the bound contained in [12, Lemma 1]
+
+                                           2            2
+                 |E[K(n)] − E(Kn )| ≤        E[K2 (n)] ≤ E[K(n)],
+                                           n            n
+which entails that E[K(n)] ≤ E(Kn )/(1 − 2/n), and hence
+
+                                            4
+                           vn− ≤                      E(Kn ).
+                                   (n − 1)2 (1 − 2/n)
+
+Thanks to Remark A.3.2, with probability bigger than 1 − δ, the following holds
+                                                                     2
+                  4                1               7
+ vn−   ≤                             log(1/δ) +      log(1/δ) + Kn        =: v̂n− . (A.23)
+         (n − 1) (1 − 2/n)
+                2                  2               6
+
+Using (A.23) in (A.22), we get
+                     
+             P(Dn ≥ − 2v̂n− log(1/δ) − log(1/δ)/(n − 1)) ≥ 1 − 2δ,
+
+which in turn implies (A.18). Putting together (A.17)–(A.18), the thesis now
+follows.
+
+
+Acknowledgements
+
+Federico Camerlenghi and Stefano Favaro received funding from the European
+Research Council (ERC) under the European Union’s Horizon 2020 research
+and innovation programme under grant agreement No 817257. Federico Camer-
+lenghi and Stefano Favaro gratefully acknowledge the ﬁnancial support from the
+Italian Ministry of Education, University and Research (MIUR), “Dipartimenti
+di Eccellenza” grant 2018–2022.
+                A Good-Turing estimator for feature allocation models       3803
+
+References
+
+ [1] Auton, A. et al. (2015). A global reference for human genetic variation.
+     Nature 526, 68–74.
+ [2] Ben-Hamou, A., Boucheron, S. and Ohannessian, M.I. (2017). Con-
+     centration inequalities in the inﬁnite urn scheme for occupancy counts and
+     the missing mass, with applications. Bernoulli 23, 249–287. MR3556773
+ [3] Boucheron, S., Lugosi, G. and Massart, P. (2013). Concentration
+     inequalities. Oxford University Press. MR3185193
+ [4] Chao, A. and Colwell, R.K. (2017). Thirty years of progeny from
+     Chao’s inequality: estimating and comparing richness with incidence data
+     and incomplete sampling. Statistics and Operation Research Transactions,
+     41, 3–54. MR3665906
+ [5] Chao, A., Gotelli, N.J., Hsieh, T.C., Sander, E.L., Ma, K.H.,
+     Colwell, R.K. and Ellison, A.M. (2014). Rarefaction and extrapola-
+     tion with Hill numbers: a framework for sampling and estimation in species
+     diversity studies. Ecological Monographs 84, 45–67.
+ [6] Colwell, R., Chao, A., Gotelli, N.J., Lin, S., Mao, C.X., Chaz-
+     don, R.L. and Longino, J.T. (2012). Models and estimators linking
+     individual-based and sample-based rarefaction, extrapolation and compar-
+     ison of assemblages. Journal of Plant Ecology 5, 3–21.
+ [7] Daley, D.J. and Vere-Jones, D. (2008). An introduction to the theory
+     of point processes. Vol. II. Springer, New York. MR2371524
+ [8] Efron, B. (1987). The jackknife, the bootstrap, and other resampling plans.
+     CBMS-NSF Regional Conference Series in Applied Mathematics, Society
+     for Industrial and Applied Mathematics. MR0659849
+ [9] Efron, B. and Morris, C (1973). Stein’s estimation rule and its com-
+     petitors – an empirical Bayes approach. Journal of the American Statistical
+     Association 68, 117–130. MR0388597
+[10] Good, I.J. (1953). On the population frequencies of species and the esti-
+     mation of population parameters. Biometrika 40, 237–264. MR0061330
+[11] Görür, D., Jäkel, F. and Rasmussen, C.E. (2006). A choice model
+     with inﬁnitely many latent features. 23rd International Conference on Ma-
+     chine Learning.
+[12] Gnedin, A., Hansen, B. and Pitman, J. (2007). Notes on the occupancy
+     problem with inﬁnitely many boxes: general asymptotics and power laws.
+     Probability Surveys, 4, 146–171. MR2318403
+[13] Gravel, S (2014). Predicting discovery rates of genomic features. Genetics
+     197, 601–610.
+[14] Hjort, N. (1990). Nonparametric Bayes estimators based on Beta pro-
+     cesses in models for life history data. The Annals of Statistics 18, 1259–
+     1294. MR1062708
+[15] Ionita-Laza, I., Lange, C. and Laird, N.M. (2009). Estimating the
+     number of unseen variants in the human genome. Proceeding of the National
+     Academy of Sciences 106, 5008–5013. MR2496537
+[16] James, L.F. (2017). Bayesian Poisson calculus for latent feature modeling
+3804                               F. Ayed et al.
+
+       via generalized Indian buﬀet process priors. The Annals of Statistics 45,
+       2016–2045. MR3718160
+[17]   Karlin, S. (1967). Central limit theorems for certain inﬁnite urn schemes.
+       Journal of Mathematics and Mechanics, 17, 373–401. MR0216548
+[18]   Meeds, E., Ghahramani, Z., Neal, R. and Rowies, S.T. (2007). Mod-
+       eling dyadic data with binary latent factors. Advances in Neural Informa-
+       tion Processing Systems.
+[19]   Miller, K.T., Griffiths, T.L. and Jordan, M.I. (2010). Nonpara-
+       metric latent feature models for link predictions. Advances in Neural In-
+       formation Processing Systems. MR3022515
+[20]   Navarro, D.J. and Griffiths, T.L. (2010). A nonparametric Bayesian
+       model for inferring features from similarity judgments. Advances in Neural
+       Information Processing Systems. MR2463044
+[21]   Quenouille, M.H. (1956). Notes on bias in estimation. Biometrika 43,
+       353–360. MR0081040
+[22]   Rajaraman, N., Thangaraj, A. and Suresh, A.T. (2017) Minimax
+       risk for missing mass estimation. Proceedings of the IEEE International
+       Symposium on Information Theory.
+[23]   Robbins, H. (1968). Estimating the total probability of the unobserved
+       outcomes of an experiment. The Annals of Mathematical Statistics 39,
+       256–257. MR0221695
+[24]   Teh, Y.W. and Görür, D. (2009). Indian buﬀet processes with power–
+       law behavior. Advances in Neural Information Processing Systems.
+[25]   Tukey, J.W. (1958). Bias and conﬁdence in not-quite large samples. The
+       Annals of Mathematical Statistics 29, 614.
+[26]   Wood, F. and Griffiths, T.L. (2007). Particle ﬁltering for nonparamet-
+       ric Bayesian matrix factorization. Advances in Neural Information Process-
+       ing Systems.
+[27]   Wood, F., Griffiths, T.L. and Ghahramani, Z. (2006). A non-
+       parametric Bayesian method for inferring hidden causes. 22nd Conference
+       in Uncertainty in Artiﬁcial Intelligence.
+[28]   Zou, J., Valiant, G., Valiant, P., Karczewski, K., Chan, S.O.,
+       Samocha, K., Lek, M., Sunyaev, S., Daly, M. and MacArthur,
+       D.G. (2016). Quantifying the unobserved protein-coding variants in human
+       populations provides a roadmap for large-scale sequencing projects. Nature
+       Communications 7.
+
