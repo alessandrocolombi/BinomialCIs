@@ -1,0 +1,146 @@
+wd=/home/colombi/BinomialCIs
+choose_wd=2 workers=15 Brep=1000 alpha=0.05 seed=42
+550 tasks; 550000 repetitions; outputs: /home/colombi/BinomialCIs/LowerBound
+RESUME: 450 celle riutilizzate; 100 nuove celle, 100000 nuove repliche.
+Backup: /home/colombi/BinomialCIs/LowerBound/save/Exp_LB_checkpoint_before_resume_20261106_124131_1774558.rds
+starting worker pid=1774602 on localhost:11433 at 12:41:31.798
+starting worker pid=1774615 on localhost:11433 at 12:41:31.870
+starting worker pid=1774603 on localhost:11433 at 12:41:31.870
+starting worker pid=1774601 on localhost:11433 at 12:41:31.876
+starting worker pid=1774611 on localhost:11433 at 12:41:31.892
+starting worker pid=1774606 on localhost:11433 at 12:41:31.893
+starting worker pid=1774605 on localhost:11433 at 12:41:31.897
+starting worker pid=1774607 on localhost:11433 at 12:41:31.898
+starting worker pid=1774608 on localhost:11433 at 12:41:31.914
+starting worker pid=1774599 on localhost:11433 at 12:41:31.919
+starting worker pid=1774600 on localhost:11433 at 12:41:31.935
+starting worker pid=1774616 on localhost:11433 at 12:41:31.958
+starting worker pid=1774612 on localhost:11433 at 12:41:31.961
+starting worker pid=1774604 on localhost:11433 at 12:41:31.971
+starting worker pid=1774613 on localhost:11433 at 12:41:31.971
+Task 458: Zipfs param=1.2 nfix M=3750 n=2000 coverage=1.0000 positive=1.0000
+Task 451: Zipfs param=1.2 nfix M=2000 n=2000 coverage=1.0000 positive=1.0000
+Task 461: Zipfs param=1.2 nfix M=4500 n=2000 coverage=1.0000 positive=1.0000
+Task 455: Zipfs param=1.2 nfix M=3000 n=2000 coverage=1.0000 positive=1.0000
+Task 488: Zipfs param=1.2 Mfix M=5000 n=2000 coverage=1.0000 positive=1.0000
+Task 484: Zipfs param=1.2 Mfix M=5000 n=1000 coverage=1.0000 positive=1.0000
+Task 491: Zipfs param=1.2 Mfix M=5000 n=2750 coverage=1.0000 positive=1.0000
+Task 459: Zipfs param=1.2 nfix M=4000 n=2000 coverage=1.0000 positive=1.0000
+Task 452: Zipfs param=1.2 nfix M=2250 n=2000 coverage=1.0000 positive=1.0000
+Task 465: Zipfs param=1.2 nfix M=5500 n=2000 coverage=1.0000 positive=1.0000
+Task 498: Zipfs param=1.2 Mfix M=5000 n=4500 coverage=1.0000 positive=1.0000
+Task 468: Zipfs param=1.2 nfix M=6250 n=2000 coverage=1.0000 positive=1.0000
+Task 494: Zipfs param=1.2 Mfix M=5000 n=3500 coverage=1.0000 positive=1.0000
+Task 475: Zipfs param=1.2 nfix M=8000 n=2000 coverage=1.0000 positive=1.0000
+Task 471: Zipfs param=1.2 nfix M=7000 n=2000 coverage=1.0000 positive=1.0000
+Task 462: Zipfs param=1.2 nfix M=4750 n=2000 coverage=1.0000 positive=1.0000
+Task 481: Zipfs param=1.2 nfix M=9500 n=2000 coverage=1.0000 positive=1.0000
+Task 478: Zipfs param=1.2 nfix M=8750 n=2000 coverage=1.0000 positive=1.0000
+Task 456: Zipfs param=1.2 nfix M=3250 n=2000 coverage=1.0000 positive=1.0000
+Task 492: Zipfs param=1.2 Mfix M=5000 n=3000 coverage=1.0000 positive=1.0000
+Task 485: Zipfs param=1.2 Mfix M=5000 n=1250 coverage=1.0000 positive=1.0000
+Task 489: Zipfs param=1.2 Mfix M=5000 n=2250 coverage=1.0000 positive=1.0000
+Task 453: Zipfs param=1.2 nfix M=2500 n=2000 coverage=1.0000 positive=1.0000
+Task 460: Zipfs param=1.2 nfix M=4250 n=2000 coverage=1.0000 positive=1.0000
+Task 463: Zipfs param=1.2 nfix M=5000 n=2000 coverage=1.0000 positive=1.0000
+Task 499: Zipfs param=1.2 Mfix M=5000 n=4750 coverage=1.0000 positive=1.0000
+Task 493: Zipfs param=1.2 Mfix M=5000 n=3250 coverage=1.0000 positive=1.0000
+Task 457: Zipfs param=1.2 nfix M=3500 n=2000 coverage=1.0000 positive=1.0000
+Task 466: Zipfs param=1.2 nfix M=5750 n=2000 coverage=1.0000 positive=1.0000
+Task 495: Zipfs param=1.2 Mfix M=5000 n=3750 coverage=1.0000 positive=1.0000
+Task 486: Zipfs param=1.2 Mfix M=5000 n=1500 coverage=1.0000 positive=1.0000
+Task 469: Zipfs param=1.2 nfix M=6500 n=2000 coverage=1.0000 positive=1.0000
+Task 501: Zipfs param=2 nfix M=2000 n=2000 coverage=1.0000 positive=0.0000
+Task 454: Zipfs param=1.2 nfix M=2750 n=2000 coverage=1.0000 positive=1.0000
+Task 504: Zipfs param=2 nfix M=2750 n=2000 coverage=1.0000 positive=0.0000
+Task 472: Zipfs param=1.2 nfix M=7250 n=2000 coverage=1.0000 positive=1.0000
+Task 464: Zipfs param=1.2 nfix M=5250 n=2000 coverage=1.0000 positive=1.0000
+Task 476: Zipfs param=1.2 nfix M=8250 n=2000 coverage=1.0000 positive=1.0000
+Task 490: Zipfs param=1.2 Mfix M=5000 n=2500 coverage=1.0000 positive=1.0000
+Task 505: Zipfs param=2 nfix M=3000 n=2000 coverage=1.0000 positive=0.0000
+Task 502: Zipfs param=2 nfix M=2250 n=2000 coverage=1.0000 positive=0.0000
+Task 508: Zipfs param=2 nfix M=3750 n=2000 coverage=1.0000 positive=0.0000
+Task 482: Zipfs param=1.2 nfix M=9750 n=2000 coverage=1.0000 positive=1.0000
+Task 487: Zipfs param=1.2 Mfix M=5000 n=1750 coverage=1.0000 positive=1.0000
+Task 479: Zipfs param=1.2 nfix M=9000 n=2000 coverage=1.0000 positive=1.0000
+Task 500: Zipfs param=1.2 Mfix M=5000 n=5000 coverage=1.0000 positive=1.0000
+Task 506: Zipfs param=2 nfix M=3250 n=2000 coverage=1.0000 positive=0.0000
+Task 496: Zipfs param=1.2 Mfix M=5000 n=4000 coverage=1.0000 positive=1.0000
+Task 467: Zipfs param=1.2 nfix M=6000 n=2000 coverage=1.0000 positive=1.0000
+Task 514: Zipfs param=2 nfix M=5250 n=2000 coverage=1.0000 positive=0.0000
+Task 511: Zipfs param=2 nfix M=4500 n=2000 coverage=1.0000 positive=0.0000
+Task 503: Zipfs param=2 nfix M=2500 n=2000 coverage=1.0000 positive=0.0000
+Task 509: Zipfs param=2 nfix M=4000 n=2000 coverage=1.0000 positive=0.0000
+Task 507: Zipfs param=2 nfix M=3500 n=2000 coverage=1.0000 positive=0.0000
+Task 518: Zipfs param=2 nfix M=6250 n=2000 coverage=1.0000 positive=0.0000
+Task 470: Zipfs param=1.2 nfix M=6750 n=2000 coverage=1.0000 positive=1.0000
+Task 473: Zipfs param=1.2 nfix M=7500 n=2000 coverage=1.0000 positive=1.0000
+Task 515: Zipfs param=2 nfix M=5500 n=2000 coverage=1.0000 positive=0.0000
+Task 477: Zipfs param=1.2 nfix M=8500 n=2000 coverage=1.0000 positive=1.0000
+Task 521: Zipfs param=2 nfix M=7000 n=2000 coverage=1.0000 positive=0.0000
+Task 510: Zipfs param=2 nfix M=4250 n=2000 coverage=1.0000 positive=0.0000
+Task 512: Zipfs param=2 nfix M=4750 n=2000 coverage=1.0000 positive=0.0000
+Task 497: Zipfs param=1.2 Mfix M=5000 n=4250 coverage=1.0000 positive=1.0000
+Task 534: Zipfs param=2 Mfix M=5000 n=1000 coverage=1.0000 positive=0.0000
+Task 524: Zipfs param=2 nfix M=7750 n=2000 coverage=1.0000 positive=0.0000
+Task 483: Zipfs param=1.2 nfix M=10000 n=2000 coverage=1.0000 positive=1.0000
+Task 480: Zipfs param=1.2 nfix M=9250 n=2000 coverage=1.0000 positive=1.0000
+Task 516: Zipfs param=2 nfix M=5750 n=2000 coverage=1.0000 positive=0.0000
+Task 519: Zipfs param=2 nfix M=6500 n=2000 coverage=1.0000 positive=0.0000
+Task 537: Zipfs param=2 Mfix M=5000 n=1750 coverage=1.0000 positive=0.0000
+Task 527: Zipfs param=2 nfix M=8500 n=2000 coverage=1.0000 positive=0.0000
+Task 541: Zipfs param=2 Mfix M=5000 n=2750 coverage=1.0000 positive=0.0000
+Task 531: Zipfs param=2 nfix M=9500 n=2000 coverage=1.0000 positive=0.0000
+Task 544: Zipfs param=2 Mfix M=5000 n=3500 coverage=1.0000 positive=0.0000
+Task 513: Zipfs param=2 nfix M=5000 n=2000 coverage=1.0000 positive=0.0000
+Task 547: Zipfs param=2 Mfix M=5000 n=4250 coverage=1.0000 positive=0.0000
+Task 522: Zipfs param=2 nfix M=7250 n=2000 coverage=1.0000 positive=0.0000
+Task 535: Zipfs param=2 Mfix M=5000 n=1250 coverage=1.0000 positive=0.0000
+Task 517: Zipfs param=2 nfix M=6000 n=2000 coverage=1.0000 positive=0.0000
+Task 474: Zipfs param=1.2 nfix M=7750 n=2000 coverage=1.0000 positive=1.0000
+Task 538: Zipfs param=2 Mfix M=5000 n=2000 coverage=1.0000 positive=0.0000
+Task 525: Zipfs param=2 nfix M=8000 n=2000 coverage=1.0000 positive=0.0000
+Task 542: Zipfs param=2 Mfix M=5000 n=3000 coverage=1.0000 positive=0.0000
+Task 520: Zipfs param=2 nfix M=6750 n=2000 coverage=1.0000 positive=0.0000
+Task 545: Zipfs param=2 Mfix M=5000 n=3750 coverage=1.0000 positive=0.0000
+Task 536: Zipfs param=2 Mfix M=5000 n=1500 coverage=1.0000 positive=0.0000
+Task 548: Zipfs param=2 Mfix M=5000 n=4500 coverage=1.0000 positive=0.0000
+Task 528: Zipfs param=2 nfix M=8750 n=2000 coverage=1.0000 positive=0.0000
+Task 523: Zipfs param=2 nfix M=7500 n=2000 coverage=1.0000 positive=0.0000
+Task 543: Zipfs param=2 Mfix M=5000 n=3250 coverage=1.0000 positive=0.0000
+Task 539: Zipfs param=2 Mfix M=5000 n=2250 coverage=1.0000 positive=0.0000
+Task 532: Zipfs param=2 nfix M=9750 n=2000 coverage=1.0000 positive=0.0000
+Task 546: Zipfs param=2 Mfix M=5000 n=4000 coverage=1.0000 positive=0.0000
+Task 549: Zipfs param=2 Mfix M=5000 n=4750 coverage=1.0000 positive=0.0000
+Task 526: Zipfs param=2 nfix M=8250 n=2000 coverage=1.0000 positive=0.0000
+Task 540: Zipfs param=2 Mfix M=5000 n=2500 coverage=1.0000 positive=0.0000
+Task 529: Zipfs param=2 nfix M=9000 n=2000 coverage=1.0000 positive=0.0000
+Task 550: Zipfs param=2 Mfix M=5000 n=5000 coverage=1.0000 positive=0.0000
+Task 533: Zipfs param=2 nfix M=10000 n=2000 coverage=1.0000 positive=0.0000
+Task 530: Zipfs param=2 nfix M=9250 n=2000 coverage=1.0000 positive=0.0000
+
+RIEPILOGO RISULTATI
+Scenari: 550 | Repliche per scenario: 1000 | Repliche totali: 550000
+Celle riutilizzate: 450 | Celle simulate: 100 | Nuove repliche: 100000
+alpha=0.05 | seed=42 | workers=15 | Tempo: 40.7 secondi
+Copertura LB <= Mmax: min=1.0000, max=1.0000 | Violazioni totali: 0
+Medie sulle celle: coverage = frequenza LB <= Mmax; positive_rate; unseen_rate.
+ distribution param coverage positive_rate unseen_rate
+     Constant 0.001        1        1.0000           1
+         Geom 0.005        1        0.9888           1
+     Constant 0.050        1        0.0000           0
+         Geom 0.100        1        0.0000           1
+         Geom 0.250        1        0.0000           1
+        Zipfs 0.250        1        0.0000           0
+     Constant 0.500        1        0.0000           0
+        Zipfs 0.500        1        0.0000           0
+        Zipfs 1.020        1        1.0000           1
+        Zipfs 1.200        1        1.0000           1
+        Zipfs 2.000        1        0.0000           1
+Figure PDF salvate: 22
+Figure: /home/colombi/BinomialCIs/LowerBound/img
+Risultati: /home/colombi/BinomialCIs/LowerBound/save
+Tabelle HTML/CSV: /home/colombi/BinomialCIs/LowerBound/res
+Oracle nullo in 200/550 celle; coincidente con mediana LB in 200/550 celle.
+Summary: /home/colombi/BinomialCIs/LowerBound/save/Exp_LB_summary.csv
+FINITO

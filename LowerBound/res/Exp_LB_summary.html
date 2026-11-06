@@ -35,6 +35,10 @@ Il confronto con l'oracle e conservato solo nei dati diagnostici come <code>cove
 <a href="#scenario-16">Zipfs 0.5 &mdash; varia M</a>
 <a href="#scenario-17">Zipfs 1.02 &mdash; varia n</a>
 <a href="#scenario-18">Zipfs 1.02 &mdash; varia M</a>
+<a href="#scenario-19">Zipfs 1.2 &mdash; varia n</a>
+<a href="#scenario-20">Zipfs 1.2 &mdash; varia M</a>
+<a href="#scenario-21">Zipfs 2 &mdash; varia n</a>
+<a href="#scenario-22">Zipfs 2 &mdash; varia M</a>
 </nav>
 <section id="scenario-1"><table>
 <caption>distribution: Constant | param: 0.001 | arm: Mfix | M = 5000 (fisso) | n = 1000 ... 5000 (variabile) | Brep = 1000 | alpha = 0.05</caption>
@@ -575,5 +579,125 @@ Il confronto con l'oracle e conservato solo nei dati diagnostici come <code>cove
 <tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9500</th></tr><tr><td>0.001737877</td><td>0.0002166054</td><td>1.0000</td></tr></tbody>
 <tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9750</th></tr><tr><td>0.001737877</td><td>0.0002139375</td><td>1.0000</td></tr></tbody>
 <tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 10000</th></tr><tr><td>0.001737877</td><td>0.0002128199</td><td>1.0000</td></tr></tbody>
+</table></section>
+<section id="scenario-19"><table>
+<caption>distribution: Zipfs | param: 1.2 | arm: Mfix | M = 5000 (fisso) | n = 1000 ... 5000 (variabile) | Brep = 1000 | alpha = 0.05</caption>
+<thead><tr><th scope="col"><strong>oracle</strong></th>
+<th scope="col"><strong>lb_median</strong></th><th scope="col">coverage</th></tr></thead>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 1000</th></tr><tr><td>0.002408728</td><td>0.0001327221</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 1250</th></tr><tr><td>0.002020155</td><td>0.000131268</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 1500</th></tr><tr><td>0.001743317</td><td>0.0001264223</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 1750</th></tr><tr><td>0.001537196</td><td>0.0001210499</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 2000</th></tr><tr><td>0.001385414</td><td>0.0001168988</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 2250</th></tr><tr><td>0.001259016</td><td>0.0001119588</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 2500</th></tr><tr><td>0.001157205</td><td>0.0001076846</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 2750</th></tr><tr><td>0.001069534</td><td>0.0001039847</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 3000</th></tr><tr><td>0.0009970774</td><td>9.987167e-05</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 3250</th></tr><tr><td>0.0009331388</td><td>9.730304e-05</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 3500</th></tr><tr><td>0.0008763354</td><td>9.411154e-05</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 3750</th></tr><tr><td>0.0008282433</td><td>9.157037e-05</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 4000</th></tr><tr><td>0.0007872184</td><td>8.838792e-05</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 4250</th></tr><tr><td>0.0007475392</td><td>8.629202e-05</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 4500</th></tr><tr><td>0.0007134165</td><td>8.409241e-05</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 4750</th></tr><tr><td>0.0006820448</td><td>8.233897e-05</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 5000</th></tr><tr><td>0.0006531127</td><td>8.040293e-05</td><td>1.0000</td></tr></tbody>
+</table></section>
+<section id="scenario-20"><table>
+<caption>distribution: Zipfs | param: 1.2 | arm: nfix | n = 2000 (fisso) | M = 2000 ... 10000 (variabile) | Brep = 1000 | alpha = 0.05</caption>
+<thead><tr><th scope="col"><strong>oracle</strong></th>
+<th scope="col"><strong>lb_median</strong></th><th scope="col">coverage</th></tr></thead>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 2000</th></tr><tr><td>0.001385414</td><td>0.0001468809</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 2250</th></tr><tr><td>0.001385414</td><td>0.0001427359</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 2500</th></tr><tr><td>0.001385414</td><td>0.0001396102</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 2750</th></tr><tr><td>0.001385414</td><td>0.0001359958</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 3000</th></tr><tr><td>0.001385414</td><td>0.0001333376</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 3250</th></tr><tr><td>0.001385414</td><td>0.0001310625</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 3500</th></tr><tr><td>0.001385414</td><td>0.0001278673</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 3750</th></tr><tr><td>0.001385414</td><td>0.0001256186</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 4000</th></tr><tr><td>0.001385414</td><td>0.0001242793</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 4250</th></tr><tr><td>0.001385414</td><td>0.0001216008</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 4500</th></tr><tr><td>0.001385414</td><td>0.0001192608</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 4750</th></tr><tr><td>0.001385414</td><td>0.0001180757</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 5000</th></tr><tr><td>0.001385414</td><td>0.0001164161</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 5250</th></tr><tr><td>0.001385414</td><td>0.0001153374</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 5500</th></tr><tr><td>0.001385414</td><td>0.0001133265</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 5750</th></tr><tr><td>0.001385414</td><td>0.0001127102</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 6000</th></tr><tr><td>0.001385414</td><td>0.0001108553</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 6250</th></tr><tr><td>0.001385414</td><td>0.0001098073</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 6500</th></tr><tr><td>0.001385414</td><td>0.0001089998</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 6750</th></tr><tr><td>0.001385414</td><td>0.0001083753</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 7000</th></tr><tr><td>0.001385414</td><td>0.0001066886</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 7250</th></tr><tr><td>0.001385414</td><td>0.000107009</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 7500</th></tr><tr><td>0.001385414</td><td>0.0001049171</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 7750</th></tr><tr><td>0.001385414</td><td>0.0001047865</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 8000</th></tr><tr><td>0.001385414</td><td>0.0001039911</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 8250</th></tr><tr><td>0.001385414</td><td>0.000103883</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 8500</th></tr><tr><td>0.001385414</td><td>0.0001024385</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 8750</th></tr><tr><td>0.001385414</td><td>0.0001014663</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9000</th></tr><tr><td>0.001385414</td><td>0.0001012738</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9250</th></tr><tr><td>0.001385414</td><td>0.0001000559</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9500</th></tr><tr><td>0.001385414</td><td>0.0001000617</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9750</th></tr><tr><td>0.001385414</td><td>9.955153e-05</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 10000</th></tr><tr><td>0.001385414</td><td>9.88661e-05</td><td>1.0000</td></tr></tbody>
+</table></section>
+<section id="scenario-21"><table>
+<caption>distribution: Zipfs | param: 2 | arm: Mfix | M = 5000 (fisso) | n = 1000 ... 5000 (variabile) | Brep = 1000 | alpha = 0.05</caption>
+<thead><tr><th scope="col"><strong>oracle</strong></th>
+<th scope="col"><strong>lb_median</strong></th><th scope="col">coverage</th></tr></thead>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 1000</th></tr><tr><td>0.001040583</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 1250</th></tr><tr><td>0.0008650519</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 1500</th></tr><tr><td>0.0007716049</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 1750</th></tr><tr><td>0.0006574622</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 2000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 2250</th></tr><tr><td>0.0005408329</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 2500</th></tr><tr><td>0.0004938272</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 2750</th></tr><tr><td>0.0004725898</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 3000</th></tr><tr><td>0.0004340278</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 3250</th></tr><tr><td>4e-04</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 3500</th></tr><tr><td>0.0003844675</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 3750</th></tr><tr><td>0.0003559986</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 4000</th></tr><tr><td>0.0003429355</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 4250</th></tr><tr><td>0.0003305785</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 4500</th></tr><tr><td>0.000307787</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 4750</th></tr><tr><td>0.0002972652</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">n = 5000</th></tr><tr><td>0.0002872738</td><td>0</td><td>1.0000</td></tr></tbody>
+</table></section>
+<section id="scenario-22"><table>
+<caption>distribution: Zipfs | param: 2 | arm: nfix | n = 2000 (fisso) | M = 2000 ... 10000 (variabile) | Brep = 1000 | alpha = 0.05</caption>
+<thead><tr><th scope="col"><strong>oracle</strong></th>
+<th scope="col"><strong>lb_median</strong></th><th scope="col">coverage</th></tr></thead>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 2000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 2250</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 2500</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 2750</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 3000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 3250</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 3500</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 3750</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 4000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 4250</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 4500</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 4750</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 5000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 5250</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 5500</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 5750</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 6000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 6250</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 6500</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 6750</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 7000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 7250</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 7500</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 7750</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 8000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 8250</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 8500</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 8750</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9250</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9500</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 9750</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
+<tbody><tr class="coordinate"><th colspan="3" scope="rowgroup">M = 10000</th></tr><tr><td>0.000594884</td><td>0</td><td>1.0000</td></tr></tbody>
 </table></section>
 </body></html>
